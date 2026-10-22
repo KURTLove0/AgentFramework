@@ -1,0 +1,8 @@
+{
+  "ref": "release-risk-analysis@1.0.0",
+  "tools": ["change.read@1.0.0", "standards.read@1.0.0", "report.draft.create@1.0.0", "report.read@1.0.0"],
+  "acceptance": ["report-sections", "critical-claims-evidence", "draft-readback"],
+  "risk_rules": {"failed_tests": "HIGH", "dependencies": "MEDIUM", "otherwise": "LOW"},
+  "write_effect": "create-draft-only",
+  "compensation": "none; retain draft for manual review"
+}

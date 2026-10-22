@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-22",
+  "goal": "目标运行时配置界面，可选择 Codex/Cursor 等",
+  "tests": {
+    "passed": 70,
+    "failed": 0,
+    "live_model_calls": 0
+  },
+  "providers": [
+    {
+      "id": "mock",
+      "name": "模拟运行时",
+      "command": null,
+      "description": "确定性规划，离线演示与故障回归",
+      "installed": true
+    },
+    {
+      "id": "codex",
+      "name": "Codex CLI",
+      "command": "codex",
+      "description": "使用本机 Codex 登录态和结构化输出",
+      "installed": true
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor CLI",
+      "command": "cursor-agent",
+      "description": "使用 Cursor Ask 模式和受限工具权限",
+      "installed": true
+    }
+  ],
+  "persisted_settings": {
+    "default_runtime": "mock",
+    "profiles": {
+      "codex": {
+        "max_attempts": 2,
+        "model": "gpt-6.1-sol",
+        "reasoning_effort": "high",
+        "timeout": 60
+      },
+      "cursor": {
+        "max_attempts": 2,
+        "model": "kimi-k3",
+        "timeout": 60
+      }
+    },
+    "revision": 1,
+    "updated_at": 1792645987.3307168
+  },
+  "preview_roundtrip": {
+    "default_runtime": "cursor",
+    "cursor_timeout": 75,
+    "revision": 2
+  },
+  "ui_checks": [
+    "provider selection",
+    "Codex and Cursor CLI version detection",
+    "save and reload",
+    "inline invalid model error",
+    "new task inherits Cursor default/model",
+    "per-task switch to mock and successful run",
+    "unchecked required data-sharing consent",
+    "existing Codex snapshot compatibility"
+  ],
+  "responsive_widths": [
+    320,
+    375,
+    414,
+    768
+  ],
+  "horizontal_overflow": false,
+  "legacy_run_unchanged": "run-1d31032dc1f346e0",
+  "cursor_test_scope": "native CLI version detection; fixture model transport for permission/readback/restart; no live Cursor model request",
+  "service": "http://127.0.0.1:8787/#/runtimes"
+}

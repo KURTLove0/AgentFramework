@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bounded-agent-mvp"
+version = "0.1.0"
+description = "Durable plan/execute/verify/recover Agent MVP with mock tools"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+agent-mvp = "agent_framework.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["agent_framework*"]
+
+[tool.setuptools.package-data]
+agent_framework = ["resources/*.json", "resources/*.md", "webui/*.html", "webui/*.css", "webui/*.js", "webui/*.ttf", "webui/OFL-*.txt"]

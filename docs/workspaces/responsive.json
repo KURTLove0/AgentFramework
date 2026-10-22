@@ -1,0 +1,26 @@
+[
+  {
+    "content": 375,
+    "page": "workspaces",
+    "width": 375
+  },
+  {
+    "content": 375,
+    "dialog": 349,
+    "dialogContent": 349,
+    "page": "workspace-form",
+    "width": 375
+  },
+  {
+    "content": 375,
+    "dialog": 349,
+    "dialogContent": 349,
+    "page": "agent-form",
+    "width": 375
+  },
+  {
+    "content": 768,
+    "page": "agents",
+    "width": 768
+  }
+]

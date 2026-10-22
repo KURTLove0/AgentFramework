@@ -1,0 +1,279 @@
+{
+  "passed": true,
+  "workflow_id": "workflow-710fc908e6334487",
+  "flow_id": "flowrun-bafa560fdb049e4cbe5c4b54",
+  "nodes": {
+    "assess_risk": {
+      "inputs": [
+        {
+          "artifact": {
+            "answer": "变更评估：失败测试判 HIGH；否则有依赖判 MEDIUM，否则 LOW。报告需引用来源证据，草稿供人工审核；写入状态不明先按原幂等键核对。",
+            "citations": [
+              {
+                "asset_ref": "builtin-risk-rubric-fe7bff9bf573@1",
+                "content_hash": "defa21a1fc96c2f59208d90a9bdebc82463207abcd0d79e64398196106559ceb",
+                "evidence_ref": "evidence-9a250a5ddc7d2e33a22b",
+                "quote": "变更评估：失败测试判 HIGH；否则有依赖判 MEDIUM，否则 LOW。报告需引用来源证据，草稿供人工审核；写入状态不明先按原幂等键核对。"
+              }
+            ],
+            "limitations": [
+              "仅引用当前任务范围内已发布资料；未执行任何业务写入。"
+            ],
+            "question": "仅在本 Agent 已授权知识空间的已发布资料中检索风险与草稿验收规范，输出规范依据及引用；无命中时等待补充，不编造规范。"
+          },
+          "content_hash": "28e30d6d2c49cbbea482503973e6df996e3158ac9b06ae1b7e3a0b641bdae04a",
+          "node_id": "retrieve_standards",
+          "run_id": "run-4b7fadfe8e78359c"
+        }
+      ],
+      "routing": {
+        "reason": "dependencies-satisfied"
+      },
+      "run_id": "run-18e63660ea97c07f",
+      "status": "SUCCEEDED"
+    },
+    "check_non_high_materials": {
+      "inputs": [],
+      "routing": {
+        "condition": {
+          "field": "risk_level",
+          "operator": "ne",
+          "source": "assess_risk",
+          "value": "HIGH"
+        },
+        "matched": false,
+        "source_hash": "b9a77dd461dc5dece844f2b651d2b8aeaa137654cc1a156c9ec367d928fe344b"
+      },
+      "run_id": null,
+      "status": "SKIPPED"
+    },
+    "merge_review": {
+      "inputs": [
+        {
+          "artifact": {
+            "answer": "变更评估：失败测试判 HIGH；否则有依赖判 MEDIUM，否则 LOW。报告需引用来源证据，草稿供人工审核；写入状态不明先按原幂等键核对。\n失败测试判 HIGH，否则有依赖判 MEDIUM，无依赖判 LOW。草稿需六个章节，独立回读 DRAFT、版本、正文和摘要；不明写入按原幂等键核对。",
+            "citations": [
+              {
+                "asset_ref": "builtin-risk-rubric-fe7bff9bf573@1",
+                "content_hash": "defa21a1fc96c2f59208d90a9bdebc82463207abcd0d79e64398196106559ceb",
+                "evidence_ref": "evidence-f5ac0504096304dd9f58",
+                "quote": "变更评估：失败测试判 HIGH；否则有依赖判 MEDIUM，否则 LOW。报告需引用来源证据，草稿供人工审核；写入状态不明先按原幂等键核对。"
+              },
+              {
+                "asset_ref": "asset-371aa5befe5f4dd9@1",
+                "content_hash": "2a686220bc66addcbfdd388e9572573b443efab98484520beebb808369f866af",
+                "evidence_ref": "evidence-f5ac0504096304dd9f58",
+                "quote": "失败测试判 HIGH，否则有依赖判 MEDIUM，无依赖判 LOW。草稿需六个章节，独立回读 DRAFT、版本、正文和摘要；不明写入按原幂等键核对。"
+              }
+            ],
+            "limitations": [
+              "仅引用当前任务范围内已发布资料；未执行任何业务写入。"
+            ],
+            "question": "基于直接上游评估冻结产物中携带的规范依据、引用及风险结论，对 HIGH 风险判断和草稿验收关注项进行规范复核，输出支持情况、证据缺口及待补充资料。"
+          },
+          "content_hash": "3e607aa387ad2484eae212c752117419213174059c072c6378b2b7baad298868",
+          "node_id": "review_high_risk",
+          "run_id": "run-41ec3aaf7e623545"
+        }
+      ],
+      "routing": {
+        "reason": "dependencies-satisfied"
+      },
+      "run_id": "run-a6c7893dee7c58fc",
+      "status": "SUCCEEDED"
+    },
+    "retrieve_standards": {
+      "inputs": [],
+      "routing": {
+        "reason": "dependencies-satisfied"
+      },
+      "run_id": "run-4b7fadfe8e78359c",
+      "status": "SUCCEEDED"
+    },
+    "review_high_risk": {
+      "inputs": [
+        {
+          "artifact": {
+            "change_id": "change-demo-001",
+            "claims": [
+              {
+                "evidence_ref": "evidence-904226a3e1bd7a393edf",
+                "path": "version",
+                "value": 1
+              },
+              {
+                "evidence_ref": "evidence-904226a3e1bd7a393edf",
+                "path": "service",
+                "value": "payment-service"
+              },
+              {
+                "evidence_ref": "evidence-904226a3e1bd7a393edf",
+                "path": "dependencies",
+                "value": [
+                  "order-service",
+                  "ledger-service"
+                ]
+              },
+              {
+                "evidence_ref": "evidence-904226a3e1bd7a393edf",
+                "path": "tests",
+                "value": {
+                  "failed": 1,
+                  "passed": 38
+                }
+              },
+              {
+                "evidence_ref": "evidence-904226a3e1bd7a393edf",
+                "path": "rollback",
+                "value": "关闭 retry_enabled 开关并恢复上一版本"
+              }
+            ],
+            "limitations": [
+              "模拟数据；草稿供人工审核；未执行发布或部署。"
+            ],
+            "risk_level": "HIGH",
+            "sections": {
+              "impact": "服务 payment-service；依赖：order-service, ledger-service。",
+              "recommendation": "修复失败测试并复核后再决定发布。",
+              "risks": "依照 release-review-rubric@1.0.0 判为 HIGH。",
+              "rollback": "关闭 retry_enabled 开关并恢复上一版本",
+              "summary": "评估 change-demo-001，来源版本 1，风险 HIGH。 资料依据：builtin-risk-rubric-fe7bff9bf573@1、asset-371aa5befe5f4dd9@1。",
+              "test_results": "通过 38 项，失败 1 项。"
+            },
+            "source_version": 1,
+            "standard_ref": "evidence-87440a749302e784edc8",
+            "task_ref": "run-18e63660ea97c07f:report:0",
+            "title": "支付服务增加超时重试 · 变更评估"
+          },
+          "content_hash": "b9a77dd461dc5dece844f2b651d2b8aeaa137654cc1a156c9ec367d928fe344b",
+          "node_id": "assess_risk",
+          "run_id": "run-18e63660ea97c07f"
+        }
+      ],
+      "routing": {
+        "condition": {
+          "field": "risk_level",
+          "operator": "eq",
+          "source": "assess_risk",
+          "value": "HIGH"
+        },
+        "matched": true,
+        "source_hash": "b9a77dd461dc5dece844f2b651d2b8aeaa137654cc1a156c9ec367d928fe344b"
+      },
+      "run_id": "run-41ec3aaf7e623545",
+      "status": "SUCCEEDED"
+    }
+  },
+  "checks": {
+    "assess_risk": {
+      "critical-claims-evidence": {
+        "detail": "关键事实、来源哈希、版本与风险规则一致",
+        "evidence_refs": [
+          "evidence-904226a3e1bd7a393edf",
+          "evidence-87440a749302e784edc8"
+        ],
+        "passed": true,
+        "verifier_ref": "release-verifier@1.0.0"
+      },
+      "draft-readback": {
+        "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+        "evidence_refs": [
+          "evidence-9079598672ec5ea9a88c"
+        ],
+        "passed": true,
+        "verifier_ref": "release-verifier@1.0.0"
+      },
+      "report-sections": {
+        "detail": "所有必选章节非空",
+        "evidence_refs": [
+          "evidence-904226a3e1bd7a393edf",
+          "evidence-87440a749302e784edc8"
+        ],
+        "passed": true,
+        "verifier_ref": "release-verifier@1.0.0"
+      }
+    },
+    "merge_review": {
+      "answer-current": {
+        "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+        "evidence_refs": [
+          "builtin-risk-rubric-fe7bff9bf573@1",
+          "asset-371aa5befe5f4dd9@1"
+        ],
+        "passed": true,
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      },
+      "answer-grounded": {
+        "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+        "evidence_refs": [
+          "evidence-f5ac0504096304dd9f58"
+        ],
+        "passed": true,
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      },
+      "answer-scope": {
+        "detail": "读取证据属于当前租户、项目和任务范围",
+        "evidence_refs": [
+          "evidence-f5ac0504096304dd9f58"
+        ],
+        "passed": true,
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      }
+    },
+    "retrieve_standards": {
+      "answer-current": {
+        "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+        "evidence_refs": [
+          "builtin-risk-rubric-fe7bff9bf573@1"
+        ],
+        "passed": true,
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      },
+      "answer-grounded": {
+        "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+        "evidence_refs": [
+          "evidence-9a250a5ddc7d2e33a22b"
+        ],
+        "passed": true,
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      },
+      "answer-scope": {
+        "detail": "读取证据属于当前租户、项目和任务范围",
+        "evidence_refs": [
+          "evidence-9a250a5ddc7d2e33a22b"
+        ],
+        "passed": true,
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      }
+    },
+    "review_high_risk": {
+      "answer-current": {
+        "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+        "evidence_refs": [
+          "builtin-risk-rubric-fe7bff9bf573@1",
+          "asset-371aa5befe5f4dd9@1"
+        ],
+        "passed": true,
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      },
+      "answer-grounded": {
+        "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+        "evidence_refs": [
+          "evidence-f5ac0504096304dd9f58"
+        ],
+        "passed": true,
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      },
+      "answer-scope": {
+        "detail": "读取证据属于当前租户、项目和任务范围",
+        "evidence_refs": [
+          "evidence-f5ac0504096304dd9f58"
+        ],
+        "passed": true,
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      }
+    }
+  },
+  "drafts": 1,
+  "create_calls": 1
+}

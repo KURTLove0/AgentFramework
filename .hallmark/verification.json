@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-22",
+  "tests": {
+    "passed": 59,
+    "failed": 0,
+    "live_model_calls_in_web_tests": 0
+  },
+  "browser": [
+    "normal",
+    "response-lost",
+    "crash-and-resume",
+    "concrete-grant",
+    "server-process-restart",
+    "search",
+    "command-navigation",
+    "model-consent-form"
+  ],
+  "responsive_widths": [
+    320,
+    375,
+    414,
+    768,
+    1280
+  ],
+  "horizontal_overflow": false,
+  "browser_console_errors": 0,
+  "contrast": {
+    "body_on_canvas": 14.46,
+    "muted_on_canvas": 5.83,
+    "primary_button": 6.43,
+    "nav": 8.74
+  },
+  "restart_run_id": "run-93944f938b9a4952",
+  "restart_result": {
+    "status": "SUCCEEDED",
+    "acceptance_passed": 3,
+    "external_drafts": 1,
+    "create_calls": 1
+  },
+  "evidence_directory": ".agent-data/webui-review",
+  "design_review": {
+    "critique": "P4 H4 E4 S5 R4 V4",
+    "tokens": "Cobalt / named OKLCH colors and spacing",
+    "font": "locally bundled Space Grotesk with CJK system fallback",
+    "scope": "product workbench; marketing/hero gates not applicable"
+  }
+}

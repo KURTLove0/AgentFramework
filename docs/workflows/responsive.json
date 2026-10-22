@@ -1,0 +1,38 @@
+[
+  {
+    "content": 375,
+    "navContent": 375,
+    "navWidth": 375,
+    "page": "workflows",
+    "width": 375
+  },
+  {
+    "content": 375,
+    "dialog": 349,
+    "dialogContent": 349,
+    "page": "flow-editor",
+    "width": 375
+  },
+  {
+    "content": 375,
+    "dialog": 349,
+    "dialogContent": 349,
+    "page": "flow-chat",
+    "width": 375
+  },
+  {
+    "content": 375,
+    "page": "knowledge-hub",
+    "width": 375
+  },
+  {
+    "content": 768,
+    "page": "knowledge-hub",
+    "width": 768
+  },
+  {
+    "content": 768,
+    "page": "workflows",
+    "width": 768
+  }
+]

@@ -1,0 +1,991 @@
+{
+  "verified_at": "2026-10-22T10:11:43.932438+00:00",
+  "objective": [
+    "补齐 Agent 身份、职责、标准功能",
+    "工作空间创建、编辑、删除以表示不同场景、业务"
+  ],
+  "requirements": [
+    {
+      "requirement": "可视化身份编辑与持久化",
+      "status": "verified"
+    },
+    {
+      "requirement": "职责、交付物及验收映射编辑",
+      "status": "verified"
+    },
+    {
+      "requirement": "执行标准选择、覆盖校验与编译",
+      "status": "verified"
+    },
+    {
+      "requirement": "岗位版本冻结并用于实际任务",
+      "status": "verified"
+    },
+    {
+      "requirement": "工作空间创建、编辑、版本冲突处理",
+      "status": "verified"
+    },
+    {
+      "requirement": "工作空间切换及 Agent/任务/资料/记忆范围隔离",
+      "status": "verified"
+    },
+    {
+      "requirement": "可恢复删除、未完成任务保护、最后空间保护",
+      "status": "verified"
+    },
+    {
+      "requirement": "恢复保留项目、岗位和历史任务",
+      "status": "verified"
+    },
+    {
+      "requirement": "删除默认空间后重启及 API 回退",
+      "status": "verified"
+    },
+    {
+      "requirement": "旧数据迁移和历史快照保持不变",
+      "status": "verified"
+    }
+  ],
+  "tests": {
+    "passed": 144,
+    "total": 144,
+    "command": "python3 -m unittest discover -s tests -q",
+    "log": ".agent-data/workspaces-tests-final.log",
+    "new_tests": "tests/test_workspaces.py"
+  },
+  "p0_matrix": {
+    "summary": ".agent-data/workspaces-review/p0-a353a523ed/summary.json",
+    "passed": 44,
+    "total": 44,
+    "cases": [
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-aecbdc6a7cc74349",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-514ec14b289043f5",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-0a093bd290dc4b26",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-e517e5a7959d4db9",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-9ae75bf614114a3c",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-630c6407fe2f4def",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-16ad6e5947444107",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-0f43f489000b4e69",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-721a0f63d88d47d0",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-be7bcf632f9d490d",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-67f86adcf5634e00",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-707ddf103e494983",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-793691cf2957495f",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-6162e663ac81478e",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-aba146415f864268",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-88c6ce53e3224d5e",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-0df1044b1fec40f8",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-a70840212499420c",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-46c78ebc38134c22",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-ce1db5500dc24197",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-46e2d9aa5ab24684",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-766dcd2892734298",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-afdd026a9ee049c6",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-16b8fecb4b424efe",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-4643810737224c35",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-ef80630f528e4a9d",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-7f7fd488da444212",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-dfa5ce093c734d2c",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-6e9d8378710f4ca5",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-6b4eeb4f002e4b6a",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-181b9fcce37b41bd",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-f2d0472cc6394449",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-79b4cc10745c4e4f",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-4deec3e7868b4437",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-13d5ff4645d84122",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-1829c0864c5842f4",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-4f9fd1918eee402b",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-510fc10fb5344a69",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-d4dc6f57c11f4aeb",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-9ea13475fcbb4b77",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-304a9d270e374128",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-2fea3a541c1e4a4d",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-258893cc4de6493e",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-5c56e66db37340ce",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      }
+    ]
+  },
+  "ui": {
+    "workspace": {
+      "business": "模拟交易业务",
+      "description": "验证岗位职责、执行标准与草稿恢复；仅使用模拟上下文。",
+      "name": "交易发布评审",
+      "scenario": "发布前风险评估",
+      "id": "workspace-b80fefb3ac784f7e",
+      "revision": 4,
+      "project_id": "project-451727443d7f4f8a",
+      "deleted": false,
+      "created_at": 1792663347.0832798,
+      "updated_at": 1792663503.869175
+    },
+    "agent_id": "agent-b9ce8d1e557947b3",
+    "agent_revision": 2,
+    "second_agent": "agent-e2117c20c08e456a",
+    "run_id": "run-0dd940c1ad3549e0",
+    "status": "SUCCEEDED",
+    "snapshot_hash": "b83a8bd017619fbda0f8632ddaa93f3d4bb5524a3b8f2b74493531af46e17173",
+    "compiled_hash": "fbafab32e9b64485d64d08cd16a94e146f75fc225a2f8601595201dfd497b5f8",
+    "checks": {
+      "critical-claims-evidence": {
+        "detail": "关键事实、来源哈希、版本与风险规则一致",
+        "evidence_refs": [
+          "evidence-01594f0a14b9e9f022ff",
+          "evidence-87440a749302e784edc8"
+        ],
+        "passed": true,
+        "verifier_ref": "release-verifier@1.0.0"
+      },
+      "draft-readback": {
+        "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+        "evidence_refs": [
+          "evidence-51631a1e1ab8f764d1ca"
+        ],
+        "passed": true,
+        "verifier_ref": "release-verifier@1.0.0"
+      },
+      "report-sections": {
+        "detail": "所有必选章节非空",
+        "evidence_refs": [
+          "evidence-01594f0a14b9e9f022ff",
+          "evidence-87440a749302e784edc8"
+        ],
+        "passed": true,
+        "verifier_ref": "release-verifier@1.0.0"
+      }
+    },
+    "write_calls": 1,
+    "draft_count": 1,
+    "delete_and_restore_demonstrated": true,
+    "form_standard_coverage_rejection_demonstrated": true,
+    "restart_persistence_demonstrated": true,
+    "console_errors": []
+  },
+  "migration": {
+    "original_snapshot_count": 27,
+    "all_unchanged": true,
+    "runs": [
+      {
+        "run_id": "run-1c003b0dadad45da",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-2bfe04180d5f47c1",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-cd6963a8eade4f19",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-27e6f6ed96b3414b",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-1af3949ae2c842a5",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-93944f938b9a4952",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-61558052cc844549",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-94951d4ff58a44e4",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-dacd2cd2f6df42f1",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-1d31032dc1f346e0",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-8b8ae865d97e4f0f",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-c96786f6da554068",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-1b386b79b4944bfd",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-67cc8c2ba39f4680",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-3b72a0f2f51d4fa2",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-9ee35440c6bd4e12",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-e717b3422559495b",
+        "snapshot_hash": "781b1d2b319717eedf578a2cf92fef558285e6f0f568376a8989465cfb07934d",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-2c01ebe306404139",
+        "snapshot_hash": "781b1d2b319717eedf578a2cf92fef558285e6f0f568376a8989465cfb07934d",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-84a68aa159cc462d",
+        "snapshot_hash": "781b1d2b319717eedf578a2cf92fef558285e6f0f568376a8989465cfb07934d",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-bb7abfdcfc214e92",
+        "snapshot_hash": "ed2ee61c7a24b0c64aa9a877060d6f4a60cb558959c768ce4aa7e450092ccd10",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-2760243c40e94dd1",
+        "snapshot_hash": "18c130f3d1a8a2f173cf179c5a25c68a17944720a1639c64b01398dba99508b2",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-e01365896a5a4eef",
+        "snapshot_hash": "e569561dd09eb9a71909f28fb0e81f932924e3e58577b05167bbab8a8cac6b1b",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-ccf8ae5b94af48b0",
+        "snapshot_hash": "55cad8c8ab1c0109478334c58ce0b626f3f218f7ec23b4a31949e2e3f3c6754f",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-3d23dadcfbac4dba",
+        "snapshot_hash": "15d1052450837eeb998f47661d9bf8b725b334d74b84dfedc09b183f84a73cb2",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-4b569b2e58cd4309",
+        "snapshot_hash": "8a7c66d431d3a07306f822d8f9bdb5453bbb06836054d56c900f3c7545695760",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-5f9c18ea690e4584",
+        "snapshot_hash": "bdf08a363a9870cb534622993a667321d1f842bf25452a1085cdeeb8f4734fd3",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-b20040b18bcb4087",
+        "snapshot_hash": "bdf08a363a9870cb534622993a667321d1f842bf25452a1085cdeeb8f4734fd3",
+        "unchanged": true,
+        "planner_restores": true
+      }
+    ],
+    "baseline": ".agent-data/workspaces-before-snapshots.json"
+  },
+  "responsive": [
+    {
+      "content": 375,
+      "page": "workspaces",
+      "width": 375
+    },
+    {
+      "content": 375,
+      "dialog": 349,
+      "dialogContent": 349,
+      "page": "workspace-form",
+      "width": 375
+    },
+    {
+      "content": 375,
+      "dialog": 349,
+      "dialogContent": 349,
+      "page": "agent-form",
+      "width": 375
+    },
+    {
+      "content": 768,
+      "page": "agents",
+      "width": 768
+    }
+  ],
+  "screenshots": [
+    "overview.jpg",
+    "agents.jpg",
+    "identity.jpg",
+    "standards.jpg",
+    "deleted.jpg",
+    "run.jpg"
+  ],
+  "source_sha256": {
+    "agent_framework/__init__.py": "1c576e527e826bebd15d3b6e4a4b4fbf2e16e9887096ef601b187a1b32734271",
+    "agent_framework/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "agent_framework/adapters.py": "fbd0c39a31d2590168804103a9d6f42d12757ac0c56dbe380e106c367725c9ef",
+    "agent_framework/agent_extensions.py": "c2a2e8984451f3bff50d24c86a4ff5f5b9985edba3064fa1d4a5385904414875",
+    "agent_framework/agents.py": "8db9ff9862fc32792ca7b9f5d5dff947361011e29f0f71172bbf85cc7440eddf",
+    "agent_framework/assistant_evaluate.py": "dc6a1ced9a2e37f773daa309b2c3b4e0ded378751d84d51ab773320bbb5d1780",
+    "agent_framework/cli.py": "aad99deb31a6ff684b1c64cd9c5f04b163681bb9301d1cde4909335878a48caf",
+    "agent_framework/context_builder.py": "5ca3005d3cc0824408bc18edc6d1dc82446fdb2d1e76767c2afa3d1a4a19b937",
+    "agent_framework/contracts.py": "7602dd305879f0b8c82cb2099b212689106a951b45dbdd53a2991e0eef199af7",
+    "agent_framework/definitions.py": "4b855cd4ef00ade2c7a5e88bbf70d7cd8662766d3d8489d6e9cc0d6aa935b327",
+    "agent_framework/domains/__init__.py": "93fbe1f965bfb446f59909ed81ee4593519de4a15b8e24de3ef95af4d61a04fd",
+    "agent_framework/domains/change_assessment.py": "40c36b5faa4e86d28341d54e7f41e361aa9976625060f90d98d9998fd965a4eb",
+    "agent_framework/domains/change_verifier.py": "406976d65ac5cd27045bb753b7a8d19e30377023767e38bf5c2aa3ee2b560c38",
+    "agent_framework/domains/knowledge_answer.py": "18cfa6114d4635e59b0a61deaf24a9e25dc4795df0ddae07c149af777eebaf7b",
+    "agent_framework/evaluate.py": "a422821a864766504c8a0112cb28247d52f48408544250e09468f95348639ef6",
+    "agent_framework/experience.py": "f2258b125da9f19244839b5569f201c86d743e3f77bfead2af9ddd7e3da68130",
+    "agent_framework/gateway.py": "b964231bac0bc9413fdccbd03c1667bea979102bc1574f57ec0855073c33fb66",
+    "agent_framework/knowledge.py": "95726d331c2d97458486aeccc1148aa751f9e049b178596d9d652437dd275144",
+    "agent_framework/library_cli.py": "5ced6c3153ad05099bb0a69d11de272840dfa9240787ee0993b88e4cb915fb39",
+    "agent_framework/llm.py": "d20a609a7c9d2e42e09c996a7a6a5cf46bcfb1648addce8046f4c2aaf59c7e66",
+    "agent_framework/memory.py": "1eff9dce68e90d154ba06096993c70c1a1269acd76c2a9d98998b114fce6201d",
+    "agent_framework/mock_tools.py": "be121aad25a03f17e5cdf0792f22e58ec50e29c35b45ce52d15942f2d8b345b2",
+    "agent_framework/model_catalog.py": "4506441f5b612b45074817b8c53fc05d15bd0601130b8de52bdce7c70b7be524",
+    "agent_framework/p0_evaluate.py": "1a05f5b25eab8dae77ae67a6721c4ac9a8291863e5fc14024fd1a0878cff08d4",
+    "agent_framework/planner.py": "87dae7afd294e8c562afc74ae1ec94eb8bf29901e3b9e2f732380e5c5743bb8e",
+    "agent_framework/read_proxy.py": "c3fcda31e385ff48d6a7506fef2bfd4bb4ee49756064681c73738f004711a201",
+    "agent_framework/runtime.py": "c5b036fe34891ed0fb692571702dbefed5b4890cc0f69e442f1f885d850dd859",
+    "agent_framework/runtime_config.py": "cba64c28fd49b9bcb14105a8f0ab04df588681678bd56e3cbddf37e819a4f0b4",
+    "agent_framework/store.py": "fa772a9e3bd048aae8b8b5409c82a74a4d6cd242c9e7a4bc00d25862e97c665d",
+    "agent_framework/structured.py": "9cdbb6b55cd2cef287d67030cc953b6bbe154a576b92adb1b3164760543a120d",
+    "agent_framework/verifier.py": "840834bfa62b9e6d512f87330d8534154d8d0225e7d7d8d9bce38bb369aa756e",
+    "agent_framework/web.py": "97acd6f55253f08a210f6f7239eade61f81582e992587e547a532cda25c3a4a9",
+    "agent_framework/webui/agents.js": "89ed857303aee41ec00bb3571d14340ca370ccf154d12ab867410c35a1f0d1fe",
+    "agent_framework/webui/app.js": "0241df1e85dc6cc6a17682c2eda19455b6dfd3d3cc55b9d7ea3942c37ea1b1d0",
+    "agent_framework/webui/index.html": "f80d009791e87acaa179439a9ab6fa16c8dec139105d643a1f23008d5b662ab4",
+    "agent_framework/webui/library.js": "ffbca85c7da6af672225863a61e6888ff6f3151b73c9b038d9a44b49fbd5df54",
+    "agent_framework/webui/roles.js": "b7bd15d3138737f31e6edda282461f338204895377b67bc582f587ff28927fde",
+    "agent_framework/webui/styles.css": "030aeaae79a30872a0d8730db08acaa8223cb4768124d84245124e047e67c192",
+    "agent_framework/webui/workspaces.js": "8cbf7a1790a45e8fd12d0e5ab12e90f55a4a5c5e5e417c4348dacde6b7ceb1dd",
+    "agent_framework/worker.py": "604b82876569f3fa24ad1cfb7ffc34d5a805ce3ff80acb991d14374bba6abab8",
+    "agent_framework/workspaces.py": "c4a107cb7a0392be825ac77c812e2ef4989fa591eb16e583e6bbd826a66fca3b",
+    "tests/test_agents.py": "defe1113a379535187010c37e490e469ce2e5c11f5c696dd3bade115f820a204",
+    "tests/test_governance.py": "fe886282168fe830a37f82692da05768e06cb579621be9e3005fd7de62280849",
+    "tests/test_knowledge.py": "2e53066f707ab11281b2461d6e8e30a24408d33433afe68f831256005b861d1a",
+    "tests/test_knowledge_domain.py": "4d3f8c4d38946e60196909d2c7e28abb216801713a1d147c479355c88abce2bd",
+    "tests/test_llm.py": "2f2e2eea3d00c4da8926bf8174fd9ebbcfcdae32e48f5a6df9ce64ca083bde3d",
+    "tests/test_mcp_fixture.py": "409d0634b0708dce59ebd5d3298faf9fead1e30945c0cdda21048aeeff9691d5",
+    "tests/test_model_catalog.py": "473e1a417cde354c1b9abe93d636afee74564ab6f289bd954fd4be7fd029f487",
+    "tests/test_runtime.py": "c31a38f6507cb00b156af70d02e407d139cd1805e4d4be85e03c682ff1f5f556",
+    "tests/test_runtime_config.py": "702d5c5093c73632b6da88a42ae117b40c435bcbdf1af2ce39bb76224cc9a43b",
+    "tests/test_web.py": "7529eb846e5a72482ccf4544e912bcfffe08b1d0ebecdcfb76c4919dcf41e450",
+    "tests/test_workspaces.py": "90160131dfcb2cda52eba89abe75ca187e9466cc01a2113c8c13c8f1c748162a"
+  }
+}

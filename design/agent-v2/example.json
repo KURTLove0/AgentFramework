@@ -1,0 +1,185 @@
+{
+  "schema_version": 2,
+  "agent": {
+    "ref": "release-reviewer@2.0.0",
+    "tenant_id": "tenant-demo",
+    "identity": {
+      "name": "变更评估助手",
+      "role": "release_reviewer",
+      "owner_team": "engineering-platform"
+    },
+    "responsibilities": [
+      "依据证据评估风险",
+      "在本次授权范围内提出草稿写入"
+    ],
+    "standard_refs": [
+      "release-rubric@1.0.0"
+    ],
+    "skill_refs": [
+      "change-assessment@2.0.0"
+    ],
+    "capability_refs": [
+      "change.read@1.0.0",
+      "standards.read@1.0.0",
+      "report.draft.create@1.0.0",
+      "report.read@1.0.0"
+    ],
+    "knowledge_spaces": [
+      "release-standards"
+    ],
+    "policy_ref": "release-reviewer-policy@2.0.0"
+  },
+  "task": {
+    "tenant_id": "tenant-demo",
+    "project_id": "project-demo",
+    "principal": "demo-user",
+    "environment": "test",
+    "acceptance_refs": [
+      "report-sections",
+      "critical-claims-evidence",
+      "draft-readback"
+    ]
+  },
+  "domain": {
+    "ref": "change-assessment@2.0.0",
+    "required_capability_refs": [
+      "change.read@1.0.0",
+      "standards.read@1.0.0",
+      "report.draft.create@1.0.0",
+      "report.read@1.0.0"
+    ],
+    "acceptance_refs": [
+      "report-sections",
+      "critical-claims-evidence",
+      "draft-readback"
+    ],
+    "standard_refs": [
+      "release-rubric@1.0.0"
+    ],
+    "required_context_refs": [
+      "release-rubric@1.0.0"
+    ]
+  },
+  "standards": [
+    {
+      "ref": "release-rubric@1.0.0",
+      "verifier_refs": [
+        "report-sections",
+        "critical-claims-evidence",
+        "draft-readback"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "ref": "change-assessment@2.0.0",
+      "capability_refs": [
+        "change.read@1.0.0",
+        "standards.read@1.0.0",
+        "report.draft.create@1.0.0",
+        "report.read@1.0.0"
+      ]
+    }
+  ],
+  "verifier_refs": [
+    "report-sections",
+    "critical-claims-evidence",
+    "draft-readback"
+  ],
+  "capabilities": [
+    {
+      "ref": "change.read@1.0.0",
+      "phase": "PERCEIVE",
+      "effect": "READ",
+      "transport": "MCP",
+      "route": "native_read_proxy",
+      "input_schema_ref": "change.read@1.0.0:input",
+      "output_schema_ref": "change.read@1.0.0:output",
+      "verifier_refs": [
+        "critical-claims-evidence"
+      ],
+      "trusted_read_classification": true
+    },
+    {
+      "ref": "standards.read@1.0.0",
+      "phase": "PERCEIVE",
+      "effect": "READ",
+      "transport": "CLI",
+      "route": "gateway",
+      "input_schema_ref": "standards.read@1.0.0:input",
+      "output_schema_ref": "standards.read@1.0.0:output",
+      "verifier_refs": [
+        "critical-claims-evidence"
+      ]
+    },
+    {
+      "ref": "report.draft.create@1.0.0",
+      "phase": "EXECUTE",
+      "effect": "WRITE",
+      "transport": "PYTHON",
+      "route": "gateway",
+      "input_schema_ref": "report.draft.create@1.0.0:input",
+      "output_schema_ref": "report.draft.create@1.0.0:output",
+      "verifier_refs": [
+        "draft-readback"
+      ],
+      "idempotency": "runtime_generated",
+      "reconcile_ref": "report.read@1.0.0"
+    },
+    {
+      "ref": "report.read@1.0.0",
+      "phase": "VERIFY",
+      "effect": "READ",
+      "transport": "PYTHON",
+      "route": "gateway",
+      "input_schema_ref": "report.read@1.0.0:input",
+      "output_schema_ref": "report.read@1.0.0:output",
+      "verifier_refs": [
+        "draft-readback"
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "ref": "release-rubric@1.0.0",
+      "kind": "KNOWLEDGE",
+      "tenant_id": "tenant-demo",
+      "project_id": "project-demo",
+      "space_id": "release-standards",
+      "readers": [
+        "demo-user"
+      ],
+      "status": "PUBLISHED",
+      "source_version": "1.0.0",
+      "valid_until": "2030-01-01T00:00:00Z",
+      "content": {
+        "rule": "失败测试数量大于零时，报告风险判为 HIGH。",
+        "source": "模拟发布规范"
+      },
+      "content_hash": "9b3bbffbc69a20b8c4ebc564a79e2551e6af36cbf44f4b91ebc7d0bdb89bd515"
+    },
+    {
+      "ref": "experience-response-lost@candidate",
+      "kind": "EXPERIENCE",
+      "tenant_id": "tenant-demo",
+      "project_id": "project-demo",
+      "space_id": "release-standards",
+      "readers": [
+        "demo-user"
+      ],
+      "status": "CANDIDATE",
+      "source_version": "1.0.0",
+      "valid_until": "2030-01-01T00:00:00Z",
+      "content": {
+        "hypothesis": "响应丢失后，先核对原幂等键。",
+        "needs_review": true
+      },
+      "content_hash": "11e0ab8c7a1c8121ac1f1391d99ed32b9591259c1eff335ae26e308946b68188"
+    }
+  ],
+  "context": {
+    "asset_refs": [
+      "release-rubric@1.0.0"
+    ]
+  }
+}

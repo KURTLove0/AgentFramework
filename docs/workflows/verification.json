@@ -1,0 +1,2068 @@
+{
+  "verified_at": "2026-10-22T11:14:04.513921+00:00",
+  "objective": [
+    "知识库对齐知识-记忆-经验-能力",
+    "由 Agent 实现工作流节点，通过 Agent 对话创建流程"
+  ],
+  "requirements": [
+    {
+      "requirement": "知识模块：检索、修订、来源/有效期/权限、审核发布撤回、版本审计",
+      "status": "verified",
+      "evidence": "knowledge_hub.py; library.js; test_workflows.py; UI knowledge versions 1/2"
+    },
+    {
+      "requirement": "记忆模块：私有偏好与终态情节、检索和证据链接",
+      "status": "verified",
+      "evidence": "memory.py; hub; UI five scoped episodes"
+    },
+    {
+      "requirement": "经验模块：候选、隔离评测、明确发布、撤回及评测查看",
+      "status": "verified",
+      "evidence": "experience.py; tests; published experience-run-b1630276b4669013@1"
+    },
+    {
+      "requirement": "能力模块：可信能力/Skill 契约与当前空间 Agent 使用绑定",
+      "status": "verified",
+      "evidence": "six capability contracts; test_workflows; capabilities.jpg"
+    },
+    {
+      "requirement": "工作流每个节点由真实 Agent 任务承载",
+      "status": "verified",
+      "evidence": "two main flow runs and live-proposal run with frozen Agent profiles and verified Runtime tasks"
+    },
+    {
+      "requirement": "工作流创建、节点编辑、依赖、版本、运行、授权、取消、恢复、归档",
+      "status": "verified",
+      "evidence": "workflows.py; HTTP and invariant tests; UI conversation adoption/start/grant/restart"
+    },
+    {
+      "requirement": "通过 Agent 对话创建工作流并继续编辑历史对话",
+      "status": "verified",
+      "evidence": "workflow_chat.py; closed Schema; live Codex conversation chat-d99f25df6e8945f5; UI saved proposal"
+    },
+    {
+      "requirement": "运行时权限、独立验收、幂等及失败恢复保留",
+      "status": "verified",
+      "evidence": "163 tests; 44 P0 cases; restart same child and one draft; upstream invalidation reconciles in-flight effects"
+    },
+    {
+      "requirement": "工作空间和主体隔离、旧任务兼容",
+      "status": "verified",
+      "evidence": "HTTP scope/privacy tests; 28 original snapshot hashes unchanged"
+    },
+    {
+      "requirement": "可运行命令、文档、真实模型证据与界面验证",
+      "status": "verified",
+      "evidence": "workflow_evaluate 6/6; live 7/7; docs; responsive measurements"
+    }
+  ],
+  "tests": {
+    "command": "python3 -m unittest discover -s tests -q",
+    "passed": 163,
+    "total": 163,
+    "log": ".agent-data/workflow-tests-final.log"
+  },
+  "component_recheck": {
+    "passed": 19,
+    "total": 19,
+    "log": ".agent-data/workflow-component-final.log"
+  },
+  "p0_matrix": {
+    "summary": ".agent-data/workflow-review/p0-f76e6e801f/summary.json",
+    "passed": 44,
+    "total": 44,
+    "cases": [
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-3ea31b90ba6e41fe",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-732fec48548448bd",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-036f94aae3434e2c",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-106d45f3b4f84d35",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-740bf68f951f40b3",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-bf767885a4a44cb8",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-559c27adcca24840",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-c6a8307503a1434c",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-57ef7e8b99304cdd",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-6d58b66a0aa44148",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-1ec49b54666549d3",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-b8c49d32cc194f55",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-404ad88db0974c3e",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-e38c3aaa30c24b54",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-7b291ebb05624104",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-091100fcd4344a19",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-134ff76b0443463a",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-4fa5502d6c7e4050",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-9d47f82b26544275",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-ba8570a5164147c6",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-106025b7f635462d",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-a87285176df94bc0",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-9f9acd96daf24f1b",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-adc778f9b94948f9",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-bef4df4f6dd849fb",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-ab1b8327f1c24448",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-ad3a133804c14f51",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-9674eca0a85d4443",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-11a55c666dbe47e9",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-4cfed502cc67443f",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-013ecba0b85843e8",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-69b45ca6e8fd4c4a",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-4ca6f5696d274627",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-8fd2b9c4f084437e",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-14e9084b7d364c17",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-2cbdc79562d245f0",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-f07cd15947b94e39",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-8b22215e8a814382",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-878843ef88654f54",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-cca1e09394be4255",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-2f95cbd7d08d4323",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-debf0a3bcb544cf6",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-1d6121bb64894da4",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-876de59162f84b1a",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      }
+    ]
+  },
+  "current_demo": {
+    "summary": ".agent-data/workflow-final-review/workflow-ba9b2c7732/summary.json",
+    "verified_at": "2026-10-22T11:08:00.258710+00:00",
+    "scope": "fixed synthetic context; simulated business tools",
+    "passed": 6,
+    "total": 6,
+    "cases": [
+      {
+        "case": "four-module-library",
+        "passed": true
+      },
+      {
+        "case": "conversation-proposes-without-execution",
+        "passed": true,
+        "conversation_id": "chat-dd61a9af3bd84cac"
+      },
+      {
+        "case": "authorization-stops-write-node",
+        "passed": true
+      },
+      {
+        "case": "response-lost-verified-one-draft",
+        "passed": true,
+        "run_id": "flowrun-65d2f9e03db61675a46c13bf",
+        "child": "run-863c538f8c35cb2d"
+      },
+      {
+        "case": "upstream-artifact-delivered-with-hash",
+        "passed": true
+      },
+      {
+        "case": "restart-resumes-same-task-one-draft",
+        "passed": true,
+        "run_id": "flowrun-db847337763c59b3c59c4b61",
+        "child": "run-3191a3022bacd8fe"
+      }
+    ],
+    "data_dir": "/Users/kurt/Desktop/CodeSpace/AgentFramework/.agent-data/workflow-final-review/workflow-ba9b2c7732/data"
+  },
+  "live_demo": {
+    "summary": ".agent-data/workflow-review/workflow-3b13d15b01/summary.json",
+    "verified_at": "2026-10-22T10:56:13.705159+00:00",
+    "scope": "fixed synthetic context; simulated business tools",
+    "passed": 7,
+    "total": 7,
+    "cases": [
+      {
+        "case": "four-module-library",
+        "passed": true
+      },
+      {
+        "case": "conversation-proposes-without-execution",
+        "passed": true,
+        "conversation_id": "chat-3fa2145cd3ac428d"
+      },
+      {
+        "case": "authorization-stops-write-node",
+        "passed": true
+      },
+      {
+        "case": "response-lost-verified-one-draft",
+        "passed": true,
+        "run_id": "flowrun-65d2f9e03db61675a46c13bf",
+        "child": "run-863c538f8c35cb2d"
+      },
+      {
+        "case": "upstream-artifact-delivered-with-hash",
+        "passed": true
+      },
+      {
+        "case": "restart-resumes-same-task-one-draft",
+        "passed": true,
+        "run_id": "flowrun-db847337763c59b3c59c4b61",
+        "child": "run-3191a3022bacd8fe"
+      },
+      {
+        "case": "live-codex-agent-structured-proposal",
+        "passed": true,
+        "model": "gpt-6.1-sol",
+        "elapsed_seconds": 17.27,
+        "conversation_id": "chat-d99f25df6e8945f5",
+        "usage": {
+          "cli_diagnostic_count": 1,
+          "mcp_calls": [],
+          "model": "gpt-6.1-sol",
+          "usage": {
+            "cache_write_input_tokens": 0,
+            "cached_input_tokens": 0,
+            "input_tokens": 17216,
+            "output_tokens": 341,
+            "reasoning_output_tokens": 0
+          }
+        }
+      }
+    ],
+    "data_dir": "/Users/kurt/Desktop/CodeSpace/AgentFramework/.agent-data/workflow-review/workflow-3b13d15b01/data"
+  },
+  "main_workspace_id": "workspace-b80fefb3ac784f7e",
+  "knowledge_versions": [
+    {
+      "ref": "asset-c86954abb265472d@2",
+      "status": "PUBLISHED",
+      "hash": "bde005b7672660e922bd6e618d17233078efbfb8583cffb037cd589a608c94c4"
+    },
+    {
+      "ref": "asset-c86954abb265472d@1",
+      "status": "PUBLISHED",
+      "hash": "10aa44bfccc5eccc0c51dd79a2dfbd08fb95bf7ba0ab6a26ce85b38f63d1c38a"
+    }
+  ],
+  "memory_episode_count": 5,
+  "published_experience": "experience-run-b1630276b4669013@1",
+  "main_flow_runs": [
+    {
+      "id": "flowrun-94e844b8d22431721c8f4dec",
+      "snapshot_hash": "599b4e1a596c6ee60294c5c6ac82f1e368751abb37190328bf62593d2110e7e8",
+      "workflow_id": "workflow-88215c9f00d84f74",
+      "status": "SUCCEEDED",
+      "children": [
+        {
+          "node_id": "node-1",
+          "agent_id": "agent-e2117c20c08e456a",
+          "agent_revision": 2,
+          "run_id": "run-720659368b9d8bf0",
+          "status": "SUCCEEDED",
+          "snapshot_hash": "20bbbc406377eac66158151a35e39f2ef7f253637c12b9fb6f5ca57c52c173df",
+          "checks": {
+            "answer-current": {
+              "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+              "evidence_refs": [
+                "builtin-risk-rubric-a2164245198d@1",
+                "asset-c86954abb265472d@2"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-grounded": {
+              "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-scope": {
+              "detail": "读取证据属于当前租户、项目和任务范围",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            }
+          },
+          "create_calls": 0,
+          "draft_count": 0,
+          "workflow_inputs": []
+        },
+        {
+          "node_id": "node-2",
+          "agent_id": "agent-b9ce8d1e557947b3",
+          "agent_revision": 2,
+          "run_id": "run-974625034b071d57",
+          "status": "SUCCEEDED",
+          "snapshot_hash": "b83a8bd017619fbda0f8632ddaa93f3d4bb5524a3b8f2b74493531af46e17173",
+          "checks": {
+            "critical-claims-evidence": {
+              "detail": "关键事实、来源哈希、版本与风险规则一致",
+              "evidence_refs": [
+                "evidence-01594f0a14b9e9f022ff",
+                "evidence-87440a749302e784edc8"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            },
+            "draft-readback": {
+              "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+              "evidence_refs": [
+                "evidence-02959f20df484b89f8db"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            },
+            "report-sections": {
+              "detail": "所有必选章节非空",
+              "evidence_refs": [
+                "evidence-01594f0a14b9e9f022ff",
+                "evidence-87440a749302e784edc8"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            }
+          },
+          "create_calls": 1,
+          "draft_count": 1,
+          "workflow_inputs": [
+            {
+              "artifact": {
+                "answer": "变更评估：失败测试判 HIGH；否则有依赖判 MEDIUM，否则 LOW。报告需引用来源证据，草稿供人工审核；写入状态不明先按原幂等键核对。\n模拟交易变更：失败测试判 HIGH，否则有依赖判 MEDIUM，无依赖判 LOW。评估报告包含 summary、impact、risks、test_results、rollback、recommendation 六个章节。草稿创建后独立回读，确认 DRAFT、项目、变更、来源版本、正文和摘要一致；回执不明先按原幂等键核对。工作流只有上游验收成功，才可将冻结产物交给下游 Agent；经验候选须评测并审核发布。",
+                "citations": [
+                  {
+                    "asset_ref": "builtin-risk-rubric-a2164245198d@1",
+                    "content_hash": "f9b95ce2c600b87202d6b80e58cf7b70e2e5febf3cf4caa3d745f7fd6a273133",
+                    "evidence_ref": "evidence-f3eded2de5ded697a99a",
+                    "quote": "变更评估：失败测试判 HIGH；否则有依赖判 MEDIUM，否则 LOW。报告需引用来源证据，草稿供人工审核；写入状态不明先按原幂等键核对。"
+                  },
+                  {
+                    "asset_ref": "asset-c86954abb265472d@2",
+                    "content_hash": "bde005b7672660e922bd6e618d17233078efbfb8583cffb037cd589a608c94c4",
+                    "evidence_ref": "evidence-f3eded2de5ded697a99a",
+                    "quote": "模拟交易变更：失败测试判 HIGH，否则有依赖判 MEDIUM，无依赖判 LOW。评估报告包含 summary、impact、risks、test_results、rollback、recommendation 六个章节。草稿创建后独立回读，确认 DRAFT、项目、变更、来源版本、正文和摘要一致；回执不明先按原幂等键核对。工作流只有上游验收成功，才可将冻结产物交给下游 Agent；经验候选须评测并审核发布。"
+                  }
+                ],
+                "limitations": [
+                  "仅引用当前任务范围内已发布资料；未执行任何业务写入。"
+                ],
+                "question": "依据当前空间已发布知识检索风险与草稿验收标准，提供可核对原文引用。"
+              },
+              "content_hash": "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c",
+              "node_id": "node-1",
+              "run_id": "run-720659368b9d8bf0"
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "data": {
+            "snapshot_hash": "599b4e1a596c6ee60294c5c6ac82f1e368751abb37190328bf62593d2110e7e8"
+          },
+          "kind": "workflow.created",
+          "seq": 1,
+          "time": 1792666355.458165
+        },
+        {
+          "data": {},
+          "kind": "workflow.resumed",
+          "seq": 2,
+          "time": 1792666355.465982
+        },
+        {
+          "data": {
+            "input_hashes": [],
+            "node_id": "node-1",
+            "run_id": "run-720659368b9d8bf0"
+          },
+          "kind": "node.intent",
+          "seq": 3,
+          "time": 1792666355.4707851
+        },
+        {
+          "data": {
+            "node_id": "node-1",
+            "run_id": "run-720659368b9d8bf0"
+          },
+          "kind": "node.submitted",
+          "seq": 4,
+          "time": 1792666355.480087
+        },
+        {
+          "data": {
+            "node_id": "node-1",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 5,
+          "time": 1792666355.50507
+        },
+        {
+          "data": {
+            "input_hashes": [],
+            "node_id": "node-1",
+            "run_id": "run-720659368b9d8bf0"
+          },
+          "kind": "node.intent",
+          "seq": 6,
+          "time": 1792666355.511183
+        },
+        {
+          "data": {
+            "node_id": "node-1",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 7,
+          "time": 1792666355.539674
+        },
+        {
+          "data": {
+            "input_hashes": [],
+            "node_id": "node-1",
+            "run_id": "run-720659368b9d8bf0"
+          },
+          "kind": "node.intent",
+          "seq": 8,
+          "time": 1792666355.5425012
+        },
+        {
+          "data": {
+            "node_id": "node-1",
+            "status": "SUCCEEDED"
+          },
+          "kind": "node.checkpoint",
+          "seq": 9,
+          "time": 1792666355.583817
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c"
+            ],
+            "node_id": "node-2",
+            "run_id": "run-974625034b071d57"
+          },
+          "kind": "node.intent",
+          "seq": 10,
+          "time": 1792666355.5928352
+        },
+        {
+          "data": {
+            "node_id": "node-2",
+            "run_id": "run-974625034b071d57"
+          },
+          "kind": "node.submitted",
+          "seq": 11,
+          "time": 1792666355.5983949
+        },
+        {
+          "data": {
+            "node_id": "node-2",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 12,
+          "time": 1792666355.729665
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c"
+            ],
+            "node_id": "node-2",
+            "run_id": "run-974625034b071d57"
+          },
+          "kind": "node.intent",
+          "seq": 13,
+          "time": 1792666355.737982
+        },
+        {
+          "data": {
+            "node_id": "node-2",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 14,
+          "time": 1792666355.8052301
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c"
+            ],
+            "node_id": "node-2",
+            "run_id": "run-974625034b071d57"
+          },
+          "kind": "node.intent",
+          "seq": 15,
+          "time": 1792666355.8158798
+        },
+        {
+          "data": {
+            "node_id": "node-2",
+            "status": "WAITING_AUTH"
+          },
+          "kind": "workflow.waiting",
+          "seq": 16,
+          "time": 1792666355.848491
+        },
+        {
+          "data": {},
+          "kind": "workflow.resumed",
+          "seq": 17,
+          "time": 1792666365.81495
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c"
+            ],
+            "node_id": "node-2",
+            "run_id": "run-974625034b071d57"
+          },
+          "kind": "node.intent",
+          "seq": 18,
+          "time": 1792666365.826781
+        },
+        {
+          "data": {
+            "node_id": "node-2",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 19,
+          "time": 1792666365.967503
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c"
+            ],
+            "node_id": "node-2",
+            "run_id": "run-974625034b071d57"
+          },
+          "kind": "node.intent",
+          "seq": 20,
+          "time": 1792666365.9754481
+        },
+        {
+          "data": {
+            "node_id": "node-2",
+            "status": "SUCCEEDED"
+          },
+          "kind": "node.checkpoint",
+          "seq": 21,
+          "time": 1792666365.9965749
+        },
+        {
+          "data": {},
+          "kind": "workflow.verified",
+          "seq": 22,
+          "time": 1792666366.0049422
+        }
+      ]
+    },
+    {
+      "id": "flowrun-3bf5a502ba70f023bb85fa6a",
+      "snapshot_hash": "599b4e1a596c6ee60294c5c6ac82f1e368751abb37190328bf62593d2110e7e8",
+      "workflow_id": "workflow-88215c9f00d84f74",
+      "status": "SUCCEEDED",
+      "children": [
+        {
+          "node_id": "node-1",
+          "agent_id": "agent-e2117c20c08e456a",
+          "agent_revision": 2,
+          "run_id": "run-ce6bccee15594a55",
+          "status": "SUCCEEDED",
+          "snapshot_hash": "20bbbc406377eac66158151a35e39f2ef7f253637c12b9fb6f5ca57c52c173df",
+          "checks": {
+            "answer-current": {
+              "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+              "evidence_refs": [
+                "builtin-risk-rubric-a2164245198d@1",
+                "asset-c86954abb265472d@2"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-grounded": {
+              "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-scope": {
+              "detail": "读取证据属于当前租户、项目和任务范围",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            }
+          },
+          "create_calls": 0,
+          "draft_count": 0,
+          "workflow_inputs": []
+        },
+        {
+          "node_id": "node-2",
+          "agent_id": "agent-b9ce8d1e557947b3",
+          "agent_revision": 2,
+          "run_id": "run-b1630276b4669013",
+          "status": "SUCCEEDED",
+          "snapshot_hash": "b83a8bd017619fbda0f8632ddaa93f3d4bb5524a3b8f2b74493531af46e17173",
+          "checks": {
+            "critical-claims-evidence": {
+              "detail": "关键事实、来源哈希、版本与风险规则一致",
+              "evidence_refs": [
+                "evidence-01594f0a14b9e9f022ff",
+                "evidence-87440a749302e784edc8"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            },
+            "draft-readback": {
+              "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+              "evidence_refs": [
+                "evidence-06dbba7d1f34fcaee3eb"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            },
+            "report-sections": {
+              "detail": "所有必选章节非空",
+              "evidence_refs": [
+                "evidence-01594f0a14b9e9f022ff",
+                "evidence-87440a749302e784edc8"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            }
+          },
+          "create_calls": 1,
+          "draft_count": 1,
+          "workflow_inputs": [
+            {
+              "artifact": {
+                "answer": "变更评估：失败测试判 HIGH；否则有依赖判 MEDIUM，否则 LOW。报告需引用来源证据，草稿供人工审核；写入状态不明先按原幂等键核对。\n模拟交易变更：失败测试判 HIGH，否则有依赖判 MEDIUM，无依赖判 LOW。评估报告包含 summary、impact、risks、test_results、rollback、recommendation 六个章节。草稿创建后独立回读，确认 DRAFT、项目、变更、来源版本、正文和摘要一致；回执不明先按原幂等键核对。工作流只有上游验收成功，才可将冻结产物交给下游 Agent；经验候选须评测并审核发布。",
+                "citations": [
+                  {
+                    "asset_ref": "builtin-risk-rubric-a2164245198d@1",
+                    "content_hash": "f9b95ce2c600b87202d6b80e58cf7b70e2e5febf3cf4caa3d745f7fd6a273133",
+                    "evidence_ref": "evidence-f3eded2de5ded697a99a",
+                    "quote": "变更评估：失败测试判 HIGH；否则有依赖判 MEDIUM，否则 LOW。报告需引用来源证据，草稿供人工审核；写入状态不明先按原幂等键核对。"
+                  },
+                  {
+                    "asset_ref": "asset-c86954abb265472d@2",
+                    "content_hash": "bde005b7672660e922bd6e618d17233078efbfb8583cffb037cd589a608c94c4",
+                    "evidence_ref": "evidence-f3eded2de5ded697a99a",
+                    "quote": "模拟交易变更：失败测试判 HIGH，否则有依赖判 MEDIUM，无依赖判 LOW。评估报告包含 summary、impact、risks、test_results、rollback、recommendation 六个章节。草稿创建后独立回读，确认 DRAFT、项目、变更、来源版本、正文和摘要一致；回执不明先按原幂等键核对。工作流只有上游验收成功，才可将冻结产物交给下游 Agent；经验候选须评测并审核发布。"
+                  }
+                ],
+                "limitations": [
+                  "仅引用当前任务范围内已发布资料；未执行任何业务写入。"
+                ],
+                "question": "依据当前空间已发布知识检索风险与草稿验收标准，提供可核对原文引用。"
+              },
+              "content_hash": "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c",
+              "node_id": "node-1",
+              "run_id": "run-ce6bccee15594a55"
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "data": {
+            "snapshot_hash": "599b4e1a596c6ee60294c5c6ac82f1e368751abb37190328bf62593d2110e7e8"
+          },
+          "kind": "workflow.created",
+          "seq": 1,
+          "time": 1792666422.230159
+        },
+        {
+          "data": {},
+          "kind": "workflow.resumed",
+          "seq": 2,
+          "time": 1792666422.2381482
+        },
+        {
+          "data": {
+            "input_hashes": [],
+            "node_id": "node-1",
+            "run_id": "run-ce6bccee15594a55"
+          },
+          "kind": "node.intent",
+          "seq": 3,
+          "time": 1792666422.2424572
+        },
+        {
+          "data": {
+            "node_id": "node-1",
+            "run_id": "run-ce6bccee15594a55"
+          },
+          "kind": "node.submitted",
+          "seq": 4,
+          "time": 1792666422.251331
+        },
+        {
+          "data": {
+            "node_id": "node-1",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 5,
+          "time": 1792666422.2926662
+        },
+        {
+          "data": {
+            "input_hashes": [],
+            "node_id": "node-1",
+            "run_id": "run-ce6bccee15594a55"
+          },
+          "kind": "node.intent",
+          "seq": 6,
+          "time": 1792666422.295134
+        },
+        {
+          "data": {
+            "node_id": "node-1",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 7,
+          "time": 1792666422.318243
+        },
+        {
+          "data": {
+            "input_hashes": [],
+            "node_id": "node-1",
+            "run_id": "run-ce6bccee15594a55"
+          },
+          "kind": "node.intent",
+          "seq": 8,
+          "time": 1792666422.320878
+        },
+        {
+          "data": {
+            "node_id": "node-1",
+            "status": "SUCCEEDED"
+          },
+          "kind": "node.checkpoint",
+          "seq": 9,
+          "time": 1792666422.365542
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c"
+            ],
+            "node_id": "node-2",
+            "run_id": "run-b1630276b4669013"
+          },
+          "kind": "node.intent",
+          "seq": 10,
+          "time": 1792666422.373999
+        },
+        {
+          "data": {
+            "node_id": "node-2",
+            "run_id": "run-b1630276b4669013"
+          },
+          "kind": "node.submitted",
+          "seq": 11,
+          "time": 1792666422.3788311
+        },
+        {
+          "data": {
+            "node_id": "node-2",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 12,
+          "time": 1792666422.4683452
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c"
+            ],
+            "node_id": "node-2",
+            "run_id": "run-b1630276b4669013"
+          },
+          "kind": "node.intent",
+          "seq": 13,
+          "time": 1792666422.4771898
+        },
+        {
+          "data": {
+            "node_id": "node-2",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 14,
+          "time": 1792666422.546876
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c"
+            ],
+            "node_id": "node-2",
+            "run_id": "run-b1630276b4669013"
+          },
+          "kind": "node.intent",
+          "seq": 15,
+          "time": 1792666422.556973
+        },
+        {
+          "data": {},
+          "kind": "node.interrupted",
+          "seq": 16,
+          "time": 1792666422.638562
+        },
+        {
+          "data": {},
+          "kind": "workflow.resumed",
+          "seq": 17,
+          "time": 1792666456.322651
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c"
+            ],
+            "node_id": "node-2",
+            "run_id": "run-b1630276b4669013"
+          },
+          "kind": "node.intent",
+          "seq": 18,
+          "time": 1792666456.338157
+        },
+        {
+          "data": {
+            "node_id": "node-2",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 19,
+          "time": 1792666456.418735
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "b8a58a1785bdfa496b2da8dd9a1fe89dd7aa09c566e4f6ec291b983d63fb377c"
+            ],
+            "node_id": "node-2",
+            "run_id": "run-b1630276b4669013"
+          },
+          "kind": "node.intent",
+          "seq": 20,
+          "time": 1792666456.426704
+        },
+        {
+          "data": {
+            "node_id": "node-2",
+            "status": "SUCCEEDED"
+          },
+          "kind": "node.checkpoint",
+          "seq": 21,
+          "time": 1792666456.451137
+        },
+        {
+          "data": {},
+          "kind": "workflow.verified",
+          "seq": 22,
+          "time": 1792666456.458988
+        }
+      ]
+    }
+  ],
+  "restart_proof": {
+    "flow_hash_unchanged": true,
+    "child_id_unchanged": true,
+    "child_snapshot_unchanged": true,
+    "create_calls": 1,
+    "draft_count": 1
+  },
+  "real_model": {
+    "conversation_id": "chat-d99f25df6e8945f5",
+    "runtime": "codex",
+    "model": "gpt-6.1-sol",
+    "schema_hash": "59f2c06cc0fa2c04e05d9122fdfe4f5e86840a29fc175990b1984d2908672480",
+    "usage": {
+      "cli_diagnostic_count": 1,
+      "mcp_calls": [],
+      "model": "gpt-6.1-sol",
+      "usage": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 0,
+        "input_tokens": 17216,
+        "output_tokens": 341,
+        "reasoning_output_tokens": 0
+      }
+    },
+    "business_and_native_tools_during_design": 0,
+    "ui_saved_and_executed_proposal": {
+      "id": "flowrun-83c506fe8da4e0d1bf4b910b",
+      "snapshot_hash": "ec6512625bc85debc516e166e0df8872cb5264491b8f006c2cfcced43e30a494",
+      "workflow_id": "workflow-f183bef6a6f74bdf",
+      "status": "SUCCEEDED",
+      "children": [
+        {
+          "node_id": "standards_lookup",
+          "agent_id": "agent-89d9ac831df14fa6",
+          "agent_revision": 1,
+          "run_id": "run-205e5b95b45d4c8a",
+          "status": "SUCCEEDED",
+          "snapshot_hash": "66d19c90d89258587fea30402e77f4f5b2871087d6397fc6830fdfcb9c2cf955",
+          "checks": {
+            "answer-current": {
+              "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+              "evidence_refs": [
+                "builtin-risk-rubric-fe7bff9bf573@1",
+                "asset-371aa5befe5f4dd9@1"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-grounded": {
+              "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+              "evidence_refs": [
+                "evidence-f5ac0504096304dd9f58"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-scope": {
+              "detail": "读取证据属于当前租户、项目和任务范围",
+              "evidence_refs": [
+                "evidence-f5ac0504096304dd9f58"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            }
+          },
+          "create_calls": 0,
+          "draft_count": 0,
+          "workflow_inputs": []
+        },
+        {
+          "node_id": "change_assessment",
+          "agent_id": "agent-45f1d7fc017c412b",
+          "agent_revision": 1,
+          "run_id": "run-e1b755e7e367ecc2",
+          "status": "SUCCEEDED",
+          "snapshot_hash": "6483c4efc751fb398f831e135c1495dcd11d0fcf130d734506cfb9bdb6245be3",
+          "checks": {
+            "critical-claims-evidence": {
+              "detail": "关键事实、来源哈希、版本与风险规则一致",
+              "evidence_refs": [
+                "evidence-904226a3e1bd7a393edf",
+                "evidence-87440a749302e784edc8"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            },
+            "draft-readback": {
+              "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+              "evidence_refs": [
+                "evidence-f5af99eab182541334f8"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            },
+            "report-sections": {
+              "detail": "所有必选章节非空",
+              "evidence_refs": [
+                "evidence-904226a3e1bd7a393edf",
+                "evidence-87440a749302e784edc8"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            }
+          },
+          "create_calls": 1,
+          "draft_count": 1,
+          "workflow_inputs": [
+            {
+              "artifact": {
+                "answer": "变更评估：失败测试判 HIGH；否则有依赖判 MEDIUM，否则 LOW。报告需引用来源证据，草稿供人工审核；写入状态不明先按原幂等键核对。\n失败测试判 HIGH，否则有依赖判 MEDIUM，无依赖判 LOW。草稿需六个章节，独立回读 DRAFT、版本、正文和摘要；不明写入按原幂等键核对。",
+                "citations": [
+                  {
+                    "asset_ref": "builtin-risk-rubric-fe7bff9bf573@1",
+                    "content_hash": "defa21a1fc96c2f59208d90a9bdebc82463207abcd0d79e64398196106559ceb",
+                    "evidence_ref": "evidence-f5ac0504096304dd9f58",
+                    "quote": "变更评估：失败测试判 HIGH；否则有依赖判 MEDIUM，否则 LOW。报告需引用来源证据，草稿供人工审核；写入状态不明先按原幂等键核对。"
+                  },
+                  {
+                    "asset_ref": "asset-371aa5befe5f4dd9@1",
+                    "content_hash": "2a686220bc66addcbfdd388e9572573b443efab98484520beebb808369f866af",
+                    "evidence_ref": "evidence-f5ac0504096304dd9f58",
+                    "quote": "失败测试判 HIGH，否则有依赖判 MEDIUM，无依赖判 LOW。草稿需六个章节，独立回读 DRAFT、版本、正文和摘要；不明写入按原幂等键核对。"
+                  }
+                ],
+                "limitations": [
+                  "仅引用当前任务范围内已发布资料；未执行任何业务写入。"
+                ],
+                "question": "仅基于固定模拟上下文，查询并整理变更风险评估规范及草稿验收规范，提供规范来源、适用条件、评估要求与验收清单。产物验收成功后冻结，供下游通过 workflow_inputs 使用。"
+              },
+              "content_hash": "2c6500d414d1826b19fd0875fac8200d1c1fc574721344f67937e56ba60045f3",
+              "node_id": "standards_lookup",
+              "run_id": "run-205e5b95b45d4c8a"
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "data": {
+            "snapshot_hash": "ec6512625bc85debc516e166e0df8872cb5264491b8f006c2cfcced43e30a494"
+          },
+          "kind": "workflow.created",
+          "seq": 1,
+          "time": 1792666746.690079
+        },
+        {
+          "data": {},
+          "kind": "workflow.resumed",
+          "seq": 2,
+          "time": 1792666746.697373
+        },
+        {
+          "data": {
+            "input_hashes": [],
+            "node_id": "standards_lookup",
+            "run_id": "run-205e5b95b45d4c8a"
+          },
+          "kind": "node.intent",
+          "seq": 3,
+          "time": 1792666746.702067
+        },
+        {
+          "data": {
+            "node_id": "standards_lookup",
+            "run_id": "run-205e5b95b45d4c8a"
+          },
+          "kind": "node.submitted",
+          "seq": 4,
+          "time": 1792666746.708586
+        },
+        {
+          "data": {
+            "node_id": "standards_lookup",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 5,
+          "time": 1792666746.761309
+        },
+        {
+          "data": {
+            "input_hashes": [],
+            "node_id": "standards_lookup",
+            "run_id": "run-205e5b95b45d4c8a"
+          },
+          "kind": "node.intent",
+          "seq": 6,
+          "time": 1792666746.764661
+        },
+        {
+          "data": {
+            "node_id": "standards_lookup",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 7,
+          "time": 1792666746.7886841
+        },
+        {
+          "data": {
+            "input_hashes": [],
+            "node_id": "standards_lookup",
+            "run_id": "run-205e5b95b45d4c8a"
+          },
+          "kind": "node.intent",
+          "seq": 8,
+          "time": 1792666746.791392
+        },
+        {
+          "data": {
+            "node_id": "standards_lookup",
+            "status": "SUCCEEDED"
+          },
+          "kind": "node.checkpoint",
+          "seq": 9,
+          "time": 1792666746.833816
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "2c6500d414d1826b19fd0875fac8200d1c1fc574721344f67937e56ba60045f3"
+            ],
+            "node_id": "change_assessment",
+            "run_id": "run-e1b755e7e367ecc2"
+          },
+          "kind": "node.intent",
+          "seq": 10,
+          "time": 1792666746.8425212
+        },
+        {
+          "data": {
+            "node_id": "change_assessment",
+            "run_id": "run-e1b755e7e367ecc2"
+          },
+          "kind": "node.submitted",
+          "seq": 11,
+          "time": 1792666746.847738
+        },
+        {
+          "data": {
+            "node_id": "change_assessment",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 12,
+          "time": 1792666746.978401
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "2c6500d414d1826b19fd0875fac8200d1c1fc574721344f67937e56ba60045f3"
+            ],
+            "node_id": "change_assessment",
+            "run_id": "run-e1b755e7e367ecc2"
+          },
+          "kind": "node.intent",
+          "seq": 13,
+          "time": 1792666746.987693
+        },
+        {
+          "data": {
+            "node_id": "change_assessment",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 14,
+          "time": 1792666747.057255
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "2c6500d414d1826b19fd0875fac8200d1c1fc574721344f67937e56ba60045f3"
+            ],
+            "node_id": "change_assessment",
+            "run_id": "run-e1b755e7e367ecc2"
+          },
+          "kind": "node.intent",
+          "seq": 15,
+          "time": 1792666747.0669901
+        },
+        {
+          "data": {
+            "node_id": "change_assessment",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 16,
+          "time": 1792666747.152552
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "2c6500d414d1826b19fd0875fac8200d1c1fc574721344f67937e56ba60045f3"
+            ],
+            "node_id": "change_assessment",
+            "run_id": "run-e1b755e7e367ecc2"
+          },
+          "kind": "node.intent",
+          "seq": 17,
+          "time": 1792666747.1621451
+        },
+        {
+          "data": {
+            "node_id": "change_assessment",
+            "status": "RUNNING"
+          },
+          "kind": "node.checkpoint",
+          "seq": 18,
+          "time": 1792666747.233977
+        },
+        {
+          "data": {
+            "input_hashes": [
+              "2c6500d414d1826b19fd0875fac8200d1c1fc574721344f67937e56ba60045f3"
+            ],
+            "node_id": "change_assessment",
+            "run_id": "run-e1b755e7e367ecc2"
+          },
+          "kind": "node.intent",
+          "seq": 19,
+          "time": 1792666747.242176
+        },
+        {
+          "data": {
+            "node_id": "change_assessment",
+            "status": "SUCCEEDED"
+          },
+          "kind": "node.checkpoint",
+          "seq": 20,
+          "time": 1792666747.264371
+        },
+        {
+          "data": {},
+          "kind": "workflow.verified",
+          "seq": 21,
+          "time": 1792666747.273108
+        }
+      ]
+    },
+    "execution_nodes": "mock cognition and simulated business tools"
+  },
+  "old_snapshots": {
+    "count": 28,
+    "all_unchanged": true,
+    "runs": [
+      {
+        "run_id": "run-1c003b0dadad45da",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-2bfe04180d5f47c1",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-cd6963a8eade4f19",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-27e6f6ed96b3414b",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-1af3949ae2c842a5",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-93944f938b9a4952",
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-61558052cc844549",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-94951d4ff58a44e4",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-dacd2cd2f6df42f1",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-1d31032dc1f346e0",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-8b8ae865d97e4f0f",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-c96786f6da554068",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-1b386b79b4944bfd",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-67cc8c2ba39f4680",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-3b72a0f2f51d4fa2",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-9ee35440c6bd4e12",
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-e717b3422559495b",
+        "snapshot_hash": "781b1d2b319717eedf578a2cf92fef558285e6f0f568376a8989465cfb07934d",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-2c01ebe306404139",
+        "snapshot_hash": "781b1d2b319717eedf578a2cf92fef558285e6f0f568376a8989465cfb07934d",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-84a68aa159cc462d",
+        "snapshot_hash": "781b1d2b319717eedf578a2cf92fef558285e6f0f568376a8989465cfb07934d",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-bb7abfdcfc214e92",
+        "snapshot_hash": "ed2ee61c7a24b0c64aa9a877060d6f4a60cb558959c768ce4aa7e450092ccd10",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-2760243c40e94dd1",
+        "snapshot_hash": "18c130f3d1a8a2f173cf179c5a25c68a17944720a1639c64b01398dba99508b2",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-e01365896a5a4eef",
+        "snapshot_hash": "e569561dd09eb9a71909f28fb0e81f932924e3e58577b05167bbab8a8cac6b1b",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-ccf8ae5b94af48b0",
+        "snapshot_hash": "55cad8c8ab1c0109478334c58ce0b626f3f218f7ec23b4a31949e2e3f3c6754f",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-3d23dadcfbac4dba",
+        "snapshot_hash": "15d1052450837eeb998f47661d9bf8b725b334d74b84dfedc09b183f84a73cb2",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-4b569b2e58cd4309",
+        "snapshot_hash": "8a7c66d431d3a07306f822d8f9bdb5453bbb06836054d56c900f3c7545695760",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-5f9c18ea690e4584",
+        "snapshot_hash": "bdf08a363a9870cb534622993a667321d1f842bf25452a1085cdeeb8f4734fd3",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-b20040b18bcb4087",
+        "snapshot_hash": "bdf08a363a9870cb534622993a667321d1f842bf25452a1085cdeeb8f4734fd3",
+        "unchanged": true,
+        "planner_restores": true
+      },
+      {
+        "run_id": "run-0dd940c1ad3549e0",
+        "snapshot_hash": "b83a8bd017619fbda0f8632ddaa93f3d4bb5524a3b8f2b74493531af46e17173",
+        "unchanged": true,
+        "planner_restores": true
+      }
+    ]
+  },
+  "responsive": [
+    {
+      "content": 375,
+      "navContent": 375,
+      "navWidth": 375,
+      "page": "workflows",
+      "width": 375
+    },
+    {
+      "content": 375,
+      "dialog": 349,
+      "dialogContent": 349,
+      "page": "flow-editor",
+      "width": 375
+    },
+    {
+      "content": 375,
+      "dialog": 349,
+      "dialogContent": 349,
+      "page": "flow-chat",
+      "width": 375
+    },
+    {
+      "content": 375,
+      "page": "knowledge-hub",
+      "width": 375
+    },
+    {
+      "content": 768,
+      "page": "knowledge-hub",
+      "width": 768
+    },
+    {
+      "content": 768,
+      "page": "workflows",
+      "width": 768
+    }
+  ],
+  "screenshots": [
+    "knowledge.jpg",
+    "memory.jpg",
+    "experience.jpg",
+    "capabilities.jpg",
+    "chat.jpg",
+    "waiting-auth.jpg",
+    "recovered.jpg",
+    "live-codex-proposal.jpg",
+    "live-workflow-result.jpg"
+  ],
+  "source_sha256": {
+    "agent_framework/__init__.py": "1c576e527e826bebd15d3b6e4a4b4fbf2e16e9887096ef601b187a1b32734271",
+    "agent_framework/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "agent_framework/adapters.py": "fbd0c39a31d2590168804103a9d6f42d12757ac0c56dbe380e106c367725c9ef",
+    "agent_framework/agent_extensions.py": "c2a2e8984451f3bff50d24c86a4ff5f5b9985edba3064fa1d4a5385904414875",
+    "agent_framework/agents.py": "8db9ff9862fc32792ca7b9f5d5dff947361011e29f0f71172bbf85cc7440eddf",
+    "agent_framework/assistant_evaluate.py": "dc6a1ced9a2e37f773daa309b2c3b4e0ded378751d84d51ab773320bbb5d1780",
+    "agent_framework/cli.py": "aad99deb31a6ff684b1c64cd9c5f04b163681bb9301d1cde4909335878a48caf",
+    "agent_framework/context_builder.py": "5ca3005d3cc0824408bc18edc6d1dc82446fdb2d1e76767c2afa3d1a4a19b937",
+    "agent_framework/contracts.py": "72082417e8193fbe9625efaf251fa11d74ee58816d507bd8b9bdba8c0afbed81",
+    "agent_framework/definitions.py": "4b855cd4ef00ade2c7a5e88bbf70d7cd8662766d3d8489d6e9cc0d6aa935b327",
+    "agent_framework/domains/__init__.py": "93fbe1f965bfb446f59909ed81ee4593519de4a15b8e24de3ef95af4d61a04fd",
+    "agent_framework/domains/change_assessment.py": "40c36b5faa4e86d28341d54e7f41e361aa9976625060f90d98d9998fd965a4eb",
+    "agent_framework/domains/change_verifier.py": "406976d65ac5cd27045bb753b7a8d19e30377023767e38bf5c2aa3ee2b560c38",
+    "agent_framework/domains/knowledge_answer.py": "18cfa6114d4635e59b0a61deaf24a9e25dc4795df0ddae07c149af777eebaf7b",
+    "agent_framework/evaluate.py": "a422821a864766504c8a0112cb28247d52f48408544250e09468f95348639ef6",
+    "agent_framework/experience.py": "f2258b125da9f19244839b5569f201c86d743e3f77bfead2af9ddd7e3da68130",
+    "agent_framework/gateway.py": "b964231bac0bc9413fdccbd03c1667bea979102bc1574f57ec0855073c33fb66",
+    "agent_framework/knowledge.py": "95726d331c2d97458486aeccc1148aa751f9e049b178596d9d652437dd275144",
+    "agent_framework/knowledge_hub.py": "4b38b30ebc08d1bafc2db3d9dd5d87fe7772aa591e5a95d992f31019b0a36d86",
+    "agent_framework/library_cli.py": "5ced6c3153ad05099bb0a69d11de272840dfa9240787ee0993b88e4cb915fb39",
+    "agent_framework/llm.py": "d20a609a7c9d2e42e09c996a7a6a5cf46bcfb1648addce8046f4c2aaf59c7e66",
+    "agent_framework/memory.py": "1eff9dce68e90d154ba06096993c70c1a1269acd76c2a9d98998b114fce6201d",
+    "agent_framework/mock_tools.py": "be121aad25a03f17e5cdf0792f22e58ec50e29c35b45ce52d15942f2d8b345b2",
+    "agent_framework/model_catalog.py": "4506441f5b612b45074817b8c53fc05d15bd0601130b8de52bdce7c70b7be524",
+    "agent_framework/p0_evaluate.py": "1a05f5b25eab8dae77ae67a6721c4ac9a8291863e5fc14024fd1a0878cff08d4",
+    "agent_framework/planner.py": "87dae7afd294e8c562afc74ae1ec94eb8bf29901e3b9e2f732380e5c5743bb8e",
+    "agent_framework/read_proxy.py": "c3fcda31e385ff48d6a7506fef2bfd4bb4ee49756064681c73738f004711a201",
+    "agent_framework/runtime.py": "442bd0e3f1ef62e2ae079f012c0274982db078fa5bb42a1d7336fb5c658e26c7",
+    "agent_framework/runtime_config.py": "cba64c28fd49b9bcb14105a8f0ab04df588681678bd56e3cbddf37e819a4f0b4",
+    "agent_framework/store.py": "be286881835e176835176efb3066da91222cbff91d288af4ca2e5a107a10a367",
+    "agent_framework/structured.py": "9cdbb6b55cd2cef287d67030cc953b6bbe154a576b92adb1b3164760543a120d",
+    "agent_framework/verifier.py": "840834bfa62b9e6d512f87330d8534154d8d0225e7d7d8d9bce38bb369aa756e",
+    "agent_framework/web.py": "719e2261407768e3699f0ef272594b7704bcd53eb7416d59d864b4919a03e05b",
+    "agent_framework/webui/agents.js": "bc7ef1521c27e66ca699b2122f1136734e394ada25de264c23eb3c232cd3548d",
+    "agent_framework/webui/app.js": "95f5ffdc566c03084cab39b2741db7e806593128e6461770cf3d3e749ae5dae2",
+    "agent_framework/webui/index.html": "e6f51b44fab1a9b722c075fc06a8d40670ec5fbf18431739ef3011bd5c163155",
+    "agent_framework/webui/library.js": "2af55e204482af0bbc96b68e2de9bc33d490184c925dfb762061202aa361fc0f",
+    "agent_framework/webui/roles.js": "b7bd15d3138737f31e6edda282461f338204895377b67bc582f587ff28927fde",
+    "agent_framework/webui/styles.css": "797a86644a61a3eb65b1ed02612f43077d3de30a1e7113439e0a5770a2f96241",
+    "agent_framework/webui/workflows.js": "396ea4a0dffaa7ce785482f85a8ad69ef80070e1d5fedab377f268443c35d0cd",
+    "agent_framework/webui/workspaces.js": "237012edb237ea6135e25d0d8e77ea46f391443cd9c4c4480048c8738d0656c9",
+    "agent_framework/worker.py": "604b82876569f3fa24ad1cfb7ffc34d5a805ce3ff80acb991d14374bba6abab8",
+    "agent_framework/workflow_chat.py": "a5eb1e43dfb192e37b300a505d43ef1c281d0c8439e0ffebe5ca8251b2bb07a2",
+    "agent_framework/workflow_evaluate.py": "c923541663a2e567fca4c1c8cae3c6cbb0611928e9d7fbb0d40fb4adfdc02016",
+    "agent_framework/workflows.py": "00e61252614d989b8e55c3eba93f9e3744640467bb2b56dc3bb2fc972c1678fe",
+    "agent_framework/workspaces.py": "bacf1108cb02f9c52a724bf9dac159225ea9ae3fca19a36d647b3ac4288e13ea",
+    "tests/test_agents.py": "defe1113a379535187010c37e490e469ce2e5c11f5c696dd3bade115f820a204",
+    "tests/test_governance.py": "fe886282168fe830a37f82692da05768e06cb579621be9e3005fd7de62280849",
+    "tests/test_knowledge.py": "2e53066f707ab11281b2461d6e8e30a24408d33433afe68f831256005b861d1a",
+    "tests/test_knowledge_domain.py": "4d3f8c4d38946e60196909d2c7e28abb216801713a1d147c479355c88abce2bd",
+    "tests/test_llm.py": "2f2e2eea3d00c4da8926bf8174fd9ebbcfcdae32e48f5a6df9ce64ca083bde3d",
+    "tests/test_mcp_fixture.py": "409d0634b0708dce59ebd5d3298faf9fead1e30945c0cdda21048aeeff9691d5",
+    "tests/test_model_catalog.py": "473e1a417cde354c1b9abe93d636afee74564ab6f289bd954fd4be7fd029f487",
+    "tests/test_runtime.py": "c31a38f6507cb00b156af70d02e407d139cd1805e4d4be85e03c682ff1f5f556",
+    "tests/test_runtime_config.py": "702d5c5093c73632b6da88a42ae117b40c435bcbdf1af2ce39bb76224cc9a43b",
+    "tests/test_web.py": "7529eb846e5a72482ccf4544e912bcfffe08b1d0ebecdcfb76c4919dcf41e450",
+    "tests/test_workflows.py": "57dbfa0380f3473739fdb6b6692cb4744130e610e1742289f6db0679bd049343",
+    "tests/test_workspaces.py": "90160131dfcb2cda52eba89abe75ca187e9466cc01a2113c8c13c8f1c748162a"
+  }
+}

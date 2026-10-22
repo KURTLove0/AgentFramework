@@ -1,0 +1,495 @@
+{
+  "verified_at": "2026-10-22T11:41:26.675938+00:00",
+  "scope": "Synthetic context and simulated business tools only",
+  "tests": {
+    "regression": {
+      "passed": 171,
+      "total": 171,
+      "log": ".agent-data/workflow-visual-full-tests.log"
+    },
+    "p0": {
+      "passed": 44,
+      "total": 44
+    }
+  },
+  "legacy_snapshots_unchanged": 28,
+  "legacy_runs": [
+    "run-1c003b0dadad45da",
+    "run-2bfe04180d5f47c1",
+    "run-cd6963a8eade4f19",
+    "run-27e6f6ed96b3414b",
+    "run-1af3949ae2c842a5",
+    "run-93944f938b9a4952",
+    "run-61558052cc844549",
+    "run-94951d4ff58a44e4",
+    "run-dacd2cd2f6df42f1",
+    "run-1d31032dc1f346e0",
+    "run-8b8ae865d97e4f0f",
+    "run-c96786f6da554068",
+    "run-1b386b79b4944bfd",
+    "run-67cc8c2ba39f4680",
+    "run-3b72a0f2f51d4fa2",
+    "run-9ee35440c6bd4e12",
+    "run-e717b3422559495b",
+    "run-2c01ebe306404139",
+    "run-84a68aa159cc462d",
+    "run-bb7abfdcfc214e92",
+    "run-2760243c40e94dd1",
+    "run-e01365896a5a4eef",
+    "run-ccf8ae5b94af48b0",
+    "run-3d23dadcfbac4dba",
+    "run-4b569b2e58cd4309",
+    "run-5f9c18ea690e4584",
+    "run-b20040b18bcb4087",
+    "run-0dd940c1ad3549e0"
+  ],
+  "web_ui_runs": [
+    {
+      "id": "flowrun-8c69780d2e602a9b52998f47",
+      "status": "SUCCEEDED",
+      "snapshot_hash": "a0eb2c14ffd51a4fb695344fcd7a372bf65979ec6efe5c4dd71a34542a41c859",
+      "nodes": [
+        {
+          "node_id": "node-d875f072",
+          "name": "知识检索与引用",
+          "status": "SUCCEEDED",
+          "run_id": "run-012bee706150e378",
+          "checks": {
+            "answer-current": {
+              "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+              "evidence_refs": [
+                "builtin-risk-rubric-a2164245198d@1"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-grounded": {
+              "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+              "evidence_refs": [
+                "evidence-9b5768f1733d7aa7c19e"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-scope": {
+              "detail": "读取证据属于当前租户、项目和任务范围",
+              "evidence_refs": [
+                "evidence-9b5768f1733d7aa7c19e"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            }
+          },
+          "draft_count": 0,
+          "create_calls": 0,
+          "snapshot_hash": "20bbbc406377eac66158151a35e39f2ef7f253637c12b9fb6f5ca57c52c173df",
+          "retrieval": {
+            "query": "变更风险 草稿验收标准",
+            "top_k": 1
+          },
+          "upstream_inputs": 0
+        },
+        {
+          "node_id": "node-7e8bfd7f",
+          "name": "基于知识生成评估",
+          "status": "SUCCEEDED",
+          "run_id": "run-2d4ea810fd75b9b5",
+          "checks": {
+            "critical-claims-evidence": {
+              "detail": "关键事实、来源哈希、版本与风险规则一致",
+              "evidence_refs": [
+                "evidence-01594f0a14b9e9f022ff",
+                "evidence-87440a749302e784edc8"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            },
+            "draft-readback": {
+              "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+              "evidence_refs": [
+                "evidence-1e99c938288852ba5329"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            },
+            "report-sections": {
+              "detail": "所有必选章节非空",
+              "evidence_refs": [
+                "evidence-01594f0a14b9e9f022ff",
+                "evidence-87440a749302e784edc8"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            }
+          },
+          "draft_count": 1,
+          "create_calls": 1,
+          "snapshot_hash": "b83a8bd017619fbda0f8632ddaa93f3d4bb5524a3b8f2b74493531af46e17173",
+          "retrieval": null,
+          "upstream_inputs": 1
+        },
+        {
+          "node_id": "node-e0a7a5d3",
+          "name": "高风险规范复核",
+          "status": "SUCCEEDED",
+          "run_id": "run-df2f8379c3d2f189",
+          "checks": {
+            "answer-current": {
+              "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+              "evidence_refs": [
+                "builtin-risk-rubric-a2164245198d@1",
+                "asset-c86954abb265472d@2"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-grounded": {
+              "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-scope": {
+              "detail": "读取证据属于当前租户、项目和任务范围",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            }
+          },
+          "draft_count": 0,
+          "create_calls": 0,
+          "snapshot_hash": "20bbbc406377eac66158151a35e39f2ef7f253637c12b9fb6f5ca57c52c173df",
+          "retrieval": null,
+          "upstream_inputs": 1
+        },
+        {
+          "node_id": "node-15b1b1d1",
+          "name": "其他风险资料核对",
+          "status": "SKIPPED",
+          "child_created": false
+        },
+        {
+          "node_id": "node-2a1e9eda",
+          "name": "分支汇合与引用验收",
+          "status": "SUCCEEDED",
+          "run_id": "run-d84976c3d80b6ba9",
+          "checks": {
+            "answer-current": {
+              "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+              "evidence_refs": [
+                "builtin-risk-rubric-a2164245198d@1",
+                "asset-c86954abb265472d@2"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-grounded": {
+              "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-scope": {
+              "detail": "读取证据属于当前租户、项目和任务范围",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            }
+          },
+          "draft_count": 0,
+          "create_calls": 0,
+          "snapshot_hash": "20bbbc406377eac66158151a35e39f2ef7f253637c12b9fb6f5ca57c52c173df",
+          "retrieval": null,
+          "upstream_inputs": 1
+        }
+      ],
+      "routing_events": [
+        {
+          "data": {
+            "node_id": "node-15b1b1d1",
+            "routing": {
+              "condition": {
+                "field": "risk_level",
+                "operator": "ne",
+                "source": "node-7e8bfd7f",
+                "value": "HIGH"
+              },
+              "matched": false,
+              "source_hash": "44a2791800f234bcb27e7fe650ab897a21569d46003fb3cd42be10749357e9dc"
+            }
+          },
+          "kind": "node.skipped",
+          "seq": 29,
+          "time": 1792669114.6394858
+        }
+      ]
+    },
+    {
+      "id": "flowrun-e2acba10c6d184a4fe3f1b2c",
+      "status": "SUCCEEDED",
+      "snapshot_hash": "a0eb2c14ffd51a4fb695344fcd7a372bf65979ec6efe5c4dd71a34542a41c859",
+      "nodes": [
+        {
+          "node_id": "node-d875f072",
+          "name": "知识检索与引用",
+          "status": "SUCCEEDED",
+          "run_id": "run-00d5b534f458b89b",
+          "checks": {
+            "answer-current": {
+              "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+              "evidence_refs": [
+                "builtin-risk-rubric-a2164245198d@1"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-grounded": {
+              "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+              "evidence_refs": [
+                "evidence-9b5768f1733d7aa7c19e"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-scope": {
+              "detail": "读取证据属于当前租户、项目和任务范围",
+              "evidence_refs": [
+                "evidence-9b5768f1733d7aa7c19e"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            }
+          },
+          "draft_count": 0,
+          "create_calls": 0,
+          "snapshot_hash": "20bbbc406377eac66158151a35e39f2ef7f253637c12b9fb6f5ca57c52c173df",
+          "retrieval": {
+            "query": "变更风险 草稿验收标准",
+            "top_k": 1
+          },
+          "upstream_inputs": 0
+        },
+        {
+          "node_id": "node-7e8bfd7f",
+          "name": "基于知识生成评估",
+          "status": "SUCCEEDED",
+          "run_id": "run-c3f9f6b07ff7ed66",
+          "checks": {
+            "critical-claims-evidence": {
+              "detail": "关键事实、来源哈希、版本与风险规则一致",
+              "evidence_refs": [
+                "evidence-01594f0a14b9e9f022ff",
+                "evidence-87440a749302e784edc8"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            },
+            "draft-readback": {
+              "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+              "evidence_refs": [
+                "evidence-e11184362c6097059d04"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            },
+            "report-sections": {
+              "detail": "所有必选章节非空",
+              "evidence_refs": [
+                "evidence-01594f0a14b9e9f022ff",
+                "evidence-87440a749302e784edc8"
+              ],
+              "passed": true,
+              "verifier_ref": "release-verifier@1.0.0"
+            }
+          },
+          "draft_count": 1,
+          "create_calls": 1,
+          "snapshot_hash": "b83a8bd017619fbda0f8632ddaa93f3d4bb5524a3b8f2b74493531af46e17173",
+          "retrieval": null,
+          "upstream_inputs": 1
+        },
+        {
+          "node_id": "node-e0a7a5d3",
+          "name": "高风险规范复核",
+          "status": "SUCCEEDED",
+          "run_id": "run-edeb0f0fce569208",
+          "checks": {
+            "answer-current": {
+              "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+              "evidence_refs": [
+                "builtin-risk-rubric-a2164245198d@1",
+                "asset-c86954abb265472d@2"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-grounded": {
+              "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-scope": {
+              "detail": "读取证据属于当前租户、项目和任务范围",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            }
+          },
+          "draft_count": 0,
+          "create_calls": 0,
+          "snapshot_hash": "20bbbc406377eac66158151a35e39f2ef7f253637c12b9fb6f5ca57c52c173df",
+          "retrieval": null,
+          "upstream_inputs": 1
+        },
+        {
+          "node_id": "node-15b1b1d1",
+          "name": "其他风险资料核对",
+          "status": "SKIPPED",
+          "child_created": false
+        },
+        {
+          "node_id": "node-2a1e9eda",
+          "name": "分支汇合与引用验收",
+          "status": "SUCCEEDED",
+          "run_id": "run-2a92d18e03a3241c",
+          "checks": {
+            "answer-current": {
+              "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+              "evidence_refs": [
+                "builtin-risk-rubric-a2164245198d@1",
+                "asset-c86954abb265472d@2"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-grounded": {
+              "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            },
+            "answer-scope": {
+              "detail": "读取证据属于当前租户、项目和任务范围",
+              "evidence_refs": [
+                "evidence-f3eded2de5ded697a99a"
+              ],
+              "passed": true,
+              "verifier_ref": "knowledge-answer-verifier@1.0.0"
+            }
+          },
+          "draft_count": 0,
+          "create_calls": 0,
+          "snapshot_hash": "20bbbc406377eac66158151a35e39f2ef7f253637c12b9fb6f5ca57c52c173df",
+          "retrieval": null,
+          "upstream_inputs": 1
+        }
+      ],
+      "routing_events": [
+        {
+          "data": {
+            "node_id": "node-15b1b1d1",
+            "routing": {
+              "condition": {
+                "field": "risk_level",
+                "operator": "ne",
+                "source": "node-7e8bfd7f",
+                "value": "HIGH"
+              },
+              "matched": false,
+              "source_hash": "661c71e168b5a0a5052b6baa0f4917032afd68daf465320633df8cda2dc96ae6"
+            }
+          },
+          "kind": "node.skipped",
+          "seq": 29,
+          "time": 1792669174.621751
+        }
+      ]
+    }
+  ],
+  "restart_preserved_task_and_snapshot": true,
+  "live_model": {
+    "provider": "local Codex CLI login",
+    "model": "gpt-6.1-sol",
+    "conversation_id": "chat-cff7f8f5b59345ac",
+    "usage": {
+      "cli_diagnostic_count": 1,
+      "mcp_calls": [],
+      "model": "gpt-6.1-sol",
+      "usage": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 0,
+        "input_tokens": 18070,
+        "output_tokens": 780,
+        "reasoning_output_tokens": 0
+      }
+    },
+    "nodes": 5,
+    "execution_run_id": "flowrun-bafa560fdb049e4cbe5c4b54",
+    "draft_count": 1,
+    "create_calls": 1
+  },
+  "responsive_checks": [
+    {
+      "width": 1440,
+      "height": 1000,
+      "page_overflow": false,
+      "columns": "1020px 320px"
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "page_overflow": false,
+      "dialog_width": 355,
+      "dialog_scroll_width": 353,
+      "canvas_viewport_width": 319
+    }
+  ],
+  "changed_source_hashes": {
+    "agent_framework/workflows.py": "829ea0ce761a082a8d9ecff40cc2f289bc4f0530cb46a6961293d6ff198b4358",
+    "agent_framework/workflow_rules.py": "da846ab9e067d6de38a55a74b4519a67cc640d27fa1d2672275d2c98af46dc95",
+    "agent_framework/workflow_chat.py": "16af09da230a48715264f6fe663fa9c15dc916b48d260b20437ebc076d9ba0f4",
+    "agent_framework/contracts.py": "0293a60db1471f866690a715607b7ff5f99ec023092f6d7b67b7884afa197e4e",
+    "agent_framework/gateway.py": "fafb86ff723c2f316469e48ef852cf592fcc66528505ded50735ba224f3f33cb",
+    "agent_framework/context_builder.py": "21b0c4b56a662261e01dfcb704356b27a648044a56dfabde8bd6d4d15d463694",
+    "agent_framework/web.py": "567283fc0432721b149f865ab46ce6d22ed0c6ccfbe8eda520138c83b06cb2cd",
+    "agent_framework/webui/index.html": "dfe9e5be3ca6a35758d0e9cded90fa34b82882b47b9b70d7fb9dd66b0e1de840",
+    "agent_framework/webui/app.js": "7a981c7e25a94b5f440549a362a57c2d8df365e6927ab511c18404914944cdc8",
+    "agent_framework/webui/workflows.js": "2638d5bffe9056af49e97d8260c386f688649a69fa1940359b4d1078dd945a74",
+    "agent_framework/webui/workflow_designer.js": "0b57841b2d1b377efb17d663694fe66e84d731a1a2238188645cd30b999e51cf",
+    "agent_framework/webui/styles.css": "a538e80fcefa388818c6a61a8ccb450edb0697bd4b4ad361ef0af5b692672efc",
+    "tests/test_workflow_routing.py": "2ad5b26a8f62315a9af194f3d746cd0fd620aff56862886fa956a893aa6bb7b4"
+  },
+  "navigation_icons": {
+    "workspace": "folder",
+    "workbench": "grid",
+    "dom_paths_different": true
+  },
+  "browser_verified_actions": [
+    "RAG template inserted",
+    "Top K edited and persisted",
+    "risk branches configured",
+    "join edges connected through ports",
+    "any join selected",
+    "workflow saved through Web UI",
+    "authorization waited then explicitly granted",
+    "response-lost completed with one draft",
+    "actual Web server restart and UI resume",
+    "fit button operated with Enter",
+    "viewport reset to default"
+  ]
+}

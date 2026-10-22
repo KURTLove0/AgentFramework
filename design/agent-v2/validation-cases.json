@@ -1,0 +1,62 @@
+[
+  {
+    "case": "跨租户知识",
+    "result": "rejected",
+    "reason": "知识资产跨租户"
+  },
+  {
+    "case": "跨项目知识",
+    "result": "rejected",
+    "reason": "知识资产跨项目"
+  },
+  {
+    "case": "无读取权限",
+    "result": "rejected",
+    "reason": "主体无权读取知识资产"
+  },
+  {
+    "case": "过期知识",
+    "result": "rejected",
+    "reason": "知识资产已过期"
+  },
+  {
+    "case": "未发布经验",
+    "result": "rejected",
+    "reason": "未发布的知识或经验不能进入上下文"
+  },
+  {
+    "case": "未知能力",
+    "result": "rejected",
+    "reason": "Agent 引用了未注册能力"
+  },
+  {
+    "case": "写入无核对方式",
+    "result": "rejected",
+    "reason": "写入缺少可用的只读核对能力"
+  },
+  {
+    "case": "原生 MCP 绕过写网关",
+    "result": "rejected",
+    "reason": "原生通道只允许经治理确认的只读能力"
+  },
+  {
+    "case": "模型提供幂等键",
+    "result": "rejected",
+    "reason": "写入幂等身份须由运行时生成"
+  },
+  {
+    "case": "未知验收器",
+    "result": "rejected",
+    "reason": "标准引用了未注册验收器"
+  },
+  {
+    "case": "缺少标准证据",
+    "result": "rejected",
+    "reason": "上下文缺少必需的标准证据"
+  },
+  {
+    "case": "知识内容被篡改",
+    "result": "rejected",
+    "reason": "知识资产内容摘要不匹配"
+  }
+]

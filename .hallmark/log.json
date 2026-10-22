@@ -1,0 +1,12 @@
+[
+  {
+    "date": "2026-10-22",
+    "macrostructure": "Workbench",
+    "theme": "Cobalt",
+    "enrichment": "none",
+    "brief": "本地 Agent 运行、授权、验收与恢复技术工作台",
+    "nav": "persistent sidebar / compact rail / mobile icon bar",
+    "footer": "connection status strip",
+    "critique": "P4 H4 E4 S5 R4 V4"
+  }
+]

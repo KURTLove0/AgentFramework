@@ -1,0 +1,9 @@
+{
+  "ref": "release-assistant@1.0.0",
+  "identity": {"name": "变更评估助手", "role": "release_reviewer", "ownerTeam": "engineering-platform"},
+  "responsibilities": ["汇总变更与依赖信息", "识别风险并生成评估报告", "在已授权范围内创建评估草稿"],
+  "standards": ["report-evidence@1.0.0", "release-review-rubric@1.0.0"],
+  "capabilities": ["change.read@1.0.0", "standards.read@1.0.0", "report.draft.create@1.0.0", "report.read@1.0.0"],
+  "skill_ref": "release-risk-analysis@1.0.0",
+  "policy_ref": "release-reviewer-policy@1.0.0"
+}

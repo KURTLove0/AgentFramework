@@ -1,0 +1,24 @@
+{
+  "kind": "compiled-design-example",
+  "agent_ref": "release-reviewer@2.0.0",
+  "max_declared_capability_refs": [
+    "change.read@1.0.0",
+    "report.draft.create@1.0.0",
+    "report.read@1.0.0",
+    "standards.read@1.0.0"
+  ],
+  "native_read_refs": [
+    "change.read@1.0.0"
+  ],
+  "context_manifest": [
+    {
+      "ref": "release-rubric@1.0.0",
+      "content_hash": "9b3bbffbc69a20b8c4ebc564a79e2551e6af36cbf44f4b91ebc7d0bdb89bd515",
+      "source_version": "1.0.0"
+    }
+  ],
+  "context_manifest_hash": "a21f1dad91f6c796dd66b5a7ab09534f750365ea004d00c81f466e8a6b65a9a5",
+  "definition_hash": "22fd9d47c7ba5445248b18fef7c25b9a86087956e569db6f75150f79f1403b69",
+  "task_hash": "403dcb607e9a23cffd3d67e9729aaf0bb7f1a392c43b1c78ef0bec4493646c4d",
+  "execution_authorized": false
+}

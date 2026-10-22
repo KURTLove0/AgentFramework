@@ -1,0 +1,33 @@
+{
+  "objective_scope": "Actionable framework optimization proposal with optional executable design supplement",
+  "requirements": [
+    {
+      "item": "知识记忆经验能力",
+      "status": "proven",
+      "evidence": "proposal.md"
+    },
+    {
+      "item": "Agent 身份职责标准",
+      "status": "proven",
+      "evidence": "proposal.md"
+    },
+    {
+      "item": "感知执行验证与调用关系",
+      "status": "proven",
+      "evidence": "proposal.md"
+    },
+    {
+      "item": "可落地工程路线",
+      "status": "proven",
+      "evidence": "proposal.md"
+    },
+    {
+      "item": "执行与学习闭环",
+      "status": "proven",
+      "evidence": "proposal.md"
+    }
+  ],
+  "artifacts": "architecture and contract examples exist and are verified",
+  "runtime_changes": "none in this goal",
+  "future_work": "Production implementation is explicitly scheduled in proposal P0A/P0B/P1 batches; not claimed implemented"
+}

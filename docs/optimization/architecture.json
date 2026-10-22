@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Agent 框架优化目标架构",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1380,
+      740
+    ]
+  },
+  "components": [
+    {
+      "id": "task",
+      "type": "frontend",
+      "label": "任务契约",
+      "sublabel": "目标 · 范围 · 验收 · 预算",
+      "tag": "已有基础",
+      "pos": [
+        410,
+        50
+      ],
+      "size": [
+        230,
+        84
+      ]
+    },
+    {
+      "id": "persona",
+      "type": "backend",
+      "label": "Agent 岗位定义",
+      "sublabel": "身份 · 职责 · 标准 · 版本",
+      "tag": "统一编译",
+      "pos": [
+        730,
+        50
+      ],
+      "size": [
+        230,
+        84
+      ]
+    },
+    {
+      "id": "capability",
+      "type": "backend",
+      "label": "方法与能力目录",
+      "sublabel": "Skill 编排 · Tool 效果契约",
+      "tag": "新增治理",
+      "pos": [
+        1050,
+        50
+      ],
+      "size": [
+        230,
+        84
+      ]
+    },
+    {
+      "id": "assets",
+      "type": "database",
+      "label": "知识资产",
+      "sublabel": "知识 · 情节记忆 · 已发布经验",
+      "tag": "分生命周期",
+      "pos": [
+        90,
+        280
+      ],
+      "size": [
+        230,
+        84
+      ]
+    },
+    {
+      "id": "context",
+      "type": "backend",
+      "label": "上下文编译",
+      "sublabel": "权限 · 时效 · 引用 · 信息预算",
+      "tag": "新增模块",
+      "pos": [
+        410,
+        280
+      ],
+      "size": [
+        230,
+        84
+      ]
+    },
+    {
+      "id": "cognition",
+      "type": "backend",
+      "label": "认知运行时",
+      "sublabel": "模型规划 · 确定性状态调度",
+      "tag": "保留并扩展",
+      "pos": [
+        730,
+        280
+      ],
+      "size": [
+        230,
+        84
+      ]
+    },
+    {
+      "id": "gateway",
+      "type": "security",
+      "label": "统一动作网关",
+      "sublabel": "授权 · 意图 · 幂等 · 核对",
+      "tag": "收敛所有写入",
+      "pos": [
+        1050,
+        280
+      ],
+      "size": [
+        230,
+        84
+      ]
+    },
+    {
+      "id": "adapters",
+      "type": "external",
+      "label": "能力适配执行",
+      "sublabel": "MCP · CLI · Tool SDK",
+      "tag": "感知与执行",
+      "pos": [
+        1050,
+        510
+      ],
+      "size": [
+        230,
+        84
+      ]
+    },
+    {
+      "id": "verification",
+      "type": "security",
+      "label": "独立验收",
+      "sublabel": "事实证据 · 外部回读 · 业务标准",
+      "tag": "保留并扩展",
+      "pos": [
+        730,
+        510
+      ],
+      "size": [
+        230,
+        84
+      ]
+    },
+    {
+      "id": "working",
+      "type": "database",
+      "label": "工作记忆与审计",
+      "sublabel": "运行事实 · 检查点 · 未决动作",
+      "tag": "立即持久化",
+      "pos": [
+        410,
+        510
+      ],
+      "size": [
+        230,
+        84
+      ]
+    },
+    {
+      "id": "experience",
+      "type": "backend",
+      "label": "经验候选治理",
+      "sublabel": "适用条件 · 反例 · 评测与审核",
+      "tag": "异步学习",
+      "pos": [
+        90,
+        510
+      ],
+      "size": [
+        230,
+        84
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "task",
+      "to": "context",
+      "label": "限定任务",
+      "labelDy": 24
+    },
+    {
+      "from": "persona",
+      "to": "cognition",
+      "label": "岗位约束",
+      "labelDy": 24
+    },
+    {
+      "from": "capability",
+      "to": "gateway",
+      "label": "能力绑定",
+      "labelDy": 24
+    },
+    {
+      "from": "assets",
+      "to": "context",
+      "label": "检索证据"
+    },
+    {
+      "from": "context",
+      "to": "cognition",
+      "label": "冻结引用",
+      "variant": "emphasis"
+    },
+    {
+      "from": "cognition",
+      "to": "gateway",
+      "label": "动作提案",
+      "variant": "emphasis"
+    },
+    {
+      "from": "gateway",
+      "to": "adapters",
+      "label": "受控调用",
+      "variant": "security",
+      "labelDy": 24
+    },
+    {
+      "from": "adapters",
+      "to": "verification",
+      "label": "结果回读",
+      "variant": "emphasis"
+    },
+    {
+      "from": "verification",
+      "to": "working",
+      "label": "记录判定",
+      "variant": "emphasis"
+    },
+    {
+      "from": "working",
+      "to": "context",
+      "label": "恢复上下文",
+      "variant": "dashed"
+    },
+    {
+      "from": "working",
+      "to": "experience",
+      "label": "生成候选",
+      "variant": "dashed"
+    },
+    {
+      "from": "experience",
+      "to": "assets",
+      "label": "评测后发布",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "岗位与认知",
+      "items": [
+        "Agent 身份与职责稳定，模型可替换",
+        "任务目标与验收由契约明确"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "动作与验收",
+      "items": [
+        "有副作用的调用统一经过网关",
+        "成功依据外部事实与独立验收"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "记忆与经验",
+      "items": [
+        "运行事实立即写入工作记忆",
+        "经验经评测审核后供后续任务使用"
+      ]
+    }
+  ]
+}

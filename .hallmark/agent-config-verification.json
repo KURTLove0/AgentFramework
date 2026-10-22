@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-22",
+  "previous_goal_turn": "progress",
+  "objective": "运行时模型通过cli获取进行选择，基于运行时可以创建对应的智能体Agent，agent中可以配置prompt、MCP、skill等",
+  "requirements": [
+    {
+      "requirement": "CLI 模型目录获取与选择",
+      "evidence": [
+        "agent_framework/model_catalog.py",
+        "tests/test_model_catalog.py",
+        ".agent-data/agent-config-review/codex-models.json",
+        ".agent-data/agent-config-review/cursor-models.json"
+      ],
+      "result": "passed"
+    },
+    {
+      "requirement": "基于运行时创建、编辑、复制、归档和恢复 Agent",
+      "evidence": [
+        "agent_framework/agents.py",
+        "tests/test_agents.py",
+        "tests/test_web.py",
+        ".hallmark/agent-config-desktop.png"
+      ],
+      "result": "passed"
+    },
+    {
+      "requirement": "Prompt 与启用 Skill 实际进入规划并影响报告",
+      "evidence": [
+        ".agent-data/agent-config-review/native-mcp-response-lost/result.json"
+      ],
+      "result": "passed"
+    },
+    {
+      "requirement": "MCP 配置与白名单实际生效",
+      "evidence": [
+        ".agent-data/agent-config-review/native-mcp-response-lost/events.jsonl",
+        ".agent-data/agent-config-review/mcp-calls.jsonl",
+        "tests/test_mcp_fixture.py",
+        "tests/test_agents.py"
+      ],
+      "result": "passed"
+    },
+    {
+      "requirement": "任务绑定冻结 Agent 版本，编辑后仍可恢复旧任务",
+      "evidence": [
+        ".agent-data/agent-config-review/frozen-agent-recovery/result.json",
+        "tests/test_agents.py"
+      ],
+      "result": "passed"
+    },
+    {
+      "requirement": "保持业务授权、验收与幂等恢复",
+      "evidence": [
+        ".agent-data/agent-config-review/summary.json",
+        ".agent-data/agent-config-review/terminal-resume-checks.json",
+        "tests/test_agents.py",
+        "tests/test_runtime.py"
+      ],
+      "result": "passed"
+    },
+    {
+      "requirement": "窄屏表单与页面可操作",
+      "evidence": [
+        "browser verified: 320px page scrollWidth=320, dialog scrollWidth=294/clientWidth=294",
+        "browser verified: 768px page scrollWidth=768"
+      ],
+      "result": "passed"
+    }
+  ],
+  "tests": {
+    "command": "python3 -m unittest discover -s tests -q",
+    "passed": 84
+  },
+  "live_cases": [
+    {
+      "scenario": "frozen-agent-recovery",
+      "run_id": "run-bb7abfdcfc214e92",
+      "status": "SUCCEEDED",
+      "agent_id": "agent-ebecc9484256421d",
+      "agent_revision": 1,
+      "prompt_version": 1,
+      "model_calls": 7,
+      "model": {
+        "max_attempts": 2,
+        "model": "gpt-6.1-sol",
+        "reasoning_effort": "low",
+        "timeout": 180
+      },
+      "checks": {
+        "critical-claims-evidence": true,
+        "draft-readback": true,
+        "report-sections": true
+      },
+      "create_calls": 1,
+      "drafts": 1,
+      "native_mcp_calls": [],
+      "report_title": "配置核验：支付服务超时重试变更评估",
+      "limitations": [
+        "仅依据 test 环境模拟证据进行评估，失败测试的具体原因未提供。",
+        "尚未创建或回读草稿。",
+        "Skill核验：仅供人工审核"
+      ]
+    },
+    {
+      "scenario": "native-mcp-response-lost",
+      "run_id": "run-ccf8ae5b94af48b0",
+      "status": "SUCCEEDED",
+      "agent_id": "agent-ebecc9484256421d",
+      "agent_revision": 3,
+      "prompt_version": 3,
+      "model_calls": 7,
+      "model": {
+        "max_attempts": 2,
+        "model": "gpt-6.1-sol",
+        "reasoning_effort": "low",
+        "timeout": 180
+      },
+      "checks": {
+        "critical-claims-evidence": true,
+        "draft-readback": true,
+        "report-sections": true
+      },
+      "create_calls": 1,
+      "drafts": 1,
+      "native_mcp_calls": [
+        {
+          "server": "facts",
+          "tool": "lookup"
+        }
+      ],
+      "report_title": "配置新版：支付服务超时重试变更评估",
+      "limitations": [
+        "仅依据 test 环境模拟证据评估，未验证实际发布效果。",
+        "回滚方案已提供，未提供演练结果。",
+        "完成仅代表评估草稿创建并回读通过，不代表发布获批。",
+        "Skill新版：仅供人工审核"
+      ]
+    }
+  ],
+  "inference_scope": "Codex CLI login; synthetic context and local read-only MCP only; Cursor inference not run",
+  "ui": "http://127.0.0.1:8787/#/agents",
+  "docs": "docs/agents.md"
+}

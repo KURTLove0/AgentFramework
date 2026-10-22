@@ -1,0 +1,116 @@
+{
+  "actor": "demo-user",
+  "asset_hash": "b659a4e8b32b89a3e670a664a35091ff31723b8e42bf3fd4d44f37dc34f24fe9",
+  "cases": [
+    {
+      "checks": {
+        "critical-claims-evidence": true,
+        "draft-readback": true,
+        "report-sections": true
+      },
+      "draft_count": 1,
+      "kind": "support",
+      "passed": true,
+      "scenario": "normal",
+      "status": "SUCCEEDED",
+      "write_calls": 1
+    },
+    {
+      "checks": {
+        "critical-claims-evidence": true,
+        "draft-readback": true,
+        "report-sections": true
+      },
+      "draft_count": 1,
+      "kind": "support",
+      "passed": true,
+      "scenario": "response-lost",
+      "status": "SUCCEEDED",
+      "write_calls": 1
+    },
+    {
+      "checks": {
+        "critical-claims-evidence": true,
+        "report-sections": true
+      },
+      "draft_count": 1,
+      "kind": "counterexample",
+      "passed": true,
+      "scenario": "unverifiable",
+      "status": "NEEDS_REVIEW",
+      "write_calls": 1
+    },
+    {
+      "checks": {
+        "critical-claims-evidence": true,
+        "draft-readback": false,
+        "report-sections": true
+      },
+      "draft_count": 1,
+      "kind": "counterexample",
+      "passed": true,
+      "scenario": "tampered-draft",
+      "status": "NEEDS_REVIEW",
+      "write_calls": 1
+    },
+    {
+      "checks": {
+        "critical-claims-evidence": true,
+        "report-sections": true
+      },
+      "draft_count": 0,
+      "kind": "counterexample",
+      "passed": true,
+      "scenario": "denied",
+      "status": "WAITING_AUTH",
+      "write_calls": 0
+    }
+  ],
+  "created_at": 1792660314.000447,
+  "domain_hash": "ab2abe6d40ab8f95e810e83286afb3c8e2852f15ab4c36fc811ebaf0439ef41b",
+  "domain_ref": "change-assessment@2.0.0",
+  "evaluator_ref": "experience-review@1.0.0",
+  "historical_write_replays": 0,
+  "id": "evaluation-70409ee0c9ba4162",
+  "live_model_calls": 0,
+  "mode": "isolated-mock-replay",
+  "passed": true,
+  "ref": "experience-run-5f9c18ea690e4584@1",
+  "sources": [
+    {
+      "checks_recomputed": {
+        "critical-claims-evidence": {
+          "detail": "关键事实、来源哈希、版本与风险规则一致",
+          "evidence_refs": [
+            "evidence-904226a3e1bd7a393edf",
+            "evidence-87440a749302e784edc8"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "draft-readback": {
+          "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+          "evidence_refs": [
+            "evidence-ca966b051a2b09596422"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "report-sections": {
+          "detail": "所有必选章节非空",
+          "evidence_refs": [
+            "evidence-904226a3e1bd7a393edf",
+            "evidence-87440a749302e784edc8"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        }
+      },
+      "consistent": true,
+      "episode_hash": "021d1053abc6f121f381591195367b5052cfdd6d4bbe15d2edfd93c4ca885ad9",
+      "outcome": "SUCCEEDED",
+      "run_id": "run-5f9c18ea690e4584",
+      "snapshot_hash": "bdf08a363a9870cb534622993a667321d1f842bf25452a1085cdeeb8f4734fd3"
+    }
+  ]
+}

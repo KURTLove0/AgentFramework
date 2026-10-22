@@ -1,0 +1,71 @@
+{
+  "diagram_type": "architecture",
+  "output": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/optimization/architecture.html",
+  "specification_sha256": "042a1fb6f508f0ed03620d15c6dcd96f5f3e559808d8afedf54fd3b7067277ba",
+  "artifact_sha256": "4f81dd6311e475f040e10e499b514bdc153a2a29d95bf6ecca08dba1b38a8cca",
+  "validation": "9/9 showcase, 0 errors, 0 warnings",
+  "visual_review": "passed",
+  "correction_rounds": 1,
+  "visual_method": "CUA IAB inspection and DOM containment measurements",
+  "desktop_sizes": [
+    {
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "scrollHeight": 900
+    },
+    {
+      "width": 1600,
+      "height": 1000,
+      "scrollWidth": 1600,
+      "scrollHeight": 1000
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "scrollWidth": 1920,
+      "scrollHeight": 1080
+    },
+    {
+      "width": 2048,
+      "height": 1320,
+      "scrollWidth": 2048,
+      "scrollHeight": 1320
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "architecture-1440.png",
+      "width": 65536,
+      "height": 4292542531
+    },
+    {
+      "file": "architecture-2048.png",
+      "width": 65536,
+      "height": 4292542531
+    },
+    {
+      "file": "architecture-1440-dark.png",
+      "width": 65536,
+      "height": 4292542531
+    },
+    {
+      "file": "architecture-2048-dark.png",
+      "width": 65536,
+      "height": 4292542531
+    }
+  ],
+  "interactions": {
+    "theme_switch": "passed",
+    "node_search": "passed",
+    "semantic_passport_open_close": "passed",
+    "svg_download": "not verified; browser connection ended during download confirmation"
+  },
+  "design_example": {
+    "positive": "passed",
+    "negative_cases_rejected": 12,
+    "unselected_candidate_hash_invariance": "passed",
+    "execution_authorized": false
+  },
+  "scope": "Optimization proposal and isolated executable design example; production runtime unchanged"
+}

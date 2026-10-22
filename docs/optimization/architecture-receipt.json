@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "architecture",
+  "input": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/optimization/architecture.json",
+  "output": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/optimization/architecture.html",
+  "specification": {
+    "sha256": "042a1fb6f508f0ed03620d15c6dcd96f5f3e559808d8afedf54fd3b7067277ba",
+    "bytes": 5419
+  },
+  "artifact": {
+    "sha256": "4f81dd6311e475f040e10e499b514bdc153a2a29d95bf6ecca08dba1b38a8cca",
+    "bytes": 644431
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

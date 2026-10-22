@@ -1,0 +1,18 @@
+{
+  "change_id": "change-demo-001",
+  "tenant_id": "tenant-demo",
+  "principal": "demo-user",
+  "project_id": "project-demo",
+  "environment": "test",
+  "goal": "评估指定模拟变更并创建一份评估草稿",
+  "agent_ref": "release-assistant@1.0.0",
+  "acceptance": ["report-sections", "critical-claims-evidence", "draft-readback"],
+  "budget": {
+    "max_steps": 24,
+    "max_replans": 2,
+    "max_retries": 2,
+    "max_wall_seconds": 600,
+    "max_model_calls": 24,
+    "max_model_tokens": 200000
+  }
+}

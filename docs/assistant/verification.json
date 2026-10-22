@@ -1,0 +1,1269 @@
+{
+  "verified_at": "2026-10-22T09:43:16.221969+00:00",
+  "objective": "知识库（知识-记忆-经验-能力）→Agent（身份、职责、标准）→动作（感知、执行、验证）的本机可运行助理闭环",
+  "scope": "local test; simulated business and context; real Codex planning separately proven; no production IAM claim",
+  "tests": {
+    "command": "python3 -m unittest discover -s tests -q",
+    "passed": 136,
+    "total": 136,
+    "log": ".agent-data/p1-review/tests-final.log"
+  },
+  "p0_matrix": {
+    "command": "python3 -m agent_framework.p0_evaluate",
+    "summary": ".agent-data/p1-review/p0-573e2b9866/summary.json",
+    "generated_at": "2026-10-22T09:35:36.777278+00:00",
+    "scope": "synthetic context + deterministic cognition + simulated Tool/CLI/MCP",
+    "passed": 44,
+    "total": 44,
+    "cases": [
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-8b3cc409974f41ac",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-819c8a2712a64b5f",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-34f5b7ceb639442e",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-cc52a432eb474806",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-d5b47bbcf3404d50",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-b481d0b052d54be6",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-bed500c4d0d842d0",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-9d168a57083f4260",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-85c26ba04943439d",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-43b4fa06b296446f",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "legacy",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-643427fb72314bef",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-a1e42ee88b164744",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-30970bca86e44b1a",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-eb2f0c4a08aa4b00",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-dd022b9968d946bd",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-31167c4afa6b493b",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-f1ba7299b2004332",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-15ed0cfde18c471b",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-e72f15d06eb448b4",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-12e27d6808ca416a",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-f460c898fcb04490",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-worker@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-597c0e8055b5472a",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-a7fcec7493844c3c",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-0317fc5cf34d4879",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-5f3f435b5d1d4969",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-3d4edcf77f4649db",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-9464346b98564a71",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-45fd01d9ceea451f",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-1a1a47f9a1e54362",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-b71d22890f9a49ca",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-feb8d9b4c5ab4cf1",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-6e14b4164c0e487a",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-cli@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-729d5dfba1f74aad",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "normal",
+        "run_id": "run-9d47023d5162431f",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "read-transient",
+        "run_id": "run-a61ab2c4054245e6",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "read-fails",
+        "run_id": "run-9fc9f54ddd6d405f",
+        "expected_status": "FAILED",
+        "status": "FAILED",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "response-lost",
+        "run_id": "run-fe00636785af4584",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "crash-after-write",
+        "run_id": "run-f5d0f672d5e1481a",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": 75,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "unverifiable",
+        "run_id": "run-540847ffe15443f9",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "tampered-draft",
+        "run_id": "run-f3ce8fc26c9b40b2",
+        "expected_status": "NEEDS_REVIEW",
+        "status": "NEEDS_REVIEW",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "invalid-report",
+        "run_id": "run-8dd3a8fd65524a27",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 1,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "denied",
+        "run_id": "run-f7c704db5d6f4e64",
+        "expected_status": "WAITING_AUTH",
+        "status": "WAITING_AUTH",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "source-changed",
+        "run_id": "run-7425c0148175479e",
+        "expected_status": "SUCCEEDED",
+        "status": "SUCCEEDED",
+        "draft_count": 1,
+        "write_calls": 2,
+        "checks_passed": true,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      },
+      {
+        "mode": "compiled",
+        "adapter": "mock-mcp@1.0.0",
+        "scenario": "missing-evidence",
+        "run_id": "run-44ea95d37a7843c4",
+        "expected_status": "WAITING_INPUT",
+        "status": "WAITING_INPUT",
+        "draft_count": 0,
+        "write_calls": 0,
+        "checks_passed": false,
+        "snapshot_and_intent_unchanged": true,
+        "crash_exit": null,
+        "passed": true
+      }
+    ]
+  },
+  "assistant_matrix": {
+    "command": "python3 -m agent_framework.assistant_evaluate",
+    "summary": ".agent-data/p1-review/assistant-33d03052cf/summary.json",
+    "generated_at": "2026-10-22T09:34:20.696436+00:00",
+    "scope": "simulated knowledge and tools; deterministic cognition; isolated offline review",
+    "passed": 14,
+    "total": 14,
+    "cases": [
+      {
+        "case": "draft-is-not-context",
+        "passed": true
+      },
+      {
+        "case": "knowledge-and-preference-affect-artifact",
+        "passed": true,
+        "run_id": "run-c9eac8af8d674900"
+      },
+      {
+        "case": "response-lost-one-draft",
+        "passed": true
+      },
+      {
+        "case": "episode-archived-once",
+        "passed": true
+      },
+      {
+        "case": "candidate-is-not-context",
+        "passed": true
+      },
+      {
+        "case": "offline-evaluation-with-counterexamples",
+        "passed": true,
+        "evaluation_id": "evaluation-49871a3703874323"
+      },
+      {
+        "case": "published-experience-and-private-history-recalled",
+        "passed": true
+      },
+      {
+        "case": "private-memory-and-experience-isolated",
+        "passed": true
+      },
+      {
+        "case": "experience-withdrawal-affects-next-task",
+        "passed": true
+      },
+      {
+        "case": "knowledge-does-not-grant-write",
+        "passed": true
+      },
+      {
+        "case": "experience-does-not-bypass-verifier",
+        "passed": true
+      },
+      {
+        "case": "second-domain-read-only-cited-answer",
+        "passed": true,
+        "run_id": "run-a99a3e527dae41ea"
+      },
+      {
+        "case": "withdrawn-source-not-searchable",
+        "passed": true
+      },
+      {
+        "case": "legacy-snapshot-and-recovery-preserved",
+        "passed": true
+      }
+    ]
+  },
+  "historical_snapshot_audit": {
+    "count": 27,
+    "legacy_count": 23,
+    "no_context_policy_count": 24,
+    "all_valid": true,
+    "creation_event_hashes_match": true,
+    "runs": [
+      {
+        "run_id": "run-1c003b0dadad45da",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-2bfe04180d5f47c1",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-cd6963a8eade4f19",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-27e6f6ed96b3414b",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-1af3949ae2c842a5",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-93944f938b9a4952",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "5830c184ecc044995d1585d448fe4b5ae3202d1d38459b19168122b11cd8a1e7",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-61558052cc844549",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-94951d4ff58a44e4",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-dacd2cd2f6df42f1",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-1d31032dc1f346e0",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-8b8ae865d97e4f0f",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-c96786f6da554068",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-1b386b79b4944bfd",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-67cc8c2ba39f4680",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-3b72a0f2f51d4fa2",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-9ee35440c6bd4e12",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "908d3bbe3393c044bbf850dd915101bb0adac36e3ac072cff51f317bbdf29075",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-e717b3422559495b",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "781b1d2b319717eedf578a2cf92fef558285e6f0f568376a8989465cfb07934d",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-2c01ebe306404139",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "781b1d2b319717eedf578a2cf92fef558285e6f0f568376a8989465cfb07934d",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-84a68aa159cc462d",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "781b1d2b319717eedf578a2cf92fef558285e6f0f568376a8989465cfb07934d",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-bb7abfdcfc214e92",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "ed2ee61c7a24b0c64aa9a877060d6f4a60cb558959c768ce4aa7e450092ccd10",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-2760243c40e94dd1",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "18c130f3d1a8a2f173cf179c5a25c68a17944720a1639c64b01398dba99508b2",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-e01365896a5a4eef",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "e569561dd09eb9a71909f28fb0e81f932924e3e58577b05167bbab8a8cac6b1b",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-ccf8ae5b94af48b0",
+        "legacy": true,
+        "context_policy": false,
+        "snapshot_hash": "55cad8c8ab1c0109478334c58ce0b626f3f218f7ec23b4a31949e2e3f3c6754f",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-3d23dadcfbac4dba",
+        "legacy": false,
+        "context_policy": false,
+        "snapshot_hash": "15d1052450837eeb998f47661d9bf8b725b334d74b84dfedc09b183f84a73cb2",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-4b569b2e58cd4309",
+        "legacy": false,
+        "context_policy": true,
+        "snapshot_hash": "8a7c66d431d3a07306f822d8f9bdb5453bbb06836054d56c900f3c7545695760",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-5f9c18ea690e4584",
+        "legacy": false,
+        "context_policy": true,
+        "snapshot_hash": "bdf08a363a9870cb534622993a667321d1f842bf25452a1085cdeeb8f4734fd3",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      },
+      {
+        "run_id": "run-b20040b18bcb4087",
+        "legacy": false,
+        "context_policy": true,
+        "snapshot_hash": "bdf08a363a9870cb534622993a667321d1f842bf25452a1085cdeeb8f4734fd3",
+        "created_hash_matches": true,
+        "planner_restores": true,
+        "action_hashes_valid": true
+      }
+    ]
+  },
+  "ui_runs": [
+    {
+      "run_id": "run-4b569b2e58cd4309",
+      "status": "SUCCEEDED",
+      "snapshot_hash": "8a7c66d431d3a07306f822d8f9bdb5453bbb06836054d56c900f3c7545695760",
+      "model_calls": 0,
+      "model_tokens": 0,
+      "checks": {
+        "answer-grounded": {
+          "passed": true,
+          "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+          "evidence_refs": [
+            "evidence-9e0bf7460dbd062c8d35"
+          ],
+          "verifier_ref": "knowledge-answer-verifier@1.0.0"
+        },
+        "answer-scope": {
+          "passed": true,
+          "detail": "读取证据属于当前租户、项目和任务范围",
+          "evidence_refs": [
+            "evidence-9e0bf7460dbd062c8d35"
+          ],
+          "verifier_ref": "knowledge-answer-verifier@1.0.0"
+        },
+        "answer-current": {
+          "passed": true,
+          "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+          "evidence_refs": [
+            "builtin-risk-rubric-fe7bff9bf573@1",
+            "asset-341bd52d81be4d85@1"
+          ],
+          "verifier_ref": "knowledge-answer-verifier@1.0.0"
+        }
+      },
+      "draft_count": 0,
+      "create_calls": 0,
+      "all_business_calls": {},
+      "manifest_count": 6,
+      "selected_refs": [
+        "asset-341bd52d81be4d85@1",
+        "builtin-risk-rubric-fe7bff9bf573@1"
+      ],
+      "snapshot_and_planner_valid": true
+    },
+    {
+      "run_id": "run-5f9c18ea690e4584",
+      "status": "SUCCEEDED",
+      "snapshot_hash": "bdf08a363a9870cb534622993a667321d1f842bf25452a1085cdeeb8f4734fd3",
+      "model_calls": 0,
+      "model_tokens": 0,
+      "checks": {
+        "report-sections": {
+          "passed": true,
+          "detail": "所有必选章节非空",
+          "evidence_refs": [
+            "evidence-904226a3e1bd7a393edf",
+            "evidence-87440a749302e784edc8"
+          ],
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "critical-claims-evidence": {
+          "passed": true,
+          "detail": "关键事实、来源哈希、版本与风险规则一致",
+          "evidence_refs": [
+            "evidence-904226a3e1bd7a393edf",
+            "evidence-87440a749302e784edc8"
+          ],
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "draft-readback": {
+          "passed": true,
+          "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+          "evidence_refs": [
+            "evidence-ca966b051a2b09596422"
+          ],
+          "verifier_ref": "release-verifier@1.0.0"
+        }
+      },
+      "draft_count": 1,
+      "create_calls": 1,
+      "all_business_calls": {
+        "change.read@1.0.0": 1,
+        "report.draft.create@1.0.0": 1,
+        "report.read@1.0.0": 1,
+        "standards.read@1.0.0": 1
+      },
+      "manifest_count": 7,
+      "selected_refs": [
+        "asset-341bd52d81be4d85@1",
+        "builtin-risk-rubric-fe7bff9bf573@1",
+        "episode:run-4b569b2e58cd4309"
+      ],
+      "snapshot_and_planner_valid": true
+    },
+    {
+      "run_id": "run-b20040b18bcb4087",
+      "status": "SUCCEEDED",
+      "snapshot_hash": "bdf08a363a9870cb534622993a667321d1f842bf25452a1085cdeeb8f4734fd3",
+      "model_calls": 0,
+      "model_tokens": 0,
+      "checks": {
+        "report-sections": {
+          "passed": true,
+          "detail": "所有必选章节非空",
+          "evidence_refs": [
+            "evidence-904226a3e1bd7a393edf",
+            "evidence-87440a749302e784edc8"
+          ],
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "critical-claims-evidence": {
+          "passed": true,
+          "detail": "关键事实、来源哈希、版本与风险规则一致",
+          "evidence_refs": [
+            "evidence-904226a3e1bd7a393edf",
+            "evidence-87440a749302e784edc8"
+          ],
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "draft-readback": {
+          "passed": true,
+          "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+          "evidence_refs": [
+            "evidence-f845206eb2519af1d564"
+          ],
+          "verifier_ref": "release-verifier@1.0.0"
+        }
+      },
+      "draft_count": 1,
+      "create_calls": 1,
+      "all_business_calls": {
+        "change.read@1.0.0": 1,
+        "report.draft.create@1.0.0": 1,
+        "report.read@1.0.0": 1,
+        "standards.read@1.0.0": 1
+      },
+      "manifest_count": 7,
+      "selected_refs": [
+        "asset-341bd52d81be4d85@1",
+        "builtin-risk-rubric-fe7bff9bf573@1",
+        "episode:run-4b569b2e58cd4309",
+        "episode:run-5f9c18ea690e4584",
+        "experience-run-5f9c18ea690e4584@1"
+      ],
+      "snapshot_and_planner_valid": true
+    }
+  ],
+  "published_experience": {
+    "ref": "experience-run-5f9c18ea690e4584@1",
+    "status": "PUBLISHED",
+    "visibility": "PRIVATE",
+    "evaluation_id": "evaluation-70409ee0c9ba4162",
+    "cases_passed": 5,
+    "evaluation_receipt": "experience-evaluation.json",
+    "followup_recalled": true
+  },
+  "live_codex": {
+    "run_id": "run-02e2985e79784959",
+    "status": "SUCCEEDED",
+    "snapshot_hash": "022cb95085b62a767f50e2e40d099f264ebbcae644b8b5d1eabe525ba30683d2",
+    "model_calls": 6,
+    "model_tokens": 120305,
+    "checks": {
+      "answer-grounded": {
+        "passed": true,
+        "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+        "evidence_refs": [
+          "evidence-921b16ea099b43f819e9"
+        ],
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      },
+      "answer-scope": {
+        "passed": true,
+        "detail": "读取证据属于当前租户、项目和任务范围",
+        "evidence_refs": [
+          "evidence-921b16ea099b43f819e9"
+        ],
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      },
+      "answer-current": {
+        "passed": true,
+        "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+        "evidence_refs": [
+          "builtin-risk-rubric-fe7bff9bf573@1",
+          "asset-08402a55f4c2442b@1"
+        ],
+        "verifier_ref": "knowledge-answer-verifier@1.0.0"
+      }
+    },
+    "draft_count": 0,
+    "create_calls": 0,
+    "all_business_calls": {},
+    "manifest_count": 6,
+    "selected_refs": [
+      "asset-08402a55f4c2442b@1",
+      "builtin-risk-rubric-fe7bff9bf573@1"
+    ],
+    "snapshot_and_planner_valid": true,
+    "data_dir": ".agent-data/p1-live-qa-v3",
+    "planner": "Codex CLI",
+    "model": "gpt-6.1-sol",
+    "context_scope": "fixed synthetic sources only",
+    "complete_question_coverage_verified": true,
+    "export": ".agent-data/p1-live-qa-v3/export",
+    "screenshot": "real-qa.jpg"
+  },
+  "retained_diagnostics": [
+    {
+      "data_dir": ".agent-data/p1-live-qa",
+      "run_id": "run-f9ed6b95069b42ad",
+      "status": "FAILED",
+      "last_error": "动作提案被拒绝：unregistered expected verifier",
+      "model_calls": 2,
+      "create_calls": 0,
+      "draft_count": 0,
+      "counted_as_success": false
+    },
+    {
+      "data_dir": ".agent-data/p1-live-qa-v2",
+      "run_id": "run-b95cc1b0041e4b90",
+      "status": "FAILED",
+      "last_error": "认知调用失败：model_timeout",
+      "model_calls": 9,
+      "create_calls": 0,
+      "draft_count": 0,
+      "counted_as_success": false
+    }
+  ],
+  "responsive": [
+    {
+      "page": "knowledge-answer",
+      "width": 375,
+      "content": 375,
+      "viewport": 375
+    },
+    {
+      "page": "library",
+      "width": 375,
+      "content": 375,
+      "viewport": 375
+    },
+    {
+      "page": "asset-dialog",
+      "width": 375,
+      "content": 375,
+      "dialog": 349,
+      "dialogContent": 349,
+      "viewport": 375
+    },
+    {
+      "page": "library",
+      "width": 768,
+      "content": 768,
+      "viewport": 768
+    }
+  ],
+  "screenshots": [
+    "library.jpg",
+    "experience-followup.jpg",
+    "real-qa.jpg"
+  ],
+  "source_sha256": {
+    "agent_framework/__init__.py": "1c576e527e826bebd15d3b6e4a4b4fbf2e16e9887096ef601b187a1b32734271",
+    "agent_framework/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "agent_framework/adapters.py": "fbd0c39a31d2590168804103a9d6f42d12757ac0c56dbe380e106c367725c9ef",
+    "agent_framework/agent_extensions.py": "c2a2e8984451f3bff50d24c86a4ff5f5b9985edba3064fa1d4a5385904414875",
+    "agent_framework/agents.py": "54434256836128be34eb14af05aea26a5b29c6d1808ffca7a0a2ba146e7e9594",
+    "agent_framework/assistant_evaluate.py": "dc6a1ced9a2e37f773daa309b2c3b4e0ded378751d84d51ab773320bbb5d1780",
+    "agent_framework/cli.py": "aad99deb31a6ff684b1c64cd9c5f04b163681bb9301d1cde4909335878a48caf",
+    "agent_framework/context_builder.py": "5ca3005d3cc0824408bc18edc6d1dc82446fdb2d1e76767c2afa3d1a4a19b937",
+    "agent_framework/contracts.py": "7602dd305879f0b8c82cb2099b212689106a951b45dbdd53a2991e0eef199af7",
+    "agent_framework/definitions.py": "4b855cd4ef00ade2c7a5e88bbf70d7cd8662766d3d8489d6e9cc0d6aa935b327",
+    "agent_framework/domains/__init__.py": "93fbe1f965bfb446f59909ed81ee4593519de4a15b8e24de3ef95af4d61a04fd",
+    "agent_framework/domains/change_assessment.py": "40c36b5faa4e86d28341d54e7f41e361aa9976625060f90d98d9998fd965a4eb",
+    "agent_framework/domains/change_verifier.py": "406976d65ac5cd27045bb753b7a8d19e30377023767e38bf5c2aa3ee2b560c38",
+    "agent_framework/domains/knowledge_answer.py": "18cfa6114d4635e59b0a61deaf24a9e25dc4795df0ddae07c149af777eebaf7b",
+    "agent_framework/evaluate.py": "a422821a864766504c8a0112cb28247d52f48408544250e09468f95348639ef6",
+    "agent_framework/experience.py": "f2258b125da9f19244839b5569f201c86d743e3f77bfead2af9ddd7e3da68130",
+    "agent_framework/gateway.py": "b964231bac0bc9413fdccbd03c1667bea979102bc1574f57ec0855073c33fb66",
+    "agent_framework/knowledge.py": "95726d331c2d97458486aeccc1148aa751f9e049b178596d9d652437dd275144",
+    "agent_framework/library_cli.py": "5ced6c3153ad05099bb0a69d11de272840dfa9240787ee0993b88e4cb915fb39",
+    "agent_framework/llm.py": "d20a609a7c9d2e42e09c996a7a6a5cf46bcfb1648addce8046f4c2aaf59c7e66",
+    "agent_framework/memory.py": "1eff9dce68e90d154ba06096993c70c1a1269acd76c2a9d98998b114fce6201d",
+    "agent_framework/mock_tools.py": "be121aad25a03f17e5cdf0792f22e58ec50e29c35b45ce52d15942f2d8b345b2",
+    "agent_framework/model_catalog.py": "4506441f5b612b45074817b8c53fc05d15bd0601130b8de52bdce7c70b7be524",
+    "agent_framework/p0_evaluate.py": "1a05f5b25eab8dae77ae67a6721c4ac9a8291863e5fc14024fd1a0878cff08d4",
+    "agent_framework/planner.py": "87dae7afd294e8c562afc74ae1ec94eb8bf29901e3b9e2f732380e5c5743bb8e",
+    "agent_framework/read_proxy.py": "c3fcda31e385ff48d6a7506fef2bfd4bb4ee49756064681c73738f004711a201",
+    "agent_framework/runtime.py": "c5b036fe34891ed0fb692571702dbefed5b4890cc0f69e442f1f885d850dd859",
+    "agent_framework/runtime_config.py": "cba64c28fd49b9bcb14105a8f0ab04df588681678bd56e3cbddf37e819a4f0b4",
+    "agent_framework/store.py": "fa772a9e3bd048aae8b8b5409c82a74a4d6cd242c9e7a4bc00d25862e97c665d",
+    "agent_framework/structured.py": "9cdbb6b55cd2cef287d67030cc953b6bbe154a576b92adb1b3164760543a120d",
+    "agent_framework/verifier.py": "840834bfa62b9e6d512f87330d8534154d8d0225e7d7d8d9bce38bb369aa756e",
+    "agent_framework/web.py": "4c76c703960625ce26216a004983ef632daae015427c23b9211bf057c616a5b8",
+    "agent_framework/webui/agents.js": "cd4ffcc4769649c1f66eab3e42ff1a3f07ceff993f09e845902c3bd1b74f5b69",
+    "agent_framework/webui/app.js": "07f58e78a21e6740a158f75707d8b0fcafdd41d2aed5150b0ea75ce788c38673",
+    "agent_framework/webui/index.html": "c73b692891a4937a33628cd74bff45d9bab10bcf896191b753a00dbecf1aea97",
+    "agent_framework/webui/library.js": "ffbca85c7da6af672225863a61e6888ff6f3151b73c9b038d9a44b49fbd5df54",
+    "agent_framework/webui/styles.css": "827022d1f8b693c23285065842fa0fb12a0a430b3939036e7213eedac6019bf8",
+    "agent_framework/worker.py": "604b82876569f3fa24ad1cfb7ffc34d5a805ce3ff80acb991d14374bba6abab8",
+    "tests/test_agents.py": "defe1113a379535187010c37e490e469ce2e5c11f5c696dd3bade115f820a204",
+    "tests/test_governance.py": "fe886282168fe830a37f82692da05768e06cb579621be9e3005fd7de62280849",
+    "tests/test_knowledge.py": "2e53066f707ab11281b2461d6e8e30a24408d33433afe68f831256005b861d1a",
+    "tests/test_knowledge_domain.py": "4d3f8c4d38946e60196909d2c7e28abb216801713a1d147c479355c88abce2bd",
+    "tests/test_llm.py": "2f2e2eea3d00c4da8926bf8174fd9ebbcfcdae32e48f5a6df9ce64ca083bde3d",
+    "tests/test_mcp_fixture.py": "409d0634b0708dce59ebd5d3298faf9fead1e30945c0cdda21048aeeff9691d5",
+    "tests/test_model_catalog.py": "473e1a417cde354c1b9abe93d636afee74564ab6f289bd954fd4be7fd029f487",
+    "tests/test_runtime.py": "c31a38f6507cb00b156af70d02e407d139cd1805e4d4be85e03c682ff1f5f556",
+    "tests/test_runtime_config.py": "702d5c5093c73632b6da88a42ae117b40c435bcbdf1af2ce39bb76224cc9a43b",
+    "tests/test_web.py": "7529eb846e5a72482ccf4544e912bcfffe08b1d0ebecdcfb76c4919dcf41e450"
+  }
+}

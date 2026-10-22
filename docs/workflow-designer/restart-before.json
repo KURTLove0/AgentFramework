@@ -1,0 +1,72 @@
+{
+  "flow_id": "flowrun-e2acba10c6d184a4fe3f1b2c",
+  "snapshot_hash": "a0eb2c14ffd51a4fb695344fcd7a372bf65979ec6efe5c4dd71a34542a41c859",
+  "child_id": "run-c3f9f6b07ff7ed66",
+  "child_snapshot_hash": "b83a8bd017619fbda0f8632ddaa93f3d4bb5524a3b8f2b74493531af46e17173",
+  "drafts": [
+    {
+      "change_id": "change-demo-001",
+      "content_hash": "661c71e168b5a0a5052b6baa0f4917032afd68daf465320633df8cda2dc96ae6",
+      "created_at": 1792669139.347971,
+      "id": "draft-563e4501f95ff614",
+      "project_id": "project-451727443d7f4f8a",
+      "report": {
+        "change_id": "change-demo-001",
+        "claims": [
+          {
+            "evidence_ref": "evidence-01594f0a14b9e9f022ff",
+            "path": "version",
+            "value": 1
+          },
+          {
+            "evidence_ref": "evidence-01594f0a14b9e9f022ff",
+            "path": "service",
+            "value": "payment-service"
+          },
+          {
+            "evidence_ref": "evidence-01594f0a14b9e9f022ff",
+            "path": "dependencies",
+            "value": [
+              "order-service",
+              "ledger-service"
+            ]
+          },
+          {
+            "evidence_ref": "evidence-01594f0a14b9e9f022ff",
+            "path": "tests",
+            "value": {
+              "failed": 1,
+              "passed": 38
+            }
+          },
+          {
+            "evidence_ref": "evidence-01594f0a14b9e9f022ff",
+            "path": "rollback",
+            "value": "关闭 retry_enabled 开关并恢复上一版本"
+          }
+        ],
+        "limitations": [
+          "模拟数据；草稿供人工审核；未执行发布或部署。",
+          "参考经验 experience-run-b1630276b4669013@1：写入状态不明确时先按原幂等键核对，无法确认则转人工，禁止重复创建。"
+        ],
+        "risk_level": "HIGH",
+        "sections": {
+          "impact": "服务 payment-service；依赖：order-service, ledger-service。",
+          "recommendation": "修复失败测试并复核后再决定发布。",
+          "risks": "依照 release-review-rubric@1.0.0 判为 HIGH。",
+          "rollback": "关闭 retry_enabled 开关并恢复上一版本",
+          "summary": "评估 change-demo-001，来源版本 1，风险 HIGH。 资料依据：builtin-risk-rubric-a2164245198d@1、asset-c86954abb265472d@2。",
+          "test_results": "通过 38 项，失败 1 项。"
+        },
+        "source_version": 1,
+        "standard_ref": "evidence-87440a749302e784edc8",
+        "task_ref": "run-c3f9f6b07ff7ed66:report:0",
+        "title": "支付服务增加超时重试 · 变更评估"
+      },
+      "source_version": 1,
+      "status": "DRAFT",
+      "tenant_id": "tenant-demo",
+      "version": 1
+    }
+  ]
+}

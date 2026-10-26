@@ -56,11 +56,14 @@ class TaskContract:
     budget: Budget = field(default_factory=Budget)
     workflow_inputs: tuple = ()
     retrieval: dict | None = None
+    source_run_id: str | None = None
 
     def __post_init__(self):
         if self.retrieval is not None:
             from .workflow_rules import retrieval_config
             object.__setattr__(self,'retrieval',retrieval_config(self.retrieval))
+        if self.source_run_id is not None:
+            identifier(self.source_run_id)
         for name in ("change_id", "tenant_id", "principal", "project_id", "environment"):
             identifier(getattr(self, name))
         if not isinstance(self.workflow_inputs,(tuple,list)) or len(self.workflow_inputs)>11 or len(canonical(self.workflow_inputs).encode())>48000:
@@ -86,6 +89,7 @@ class TaskContract:
         result=asdict(self)
         if not self.workflow_inputs:result.pop('workflow_inputs',None)
         if self.retrieval is None:result.pop('retrieval',None)
+        if self.source_run_id is None:result.pop('source_run_id',None)
         return result
 
     @classmethod

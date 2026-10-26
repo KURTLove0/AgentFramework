@@ -61,6 +61,10 @@ class Store:
                 CREATE TABLE IF NOT EXISTS experience_candidates (
                     tenant_id TEXT, run_id TEXT, data TEXT, status TEXT DEFAULT 'PENDING_REVIEW',
                     PRIMARY KEY(tenant_id, run_id));
+                CREATE TABLE IF NOT EXISTS task_drafts (
+                    tenant TEXT, workspace TEXT, principal TEXT, revision INTEGER NOT NULL,
+                    data TEXT NOT NULL, updated REAL NOT NULL,
+                    PRIMARY KEY(tenant, workspace, principal));
             """)
         from .knowledge import schema
         with self.connect() as db:schema(db)
@@ -123,7 +127,7 @@ class Store:
         run_id = run_id or "run-" + uuid.uuid4().hex[:16]
         state = {
             "run_id": run_id, "tenant_id": task.tenant_id, "version": 0, "task": task.to_dict(),
-            "snapshot": snapshot, "scenario": scenario, "status": "CREATED", "created_at": now,
+            "snapshot": snapshot, "scenario": scenario, "status": "CREATED", "created_at": now, "updated_at": now,
             "deadline": now + task.budget.max_wall_seconds,
             "steps": 0, "replans": 0, "model_calls": 0, "model_tokens": 0, "report_revision": 0, "plan": [], "observations": {},
             "report": None, "draft": None, "checks": {}, "last_error": None,
@@ -181,6 +185,7 @@ class Store:
         tenant, run = state["tenant_id"], state["run_id"]
         updated = deepcopy(state)
         updated["version"] += 1
+        updated["updated_at"] = time.time()
         with self.transaction() as db:
             self.fence(db, state, lease)
             db.execute("UPDATE runs SET state=?,version=? WHERE tenant_id=? AND id=?", (canonical(updated), updated["version"], tenant, run))

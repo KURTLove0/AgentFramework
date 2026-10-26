@@ -1,5 +1,6 @@
 """Loopback-only Web UI/API. Business actions still pass through the existing Runtime."""
 
+import base64
 from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib.resources import files
@@ -13,7 +14,7 @@ import time
 from urllib.parse import parse_qs, urlsplit, unquote
 
 from . import __version__
-from .contracts import Budget, LeaseBusy, LeaseLost, PolicyDenied, TERMINAL, TaskContract, identifier
+from .contracts import Budget, LeaseBusy, LeaseLost, PolicyDenied, TERMINAL, TaskContract, canonical, identifier
 from .llm import CodexConfig, LLMPlanner
 from .mock_tools import SCENARIOS
 from .runtime import CrashInjected, Runtime, registry_snapshot
@@ -198,25 +199,155 @@ class Application:
         return {k: state[k] for k in ("run_id", "status", "created_at", "deadline", "steps", "replans", "scenario", "last_error")} | {
             "goal": state["task"]["goal"], "change_id": state["task"]["change_id"],
             "project_id": state["task"]["project_id"], "planner_ref": state["snapshot"]["planner_ref"],
+            "domain_pack_ref": state["task"]["domain_pack_ref"], "source_run_id": state["task"].get("source_run_id"),
+            "updated_at": state.get("updated_at", state["created_at"]),
             "agent_id": state["snapshot"].get("agent_profile", {}).get("id"),
+            "agent_name": state["snapshot"].get("agent_profile", {}).get("name") or state["snapshot"].get("agent", {}).get("identity", {}).get("name"),
             "agent_revision": state["snapshot"].get("agent_profile", {}).get("revision"),
             "model": state["snapshot"].get("planner", {}).get("config", {}).get("model"),
             "risk_level": (state["report"] or {}).get("risk_level"), "draft": state["draft"],
             "model_calls": state.get("model_calls", 0), "model_tokens": state.get("model_tokens", 0), "job": job}
 
-    def runs(self):
+    def accessible_run_states(self):
         store = self.runtime().store
         with store.connect() as db:
             rows = db.execute("SELECT state FROM runs WHERE tenant_id=? ORDER BY rowid DESC", (self.tenant,)).fetchall()
         states = [json.loads(row[0]) for row in rows]
-        states = [s for s in states if s['task']['project_id']==self.workspace['project_id'] and (not s['snapshot'].get('context_policy') or s['task']['principal']==self.principal)]
+        return [s for s in states if s['task']['project_id']==self.workspace['project_id'] and (not s['snapshot'].get('context_policy') or s['task']['principal']==self.principal)]
+
+    def runs(self, params=None):
+        params = params or {}
+        def option(name, default=None):
+            value = params.get(name, default)
+            return value[0] if isinstance(value, list) else value
+        states = self.accessible_run_states()
         counts = {"total": len(states), "running": 0, "waiting": 0, "succeeded": 0}
         for state in states:
             job = self.job(state["run_id"])
             counts["running"] += bool(job and job["active"]) or state["status"] in {"RUNNING", "RECONCILING", "VERIFYING"}
             counts["waiting"] += state["status"] in WAITING
             counts["succeeded"] += state["status"] == "SUCCEEDED"
-        return {"runs": [self.summary(s) for s in states[:200]], "counts": counts, "limit": 200}
+        search = str(option('search', '') or '').strip().lower()
+        status = option('status', 'all')
+        agent = option('agent_id', '')
+        domain = option('domain', '')
+        if search:
+            states = [s for s in states if search in ' '.join(str(v) for v in (
+                s['task']['goal'], s['task']['change_id'], s['run_id'], s['scenario'],
+                SCENARIO_LABELS.get(s['scenario'], ('', ''))[0],
+                s['snapshot'].get('agent_profile', {}).get('name', ''))).lower()]
+        if status == 'group:running':
+            states = [s for s in states if (self.job(s['run_id']) or {}).get('active') or s['status'] in {'RUNNING','RECONCILING','VERIFYING'}]
+        elif status == 'group:waiting':
+            states = [s for s in states if s['status'] in WAITING]
+        elif status and status != 'all':
+            states = [s for s in states if s['status'] == status]
+        if agent:
+            states = [s for s in states if s['snapshot'].get('agent_profile', {}).get('id') == agent]
+        if domain:
+            states = [s for s in states if s['task']['domain_pack_ref'] == domain]
+        after, before = option('created_after'), option('created_before')
+        if after not in (None, ''):
+            after = float(after);states = [s for s in states if s['created_at'] >= after]
+        if before not in (None, ''):
+            before = float(before);states = [s for s in states if s['created_at'] < before]
+        sort = option('sort', 'created_desc')
+        if sort not in {'created_desc','created_asc','updated_desc','updated_asc'}:
+            raise ValueError('不支持的运行排序')
+        field = 'created_at' if sort.startswith('created') else 'updated_at'
+        states.sort(key=lambda s:(s.get(field, s['created_at']),s['run_id']),reverse=sort.endswith('_desc'))
+        filtered_total = len(states)
+        cursor = option('cursor')
+        if cursor:
+            try:
+                cursor_id = base64.urlsafe_b64decode(cursor + '=' * (-len(cursor) % 4)).decode()
+                identifier(cursor_id)
+                position = next(i for i,s in enumerate(states) if s['run_id'] == cursor_id)
+            except Exception as exc:
+                raise ValueError('运行分页游标无效或已变化，请返回第一页') from exc
+            states = states[position + 1:]
+        raw_limit = option('limit')
+        limit = 200 if raw_limit in (None, '') else int(raw_limit)
+        if not 1 <= limit <= 200:
+            raise ValueError('运行分页大小须为 1–200')
+        page, has_more = states[:limit], len(states) > limit
+        next_cursor = base64.urlsafe_b64encode(page[-1]['run_id'].encode()).decode().rstrip('=') if has_more and page else None
+        return {"runs": [self.summary(s) for s in page], "counts": counts, "limit": limit,
+                "filtered_total": filtered_total, "next_cursor": next_cursor, "sort": sort}
+
+    def attention(self):
+        kinds = {'CREATED':'start','WAITING_AUTH':'auth','WAITING_INPUT':'input','NEEDS_REVIEW':'review','FAILED':'failed','EXPIRED':'expired'}
+        tasks = []
+        for state in self.accessible_run_states():
+            status, job = state['status'], self.job(state['run_id'])
+            kind = kinds.get(status)
+            resumable = status in {'CREATED','RUNNING','RECONCILING','VERIFYING'} and not (job and job['active']) and not self.lease(state['run_id'])['active']
+            if status == 'CREATED' and not resumable:
+                kind = None
+            elif not kind and status in {'RUNNING','RECONCILING','VERIFYING'} and resumable:
+                kind = 'resume'
+            if kind and (status != 'CREATED' or resumable):
+                tasks.append(self.summary(state) | {'attention_kind':kind})
+        tasks.sort(key=lambda s:(s['deadline'],s['created_at'],s['run_id']))
+        flow_kinds = {'WAITING_AUTH':'auth','WAITING_INPUT':'input','INTERRUPTED':'resume','PAUSED':'resume','NEEDS_REVIEW':'review','FAILED':'failed','EXPIRED':'expired'}
+        flows = [dict(r,attention_kind=flow_kinds[r['status']]) for r in self.workflows().runs() if r['status'] in flow_kinds]
+        flows.sort(key=lambda r:(r.get('deadline') or float('inf'),r.get('created_at') or 0,r['id']))
+        from .workspace_scheduler import WorkspaceScheduler
+        daily = WorkspaceScheduler(self).overview()
+        plans = [p for p in daily['plans'] if p['day'] == daily['today'] and any(i['status'] == 'BLOCKED' for i in p['items'])]
+        with self.runtime().store.connect() as db:
+            alerts = db.execute('SELECT COUNT(*) FROM agent_alerts WHERE tenant=? AND project=? AND principal=? AND acknowledged IS NULL',
+                                (self.tenant,self.workspace['project_id'],self.principal)).fetchone()[0]
+        return {'tasks':tasks,'workflow_runs':flows,'daily_plans':plans,
+                'counts':{'total':len(tasks)+len(flows)+len(plans),'tasks':len(tasks),'workflows':len(flows),'daily':len(plans)},'open_alert_count':alerts}
+
+    def task_draft(self):
+        with self.runtime().store.connect() as db:
+            row = db.execute('SELECT revision,data,updated FROM task_drafts WHERE tenant=? AND workspace=? AND principal=?',
+                             (self.tenant,self.workspace['id'],self.principal)).fetchone()
+        return {'draft':json.loads(row['data']) if row else None,'revision':row['revision'] if row else 0,'updated_at':row['updated'] if row else None}
+
+    def save_task_draft(self, data):
+        allowed = {'domain_pack_ref','goal','change_id','agent_id','planner','max_steps','max_wall_seconds','step','source_run_id'}
+        if not isinstance(data,dict) or set(data) != {'revision','draft'} or type(data['revision']) is not int or not isinstance(data['draft'],dict):
+            raise ValueError('任务草稿需要 revision 和 draft')
+        source = data['draft']
+        if set(source) - allowed:
+            raise ValueError('任务草稿包含不支持或许可字段')
+        for key in {'goal','change_id','agent_id','source_run_id'} & set(source):
+            if not isinstance(source[key],str) or len(source[key]) > (2000 if key == 'goal' else 100):
+                raise ValueError('任务草稿文本字段无效')
+        if source.get('domain_pack_ref') not in {None,'change-assessment@2.0.0','knowledge-answer@1.0.0'}:
+            raise ValueError('任务草稿领域无效')
+        if source.get('planner') not in {None,'mock','codex','cursor'}:
+            raise ValueError('任务草稿运行时无效')
+        if source.get('agent_id'):
+            identifier(source['agent_id'])
+        if source.get('source_run_id'):
+            identifier(source['source_run_id'])
+        if 'step' in source and (type(source['step']) is not int or not 0 <= source['step'] <= 2):
+            raise ValueError('任务草稿步骤无效')
+        for key,maximum in (('max_steps',100),('max_wall_seconds',3600)):
+            if key in source and (type(source[key]) is not int or not 1 <= source[key] <= maximum):
+                raise ValueError('任务草稿预算无效')
+        clean = {key:source[key] for key in allowed if key in source}
+        now = time.time()
+        with self.runtime().store.transaction() as db:
+            row = db.execute('SELECT revision FROM task_drafts WHERE tenant=? AND workspace=? AND principal=?',
+                             (self.tenant,self.workspace['id'],self.principal)).fetchone()
+            current = row['revision'] if row else 0
+            if current != data['revision']:
+                raise ConfigConflict('任务草稿已在其他页面更新，请重新读取')
+            revision = current + 1
+            db.execute('INSERT OR REPLACE INTO task_drafts VALUES(?,?,?,?,?,?)',
+                       (self.tenant,self.workspace['id'],self.principal,revision,canonical(clean),now))
+        return {'draft':clean,'revision':revision,'updated_at':now}
+
+    def discard_task_draft(self):
+        with self.runtime().store.transaction() as db:
+            db.execute('DELETE FROM task_drafts WHERE tenant=? AND workspace=? AND principal=?',
+                       (self.tenant,self.workspace['id'],self.principal))
+        return {'draft':None,'revision':0,'updated_at':None}
 
     def detail(self, run_id):
         identifier(run_id)
@@ -240,11 +371,11 @@ class Application:
             return self._create(data, run_id=run_id)
 
     def _create(self, data, *, run_id=None):
-        allowed = {"goal", "change_id", "project_id", "domain_pack_ref", "planner", "runtime", "runtime_revision", "agent_id", "agent_revision", "mcp_consent", "scenario", "grant", "consent", "budget", "start"}
+        allowed = {"goal", "change_id", "project_id", "domain_pack_ref", "planner", "runtime", "runtime_revision", "agent_id", "agent_revision", "mcp_consent", "scenario", "grant", "consent", "budget", "start", "source_run_id", "clear_draft"}
         if not isinstance(data, dict) or set(data) - allowed:
             raise ValueError("任务包含不支持的字段")
         if data.get('project_id',self.workspace['project_id'])!=self.workspace['project_id']:raise PolicyDenied('project outside current workspace')
-        for name in ("grant", "consent", "mcp_consent", "start"):
+        for name in ("grant", "consent", "mcp_consent", "start", "clear_draft"):
             if name in data and type(data[name]) is not bool:
                 raise ValueError(name + " 必须为布尔值")
         if "runtime" in data and "planner" in data and data['runtime'] != data['planner']:
@@ -280,9 +411,13 @@ class Application:
         budget = {"max_wall_seconds": 600 if planner else 120, **data.get("budget", {})}
         domain_ref=(profile.get('definition') or {}).get('domain_pack_ref','change-assessment@2.0.0') if profile else data.get('domain_pack_ref','change-assessment@2.0.0')
         if profile and data.get('domain_pack_ref',domain_ref)!=domain_ref:raise ValueError('domain differs from selected Agent')
+        source_run_id = data.get('source_run_id')
+        if source_run_id:
+            identifier(source_run_id)
+            self.assert_run_access(self.runtime().store.load(self.tenant,source_run_id))
         task = TaskContract(domain_pack_ref=domain_ref,goal=goal.strip(), change_id=data.get("change_id", "change-demo-001"),
                             project_id=self.workspace['project_id'], tenant_id=self.tenant,
-                            principal=self.principal, agent_ref=agent_ref(profile) if profile else 'release-assistant@1.0.0', budget=Budget(**budget))
+                            principal=self.principal, agent_ref=agent_ref(profile) if profile else 'release-assistant@1.0.0', budget=Budget(**budget), source_run_id=source_run_id)
         runtime = self.runtime(planner)
         state = runtime.submit(task, scenario=data.get("scenario", "normal"), grant=data.get("grant", True), agent_profile=profile, run_id=run_id)
         lease = runtime.store.acquire(self.tenant, state["run_id"], self.lease_seconds)
@@ -296,7 +431,10 @@ class Application:
             runtime.store.release(state, lease)
         if data.get("start", True):
             self.schedule(state["run_id"])
-        return self.detail(state["run_id"])
+        result = self.detail(state["run_id"])
+        if data.get('clear_draft'):
+            self.discard_task_draft()
+        return result
 
     def schedule(self, run_id):
         identifier(run_id)
@@ -518,6 +656,13 @@ class Handler(BaseHTTPRequestHandler):
                     count = db.execute('SELECT COUNT(*) FROM agent_alerts WHERE tenant=? AND project=? AND principal=? AND acknowledged IS NULL',
                                        (app.tenant, app.workspace['project_id'], app.principal)).fetchone()[0]
                 return self.reply(200, {'open_alert_count': count})
+            if path == '/api/attention' and not mutation:
+                return self.reply(200,app.attention())
+            if path == '/api/task-draft':
+                return self.reply(200,app.save_task_draft(data)) if mutation else self.reply(200,app.task_draft())
+            if path == '/api/task-draft/discard' and mutation:
+                if data:raise ValueError('放弃任务草稿不接受额外字段')
+                return self.reply(200,app.discard_task_draft())
             if path == '/api/agent-evaluations/evaluate' and mutation:
                 from .agent_evaluation import AgentEvaluations
                 if set(data) - {'run_id'}:raise ValueError('评测参数无效')
@@ -748,7 +893,7 @@ class Handler(BaseHTTPRequestHandler):
                     return self.reply(200,service.publish(scope,ref,data.get('evaluation_id')))
                 if not mutation and action=='evaluations':return self.reply(200,{'evaluations':service.evaluations(scope,ref)})
             if path == "/api/runs":
-                return self.reply(202, app.create(data)) if mutation else self.reply(200, app.runs())
+                return self.reply(202, app.create(data)) if mutation else self.reply(200, app.runs(query))
             pieces = path.strip("/").split("/")
             if len(pieces) in (3, 4) and pieces[:2] == ["api", "runs"]:
                 run_id = identifier(pieces[2])

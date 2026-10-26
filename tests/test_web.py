@@ -129,6 +129,79 @@ class WebTests(unittest.TestCase):
         finally:
             other.close()
 
+    def test_task_draft_persistence_revision_and_workspace_scope(self):
+        self.assertIsNone(self.app.task_draft()['draft'])
+        draft={'domain_pack_ref':'change-assessment@2.0.0','goal':'保留的模拟目标','change_id':'change-draft-001','agent_id':'','planner':'mock','max_steps':32,'max_wall_seconds':180,'step':1}
+        saved=self.app.save_task_draft({'revision':0,'draft':draft})
+        self.assertEqual(saved['revision'],1)
+        self.assertEqual(saved['draft']['goal'],'保留的模拟目标')
+        with self.assertRaisesRegex(ValueError,'许可字段'):
+            self.app.save_task_draft({'revision':1,'draft':draft|{'grant':True}})
+        with self.assertRaisesRegex(Exception,'其他页面更新'):
+            self.app.save_task_draft({'revision':0,'draft':draft})
+        other_space=self.app.workspaces.save({'name':'其他空间','business':'模拟','scenario':'隔离','description':'','revision':0})
+        self.assertIsNone(self.app.scoped(other_space['id']).task_draft()['draft'])
+        self.app.close()
+        self.app=Application(self.tmp.name,lease_seconds=.5,tool_timeout=.2)
+        self.assertEqual(self.app.task_draft()['draft']['goal'],'保留的模拟目标')
+        created=self.app.create({'start':False,'clear_draft':True})
+        self.assertEqual(created['run']['status'],'CREATED')
+        self.assertIsNone(self.app.task_draft()['draft'])
+
+    def test_source_run_is_linked_without_inheriting_grant(self):
+        original=self.app.create({'start':False})['run']
+        copied=self.app.create({'start':False,'source_run_id':original['run_id'],'grant':False})['run']
+        self.assertNotEqual(copied['run_id'],original['run_id'])
+        self.assertEqual(copied['task']['source_run_id'],original['run_id'])
+        self.assertIsNone(self.app.runtime().store.get_grant(copied))
+        self.assertEqual(self.app.detail(original['run_id'])['run']['status'],'CREATED')
+        self.assertEqual(self.app.runs({'search':[original['run_id']]})['filtered_total'],1)
+
+    def test_runs_filter_sort_and_cursor_pagination(self):
+        first=self.app.create({'goal':'分页-甲','start':False})['run']
+        second=self.app.create({'goal':'分页-乙','start':False})['run']
+        third=self.app.create({'goal':'分页-丙','start':False,'domain_pack_ref':'knowledge-answer@1.0.0'})['run']
+        page=self.app.runs({'sort':['created_asc'],'limit':['2']})
+        self.assertEqual([r['run_id'] for r in page['runs']],[first['run_id'],second['run_id']])
+        self.assertEqual(page['filtered_total'],3)
+        self.assertTrue(page['next_cursor'])
+        following=self.app.runs({'sort':['created_asc'],'limit':['2'],'cursor':[page['next_cursor']]})
+        self.assertEqual([r['run_id'] for r in following['runs']],[third['run_id']])
+        self.assertIsNone(following['next_cursor'])
+        self.assertEqual(self.app.runs({'domain':['knowledge-answer@1.0.0']})['filtered_total'],1)
+        self.assertEqual(self.app.runs({'search':['分页-乙']})['runs'][0]['run_id'],second['run_id'])
+        with self.assertRaisesRegex(ValueError,'分页游标'):
+            self.app.runs({'cursor':['invalid']})
+
+    def test_runs_cursor_pagination_reaches_records_beyond_two_hundred(self):
+        ids=[]
+        for index in range(205):
+            ids.append(self.app.create({'goal':f'历史-{index:03d}','start':False})['run']['run_id'])
+        seen=[];cursor=None;pages=0
+        while True:
+            params={'sort':['created_asc'],'limit':['50']}
+            if cursor:params['cursor']=[cursor]
+            page=self.app.runs(params);pages+=1
+            seen.extend(r['run_id'] for r in page['runs'])
+            cursor=page['next_cursor']
+            if not cursor:break
+        self.assertEqual(pages,5)
+        self.assertEqual(len(seen),205)
+        self.assertEqual(len(set(seen)),205)
+        self.assertEqual(seen[0],ids[0])
+        self.assertEqual(seen[-1],ids[-1])
+        self.assertEqual(self.app.runs({'search':['历史-000']})['filtered_total'],1)
+
+    def test_attention_uses_current_workspace_actionable_states(self):
+        waiting=self.create(grant=False)['run']
+        created=self.app.create({'start':False})['run']
+        result=self.app.attention()
+        by_id={item['run_id']:item['attention_kind'] for item in result['tasks']}
+        self.assertEqual(by_id[waiting['run_id']],'auth')
+        self.assertEqual(by_id[created['run_id']],'start')
+        self.assertEqual(result['counts']['total'],2)
+        self.assertEqual(result['open_alert_count'],0)
+
 
 class HTTPTests(unittest.TestCase):
     def setUp(self):
@@ -184,6 +257,21 @@ class HTTPTests(unittest.TestCase):
             self.assertEqual(self.request('/api/runs','POST',body)[0],400)
         self.assertEqual(self.request('/api/runs','POST','{}',{'Content-Length':'70000'})[0],413)
         self.assertEqual(self.app.runs()['counts']['total'],0)
+
+    def test_task_draft_and_attention_routes(self):
+        draft={'domain_pack_ref':'change-assessment@2.0.0','goal':'HTTP 草稿','planner':'mock','step':0}
+        status,_,body=self.request('/api/task-draft','POST',json.dumps({'revision':0,'draft':draft}))
+        self.assertEqual(status,200)
+        self.assertEqual(json.loads(body)['revision'],1)
+        status,_,body=self.request('/api/task-draft')
+        self.assertEqual(status,200)
+        self.assertEqual(json.loads(body)['draft']['goal'],'HTTP 草稿')
+        self.assertEqual(self.request('/api/task-draft','POST',json.dumps({'revision':1,'draft':draft|{'consent':True}}))[0],400)
+        status,_,body=self.request('/api/attention')
+        self.assertEqual(status,200)
+        self.assertEqual(json.loads(body)['counts']['total'],0)
+        self.assertEqual(self.request('/api/task-draft/discard','POST','{}')[0],200)
+        self.assertIsNone(self.app.task_draft()['draft'])
 
     def test_runtime_configuration_routes_and_task_selection(self):
         from unittest.mock import patch

@@ -3,7 +3,7 @@ const flowLabels={SKIPPED:'分支已跳过',CREATED:'待启动',PENDING:'待执�
 const flowStatusHelp={CREATED:'流程已创建，即将按依赖顺序执行。',RUNNING:'节点按依赖执行，验收成功后才向下游传递结果。',PAUSED:'进度已保存。继续时复用已有任务和已确认的结果。',INTERRUPTED:'执行已中断。恢复后先核对已有结果，再继续未完成的步骤。',WAITING_AUTH:'写入前已暂停。审查下方具体提案后，可仅授权该提案。',WAITING_INPUT:'需要补充材料。可打开对应的 Agent 任务查看缺少的内容。',SUCCEEDED:'全部必要节点已完成，结果已通过独立验收。',FAILED:'执行未完成。查看节点任务中的原因与证据。',NEEDS_REVIEW:'结果需要人工核对。请先检查节点任务和审计证据。',CANCELLED:'流程已取消，已有执行记录和证据仍可查看。',EXPIRED:'本次运行已超时，已有结果仍保留。'};
 async function loadFlows(){
   const workspace=state.workspaceId,flows=await api('/api/workflows'),chats=(await api('/api/workflow-chat')).conversations,agents=(await api('/api/agents')).agents;
-  const id=state.selected||flows.runs[0]?.id,detail=id?await api('/api/workflow-runs/'+encodeURIComponent(id)):null;
+  const id=state.selected,detail=id?await api('/api/workflow-runs/'+encodeURIComponent(id)):null;
   if(state.workspaceId!==workspace)return;
   // Publish a complete refresh together. A later failed GET must not overwrite
   // the authoritative receipt from an already successful mutation.
@@ -35,9 +35,20 @@ function flowGraph(nodes,results={}){
   }).join('')}</ol>`;
 }
 function flowNeedsReview(workflow){return workflow.nodes.some(node=>!(state.agents||[]).some(agent=>!agent.archived&&agent.id===node.agent_id&&agent.revision===node.agent_revision));}
+function flowPageHeader(available){
+ return `<div class="page-head"><div><p class="eyebrow">AGENT WORKFLOWS</p><h1>工作流</h1><p>将知识检索、Agent 执行与结果验收连接成可恢复的流程。</p></div><div class="toolbar">${available.length?`<button class="button secondary" data-flow-chat>${icon('file')}对话设计</button><button class="button primary" data-flow-new>${icon('plus')}可视化创建</button>`:'<a class="button primary" href="#/agents">先配置智能体</a>'}</div></div>`;
+}
+function flowDefinitions(data,available){
+ return `<section class="workflow-catalog" aria-label="工作流目录">${data.workflows.map(w=>`<article class="panel workspace-card flow-card"><div class="mini-heading"><h2>${esc(w.name)}</h2><span class="pill">${w.archived?'已归档':'v'+w.revision+(flowNeedsReview(w)?' · 需更新配置':'')}</span></div><p>${esc(w.description||'为 Agent 编排任务，按节点依赖逐步执行。')}</p><div class="flow-card-summary"><span>${w.nodes.length} 个 Agent 节点</span>${w.nodes.some(n=>n.retrieval)?`<span>${w.nodes.filter(n=>n.retrieval).length} 个知识检索</span>`:''}${w.nodes.some(n=>n.condition)?`<span>${w.nodes.filter(n=>n.condition).length} 个条件分支</span>`:''}</div><details class="flow-card-details" data-key="flow-definition-${esc(w.id)}"><summary>查看节点与路由</summary>${flowGraph(w.nodes)}</details>${!w.archived&&flowNeedsReview(w)?'<p class="field-help">节点绑定的智能体已更新或停用。重新选择并保存后，再创建新运行；旧运行保留原版本。</p>':''}<div class="agent-card-actions">${!w.archived&&flowNeedsReview(w)?`<button class="button primary" data-edit-flow="${esc(w.id)}" aria-label="更新 ${esc(w.name)} 的执行配置">更新执行配置</button>`:`<button class="button primary" data-start-flow="${esc(w.id)}" ${w.archived?'disabled':''} aria-label="运行 ${esc(w.name)}">运行工作流</button><button class="button secondary" data-edit-flow="${esc(w.id)}" aria-label="编辑 ${esc(w.name)}">编辑流程</button>`}<button class="text-button" data-archive-flow="${esc(w.id)}" aria-label="${w.archived?'恢复使用':'归档'} ${esc(w.name)}">${w.archived?'恢复使用':'归档'}</button></div></article>`).join('')||`<section class="panel empty flow-empty-state">${icon('list')}<h2>让 Agent 协同完成工作</h2><p>${available.length?'从可视化画布开始，或向 Agent 描述你的流程。每个节点都由 Agent 执行并独立验收。':'先配置一个 Agent，定义它的职责、能力和验收标准，再创建工作流。'}</p><div class="toolbar">${available.length?'<button class="button primary" data-flow-new>创建第一个工作流</button><button class="button secondary" data-flow-chat>通过对话设计</button>':'<a class="button primary" href="#/agents">配置 Agent</a>'}</div></section>`}</section><details class="panel registry-skill flow-conversations" data-key="workflow-design-conversations"><summary>设计对话 <span class="pill">${(state.flowChats||[]).length}</span></summary>${(state.flowChats||[]).map(c=>`<button class="flow-run-row" data-open-flow-chat="${esc(c.id)}" aria-label="继续设计对话：${esc(c.preview)}"><span><strong>${esc(c.preview)}</strong><small>${runtimeLabel(c.runtime)} · ${time(c.updated_at)}</small></span><span>继续对话 →</span></button>`).join('')||'<p class="empty">通过对话设计时，需求和提案会保存在这里。</p>'}</details>`;
+}
+function flowRunDirectory(data){
+ return `<section class="panel registry-skill" aria-labelledby="flow-runs-heading"><div class="panel-heading"><div><h2 id="flow-runs-heading">运行记录</h2><small>每次运行保留独立的流程与 Agent 版本快照</small></div><span class="pill">${data.runs.length} 次</span></div>${data.runs.map(r=>`<button class="flow-run-row ${state.flowDetail?.run?.id===r.id?'selected':''}" data-select-flow-run="${esc(r.id)}" ${state.flowDetail?.run?.id===r.id?'aria-current="true"':''} aria-label="查看 ${esc(r.name)} 的运行，${esc(flowLabels[r.status]||r.status)}"><span><strong>${esc(r.name)}</strong><small>${time(r.created_at)}</small></span>${flowPill(r.status)}</button>`).join('')||'<div class="empty"><h3>尚无运行记录</h3><p>保存工作流后，点击“运行工作流”审查输入与权限。</p></div>'}</section>`;
+}
 function flowsPage(){
-  const data=state.flows||{workflows:[],runs:[]},active=data.workflows.filter(w=>!w.archived),available=(state.agents||[]).filter(a=>!a.archived),waiting=data.runs.filter(r=>['WAITING_AUTH','WAITING_INPUT','INTERRUPTED','NEEDS_REVIEW'].includes(r.status));
-  return `<div class="page-head"><div><p class="eyebrow">AGENT WORKFLOWS</p><h1>工作流</h1><p>将知识检索、Agent 执行与结果验收连接成可恢复的流程。</p></div><div class="toolbar">${available.length?`<button class="button secondary" data-flow-chat>${icon('file')}对话设计</button><button class="button primary" data-flow-new>${icon('plus')}可视化创建</button>`:'<a class="button primary" href="#/agents">先配置智能体</a>'}</div></div>${flowMutationFeedback()}<div class="flow-overview"><span><strong>${active.length}</strong> 个可用工作流</span><span><strong>${data.runs.length}</strong> 次运行</span>${waiting.length?`<span class="pill warn">${waiting.length} 次运行需要处理</span>`:''}<span class="field-help">设计 → 审查并保存 → 运行与授权</span></div><section class="workflow-catalog" aria-label="工作流目录">${data.workflows.map(w=>`<article class="panel workspace-card flow-card"><div class="mini-heading"><h2>${esc(w.name)}</h2><span class="pill">${w.archived?'已归档':'v'+w.revision+(flowNeedsReview(w)?' · 需更新配置':'')}</span></div><p>${esc(w.description||'为 Agent 编排任务，按节点依赖逐步执行。')}</p><div class="flow-card-summary"><span>${w.nodes.length} 个 Agent 节点</span>${w.nodes.some(n=>n.retrieval)?`<span>${w.nodes.filter(n=>n.retrieval).length} 个知识检索</span>`:''}${w.nodes.some(n=>n.condition)?`<span>${w.nodes.filter(n=>n.condition).length} 个条件分支</span>`:''}</div><details class="flow-card-details" data-key="flow-definition-${esc(w.id)}"><summary>查看节点与路由</summary>${flowGraph(w.nodes)}</details>${!w.archived&&flowNeedsReview(w)?'<p class="field-help">节点绑定的智能体已更新或停用。重新选择并保存后，再创建新运行；旧运行保留原版本。</p>':''}<div class="agent-card-actions">${!w.archived&&flowNeedsReview(w)?`<button class="button primary" data-edit-flow="${esc(w.id)}" aria-label="更新 ${esc(w.name)} 的执行配置">更新执行配置</button>`:`<button class="button primary" data-start-flow="${esc(w.id)}" ${w.archived?'disabled':''} aria-label="运行 ${esc(w.name)}">运行工作流</button><button class="button secondary" data-edit-flow="${esc(w.id)}" aria-label="编辑 ${esc(w.name)}">编辑流程</button>`}<button class="text-button" data-archive-flow="${esc(w.id)}" aria-label="${w.archived?'恢复使用':'归档'} ${esc(w.name)}">${w.archived?'恢复使用':'归档'}</button></div></article>`).join('')||`<section class="panel empty flow-empty-state">${icon('list')}<h2>让 Agent 协同完成工作</h2><p>${available.length?'从可视化画布开始，或向 Agent 描述你的流程。每个节点都由 Agent 执行并独立验收。':'先配置一个 Agent，定义它的职责、能力和验收标准，再创建工作流。'}</p><div class="toolbar">${available.length?'<button class="button primary" data-flow-new>创建第一个工作流</button><button class="button secondary" data-flow-chat>通过对话设计</button>':'<a class="button primary" href="#/agents">配置 Agent</a>'}</div></section>`}</section><section class="panel registry-skill" aria-labelledby="flow-runs-heading"><div class="panel-heading"><div><h2 id="flow-runs-heading">运行记录</h2><small>每次运行保留独立的流程与 Agent 版本快照</small></div><span class="pill">${data.runs.length} 次</span></div>${data.runs.map(r=>`<button class="flow-run-row ${state.flowDetail?.run?.id===r.id?'selected':''}" data-select-flow-run="${esc(r.id)}" ${state.flowDetail?.run?.id===r.id?'aria-current="true"':''} aria-label="查看 ${esc(r.name)} 的运行，${esc(flowLabels[r.status]||r.status)}"><span><strong>${esc(r.name)}</strong><small>${time(r.created_at)}</small></span>${flowPill(r.status)}</button>`).join('')||'<div class="empty"><h3>尚无运行记录</h3><p>保存工作流后，点击“运行工作流”审查输入与权限。</p></div>'}</section><details class="panel registry-skill flow-conversations" data-key="workflow-design-conversations"><summary>设计对话 <span class="pill">${(state.flowChats||[]).length}</span></summary>${(state.flowChats||[]).map(c=>`<button class="flow-run-row" data-open-flow-chat="${esc(c.id)}" aria-label="继续设计对话：${esc(c.preview)}"><span><strong>${esc(c.preview)}</strong><small>${runtimeLabel(c.runtime)} · ${time(c.updated_at)}</small></span><span>继续对话 →</span></button>`).join('')||'<p class="empty">通过对话设计时，需求和提案会保存在这里。</p>'}</details>${state.flowDetail?flowRunDetail(state.flowDetail):''}`;
+  const data=state.flows||{workflows:[],runs:[]},available=(state.agents||[]).filter(a=>!a.archived),section=state.flowSection||'definitions';
+  if(state.selected&&state.flowDetail)return `${flowPageHeader(available)}<a class="agent-back-link" href="#/workflows" data-flow-section="runs">${icon('arrow')}返回工作流运行记录</a>${flowRunDetail(state.flowDetail)}`;
+  const active=data.workflows.filter(w=>!w.archived),waiting=data.runs.filter(r=>['WAITING_AUTH','WAITING_INPUT','INTERRUPTED','NEEDS_REVIEW'].includes(r.status));
+  return `${flowPageHeader(available)}${flowMutationFeedback()}<div class="flow-overview"><span><strong>${active.length}</strong> 个可用工作流</span><span><strong>${data.runs.length}</strong> 次运行</span>${waiting.length?`<span class="pill warn">${waiting.length} 次运行需要处理</span>`:''}<span class="field-help">设计 → 审查并保存 → 运行与授权</span></div><nav class="content-tabs" role="tablist" aria-label="工作流视图"><button type="button" role="tab" aria-selected="${section==='definitions'}" class="button ${section==='definitions'?'primary':'secondary'}" tabindex="${section==='definitions'?'0':'-1'}" data-flow-section="definitions">流程定义 <small>${data.workflows.length}</small></button><button type="button" role="tab" aria-selected="${section==='runs'}" class="button ${section==='runs'?'primary':'secondary'}" tabindex="${section==='runs'?'0':'-1'}" data-flow-section="runs">运行记录 <small>${data.runs.length}</small></button></nav>${section==='runs'?flowRunDirectory(data):flowDefinitions(data,available)}`;
 }
 function flowRunDetail(d){
   const r=d.run,done=['SUCCEEDED','FAILED','NEEDS_REVIEW','CANCELLED','EXPIRED'].includes(r.status),busy=d.job?.active||r.lease_active,nodes=r.snapshot.definition.nodes,completed=Object.values(r.nodes).filter(n=>['SUCCEEDED','SKIPPED'].includes(n.status)).length;
@@ -76,12 +87,33 @@ function showFlowChat(chat){
   const history=$('#flow-chat-history');history.innerHTML=chat.messages.map(m=>`<div class="chat-message ${m.role}"><strong>${m.role==='user'?'你':'Agent'}</strong><p>${esc(m.text)}</p></div>`).join('')||flowChatIntroduction();history.scrollTop=history.scrollHeight;
   $('#flow-chat-proposal').innerHTML=chat.proposal?`<div class="panel-heading"><div><p class="eyebrow">流程提案</p><h3>${esc(chat.proposal.name)}</h3></div><span class="pill">待审查</span></div><p class="field-help">${esc(chat.proposal.description||'打开可视化画布，检查节点职责、知识检索和分支条件。')}</p>${flowGraph(chat.proposal.nodes)}<button type="button" class="button primary" data-adopt-flow>在画布中审查与编辑</button><p class="field-help">下一步：保存为工作流。运行时另行审查输入与权限。</p>`:'';
 }
-function openFlowStart(id){
+function flowStartReadiness(workflow,agents,hub,hubError){
+ const items=[],seen=new Set();
+ for(const agent of agents){
+  if(!agent||seen.has(agent.id))continue;seen.add(agent.id);
+  const provider=state.runtimeConfig?.providers.find(p=>p.id===agent.runtime);
+  if(!provider?.installed)items.push({status:'error',text:agent.name+' 的运行时不可用，请先完成本机配置。'});
+  if(agent.runtime!=='mock'){if(!agent.model)items.push({status:'error',text:agent.name+' 尚未配置模型。'});items.push({status:'pending',text:agent.name+' 的账号与模型权限将在执行时确认。'});}
+  const missing=(agent.definition?.native_read_refs||[]).some(ref=>!state.meta?.capability_contracts?.[ref]);if(missing)items.push({status:'error',text:agent.name+' 的受控读取能力需要更新。'});
+ }
+ if(workflow.nodes.some(n=>n.retrieval)){
+  if(hubError)items.push({status:'error',text:'无法核对知识来源：'+hubError});
+  else{
+   const now=Date.now()/1000,assets=[...(hub?.knowledge||[]),...(hub?.memory?.preferences||[]),...(hub?.memory?.notes||[]),...(hub?.experience||[]),...(hub?.capability_methods||[])],available=assets.filter(a=>a.status==='PUBLISHED'&&(a.effective_at||0)<=now&&(a.effective_until||Infinity)>now);
+   items.push(available.length?{status:'pass',text:available.length+' 份当前有效资料可用于流程检索。'}:{status:'error',text:'流程包含知识检索，但当前空间没有可用的已发布资料。'});
+  }
+ }
+ if(!items.some(item=>item.status==='error'))items.unshift({status:'pass',text:'节点配置检查通过，执行时仍逐节点授权与验收。'});
+ return {ready:!items.some(item=>item.status==='error'),markup:`<section class="flow-start-readiness"><h4>运行准备检查</h4><ul class="readiness-list">${items.map(item=>`<li class="${item.status}">${icon(item.status==='pass'?'check':item.status==='error'?'alert':'clock')}<span>${esc(item.text)}</span></li>`).join('')}</ul></section>`};
+}
+async function openFlowStart(id){
   const w=state.flows.workflows.find(w=>w.id===id);if(!w||w.archived){toast('此工作流不可运行，请刷新后重试');return;}
   if(flowNeedsReview(w)){openFlowEditor(w);toast('绑定的智能体版本已变化，请重新选择当前版本并保存。');return;}
   const f=$('#flow-start-form');f.reset();f.dataset.id=id;f.dataset.revision=w.revision;f.dataset.requestId='request-'+crypto.randomUUID();
   $('#flow-start-summary').innerHTML=`<h3>${esc(w.name)} <span class="pill">v${w.revision}</span></h3><p class="field-help">确认输入与许可后创建运行。每个节点使用已审查的 Agent 版本。</p><details><summary>检查 ${w.nodes.length} 个执行节点</summary>${flowGraph(w.nodes)}</details>`;
   const agents=w.nodes.map(n=>(state.agents||[]).find(a=>a.id===n.agent_id));
+  let hub=null,hubError='';if(w.nodes.some(n=>n.retrieval)){try{hub=await api('/api/knowledge-hub');}catch(error){hubError=error.message;}}
+  const readiness=flowStartReadiness(w,agents,hub,hubError);$('#flow-start-summary').insertAdjacentHTML('beforeend',readiness.markup);$('button[type="submit"]',f).disabled=!readiness.ready;
   const readonly=w.nodes.every((n,i)=>agents[i]?.revision===n.agent_revision&&agents[i]?.definition?.domain_pack_ref==='knowledge-answer@1.0.0');
   $('#flow-change').closest('label').hidden=readonly;$('#flow-change').disabled=readonly;$('#flow-grant').closest('label').hidden=readonly;$('#flow-grant').disabled=readonly;
   if(readonly)$('#flow-start-summary').insertAdjacentHTML('beforeend','<p class="field-help">此流程只读取当前空间的资料，无需填写变更标识或授予草稿写入权限。</p>');
@@ -90,6 +122,7 @@ function openFlowStart(id){
   $('#flow-start-error').hidden=true;$('#flow-start-dialog').showModal();$('#flow-change').focus();
 }
 document.addEventListener('click',async e=>{
+  const section=e.target.closest('[data-flow-section]');if(section){state.flowSection=section.dataset.flowSection;if(state.selected)navigate('workflows');else{state.fingerprint='';render();}}
   if(e.target.closest('[data-flow-new]'))openFlowEditor();
   if(e.target.closest('[data-flow-chat]'))openFlowChat().catch(error=>toast(error.message));
   if(e.target.closest('[data-flow-feedback-close]')){state.flowFeedback=null;render();}
@@ -97,10 +130,15 @@ document.addEventListener('click',async e=>{
   const history=e.target.closest('[data-open-flow-chat]');if(history)openFlowChat(history.dataset.openFlowChat).catch(error=>toast(error.message));
   if(e.target.closest('[data-adopt-flow]')){$('#flow-chat-dialog').close();openFlowEditor(state.flowChat.proposal);}
   const edit=e.target.closest('[data-edit-flow]');if(edit)openFlowEditor(state.flows.workflows.find(w=>w.id===edit.dataset.editFlow));
-  const start=e.target.closest('[data-start-flow]');if(start)openFlowStart(start.dataset.startFlow);
-  const select=e.target.closest('[data-select-flow-run]');if(select)navigate('workflows',select.dataset.selectFlowRun);
+  const start=e.target.closest('[data-start-flow]');if(start)openFlowStart(start.dataset.startFlow).catch(error=>toast(error.message));
+  const select=e.target.closest('[data-select-flow-run]');if(select){state.flowSection='runs';navigate('workflows',select.dataset.selectFlowRun);}
   const archive=e.target.closest('[data-archive-flow]');if(archive){const workspace=state.workspaceId,w=state.flows.workflows.find(w=>w.id===archive.dataset.archiveFlow),restore=flowButtonBusy(archive,w.archived?'正在恢复…':'正在归档…');try{const saved=await api('/api/workflows/'+w.id+'/archive',{revision:w.revision,archived:!w.archived});const feedback=flowRememberMutation('workflow',saved,workspace,w.archived?'工作流已恢复使用':'工作流已归档，运行记录仍保留');await flowRefreshAfterMutation(feedback);}catch(error){toast(error.message);}finally{restore();}}
   for(const [key,op] of [['resumeFlow','resume'],['cancelFlow','cancel'],['grantFlow','grant']]){const attr=key.replace(/[A-Z]/g,m=>'-'+m.toLowerCase()),button=e.target.closest('[data-'+attr+']');if(button){const restore=flowButtonBusy(button,op==='grant'?'正在提交授权…':op==='cancel'?'正在取消…':'正在恢复…');try{const workspace=state.workspaceId,detail=await api('/api/workflow-runs/'+button.dataset[key]+'/'+op,op==='grant'?{node_id:button.dataset.node}:{});const feedback=flowRememberMutation('run',detail,workspace,op==='grant'?'已授权此提案，继续执行':op==='cancel'?'取消请求已提交':'恢复请求已提交，将复用已有任务');await flowRefreshAfterMutation(feedback);}catch(error){toast(error.message);}finally{restore();}}}
+});
+document.addEventListener('keydown',event=>{
+ const tab=event.target.closest('.content-tabs [data-flow-section]');if(!tab||event.isComposing||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+ event.preventDefault();const next=event.key==='Home'?'definitions':event.key==='End'?'runs':state.flowSection==='runs'?'definitions':'runs';state.flowSection=next||'definitions';
+ if(state.selected)navigate('workflows');else{state.fingerprint='';render();}requestAnimationFrame(()=>document.querySelector('.content-tabs [data-flow-section="'+state.flowSection+'"]')?.focus({preventScroll:true}));
 });
 $('#flow-chat-agent').addEventListener('change',updateFlowChatRuntime);
 $('#flow-editor-form').addEventListener('submit',async e=>{

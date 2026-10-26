@@ -1,0 +1,318 @@
+{
+  "at": "2026-10-25T05:30:55.098108+00:00",
+  "sourceSha256": "e7a59ce14c9ef5b610ee40351c518bbd9dd0de813376e48d778079233563ff27",
+  "files": [
+    {
+      "path": "agent_framework/__init__.py",
+      "sha256": "2fde629cdfe0e7080899a5dbb8312f4dc6960073d42df1233295aa49a5da7deb"
+    },
+    {
+      "path": "agent_framework/__main__.py",
+      "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d"
+    },
+    {
+      "path": "agent_framework/adapters.py",
+      "sha256": "fbd0c39a31d2590168804103a9d6f42d12757ac0c56dbe380e106c367725c9ef"
+    },
+    {
+      "path": "agent_framework/agent_domains.py",
+      "sha256": "86128829faff8373b33b603ac6d3c223430188085b519e50efa49ab1fa626a2d"
+    },
+    {
+      "path": "agent_framework/agent_evaluation.py",
+      "sha256": "26015c7f82ac76e21a78629806a369233e56fb43745c386bfcdf2b927c31f41c"
+    },
+    {
+      "path": "agent_framework/agent_extensions.py",
+      "sha256": "c2a2e8984451f3bff50d24c86a4ff5f5b9985edba3064fa1d4a5385904414875"
+    },
+    {
+      "path": "agent_framework/agents.py",
+      "sha256": "38cb6c3c11551f0c894fa481de7ab59f71d348df656f6137d2b668abe49e27af"
+    },
+    {
+      "path": "agent_framework/assistant_evaluate.py",
+      "sha256": "dc6a1ced9a2e37f773daa309b2c3b4e0ded378751d84d51ab773320bbb5d1780"
+    },
+    {
+      "path": "agent_framework/cli.py",
+      "sha256": "aad99deb31a6ff684b1c64cd9c5f04b163681bb9301d1cde4909335878a48caf"
+    },
+    {
+      "path": "agent_framework/context_builder.py",
+      "sha256": "e6f58c1e8ab57c776bd21e66012a274f4e0124a9d1c6a10f3804c20556ac5846"
+    },
+    {
+      "path": "agent_framework/contracts.py",
+      "sha256": "55321f668b75db9dff8cc16dca50135c16d62b369097921da3bc451598124f47"
+    },
+    {
+      "path": "agent_framework/definitions.py",
+      "sha256": "6a49c8efd2e1cf9f849f1f43ab992a3e4c583b40976513b0dadc0ea5a564df39"
+    },
+    {
+      "path": "agent_framework/domains/__init__.py",
+      "sha256": "93fbe1f965bfb446f59909ed81ee4593519de4a15b8e24de3ef95af4d61a04fd"
+    },
+    {
+      "path": "agent_framework/domains/change_assessment.py",
+      "sha256": "40c36b5faa4e86d28341d54e7f41e361aa9976625060f90d98d9998fd965a4eb"
+    },
+    {
+      "path": "agent_framework/domains/change_verifier.py",
+      "sha256": "406976d65ac5cd27045bb753b7a8d19e30377023767e38bf5c2aa3ee2b560c38"
+    },
+    {
+      "path": "agent_framework/domains/knowledge_answer.py",
+      "sha256": "18cfa6114d4635e59b0a61deaf24a9e25dc4795df0ddae07c149af777eebaf7b"
+    },
+    {
+      "path": "agent_framework/evaluate.py",
+      "sha256": "a422821a864766504c8a0112cb28247d52f48408544250e09468f95348639ef6"
+    },
+    {
+      "path": "agent_framework/evaluation_contract.py",
+      "sha256": "27e8752c03228f76766ae9b411e0e7b5d3d78bb67cc75f03a3997b7a000a4686"
+    },
+    {
+      "path": "agent_framework/experience.py",
+      "sha256": "f2258b125da9f19244839b5569f201c86d743e3f77bfead2af9ddd7e3da68130"
+    },
+    {
+      "path": "agent_framework/gateway.py",
+      "sha256": "d311679639c0aa7710d3bba477fe2c4c17fb5c57ede5aae7cb6b4770627f5f47"
+    },
+    {
+      "path": "agent_framework/knowledge.py",
+      "sha256": "31e7a34b449816a4b36f5366aaae415cf0fbd297aaf99b7a0b4723ae0210aa05"
+    },
+    {
+      "path": "agent_framework/knowledge_hub.py",
+      "sha256": "fa21ee0d2cd94b98cc410bc2d47bf15e95b4510e82c563acf3191e7ba0b74538"
+    },
+    {
+      "path": "agent_framework/learning.py",
+      "sha256": "15e3eed6d1c6cb94cc74360bf2c04994691dbcaaf8e55a341f01cec69fc6531b"
+    },
+    {
+      "path": "agent_framework/library_cli.py",
+      "sha256": "5ced6c3153ad05099bb0a69d11de272840dfa9240787ee0993b88e4cb915fb39"
+    },
+    {
+      "path": "agent_framework/llm.py",
+      "sha256": "3a67ecc21403c6327178ff7fda4666f6992f46bec765ecb87a91ea81e04b7bb5"
+    },
+    {
+      "path": "agent_framework/memory.py",
+      "sha256": "1eff9dce68e90d154ba06096993c70c1a1269acd76c2a9d98998b114fce6201d"
+    },
+    {
+      "path": "agent_framework/mock_tools.py",
+      "sha256": "be121aad25a03f17e5cdf0792f22e58ec50e29c35b45ce52d15942f2d8b345b2"
+    },
+    {
+      "path": "agent_framework/model_catalog.py",
+      "sha256": "c83b6cdb7f3b2fcb57a53e0d7c364f6b2f85752ef8eca07844fd14d9dfbd0d75"
+    },
+    {
+      "path": "agent_framework/ontology.py",
+      "sha256": "6321bc540ba3b970acf0659993b43239feac6016bf794b39af210594e35b7a96"
+    },
+    {
+      "path": "agent_framework/ontology_model.py",
+      "sha256": "3bfacdb6de3cb7f76f3e3f466221b5c25980db55aa7d599fac6062cb48e3a682"
+    },
+    {
+      "path": "agent_framework/p0_evaluate.py",
+      "sha256": "1a05f5b25eab8dae77ae67a6721c4ac9a8291863e5fc14024fd1a0878cff08d4"
+    },
+    {
+      "path": "agent_framework/planner.py",
+      "sha256": "87dae7afd294e8c562afc74ae1ec94eb8bf29901e3b9e2f732380e5c5743bb8e"
+    },
+    {
+      "path": "agent_framework/read_proxy.py",
+      "sha256": "c3fcda31e385ff48d6a7506fef2bfd4bb4ee49756064681c73738f004711a201"
+    },
+    {
+      "path": "agent_framework/resources/agent.json",
+      "sha256": "be29f8965003f180b1bf921b48e51f6fe5ae904ca3e979c57e0fdc09fd185fa2"
+    },
+    {
+      "path": "agent_framework/resources/capability.json",
+      "sha256": "7a9959fde2e84368eae66010679afc1f688da8180c40c3b6cfb39850502b647f"
+    },
+    {
+      "path": "agent_framework/resources/change-assessment.md",
+      "sha256": "a7595e6c0f4bba6542f31e34a1f1013bd2b171cd96d7f3bc1054c07e94d61c19"
+    },
+    {
+      "path": "agent_framework/resources/skills/release-risk-analysis/SKILL.md",
+      "sha256": "c66db09fcc43d38b69825ebbf95a9e6d4e1e5b54aa24d928520bfa624a49cd10"
+    },
+    {
+      "path": "agent_framework/resources/skills/release-risk-analysis/references/method.md",
+      "sha256": "3cb3030e3aa67e72e906cf05d6e7c6173948001f04c87701ee0a4b78753e8597"
+    },
+    {
+      "path": "agent_framework/resources/skills/source-grounded-answer/SKILL.md",
+      "sha256": "4c37235e1c254fbad27ffee31119402191d6ff2945e1ce5860fb6af45d5dddc3"
+    },
+    {
+      "path": "agent_framework/resources/skills/source-grounded-answer/references/grounding.md",
+      "sha256": "ff951a1feb19885e26dba2664aacb76c2214236ccdefe712558e5c7a04c51e0a"
+    },
+    {
+      "path": "agent_framework/runtime.py",
+      "sha256": "350676aab867985c82de60f0e5fc6c1641c4682a5526a23e50931777c7321ea2"
+    },
+    {
+      "path": "agent_framework/runtime_config.py",
+      "sha256": "cba64c28fd49b9bcb14105a8f0ab04df588681678bd56e3cbddf37e819a4f0b4"
+    },
+    {
+      "path": "agent_framework/skill_context.py",
+      "sha256": "6b830a4a13eb37ea0aeb61bce3f9013890100f6b0d1f76b0b7db04b904d7bc98"
+    },
+    {
+      "path": "agent_framework/skills.py",
+      "sha256": "193bbfb52dfb241a1a4d5e139e82a7790f3f21ef73b4195d86af0199875acacd"
+    },
+    {
+      "path": "agent_framework/store.py",
+      "sha256": "e17095eced46194bdd5710e4ea43c0bbad9514eaf311740a9635943b725a9ac1"
+    },
+    {
+      "path": "agent_framework/structured.py",
+      "sha256": "c1fcf856717fab2168404a13e1f9c59e88e470d5ed8ac53b44dfd69ab4c9919a"
+    },
+    {
+      "path": "agent_framework/verifier.py",
+      "sha256": "840834bfa62b9e6d512f87330d8534154d8d0225e7d7d8d9bce38bb369aa756e"
+    },
+    {
+      "path": "agent_framework/web.py",
+      "sha256": "8c2b58008aafb0c75e46460aea74605abeede98ed610d827fa736212cf5bf3a8"
+    },
+    {
+      "path": "agent_framework/webui/agent_domains.js",
+      "sha256": "b186a9ddea2347490414acbbacf11b2b81bccf39517c935987ab79b5a8b650d9"
+    },
+    {
+      "path": "agent_framework/webui/agent_experience.js",
+      "sha256": "b7b9318a27196e7888ad49ef9dc5449c28987574c79d60acef6ecd327a9e5bd7"
+    },
+    {
+      "path": "agent_framework/webui/agents.js",
+      "sha256": "63385041a18dd71a894ae4063eb6a572464013afff885baef4b202688aa611bc"
+    },
+    {
+      "path": "agent_framework/webui/app.js",
+      "sha256": "66aa1473e4658e5cca3105bc14d26e6b7af85a75c6924a9c44cbc3ef085d66aa"
+    },
+    {
+      "path": "agent_framework/webui/appearance.js",
+      "sha256": "cc0b279176e545da5701b33d44f83ccc4a89829e4c763c8cf23f016507df4ba3"
+    },
+    {
+      "path": "agent_framework/webui/form_controls.css",
+      "sha256": "43a471ae1a08f636eae24f4fadcb709d24a39180a1c484591f98ef75512e01fb"
+    },
+    {
+      "path": "agent_framework/webui/form_controls.js",
+      "sha256": "2c00a289393ba95bfc6c72738f60b363cd1300af75f960d4af950c66d25ec4ec"
+    },
+    {
+      "path": "agent_framework/webui/hig.css",
+      "sha256": "5bdd6a38b839400bac7245cd5a9d1e3cda223142d50e616d0b134678d9f21869"
+    },
+    {
+      "path": "agent_framework/webui/index.html",
+      "sha256": "4721381b8e3487241a59d6df0ab3fb6cb5e5e223ddb8b61eb406fc63a51aebe9"
+    },
+    {
+      "path": "agent_framework/webui/journeys.js",
+      "sha256": "ec6830f76aef48f5c62a8ea101934ad36890b5207645dcbdda5e55edf1fa839c"
+    },
+    {
+      "path": "agent_framework/webui/learning.js",
+      "sha256": "c1eb0f3850edcb45f61e963422d056e57fe785fa38dc2bb16da5368a94f8838e"
+    },
+    {
+      "path": "agent_framework/webui/library.js",
+      "sha256": "5df0d558dc3eeb8e41c299942b9559411eee2264ebcc58c4112553c83541a3e4"
+    },
+    {
+      "path": "agent_framework/webui/ontology_model.js",
+      "sha256": "a438c953280f7795f29bd46c7d9a3ebe81057ad3b146fc2a8c4c0956b3e7c652"
+    },
+    {
+      "path": "agent_framework/webui/operations.css",
+      "sha256": "de135584ef57d58b0ab9e1e9c84e7e67a1d4e1b5c719b6b3f9dd3e1aad1b93b1"
+    },
+    {
+      "path": "agent_framework/webui/operations.js",
+      "sha256": "9f04e75fb7adf0f0dad004dcb4191164fb790587d746fd420c0dc630b58060ff"
+    },
+    {
+      "path": "agent_framework/webui/roles.js",
+      "sha256": "9f79dbb0e6c6976cd5c5b473d091d815d533d23401a62f3e5a286c8b0f845a83"
+    },
+    {
+      "path": "agent_framework/webui/skills.js",
+      "sha256": "055732ce09ba2abab91fa49e9c727caf38a93e7f7eba4723052986d906f53a6d"
+    },
+    {
+      "path": "agent_framework/webui/space-grotesk.ttf",
+      "sha256": "acad6de1fc93436f5c0f1f4137751ef04f1aea3063e7036535970ffcfbd79f72"
+    },
+    {
+      "path": "agent_framework/webui/styles.css",
+      "sha256": "2832a732930dec5cf1c8d149f612815d83f5fd1e61d8e95d404b0c43b783c7c3"
+    },
+    {
+      "path": "agent_framework/webui/workflow_designer.js",
+      "sha256": "feb5161fd622a20ef90d2b891d145203784dd8c9fa15a15845391fb00483bded"
+    },
+    {
+      "path": "agent_framework/webui/workflows.js",
+      "sha256": "3e6823628dd9600837314e1cf730aefa9f057d7b7650483676a30149e6a94280"
+    },
+    {
+      "path": "agent_framework/webui/workspaces.js",
+      "sha256": "524b794d1a132f62fed1ff784ea8eae8aa44118c45b201db482d125e72b23372"
+    },
+    {
+      "path": "agent_framework/worker.py",
+      "sha256": "604b82876569f3fa24ad1cfb7ffc34d5a805ce3ff80acb991d14374bba6abab8"
+    },
+    {
+      "path": "agent_framework/workflow_chat.py",
+      "sha256": "deb9195e6b9497975095a0309ffd30794d834a9cb37539698381a4a86acd0dfb"
+    },
+    {
+      "path": "agent_framework/workflow_evaluate.py",
+      "sha256": "c923541663a2e567fca4c1c8cae3c6cbb0611928e9d7fbb0d40fb4adfdc02016"
+    },
+    {
+      "path": "agent_framework/workflow_rules.py",
+      "sha256": "0328f0160ee3d1206992efa1e3004b408c5cbd39c4dc1949fbd6326acf14de8d"
+    },
+    {
+      "path": "agent_framework/workflows.py",
+      "sha256": "4539413f5aa18a12fe86074c6db24f8ba6e34e9886f40b9283b137ab8599d474"
+    },
+    {
+      "path": "agent_framework/workspace_scheduler.py",
+      "sha256": "30c0e58c1251de7a644003d5b7c1ad470660f6785e7f80378422fd44b286159e"
+    },
+    {
+      "path": "agent_framework/workspaces.py",
+      "sha256": "92066b1ffdf80e8e819987dbaddadad2365186fc1f77f752b40b3ec9ff695e65"
+    },
+    {
+      "path": "design.md",
+      "sha256": "bf92f986e4cc1dac30bc68b2b208deab767e186f81d17fe1c0741dc8c9246ab5"
+    }
+  ]
+}

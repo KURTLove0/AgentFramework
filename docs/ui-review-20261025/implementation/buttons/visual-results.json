@@ -1,0 +1,4443 @@
+{
+  "generatedAt": "2026-10-25T05:36:13.007Z",
+  "browser": "155.0.8059.85",
+  "platform": "darwin",
+  "deviceScaleFactor": 2,
+  "sourceFiles": {
+    "agent_framework/webui/styles.css": "2832a732930dec5cf1c8d149f612815d83f5fd1e61d8e95d404b0c43b783c7c3",
+    "agent_framework/webui/hig.css": "9b17d1a17f329b5b8f955ea357f82922d86fbdaf561fec79b29580e10ba99d25",
+    "agent_framework/webui/form_controls.css": "43a471ae1a08f636eae24f4fadcb709d24a39180a1c484591f98ef75512e01fb",
+    "agent_framework/webui/app.js": "66aa1473e4658e5cca3105bc14d26e6b7af85a75c6924a9c44cbc3ef085d66aa",
+    "agent_framework/webui/agents.js": "63385041a18dd71a894ae4063eb6a572464013afff885baef4b202688aa611bc",
+    "agent_framework/webui/agent_experience.js": "b7b9318a27196e7888ad49ef9dc5449c28987574c79d60acef6ecd327a9e5bd7"
+  },
+  "workspaceId": "workspace-d518996f39054c66",
+  "staleScrollRetries": 1,
+  "contextMatrix": [
+    {
+      "context": "saved-notice",
+      "theme": "light",
+      "width": 320,
+      "height": 812,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": null,
+        "rect": {
+          "x": 33,
+          "y": 385.0625,
+          "width": 166,
+          "height": 44,
+          "right": 199,
+          "bottom": 429.0625
+        },
+        "textBounds": {
+          "top": 398.265625,
+          "bottom": 415.265625,
+          "left": 75,
+          "right": 131
+        },
+        "icon": {
+          "x": 139,
+          "y": 398.0625,
+          "width": 18,
+          "height": 18,
+          "right": 157,
+          "bottom": 416.0625
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 320,
+        "parent": {
+          "x": 33,
+          "y": 385.0625,
+          "width": 254,
+          "height": 44,
+          "right": 287,
+          "bottom": 429.0625
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "saved-notice",
+      "theme": "light",
+      "width": 375,
+      "height": 812,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": null,
+        "rect": {
+          "x": 33,
+          "y": 341.875,
+          "width": 221,
+          "height": 44,
+          "right": 254,
+          "bottom": 385.875
+        },
+        "textBounds": {
+          "top": 355.078125,
+          "bottom": 372.078125,
+          "left": 102.5,
+          "right": 158.5
+        },
+        "icon": {
+          "x": 166.5,
+          "y": 354.875,
+          "width": 18,
+          "height": 18,
+          "right": 184.5,
+          "bottom": 372.875
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 375,
+        "parent": {
+          "x": 33,
+          "y": 341.875,
+          "width": 309,
+          "height": 44,
+          "right": 342,
+          "bottom": 385.875
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "saved-notice",
+      "theme": "light",
+      "width": 768,
+      "height": 1024,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": null,
+        "rect": {
+          "x": 129,
+          "y": 513.28125,
+          "width": 116,
+          "height": 44,
+          "right": 245,
+          "bottom": 557.28125
+        },
+        "textBounds": {
+          "top": 526.484375,
+          "bottom": 543.484375,
+          "left": 146,
+          "right": 202
+        },
+        "icon": {
+          "x": 210,
+          "y": 526.28125,
+          "width": 18,
+          "height": 18,
+          "right": 228,
+          "bottom": 544.28125
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 768,
+        "parent": {
+          "x": 129,
+          "y": 513.28125,
+          "width": 586,
+          "height": 44,
+          "right": 715,
+          "bottom": 557.28125
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "saved-notice",
+      "theme": "light",
+      "width": 1440,
+      "height": 1000,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": null,
+        "rect": {
+          "x": 1131,
+          "y": 224.578125,
+          "width": 116,
+          "height": 44,
+          "right": 1247,
+          "bottom": 268.578125
+        },
+        "textBounds": {
+          "top": 237.78125,
+          "bottom": 254.78125,
+          "left": 1148,
+          "right": 1204
+        },
+        "icon": {
+          "x": 1212,
+          "y": 237.578125,
+          "width": 18,
+          "height": 18,
+          "right": 1230,
+          "bottom": 255.578125
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 1440,
+        "parent": {
+          "x": 1131,
+          "y": 224.578125,
+          "width": 256,
+          "height": 44,
+          "right": 1387,
+          "bottom": 268.578125
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "saved-notice",
+      "theme": "dark",
+      "width": 320,
+      "height": 812,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": null,
+        "rect": {
+          "x": 33,
+          "y": 385.0625,
+          "width": 166,
+          "height": 44,
+          "right": 199,
+          "bottom": 429.0625
+        },
+        "textBounds": {
+          "top": 398.265625,
+          "bottom": 415.265625,
+          "left": 75,
+          "right": 131
+        },
+        "icon": {
+          "x": 139,
+          "y": 398.0625,
+          "width": 18,
+          "height": 18,
+          "right": 157,
+          "bottom": 416.0625
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 320,
+        "parent": {
+          "x": 33,
+          "y": 385.0625,
+          "width": 254,
+          "height": 44,
+          "right": 287,
+          "bottom": 429.0625
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "saved-notice",
+      "theme": "dark",
+      "width": 375,
+      "height": 812,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": null,
+        "rect": {
+          "x": 33,
+          "y": 341.875,
+          "width": 221,
+          "height": 44,
+          "right": 254,
+          "bottom": 385.875
+        },
+        "textBounds": {
+          "top": 355.078125,
+          "bottom": 372.078125,
+          "left": 102.5,
+          "right": 158.5
+        },
+        "icon": {
+          "x": 166.5,
+          "y": 354.875,
+          "width": 18,
+          "height": 18,
+          "right": 184.5,
+          "bottom": 372.875
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 375,
+        "parent": {
+          "x": 33,
+          "y": 341.875,
+          "width": 309,
+          "height": 44,
+          "right": 342,
+          "bottom": 385.875
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "saved-notice",
+      "theme": "dark",
+      "width": 768,
+      "height": 1024,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": null,
+        "rect": {
+          "x": 129,
+          "y": 513.28125,
+          "width": 116,
+          "height": 44,
+          "right": 245,
+          "bottom": 557.28125
+        },
+        "textBounds": {
+          "top": 526.484375,
+          "bottom": 543.484375,
+          "left": 146,
+          "right": 202
+        },
+        "icon": {
+          "x": 210,
+          "y": 526.28125,
+          "width": 18,
+          "height": 18,
+          "right": 228,
+          "bottom": 544.28125
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 768,
+        "parent": {
+          "x": 129,
+          "y": 513.28125,
+          "width": 586,
+          "height": 44,
+          "right": 715,
+          "bottom": 557.28125
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "saved-notice",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": null,
+        "rect": {
+          "x": 1131,
+          "y": 224.578125,
+          "width": 116,
+          "height": 44,
+          "right": 1247,
+          "bottom": 268.578125
+        },
+        "textBounds": {
+          "top": 237.78125,
+          "bottom": 254.78125,
+          "left": 1148,
+          "right": 1204
+        },
+        "icon": {
+          "x": 1212,
+          "y": 237.578125,
+          "width": 18,
+          "height": 18,
+          "right": 1230,
+          "bottom": 255.578125
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 1440,
+        "parent": {
+          "x": 1131,
+          "y": 224.578125,
+          "width": 256,
+          "height": 44,
+          "right": 1387,
+          "bottom": 268.578125
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "populated-agent",
+      "theme": "light",
+      "width": 320,
+      "height": 812,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": "使用 严格视觉复查助手 创建任务",
+        "rect": {
+          "x": 37,
+          "y": 610,
+          "width": 112,
+          "height": 44,
+          "right": 149,
+          "bottom": 654
+        },
+        "textBounds": {
+          "top": 623.90625,
+          "bottom": 639.90625,
+          "left": 80,
+          "right": 132
+        },
+        "icon": {
+          "x": 54,
+          "y": 623,
+          "width": 18,
+          "height": 18,
+          "right": 72,
+          "bottom": 641
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 320,
+        "parent": {
+          "x": 37,
+          "y": 593,
+          "width": 246,
+          "height": 113,
+          "right": 283,
+          "bottom": 706
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "populated-agent",
+      "theme": "light",
+      "width": 375,
+      "height": 812,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": "使用 严格视觉复查助手 创建任务",
+        "rect": {
+          "x": 37,
+          "y": 661.4375,
+          "width": 112,
+          "height": 44,
+          "right": 149,
+          "bottom": 705.4375
+        },
+        "textBounds": {
+          "top": 675.34375,
+          "bottom": 691.34375,
+          "left": 80,
+          "right": 132
+        },
+        "icon": {
+          "x": 54,
+          "y": 674.4375,
+          "width": 18,
+          "height": 18,
+          "right": 72,
+          "bottom": 692.4375
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 375,
+        "parent": {
+          "x": 37,
+          "y": 644.4375,
+          "width": 301,
+          "height": 61,
+          "right": 338,
+          "bottom": 705.4375
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "populated-agent",
+      "theme": "light",
+      "width": 768,
+      "height": 1024,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": "使用 严格视觉复查助手 创建任务",
+        "rect": {
+          "x": 57,
+          "y": 865.546875,
+          "width": 112,
+          "height": 44,
+          "right": 169,
+          "bottom": 909.546875
+        },
+        "textBounds": {
+          "top": 879.453125,
+          "bottom": 895.453125,
+          "left": 100,
+          "right": 152
+        },
+        "icon": {
+          "x": 74,
+          "y": 878.546875,
+          "width": 18,
+          "height": 18,
+          "right": 92,
+          "bottom": 896.546875
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 768,
+        "parent": {
+          "x": 57,
+          "y": 848.546875,
+          "width": 654,
+          "height": 61,
+          "right": 711,
+          "bottom": 909.546875
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "populated-agent",
+      "theme": "light",
+      "width": 1440,
+      "height": 1000,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": "使用 严格视觉复查助手 创建任务",
+        "rect": {
+          "x": 297,
+          "y": 838.953125,
+          "width": 112,
+          "height": 44,
+          "right": 409,
+          "bottom": 882.953125
+        },
+        "textBounds": {
+          "top": 852.859375,
+          "bottom": 868.859375,
+          "left": 340,
+          "right": 392
+        },
+        "icon": {
+          "x": 314,
+          "y": 851.953125,
+          "width": 18,
+          "height": 18,
+          "right": 332,
+          "bottom": 869.953125
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 1440,
+        "parent": {
+          "x": 297,
+          "y": 821.953125,
+          "width": 508,
+          "height": 61,
+          "right": 805,
+          "bottom": 882.953125
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "populated-agent",
+      "theme": "dark",
+      "width": 320,
+      "height": 812,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": "使用 严格视觉复查助手 创建任务",
+        "rect": {
+          "x": 37,
+          "y": 610,
+          "width": 112,
+          "height": 44,
+          "right": 149,
+          "bottom": 654
+        },
+        "textBounds": {
+          "top": 623.90625,
+          "bottom": 639.90625,
+          "left": 80,
+          "right": 132
+        },
+        "icon": {
+          "x": 54,
+          "y": 623,
+          "width": 18,
+          "height": 18,
+          "right": 72,
+          "bottom": 641
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 320,
+        "parent": {
+          "x": 37,
+          "y": 593,
+          "width": 246,
+          "height": 113,
+          "right": 283,
+          "bottom": 706
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "populated-agent",
+      "theme": "dark",
+      "width": 375,
+      "height": 812,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": "使用 严格视觉复查助手 创建任务",
+        "rect": {
+          "x": 37,
+          "y": 661.4375,
+          "width": 112,
+          "height": 44,
+          "right": 149,
+          "bottom": 705.4375
+        },
+        "textBounds": {
+          "top": 675.34375,
+          "bottom": 691.34375,
+          "left": 80,
+          "right": 132
+        },
+        "icon": {
+          "x": 54,
+          "y": 674.4375,
+          "width": 18,
+          "height": 18,
+          "right": 72,
+          "bottom": 692.4375
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 375,
+        "parent": {
+          "x": 37,
+          "y": 644.4375,
+          "width": 301,
+          "height": 61,
+          "right": 338,
+          "bottom": 705.4375
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "populated-agent",
+      "theme": "dark",
+      "width": 768,
+      "height": 1024,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": "使用 严格视觉复查助手 创建任务",
+        "rect": {
+          "x": 57,
+          "y": 865.546875,
+          "width": 112,
+          "height": 44,
+          "right": 169,
+          "bottom": 909.546875
+        },
+        "textBounds": {
+          "top": 879.453125,
+          "bottom": 895.453125,
+          "left": 100,
+          "right": 152
+        },
+        "icon": {
+          "x": 74,
+          "y": 878.546875,
+          "width": 18,
+          "height": 18,
+          "right": 92,
+          "bottom": 896.546875
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 768,
+        "parent": {
+          "x": 57,
+          "y": 848.546875,
+          "width": 654,
+          "height": 61,
+          "right": 711,
+          "bottom": 909.546875
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "populated-agent",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000,
+      "measurement": {
+        "text": "开始使用",
+        "ariaLabel": "使用 严格视觉复查助手 创建任务",
+        "rect": {
+          "x": 297,
+          "y": 838.953125,
+          "width": 112,
+          "height": 44,
+          "right": 409,
+          "bottom": 882.953125
+        },
+        "textBounds": {
+          "top": 852.859375,
+          "bottom": 868.859375,
+          "left": 340,
+          "right": 392
+        },
+        "icon": {
+          "x": 314,
+          "y": 851.953125,
+          "width": 18,
+          "height": 18,
+          "right": 332,
+          "bottom": 869.953125
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 1440,
+        "parent": {
+          "x": 297,
+          "y": 821.953125,
+          "width": 508,
+          "height": 61,
+          "right": 805,
+          "bottom": 882.953125
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty-filter",
+      "theme": "light",
+      "width": 320,
+      "height": 812,
+      "measurement": {
+        "text": "清除筛选",
+        "ariaLabel": null,
+        "rect": {
+          "x": 115,
+          "y": 645.421875,
+          "width": 90,
+          "height": 44,
+          "right": 205,
+          "bottom": 689.421875
+        },
+        "textBounds": {
+          "top": 658.625,
+          "bottom": 675.625,
+          "left": 132,
+          "right": 188
+        },
+        "icon": null,
+        "color": "oklch(0.47 0.025 258)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.788185292643313,
+        "viewport": 320,
+        "parent": {
+          "x": 16,
+          "y": 427.25,
+          "width": 288,
+          "height": 299.171875,
+          "right": 304,
+          "bottom": 726.421875
+        },
+        "display": "inline-flex"
+      }
+    },
+    {
+      "context": "empty-filter",
+      "theme": "light",
+      "width": 375,
+      "height": 812,
+      "measurement": {
+        "text": "清除筛选",
+        "ariaLabel": null,
+        "rect": {
+          "x": 142.5,
+          "y": 646.234375,
+          "width": 90,
+          "height": 44,
+          "right": 232.5,
+          "bottom": 690.234375
+        },
+        "textBounds": {
+          "top": 659.4375,
+          "bottom": 676.4375,
+          "left": 159.5,
+          "right": 215.5
+        },
+        "icon": null,
+        "color": "oklch(0.47 0.025 258)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.788185292643313,
+        "viewport": 375,
+        "parent": {
+          "x": 16,
+          "y": 428.0625,
+          "width": 343,
+          "height": 299.171875,
+          "right": 359,
+          "bottom": 727.234375
+        },
+        "display": "inline-flex"
+      }
+    },
+    {
+      "context": "empty-filter",
+      "theme": "light",
+      "width": 768,
+      "height": 1024,
+      "measurement": {
+        "text": "清除筛选",
+        "ariaLabel": null,
+        "rect": {
+          "x": 339,
+          "y": 834.15625,
+          "width": 90,
+          "height": 44,
+          "right": 429,
+          "bottom": 878.15625
+        },
+        "textBounds": {
+          "top": 847.359375,
+          "bottom": 864.359375,
+          "left": 356,
+          "right": 412
+        },
+        "icon": null,
+        "color": "oklch(0.47 0.025 258)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.788185292643313,
+        "viewport": 768,
+        "parent": {
+          "x": 32,
+          "y": 621.171875,
+          "width": 704,
+          "height": 313.984375,
+          "right": 736,
+          "bottom": 935.15625
+        },
+        "display": "inline-flex"
+      }
+    },
+    {
+      "context": "empty-filter",
+      "theme": "light",
+      "width": 1440,
+      "height": 1000,
+      "measurement": {
+        "text": "清除筛选",
+        "ariaLabel": null,
+        "rect": {
+          "x": 795,
+          "y": 627.5625,
+          "width": 90,
+          "height": 44,
+          "right": 885,
+          "bottom": 671.5625
+        },
+        "textBounds": {
+          "top": 640.765625,
+          "bottom": 657.765625,
+          "left": 812,
+          "right": 868
+        },
+        "icon": null,
+        "color": "oklch(0.47 0.025 258)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.788185292643313,
+        "viewport": 1440,
+        "parent": {
+          "x": 272,
+          "y": 414.578125,
+          "width": 1136,
+          "height": 313.984375,
+          "right": 1408,
+          "bottom": 728.5625
+        },
+        "display": "inline-flex"
+      }
+    },
+    {
+      "context": "empty-filter",
+      "theme": "dark",
+      "width": 320,
+      "height": 812,
+      "measurement": {
+        "text": "清除筛选",
+        "ariaLabel": null,
+        "rect": {
+          "x": 115,
+          "y": 645.421875,
+          "width": 90,
+          "height": 44,
+          "right": 205,
+          "bottom": 689.421875
+        },
+        "textBounds": {
+          "top": 658.625,
+          "bottom": 675.625,
+          "left": 132,
+          "right": 188
+        },
+        "icon": null,
+        "color": "oklab(0.58591 -0.00502565 -0.0236439)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 1.4194609805578828,
+        "viewport": 320,
+        "parent": {
+          "x": 16,
+          "y": 427.25,
+          "width": 288,
+          "height": 299.171875,
+          "right": 304,
+          "bottom": 726.421875
+        },
+        "display": "inline-flex"
+      }
+    },
+    {
+      "context": "empty-filter",
+      "theme": "dark",
+      "width": 375,
+      "height": 812,
+      "measurement": {
+        "text": "清除筛选",
+        "ariaLabel": null,
+        "rect": {
+          "x": 142.5,
+          "y": 646.234375,
+          "width": 90,
+          "height": 44,
+          "right": 232.5,
+          "bottom": 690.234375
+        },
+        "textBounds": {
+          "top": 659.4375,
+          "bottom": 676.4375,
+          "left": 159.5,
+          "right": 215.5
+        },
+        "icon": null,
+        "color": "oklab(0.705094 -0.00484865 -0.0228111)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 4.518867534415639,
+        "viewport": 375,
+        "parent": {
+          "x": 16,
+          "y": 428.0625,
+          "width": 343,
+          "height": 299.171875,
+          "right": 359,
+          "bottom": 727.234375
+        },
+        "display": "inline-flex"
+      }
+    },
+    {
+      "context": "empty-filter",
+      "theme": "dark",
+      "width": 768,
+      "height": 1024,
+      "measurement": {
+        "text": "清除筛选",
+        "ariaLabel": null,
+        "rect": {
+          "x": 339,
+          "y": 834.15625,
+          "width": 90,
+          "height": 44,
+          "right": 429,
+          "bottom": 878.15625
+        },
+        "textBounds": {
+          "top": 847.359375,
+          "bottom": 864.359375,
+          "left": 356,
+          "right": 412
+        },
+        "icon": null,
+        "color": "oklab(0.736703 -0.00480171 -0.0225903)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.8854934054260974,
+        "viewport": 768,
+        "parent": {
+          "x": 32,
+          "y": 621.171875,
+          "width": 704,
+          "height": 313.984375,
+          "right": 736,
+          "bottom": 935.15625
+        },
+        "display": "inline-flex"
+      }
+    },
+    {
+      "context": "empty-filter",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000,
+      "measurement": {
+        "text": "清除筛选",
+        "ariaLabel": null,
+        "rect": {
+          "x": 795,
+          "y": 627.5625,
+          "width": 90,
+          "height": 44,
+          "right": 885,
+          "bottom": 671.5625
+        },
+        "textBounds": {
+          "top": 640.765625,
+          "bottom": 657.765625,
+          "left": 812,
+          "right": 868
+        },
+        "icon": null,
+        "color": "oklab(0.746989 -0.00478643 -0.0225184)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 7.708449824813372,
+        "viewport": 1440,
+        "parent": {
+          "x": 272,
+          "y": 414.578125,
+          "width": 1136,
+          "height": 313.984375,
+          "right": 1408,
+          "bottom": 728.5625
+        },
+        "display": "inline-flex"
+      }
+    },
+    {
+      "context": "task-submit",
+      "theme": "light",
+      "width": 320,
+      "height": 812,
+      "measurement": {
+        "text": "创建并运行",
+        "ariaLabel": null,
+        "rect": {
+          "x": 164,
+          "y": 749,
+          "width": 127,
+          "height": 44,
+          "right": 291,
+          "bottom": 793
+        },
+        "textBounds": {
+          "top": 762.90625,
+          "bottom": 778.90625,
+          "left": 208,
+          "right": 273
+        },
+        "icon": {
+          "x": 182,
+          "y": 762,
+          "width": 18,
+          "height": 18,
+          "right": 200,
+          "bottom": 780
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 320,
+        "parent": {
+          "x": 29,
+          "y": 749,
+          "width": 262,
+          "height": 44,
+          "right": 291,
+          "bottom": 793
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "task-submit",
+      "theme": "light",
+      "width": 375,
+      "height": 812,
+      "measurement": {
+        "text": "创建并运行",
+        "ariaLabel": null,
+        "rect": {
+          "x": 191.5,
+          "y": 749,
+          "width": 154.5,
+          "height": 44,
+          "right": 346,
+          "bottom": 793
+        },
+        "textBounds": {
+          "top": 762.90625,
+          "bottom": 778.90625,
+          "left": 249.25,
+          "right": 314.25
+        },
+        "icon": {
+          "x": 223.25,
+          "y": 762,
+          "width": 18,
+          "height": 18,
+          "right": 241.25,
+          "bottom": 780
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 375,
+        "parent": {
+          "x": 29,
+          "y": 749,
+          "width": 317,
+          "height": 44,
+          "right": 346,
+          "bottom": 793
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "task-submit",
+      "theme": "light",
+      "width": 768,
+      "height": 1024,
+      "measurement": {
+        "text": "创建并运行",
+        "ariaLabel": null,
+        "rect": {
+          "x": 451,
+          "y": 869.25,
+          "width": 130,
+          "height": 44,
+          "right": 581,
+          "bottom": 913.25
+        },
+        "textBounds": {
+          "top": 882.453125,
+          "bottom": 899.453125,
+          "left": 494,
+          "right": 564
+        },
+        "icon": {
+          "x": 468,
+          "y": 882.25,
+          "width": 18,
+          "height": 18,
+          "right": 486,
+          "bottom": 900.25
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 768,
+        "parent": {
+          "x": 337,
+          "y": 869.25,
+          "width": 328,
+          "height": 44,
+          "right": 665,
+          "bottom": 913.25
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "task-submit",
+      "theme": "light",
+      "width": 1440,
+      "height": 1000,
+      "measurement": {
+        "text": "创建并运行",
+        "ariaLabel": null,
+        "rect": {
+          "x": 871,
+          "y": 831.25,
+          "width": 130,
+          "height": 44,
+          "right": 1001,
+          "bottom": 875.25
+        },
+        "textBounds": {
+          "top": 844.453125,
+          "bottom": 861.453125,
+          "left": 914,
+          "right": 984
+        },
+        "icon": {
+          "x": 888,
+          "y": 844.25,
+          "width": 18,
+          "height": 18,
+          "right": 906,
+          "bottom": 862.25
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 1440,
+        "parent": {
+          "x": 757,
+          "y": 831.25,
+          "width": 244,
+          "height": 44,
+          "right": 1001,
+          "bottom": 875.25
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "task-submit",
+      "theme": "dark",
+      "width": 320,
+      "height": 812,
+      "measurement": {
+        "text": "创建并运行",
+        "ariaLabel": null,
+        "rect": {
+          "x": 164,
+          "y": 749,
+          "width": 127,
+          "height": 44,
+          "right": 291,
+          "bottom": 793
+        },
+        "textBounds": {
+          "top": 762.90625,
+          "bottom": 778.90625,
+          "left": 208,
+          "right": 273
+        },
+        "icon": {
+          "x": 182,
+          "y": 762,
+          "width": 18,
+          "height": 18,
+          "right": 200,
+          "bottom": 780
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 320,
+        "parent": {
+          "x": 29,
+          "y": 749,
+          "width": 262,
+          "height": 44,
+          "right": 291,
+          "bottom": 793
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "task-submit",
+      "theme": "dark",
+      "width": 375,
+      "height": 812,
+      "measurement": {
+        "text": "创建并运行",
+        "ariaLabel": null,
+        "rect": {
+          "x": 191.5,
+          "y": 749,
+          "width": 154.5,
+          "height": 44,
+          "right": 346,
+          "bottom": 793
+        },
+        "textBounds": {
+          "top": 762.90625,
+          "bottom": 778.90625,
+          "left": 249.25,
+          "right": 314.25
+        },
+        "icon": {
+          "x": 223.25,
+          "y": 762,
+          "width": 18,
+          "height": 18,
+          "right": 241.25,
+          "bottom": 780
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "13px",
+        "lineHeight": "18.2px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 375,
+        "parent": {
+          "x": 29,
+          "y": 749,
+          "width": 317,
+          "height": 44,
+          "right": 346,
+          "bottom": 793
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "task-submit",
+      "theme": "dark",
+      "width": 768,
+      "height": 1024,
+      "measurement": {
+        "text": "创建并运行",
+        "ariaLabel": null,
+        "rect": {
+          "x": 451,
+          "y": 869.25,
+          "width": 130,
+          "height": 44,
+          "right": 581,
+          "bottom": 913.25
+        },
+        "textBounds": {
+          "top": 882.453125,
+          "bottom": 899.453125,
+          "left": 494,
+          "right": 564
+        },
+        "icon": {
+          "x": 468,
+          "y": 882.25,
+          "width": 18,
+          "height": 18,
+          "right": 486,
+          "bottom": 900.25
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 768,
+        "parent": {
+          "x": 337,
+          "y": 869.25,
+          "width": 328,
+          "height": 44,
+          "right": 665,
+          "bottom": 913.25
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "task-submit",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000,
+      "measurement": {
+        "text": "创建并运行",
+        "ariaLabel": null,
+        "rect": {
+          "x": 871,
+          "y": 831.25,
+          "width": 130,
+          "height": 44,
+          "right": 1001,
+          "bottom": 875.25
+        },
+        "textBounds": {
+          "top": 844.453125,
+          "bottom": 861.453125,
+          "left": 914,
+          "right": 984
+        },
+        "icon": {
+          "x": 888,
+          "y": 844.25,
+          "width": 18,
+          "height": 18,
+          "right": 906,
+          "bottom": 862.25
+        },
+        "color": "oklab(1 0 0)",
+        "iconColor": "oklab(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 1440,
+        "parent": {
+          "x": 757,
+          "y": 831.25,
+          "width": 244,
+          "height": 44,
+          "right": 1001,
+          "bottom": 875.25
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "result-copy",
+      "theme": "light",
+      "width": 320,
+      "height": 812,
+      "measurement": {
+        "text": "",
+        "ariaLabel": "复制运行 ID",
+        "rect": {
+          "x": 185.5,
+          "y": 377.234375,
+          "width": 44,
+          "height": 44,
+          "right": 229.5,
+          "bottom": 421.234375
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 198.5,
+          "y": 390.234375,
+          "width": 18,
+          "height": 18,
+          "right": 216.5,
+          "bottom": 408.234375
+        },
+        "color": "oklch(0.47 0.025 258)",
+        "iconColor": "oklch(0.47 0.025 258)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 3.093610308893413,
+        "viewport": 320,
+        "parent": {
+          "x": 37,
+          "y": 377.234375,
+          "width": 246,
+          "height": 74,
+          "right": 283,
+          "bottom": 451.234375
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "result-copy",
+      "theme": "light",
+      "width": 375,
+      "height": 812,
+      "measurement": {
+        "text": "",
+        "ariaLabel": "复制运行 ID",
+        "rect": {
+          "x": 185.5,
+          "y": 347.65625,
+          "width": 44,
+          "height": 44,
+          "right": 229.5,
+          "bottom": 391.65625
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 198.5,
+          "y": 360.65625,
+          "width": 18,
+          "height": 18,
+          "right": 216.5,
+          "bottom": 378.65625
+        },
+        "color": "oklch(0.47 0.025 258)",
+        "iconColor": "oklch(0.47 0.025 258)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 3.093610308893413,
+        "viewport": 375,
+        "parent": {
+          "x": 37,
+          "y": 347.65625,
+          "width": 282.40625,
+          "height": 44,
+          "right": 319.40625,
+          "bottom": 391.65625
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "result-copy",
+      "theme": "light",
+      "width": 768,
+      "height": 1024,
+      "measurement": {
+        "text": "",
+        "ariaLabel": "复制运行 ID",
+        "rect": {
+          "x": 205.5,
+          "y": 519.5625,
+          "width": 44,
+          "height": 44,
+          "right": 249.5,
+          "bottom": 563.5625
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 218.5,
+          "y": 532.5625,
+          "width": 18,
+          "height": 18,
+          "right": 236.5,
+          "bottom": 550.5625
+        },
+        "color": "oklch(0.47 0.025 258)",
+        "iconColor": "oklch(0.47 0.025 258)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 3.093610308893413,
+        "viewport": 768,
+        "parent": {
+          "x": 57,
+          "y": 519.5625,
+          "width": 314.40625,
+          "height": 44,
+          "right": 371.40625,
+          "bottom": 563.5625
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "result-copy",
+      "theme": "light",
+      "width": 1440,
+      "height": 1000,
+      "measurement": {
+        "text": "",
+        "ariaLabel": "复制运行 ID",
+        "rect": {
+          "x": 445.5,
+          "y": 468.984375,
+          "width": 44,
+          "height": 44,
+          "right": 489.5,
+          "bottom": 512.984375
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 458.5,
+          "y": 481.984375,
+          "width": 18,
+          "height": 18,
+          "right": 476.5,
+          "bottom": 499.984375
+        },
+        "color": "oklch(0.47 0.025 258)",
+        "iconColor": "oklch(0.47 0.025 258)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 3.093610308893413,
+        "viewport": 1440,
+        "parent": {
+          "x": 297,
+          "y": 468.984375,
+          "width": 314.40625,
+          "height": 44,
+          "right": 611.40625,
+          "bottom": 512.984375
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "result-copy",
+      "theme": "dark",
+      "width": 320,
+      "height": 812,
+      "measurement": {
+        "text": "",
+        "ariaLabel": "复制运行 ID",
+        "rect": {
+          "x": 185.5,
+          "y": 414.234375,
+          "width": 44,
+          "height": 44,
+          "right": 229.5,
+          "bottom": 458.234375
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 198.5,
+          "y": 427.234375,
+          "width": 18,
+          "height": 18,
+          "right": 216.5,
+          "bottom": 445.234375
+        },
+        "color": "oklab(0.585369 -0.00502645 -0.0236476)",
+        "iconColor": "oklab(0.585369 -0.00502645 -0.0236476)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 5.035229845261839,
+        "viewport": 320,
+        "parent": {
+          "x": 37,
+          "y": 414.234375,
+          "width": 246,
+          "height": 74,
+          "right": 283,
+          "bottom": 488.234375
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "result-copy",
+      "theme": "dark",
+      "width": 375,
+      "height": 812,
+      "measurement": {
+        "text": "",
+        "ariaLabel": "复制运行 ID",
+        "rect": {
+          "x": 185.5,
+          "y": 384.65625,
+          "width": 44,
+          "height": 44,
+          "right": 229.5,
+          "bottom": 428.65625
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 198.5,
+          "y": 397.65625,
+          "width": 18,
+          "height": 18,
+          "right": 216.5,
+          "bottom": 415.65625
+        },
+        "color": "oklab(0.705117 -0.00484862 -0.022811)",
+        "iconColor": "oklab(0.705117 -0.00484862 -0.022811)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 8.032838598794102,
+        "viewport": 375,
+        "parent": {
+          "x": 37,
+          "y": 384.65625,
+          "width": 282.40625,
+          "height": 44,
+          "right": 319.40625,
+          "bottom": 428.65625
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "result-copy",
+      "theme": "dark",
+      "width": 768,
+      "height": 1024,
+      "measurement": {
+        "text": "",
+        "ariaLabel": "复制运行 ID",
+        "rect": {
+          "x": 205.5,
+          "y": 519.5625,
+          "width": 44,
+          "height": 44,
+          "right": 249.5,
+          "bottom": 563.5625
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 218.5,
+          "y": 532.5625,
+          "width": 18,
+          "height": 18,
+          "right": 236.5,
+          "bottom": 550.5625
+        },
+        "color": "oklch(0.75 0.023 258)",
+        "iconColor": "oklch(0.75 0.023 258)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 9.466680037837177,
+        "viewport": 768,
+        "parent": {
+          "x": 57,
+          "y": 519.5625,
+          "width": 314.40625,
+          "height": 44,
+          "right": 371.40625,
+          "bottom": 563.5625
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "result-copy",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000,
+      "measurement": {
+        "text": "",
+        "ariaLabel": "复制运行 ID",
+        "rect": {
+          "x": 445.5,
+          "y": 468.984375,
+          "width": 44,
+          "height": 44,
+          "right": 489.5,
+          "bottom": 512.984375
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 458.5,
+          "y": 481.984375,
+          "width": 18,
+          "height": 18,
+          "right": 476.5,
+          "bottom": 499.984375
+        },
+        "color": "oklch(0.75 0.023 258)",
+        "iconColor": "oklch(0.75 0.023 258)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 9.466680037837177,
+        "viewport": 1440,
+        "parent": {
+          "x": 297,
+          "y": 468.984375,
+          "width": 314.40625,
+          "height": 44,
+          "right": 611.40625,
+          "bottom": 512.984375
+        },
+        "display": "flex"
+      }
+    }
+  ],
+  "noticeLayout": [
+    {
+      "theme": "light",
+      "width": 320,
+      "secondary": {
+        "text": "继续编辑",
+        "ariaLabel": null,
+        "rect": {
+          "x": 207,
+          "y": 385.0625,
+          "width": 80,
+          "height": 44,
+          "right": 287,
+          "bottom": 429.0625
+        },
+        "textBounds": {
+          "top": 398.265625,
+          "bottom": 415.265625,
+          "left": 219,
+          "right": 275
+        },
+        "icon": null,
+        "color": "oklch(0.49 0.197 257)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 3.3008780861538245,
+        "viewport": 320,
+        "parent": {
+          "x": 33,
+          "y": 385.0625,
+          "width": 254,
+          "height": 44,
+          "right": 287,
+          "bottom": 429.0625
+        },
+        "display": "flex"
+      },
+      "close": {
+        "text": "",
+        "ariaLabel": "收起智能体创建结果",
+        "rect": {
+          "x": 251,
+          "y": 274.6875,
+          "width": 44,
+          "height": 44,
+          "right": 295,
+          "bottom": 318.6875
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 264,
+          "y": 287.6875,
+          "width": 18,
+          "height": 18,
+          "right": 282,
+          "bottom": 305.6875
+        },
+        "color": "oklch(0.47 0.025 258)",
+        "iconColor": "oklch(0.47 0.025 258)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 3.093610308893413,
+        "viewport": 320,
+        "parent": {
+          "x": 33,
+          "y": 385.0625,
+          "width": 254,
+          "height": 44,
+          "right": 287,
+          "bottom": 429.0625
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "theme": "light",
+      "width": 375,
+      "secondary": {
+        "text": "继续编辑",
+        "ariaLabel": null,
+        "rect": {
+          "x": 262,
+          "y": 341.875,
+          "width": 80,
+          "height": 44,
+          "right": 342,
+          "bottom": 385.875
+        },
+        "textBounds": {
+          "top": 355.078125,
+          "bottom": 372.078125,
+          "left": 274,
+          "right": 330
+        },
+        "icon": null,
+        "color": "oklch(0.49 0.197 257)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 3.3008780861538245,
+        "viewport": 375,
+        "parent": {
+          "x": 33,
+          "y": 341.875,
+          "width": 309,
+          "height": 44,
+          "right": 342,
+          "bottom": 385.875
+        },
+        "display": "flex"
+      },
+      "close": {
+        "text": "",
+        "ariaLabel": "收起智能体创建结果",
+        "rect": {
+          "x": 306,
+          "y": 274.6875,
+          "width": 44,
+          "height": 44,
+          "right": 350,
+          "bottom": 318.6875
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 319,
+          "y": 287.6875,
+          "width": 18,
+          "height": 18,
+          "right": 337,
+          "bottom": 305.6875
+        },
+        "color": "oklch(0.47 0.025 258)",
+        "iconColor": "oklch(0.47 0.025 258)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 3.093610308893413,
+        "viewport": 375,
+        "parent": {
+          "x": 33,
+          "y": 341.875,
+          "width": 309,
+          "height": 44,
+          "right": 342,
+          "bottom": 385.875
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "secondary": {
+        "text": "继续编辑",
+        "ariaLabel": null,
+        "rect": {
+          "x": 207,
+          "y": 385.0625,
+          "width": 80,
+          "height": 44,
+          "right": 287,
+          "bottom": 429.0625
+        },
+        "textBounds": {
+          "top": 398.265625,
+          "bottom": 415.265625,
+          "left": 219,
+          "right": 275
+        },
+        "icon": null,
+        "color": "oklab(0.604714 -0.0419849 -0.162015)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 5.374988677582429,
+        "viewport": 320,
+        "parent": {
+          "x": 33,
+          "y": 385.0625,
+          "width": 254,
+          "height": 44,
+          "right": 287,
+          "bottom": 429.0625
+        },
+        "display": "flex"
+      },
+      "close": {
+        "text": "",
+        "ariaLabel": "收起智能体创建结果",
+        "rect": {
+          "x": 251,
+          "y": 274.6875,
+          "width": 44,
+          "height": 44,
+          "right": 295,
+          "bottom": 318.6875
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 264,
+          "y": 287.6875,
+          "width": 18,
+          "height": 18,
+          "right": 282,
+          "bottom": 305.6875
+        },
+        "color": "oklab(0.584714 -0.00502743 -0.0236522)",
+        "iconColor": "oklab(0.584714 -0.00502743 -0.0236522)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 4.979023838804731,
+        "viewport": 320,
+        "parent": {
+          "x": 33,
+          "y": 385.0625,
+          "width": 254,
+          "height": 44,
+          "right": 287,
+          "bottom": 429.0625
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 375,
+      "secondary": {
+        "text": "继续编辑",
+        "ariaLabel": null,
+        "rect": {
+          "x": 262,
+          "y": 341.875,
+          "width": 80,
+          "height": 44,
+          "right": 342,
+          "bottom": 385.875
+        },
+        "textBounds": {
+          "top": 355.078125,
+          "bottom": 372.078125,
+          "left": 274,
+          "right": 330
+        },
+        "icon": null,
+        "color": "oklab(0.74542 -0.0391264 -0.125296)",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 9.27874540481226,
+        "viewport": 375,
+        "parent": {
+          "x": 33,
+          "y": 341.875,
+          "width": 309,
+          "height": 44,
+          "right": 342,
+          "bottom": 385.875
+        },
+        "display": "flex"
+      },
+      "close": {
+        "text": "",
+        "ariaLabel": "收起智能体创建结果",
+        "rect": {
+          "x": 306,
+          "y": 274.6875,
+          "width": 44,
+          "height": 44,
+          "right": 350,
+          "bottom": 318.6875
+        },
+        "textBounds": null,
+        "icon": {
+          "x": 319,
+          "y": 287.6875,
+          "width": 18,
+          "height": 18,
+          "right": 337,
+          "bottom": 305.6875
+        },
+        "color": "oklab(0.72542 -0.00481847 -0.0226691)",
+        "iconColor": "oklab(0.72542 -0.00481847 -0.0226691)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "15px",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 8.628345499576412,
+        "viewport": 375,
+        "parent": {
+          "x": 33,
+          "y": 341.875,
+          "width": 309,
+          "height": 44,
+          "right": 342,
+          "bottom": 385.875
+        },
+        "display": "flex"
+      }
+    }
+  ],
+  "negativeControl": {
+    "detected": true,
+    "measured": {
+      "text": "创建智能体",
+      "ariaLabel": null,
+      "rect": {
+        "x": 770,
+        "y": 414.578125,
+        "width": 140,
+        "height": 62,
+        "right": 910,
+        "bottom": 476.578125
+      },
+      "textBounds": {
+        "top": 436.78125,
+        "bottom": 453.78125,
+        "left": 823,
+        "right": 893
+      },
+      "icon": {
+        "x": 787,
+        "y": 425.578125,
+        "width": 28,
+        "height": 28,
+        "right": 815,
+        "bottom": 453.578125
+      },
+      "color": "oklch(1 0 0)",
+      "iconColor": "oklch(0.47 0.025 258)",
+      "iconMargin": "0px 0px 12px",
+      "iconAnimation": "none",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": false,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 6.361943534991064,
+      "viewport": 1440,
+      "parent": {
+        "x": 272,
+        "y": 201.59375,
+        "width": 1136,
+        "height": 331.984375,
+        "right": 1408,
+        "bottom": 533.578125
+      },
+      "display": "inline-flex"
+    }
+  },
+  "cases": [
+    {
+      "context": "empty/header",
+      "theme": "light",
+      "width": 320,
+      "height": 812,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 95,
+          "y": 484.859375,
+          "width": 130,
+          "height": 44,
+          "right": 225,
+          "bottom": 528.859375
+        },
+        "textBounds": {
+          "top": 498.0625,
+          "bottom": 515.0625,
+          "left": 138,
+          "right": 208
+        },
+        "icon": {
+          "x": 112,
+          "y": 497.859375,
+          "width": 18,
+          "height": 18,
+          "right": 130,
+          "bottom": 515.859375
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 320,
+        "parent": {
+          "x": 16,
+          "y": 266.6875,
+          "width": 288,
+          "height": 299.171875,
+          "right": 304,
+          "bottom": 565.859375
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 16,
+          "y": 198.6875,
+          "width": 122,
+          "height": 44,
+          "right": 138,
+          "bottom": 242.6875
+        },
+        "textBounds": {
+          "top": 211.890625,
+          "bottom": 228.890625,
+          "left": 55,
+          "right": 125
+        },
+        "icon": {
+          "x": 29,
+          "y": 211.6875,
+          "width": 18,
+          "height": 18,
+          "right": 47,
+          "bottom": 229.6875
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 320,
+        "parent": {
+          "x": 16,
+          "y": 92,
+          "width": 288,
+          "height": 150.6875,
+          "right": 304,
+          "bottom": 242.6875
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty/header",
+      "theme": "light",
+      "width": 375,
+      "height": 812,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 122.5,
+          "y": 484.859375,
+          "width": 130,
+          "height": 44,
+          "right": 252.5,
+          "bottom": 528.859375
+        },
+        "textBounds": {
+          "top": 498.0625,
+          "bottom": 515.0625,
+          "left": 165.5,
+          "right": 235.5
+        },
+        "icon": {
+          "x": 139.5,
+          "y": 497.859375,
+          "width": 18,
+          "height": 18,
+          "right": 157.5,
+          "bottom": 515.859375
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 375,
+        "parent": {
+          "x": 16,
+          "y": 266.6875,
+          "width": 343,
+          "height": 299.171875,
+          "right": 359,
+          "bottom": 565.859375
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 16,
+          "y": 198.6875,
+          "width": 122,
+          "height": 44,
+          "right": 138,
+          "bottom": 242.6875
+        },
+        "textBounds": {
+          "top": 211.890625,
+          "bottom": 228.890625,
+          "left": 55,
+          "right": 125
+        },
+        "icon": {
+          "x": 29,
+          "y": 211.6875,
+          "width": 18,
+          "height": 18,
+          "right": 47,
+          "bottom": 229.6875
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 375,
+        "parent": {
+          "x": 16,
+          "y": 92,
+          "width": 343,
+          "height": 150.6875,
+          "right": 359,
+          "bottom": 242.6875
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty/header",
+      "theme": "light",
+      "width": 414,
+      "height": 896,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 142,
+          "y": 435.875,
+          "width": 130,
+          "height": 44,
+          "right": 272,
+          "bottom": 479.875
+        },
+        "textBounds": {
+          "top": 449.078125,
+          "bottom": 466.078125,
+          "left": 185,
+          "right": 255
+        },
+        "icon": {
+          "x": 159,
+          "y": 448.875,
+          "width": 18,
+          "height": 18,
+          "right": 177,
+          "bottom": 466.875
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 896,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 414,
+        "parent": {
+          "x": 16,
+          "y": 242.890625,
+          "width": 382,
+          "height": 273.984375,
+          "right": 398,
+          "bottom": 516.875
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 16,
+          "y": 174.890625,
+          "width": 122,
+          "height": 44,
+          "right": 138,
+          "bottom": 218.890625
+        },
+        "textBounds": {
+          "top": 188.09375,
+          "bottom": 205.09375,
+          "left": 55,
+          "right": 125
+        },
+        "icon": {
+          "x": 29,
+          "y": 187.890625,
+          "width": 18,
+          "height": 18,
+          "right": 47,
+          "bottom": 205.890625
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 896,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 414,
+        "parent": {
+          "x": 16,
+          "y": 92,
+          "width": 382,
+          "height": 126.890625,
+          "right": 398,
+          "bottom": 218.890625
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty/header",
+      "theme": "light",
+      "width": 768,
+      "height": 1024,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 319,
+          "y": 406.578125,
+          "width": 130,
+          "height": 44,
+          "right": 449,
+          "bottom": 450.578125
+        },
+        "textBounds": {
+          "top": 419.78125,
+          "bottom": 436.78125,
+          "left": 362,
+          "right": 432
+        },
+        "icon": {
+          "x": 336,
+          "y": 419.578125,
+          "width": 18,
+          "height": 18,
+          "right": 354,
+          "bottom": 437.578125
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 768,
+        "parent": {
+          "x": 32,
+          "y": 193.59375,
+          "width": 704,
+          "height": 313.984375,
+          "right": 736,
+          "bottom": 507.578125
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 606,
+          "y": 112.796875,
+          "width": 130,
+          "height": 44,
+          "right": 736,
+          "bottom": 156.796875
+        },
+        "textBounds": {
+          "top": 126,
+          "bottom": 143,
+          "left": 649,
+          "right": 719
+        },
+        "icon": {
+          "x": 623,
+          "y": 125.796875,
+          "width": 18,
+          "height": 18,
+          "right": 641,
+          "bottom": 143.796875
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 768,
+        "parent": {
+          "x": 32,
+          "y": 100,
+          "width": 704,
+          "height": 69.59375,
+          "right": 736,
+          "bottom": 169.59375
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty/header",
+      "theme": "light",
+      "width": 1440,
+      "height": 1000,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 775,
+          "y": 414.578125,
+          "width": 130,
+          "height": 44,
+          "right": 905,
+          "bottom": 458.578125
+        },
+        "textBounds": {
+          "top": 427.78125,
+          "bottom": 444.78125,
+          "left": 818,
+          "right": 888
+        },
+        "icon": {
+          "x": 792,
+          "y": 427.578125,
+          "width": 18,
+          "height": 18,
+          "right": 810,
+          "bottom": 445.578125
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 1440,
+        "parent": {
+          "x": 272,
+          "y": 201.59375,
+          "width": 1136,
+          "height": 313.984375,
+          "right": 1408,
+          "bottom": 515.578125
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 1278,
+          "y": 120.796875,
+          "width": 130,
+          "height": 44,
+          "right": 1408,
+          "bottom": 164.796875
+        },
+        "textBounds": {
+          "top": 134,
+          "bottom": 151,
+          "left": 1321,
+          "right": 1391
+        },
+        "icon": {
+          "x": 1295,
+          "y": 133.796875,
+          "width": 18,
+          "height": 18,
+          "right": 1313,
+          "bottom": 151.796875
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 1440,
+        "parent": {
+          "x": 272,
+          "y": 108,
+          "width": 1136,
+          "height": 69.59375,
+          "right": 1408,
+          "bottom": 177.59375
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty/header",
+      "theme": "light",
+      "width": 812,
+      "height": 375,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 341,
+          "y": 195.578125,
+          "width": 130,
+          "height": 44,
+          "right": 471,
+          "bottom": 239.578125
+        },
+        "textBounds": {
+          "top": 208.78125,
+          "bottom": 225.78125,
+          "left": 384,
+          "right": 454
+        },
+        "icon": {
+          "x": 358,
+          "y": 208.578125,
+          "width": 18,
+          "height": 18,
+          "right": 376,
+          "bottom": 226.578125
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 375,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 812,
+        "parent": {
+          "x": 32,
+          "y": -17.40625,
+          "width": 748,
+          "height": 313.984375,
+          "right": 780,
+          "bottom": 296.578125
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 650,
+          "y": -98.203125,
+          "width": 130,
+          "height": 44,
+          "right": 780,
+          "bottom": -54.203125
+        },
+        "textBounds": {
+          "top": -85,
+          "bottom": -68,
+          "left": 693,
+          "right": 763
+        },
+        "icon": {
+          "x": 667,
+          "y": -85.203125,
+          "width": 18,
+          "height": 18,
+          "right": 685,
+          "bottom": -67.203125
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": false,
+        "viewportHeight": 375,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 812,
+        "parent": {
+          "x": 32,
+          "y": -111,
+          "width": 748,
+          "height": 69.59375,
+          "right": 780,
+          "bottom": -41.40625
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty/header",
+      "theme": "dark",
+      "width": 320,
+      "height": 812,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 95,
+          "y": 483.859375,
+          "width": 130,
+          "height": 44,
+          "right": 225,
+          "bottom": 527.859375
+        },
+        "textBounds": {
+          "top": 497.0625,
+          "bottom": 514.0625,
+          "left": 138,
+          "right": 208
+        },
+        "icon": {
+          "x": 112,
+          "y": 496.859375,
+          "width": 18,
+          "height": 18,
+          "right": 130,
+          "bottom": 514.859375
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 320,
+        "parent": {
+          "x": 16,
+          "y": 265.6875,
+          "width": 288,
+          "height": 299.171875,
+          "right": 304,
+          "bottom": 564.859375
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 16,
+          "y": 197.6875,
+          "width": 122,
+          "height": 44,
+          "right": 138,
+          "bottom": 241.6875
+        },
+        "textBounds": {
+          "top": 210.890625,
+          "bottom": 227.890625,
+          "left": 55,
+          "right": 125
+        },
+        "icon": {
+          "x": 29,
+          "y": 210.6875,
+          "width": 18,
+          "height": 18,
+          "right": 47,
+          "bottom": 228.6875
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 320,
+        "parent": {
+          "x": 16,
+          "y": 91,
+          "width": 288,
+          "height": 150.6875,
+          "right": 304,
+          "bottom": 241.6875
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty/header",
+      "theme": "dark",
+      "width": 375,
+      "height": 812,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 122.5,
+          "y": 483.859375,
+          "width": 130,
+          "height": 44,
+          "right": 252.5,
+          "bottom": 527.859375
+        },
+        "textBounds": {
+          "top": 497.0625,
+          "bottom": 514.0625,
+          "left": 165.5,
+          "right": 235.5
+        },
+        "icon": {
+          "x": 139.5,
+          "y": 496.859375,
+          "width": 18,
+          "height": 18,
+          "right": 157.5,
+          "bottom": 514.859375
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 375,
+        "parent": {
+          "x": 16,
+          "y": 265.6875,
+          "width": 343,
+          "height": 299.171875,
+          "right": 359,
+          "bottom": 564.859375
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 16,
+          "y": 197.6875,
+          "width": 122,
+          "height": 44,
+          "right": 138,
+          "bottom": 241.6875
+        },
+        "textBounds": {
+          "top": 210.890625,
+          "bottom": 227.890625,
+          "left": 55,
+          "right": 125
+        },
+        "icon": {
+          "x": 29,
+          "y": 210.6875,
+          "width": 18,
+          "height": 18,
+          "right": 47,
+          "bottom": 228.6875
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 812,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 375,
+        "parent": {
+          "x": 16,
+          "y": 91,
+          "width": 343,
+          "height": 150.6875,
+          "right": 359,
+          "bottom": 241.6875
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty/header",
+      "theme": "dark",
+      "width": 414,
+      "height": 896,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 142,
+          "y": 434.875,
+          "width": 130,
+          "height": 44,
+          "right": 272,
+          "bottom": 478.875
+        },
+        "textBounds": {
+          "top": 448.078125,
+          "bottom": 465.078125,
+          "left": 185,
+          "right": 255
+        },
+        "icon": {
+          "x": 159,
+          "y": 447.875,
+          "width": 18,
+          "height": 18,
+          "right": 177,
+          "bottom": 465.875
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 896,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 414,
+        "parent": {
+          "x": 16,
+          "y": 241.890625,
+          "width": 382,
+          "height": 273.984375,
+          "right": 398,
+          "bottom": 515.875
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 16,
+          "y": 173.890625,
+          "width": 122,
+          "height": 44,
+          "right": 138,
+          "bottom": 217.890625
+        },
+        "textBounds": {
+          "top": 187.09375,
+          "bottom": 204.09375,
+          "left": 55,
+          "right": 125
+        },
+        "icon": {
+          "x": 29,
+          "y": 186.890625,
+          "width": 18,
+          "height": 18,
+          "right": 47,
+          "bottom": 204.890625
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 896,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 414,
+        "parent": {
+          "x": 16,
+          "y": 91,
+          "width": 382,
+          "height": 126.890625,
+          "right": 398,
+          "bottom": 217.890625
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty/header",
+      "theme": "dark",
+      "width": 768,
+      "height": 1024,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 319,
+          "y": 405.578125,
+          "width": 130,
+          "height": 44,
+          "right": 449,
+          "bottom": 449.578125
+        },
+        "textBounds": {
+          "top": 418.78125,
+          "bottom": 435.78125,
+          "left": 362,
+          "right": 432
+        },
+        "icon": {
+          "x": 336,
+          "y": 418.578125,
+          "width": 18,
+          "height": 18,
+          "right": 354,
+          "bottom": 436.578125
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 768,
+        "parent": {
+          "x": 32,
+          "y": 192.59375,
+          "width": 704,
+          "height": 313.984375,
+          "right": 736,
+          "bottom": 506.578125
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 606,
+          "y": 111.796875,
+          "width": 130,
+          "height": 44,
+          "right": 736,
+          "bottom": 155.796875
+        },
+        "textBounds": {
+          "top": 125,
+          "bottom": 142,
+          "left": 649,
+          "right": 719
+        },
+        "icon": {
+          "x": 623,
+          "y": 124.796875,
+          "width": 18,
+          "height": 18,
+          "right": 641,
+          "bottom": 142.796875
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1024,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 768,
+        "parent": {
+          "x": 32,
+          "y": 99,
+          "width": 704,
+          "height": 69.59375,
+          "right": 736,
+          "bottom": 168.59375
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty/header",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 775,
+          "y": 413.578125,
+          "width": 130,
+          "height": 44,
+          "right": 905,
+          "bottom": 457.578125
+        },
+        "textBounds": {
+          "top": 426.78125,
+          "bottom": 443.78125,
+          "left": 818,
+          "right": 888
+        },
+        "icon": {
+          "x": 792,
+          "y": 426.578125,
+          "width": 18,
+          "height": 18,
+          "right": 810,
+          "bottom": 444.578125
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 1440,
+        "parent": {
+          "x": 272,
+          "y": 200.59375,
+          "width": 1136,
+          "height": 313.984375,
+          "right": 1408,
+          "bottom": 514.578125
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 1278,
+          "y": 119.796875,
+          "width": 130,
+          "height": 44,
+          "right": 1408,
+          "bottom": 163.796875
+        },
+        "textBounds": {
+          "top": 133,
+          "bottom": 150,
+          "left": 1321,
+          "right": 1391
+        },
+        "icon": {
+          "x": 1295,
+          "y": 132.796875,
+          "width": 18,
+          "height": 18,
+          "right": 1313,
+          "bottom": 150.796875
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 1000,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 1440,
+        "parent": {
+          "x": 272,
+          "y": 107,
+          "width": 1136,
+          "height": 69.59375,
+          "right": 1408,
+          "bottom": 176.59375
+        },
+        "display": "flex"
+      }
+    },
+    {
+      "context": "empty/header",
+      "theme": "dark",
+      "width": 812,
+      "height": 375,
+      "empty": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 341,
+          "y": 195.578125,
+          "width": 130,
+          "height": 44,
+          "right": 471,
+          "bottom": 239.578125
+        },
+        "textBounds": {
+          "top": 208.78125,
+          "bottom": 225.78125,
+          "left": 384,
+          "right": 454
+        },
+        "icon": {
+          "x": 358,
+          "y": 208.578125,
+          "width": 18,
+          "height": 18,
+          "right": 376,
+          "bottom": 226.578125
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": true,
+        "viewportHeight": 375,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 812,
+        "parent": {
+          "x": 32,
+          "y": -17.40625,
+          "width": 748,
+          "height": 313.984375,
+          "right": 780,
+          "bottom": 296.578125
+        },
+        "display": "inline-flex"
+      },
+      "head": {
+        "text": "创建智能体",
+        "ariaLabel": null,
+        "rect": {
+          "x": 650,
+          "y": -98.203125,
+          "width": 130,
+          "height": 44,
+          "right": 780,
+          "bottom": -54.203125
+        },
+        "textBounds": {
+          "top": -85,
+          "bottom": -68,
+          "left": 693,
+          "right": 763
+        },
+        "icon": {
+          "x": 667,
+          "y": -85.203125,
+          "width": 18,
+          "height": 18,
+          "right": 685,
+          "bottom": -67.203125
+        },
+        "color": "oklch(1 0 0)",
+        "iconColor": "oklch(1 0 0)",
+        "iconMargin": "0px",
+        "iconAnimation": "none",
+        "fontSize": "14px",
+        "lineHeight": "19.6px",
+        "opacity": "1",
+        "hitTarget": false,
+        "viewportHeight": 375,
+        "disabled": false,
+        "transform": "none",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "contrast": 6.361943534991064,
+        "viewport": 812,
+        "parent": {
+          "x": 32,
+          "y": -111,
+          "width": 748,
+          "height": 69.59375,
+          "right": 780,
+          "bottom": -41.40625
+        },
+        "display": "flex"
+      }
+    }
+  ],
+  "states": {
+    "normal": {
+      "text": "创建智能体",
+      "ariaLabel": null,
+      "rect": {
+        "x": 775,
+        "y": 413.578125,
+        "width": 130,
+        "height": 44,
+        "right": 905,
+        "bottom": 457.578125
+      },
+      "textBounds": {
+        "top": 426.78125,
+        "bottom": 443.78125,
+        "left": 818,
+        "right": 888
+      },
+      "icon": {
+        "x": 792,
+        "y": 426.578125,
+        "width": 18,
+        "height": 18,
+        "right": 810,
+        "bottom": 444.578125
+      },
+      "color": "oklab(1 0 0)",
+      "iconColor": "oklab(1 0 0)",
+      "iconMargin": "0px",
+      "iconAnimation": "none",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": false,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 6.361943534991064,
+      "viewport": 1440,
+      "parent": {
+        "x": 272,
+        "y": 200.59375,
+        "width": 1136,
+        "height": 313.984375,
+        "right": 1408,
+        "bottom": 514.578125
+      },
+      "display": "inline-flex"
+    },
+    "hover": {
+      "text": "创建智能体",
+      "ariaLabel": null,
+      "rect": {
+        "x": 775,
+        "y": 413.578125,
+        "width": 130,
+        "height": 44,
+        "right": 905,
+        "bottom": 457.578125
+      },
+      "textBounds": {
+        "top": 426.78125,
+        "bottom": 443.78125,
+        "left": 818,
+        "right": 888
+      },
+      "icon": {
+        "x": 792,
+        "y": 426.578125,
+        "width": 18,
+        "height": 18,
+        "right": 810,
+        "bottom": 444.578125
+      },
+      "color": "oklab(1 0 0)",
+      "iconColor": "oklab(1 0 0)",
+      "iconMargin": "0px",
+      "iconAnimation": "none",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": false,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 6.361943534991064,
+      "viewport": 1440,
+      "parent": {
+        "x": 272,
+        "y": 200.59375,
+        "width": 1136,
+        "height": 313.984375,
+        "right": 1408,
+        "bottom": 514.578125
+      },
+      "display": "inline-flex"
+    },
+    "focus": {
+      "text": "创建智能体",
+      "ariaLabel": null,
+      "rect": {
+        "x": 775,
+        "y": 413.578125,
+        "width": 130,
+        "height": 44,
+        "right": 905,
+        "bottom": 457.578125
+      },
+      "textBounds": {
+        "top": 426.78125,
+        "bottom": 443.78125,
+        "left": 818,
+        "right": 888
+      },
+      "icon": {
+        "x": 792,
+        "y": 426.578125,
+        "width": 18,
+        "height": 18,
+        "right": 810,
+        "bottom": 444.578125
+      },
+      "color": "oklab(1 0 0)",
+      "iconColor": "oklab(1 0 0)",
+      "iconMargin": "0px",
+      "iconAnimation": "none",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": false,
+      "transform": "none",
+      "outlineStyle": "solid",
+      "outlineWidth": "3px",
+      "contrast": 6.361943534991064,
+      "viewport": 1440,
+      "parent": {
+        "x": 272,
+        "y": 200.59375,
+        "width": 1136,
+        "height": 313.984375,
+        "right": 1408,
+        "bottom": 514.578125
+      },
+      "display": "inline-flex"
+    },
+    "active": {
+      "text": "创建智能体",
+      "ariaLabel": null,
+      "rect": {
+        "x": 775,
+        "y": 413.578125,
+        "width": 130,
+        "height": 44,
+        "right": 905,
+        "bottom": 457.578125
+      },
+      "textBounds": {
+        "top": 426.78125,
+        "bottom": 443.78125,
+        "left": 818,
+        "right": 888
+      },
+      "icon": {
+        "x": 792,
+        "y": 426.578125,
+        "width": 18,
+        "height": 18,
+        "right": 810,
+        "bottom": 444.578125
+      },
+      "color": "oklch(1 0 0)",
+      "iconColor": "oklch(1 0 0)",
+      "iconMargin": "0px",
+      "iconAnimation": "none",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": false,
+      "transform": "none",
+      "outlineStyle": "solid",
+      "outlineWidth": "3px",
+      "contrast": 8.256706201197511,
+      "viewport": 1440,
+      "parent": {
+        "x": 272,
+        "y": 200.59375,
+        "width": 1136,
+        "height": 313.984375,
+        "right": 1408,
+        "bottom": 514.578125
+      },
+      "display": "inline-flex"
+    },
+    "disabled": {
+      "text": "创建智能体",
+      "ariaLabel": null,
+      "rect": {
+        "x": 775,
+        "y": 413.578125,
+        "width": 130,
+        "height": 44,
+        "right": 905,
+        "bottom": 457.578125
+      },
+      "textBounds": {
+        "top": 426.78125,
+        "bottom": 443.78125,
+        "left": 818,
+        "right": 888
+      },
+      "icon": {
+        "x": 792,
+        "y": 426.578125,
+        "width": 18,
+        "height": 18,
+        "right": 810,
+        "bottom": 444.578125
+      },
+      "color": "oklch(1 0 0)",
+      "iconColor": "oklch(1 0 0)",
+      "iconMargin": "0px",
+      "iconAnimation": "none",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "0.638383",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": true,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 6.879052446664727,
+      "viewport": 1440,
+      "parent": {
+        "x": 272,
+        "y": 200.59375,
+        "width": 1136,
+        "height": 313.984375,
+        "right": 1408,
+        "bottom": 514.578125
+      },
+      "display": "inline-flex"
+    },
+    "busy": {
+      "text": "创建智能体",
+      "ariaLabel": null,
+      "rect": {
+        "x": 775,
+        "y": 413.578125,
+        "width": 130,
+        "height": 44,
+        "right": 905,
+        "bottom": 457.578125
+      },
+      "textBounds": {
+        "top": 426.78125,
+        "bottom": 443.78125,
+        "left": 818,
+        "right": 888
+      },
+      "icon": {
+        "x": 792,
+        "y": 426.578125,
+        "width": 18,
+        "height": 18,
+        "right": 810,
+        "bottom": 444.578125
+      },
+      "color": "oklch(1 0 0)",
+      "iconColor": "oklch(1 0 0)",
+      "iconMargin": "0px",
+      "iconAnimation": "none",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "0.638383",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": true,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 6.879052446664727,
+      "viewport": 1440,
+      "parent": {
+        "x": 272,
+        "y": 200.59375,
+        "width": 1136,
+        "height": 313.984375,
+        "right": 1408,
+        "bottom": 514.578125
+      },
+      "display": "inline-flex"
+    },
+    "beforeSave": {
+      "text": "创建智能体",
+      "ariaLabel": null,
+      "rect": {
+        "x": 983,
+        "y": 909,
+        "width": 112,
+        "height": 44,
+        "right": 1095,
+        "bottom": 953
+      },
+      "textBounds": {
+        "top": 922.203125,
+        "bottom": 939.203125,
+        "left": 1004,
+        "right": 1074
+      },
+      "icon": null,
+      "color": "oklch(1 0 0)",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": false,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 6.361943534991064,
+      "viewport": 1440,
+      "parent": {
+        "x": 345,
+        "y": 896,
+        "width": 750,
+        "height": 57,
+        "right": 1095,
+        "bottom": 953
+      },
+      "display": "flex"
+    },
+    "saving": {
+      "text": "保存中…",
+      "ariaLabel": null,
+      "rect": {
+        "x": 983,
+        "y": 909,
+        "width": 112,
+        "height": 44,
+        "right": 1095,
+        "bottom": 953
+      },
+      "textBounds": {
+        "top": 922.203125,
+        "bottom": 939.203125,
+        "left": 1011.875,
+        "right": 1066.109375
+      },
+      "icon": null,
+      "color": "oklch(1 0 0)",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": true,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 6.361943534991064,
+      "viewport": 1440,
+      "parent": {
+        "x": 345,
+        "y": 896,
+        "width": 750,
+        "height": 57,
+        "right": 1095,
+        "bottom": 953
+      },
+      "display": "flex"
+    }
+  },
+  "contexts": {
+    "notice": {
+      "text": "开始使用",
+      "ariaLabel": null,
+      "rect": {
+        "x": 1131,
+        "y": 224.578125,
+        "width": 116,
+        "height": 44,
+        "right": 1247,
+        "bottom": 268.578125
+      },
+      "textBounds": {
+        "top": 237.78125,
+        "bottom": 254.78125,
+        "left": 1148,
+        "right": 1204
+      },
+      "icon": {
+        "x": 1212,
+        "y": 237.578125,
+        "width": 18,
+        "height": 18,
+        "right": 1230,
+        "bottom": 255.578125
+      },
+      "color": "oklch(1 0 0)",
+      "iconColor": "oklch(1 0 0)",
+      "iconMargin": "0px",
+      "iconAnimation": "none",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": false,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 6.361943534991064,
+      "viewport": 1440,
+      "parent": {
+        "x": 1131,
+        "y": 224.578125,
+        "width": 256,
+        "height": 44,
+        "right": 1387,
+        "bottom": 268.578125
+      },
+      "display": "flex"
+    },
+    "card": {
+      "text": "开始使用",
+      "ariaLabel": "使用 严格视觉复查助手 创建任务",
+      "rect": {
+        "x": 297,
+        "y": 838.953125,
+        "width": 112,
+        "height": 44,
+        "right": 409,
+        "bottom": 882.953125
+      },
+      "textBounds": {
+        "top": 852.859375,
+        "bottom": 868.859375,
+        "left": 340,
+        "right": 392
+      },
+      "icon": {
+        "x": 314,
+        "y": 851.953125,
+        "width": 18,
+        "height": 18,
+        "right": 332,
+        "bottom": 869.953125
+      },
+      "color": "oklch(1 0 0)",
+      "iconColor": "oklch(1 0 0)",
+      "iconMargin": "0px",
+      "iconAnimation": "none",
+      "fontSize": "13px",
+      "lineHeight": "18.2px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": false,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 6.361943534991064,
+      "viewport": 1440,
+      "parent": {
+        "x": 297,
+        "y": 821.953125,
+        "width": 508,
+        "height": 61,
+        "right": 805,
+        "bottom": 882.953125
+      },
+      "display": "flex"
+    },
+    "filtered": {
+      "text": "清除筛选",
+      "ariaLabel": null,
+      "rect": {
+        "x": 795,
+        "y": 627.5625,
+        "width": 90,
+        "height": 44,
+        "right": 885,
+        "bottom": 671.5625
+      },
+      "textBounds": {
+        "top": 640.765625,
+        "bottom": 657.765625,
+        "left": 812,
+        "right": 868
+      },
+      "icon": null,
+      "color": "oklch(0.47 0.025 258)",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": false,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 6.788185292643313,
+      "viewport": 1440,
+      "parent": {
+        "x": 272,
+        "y": 414.578125,
+        "width": 1136,
+        "height": 313.984375,
+        "right": 1408,
+        "bottom": 728.5625
+      },
+      "display": "inline-flex"
+    },
+    "start": {
+      "text": "创建并运行",
+      "ariaLabel": null,
+      "rect": {
+        "x": 871,
+        "y": 831.25,
+        "width": 130,
+        "height": 44,
+        "right": 1001,
+        "bottom": 875.25
+      },
+      "textBounds": {
+        "top": 844.453125,
+        "bottom": 861.453125,
+        "left": 914,
+        "right": 984
+      },
+      "icon": {
+        "x": 888,
+        "y": 844.25,
+        "width": 18,
+        "height": 18,
+        "right": 906,
+        "bottom": 862.25
+      },
+      "color": "oklch(1 0 0)",
+      "iconColor": "oklch(1 0 0)",
+      "iconMargin": "0px",
+      "iconAnimation": "none",
+      "fontSize": "14px",
+      "lineHeight": "19.6px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 1000,
+      "disabled": false,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 6.361943534991064,
+      "viewport": 1440,
+      "parent": {
+        "x": 757,
+        "y": 831.25,
+        "width": 244,
+        "height": 44,
+        "right": 1001,
+        "bottom": 875.25
+      },
+      "display": "flex"
+    },
+    "copy": {
+      "text": "",
+      "ariaLabel": "复制运行 ID",
+      "rect": {
+        "x": 185.5,
+        "y": 377.234375,
+        "width": 44,
+        "height": 44,
+        "right": 229.5,
+        "bottom": 421.234375
+      },
+      "textBounds": null,
+      "icon": {
+        "x": 198.5,
+        "y": 390.234375,
+        "width": 18,
+        "height": 18,
+        "right": 216.5,
+        "bottom": 408.234375
+      },
+      "color": "oklch(0.47 0.025 258)",
+      "iconColor": "oklch(0.47 0.025 258)",
+      "iconMargin": "0px",
+      "iconAnimation": "none",
+      "fontSize": "15px",
+      "lineHeight": "24px",
+      "opacity": "1",
+      "hitTarget": true,
+      "viewportHeight": 812,
+      "disabled": false,
+      "transform": "none",
+      "outlineStyle": "none",
+      "outlineWidth": "3px",
+      "contrast": 3.093610308893413,
+      "viewport": 320,
+      "parent": {
+        "x": 37,
+        "y": 377.234375,
+        "width": 246,
+        "height": 74,
+        "right": 283,
+        "bottom": 451.234375
+      },
+      "display": "flex"
+    }
+  },
+  "errors": []
+}

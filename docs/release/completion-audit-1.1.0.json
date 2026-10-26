@@ -1,0 +1,38 @@
+{
+  "version": "1.1.0",
+  "requirements": [
+    {
+      "requirement": "清除测试模拟记录",
+      "passed": true,
+      "evidence": "verification.json active_data_counts; cleanup-1.1.0.json"
+    },
+    {
+      "requirement": "备份可恢复",
+      "passed": true,
+      "evidence": "清理前两组数据逐文件SHA256匹配，SQLite quick_check均ok"
+    },
+    {
+      "requirement": "生成当前源码正式包",
+      "passed": true,
+      "evidence": "62 package files match source, nested and external checksums verified"
+    },
+    {
+      "requirement": "安装和启动可运行",
+      "passed": true,
+      "evidence": "fresh venv install, site-packages import, 13 static endpoints per server"
+    },
+    {
+      "requirement": "授权验收幂等恢复不受影响",
+      "passed": true,
+      "evidence": "184 unit + 44 installed fault cases + 15 session checks"
+    },
+    {
+      "requirement": "结束临时验证，保留主工作台",
+      "passed": true,
+      "evidence": "isolated services stopped and databases removed; loopback8787 retained"
+    }
+  ],
+  "remote_deployment_requested_this_turn": false,
+  "model_calls": 0,
+  "runtime_business_records": 0
+}

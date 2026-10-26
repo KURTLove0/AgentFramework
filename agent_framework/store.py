@@ -64,6 +64,8 @@ class Store:
             """)
         from .knowledge import schema
         with self.connect() as db:schema(db)
+        from .agent_evaluation import schema as evaluation_schema
+        with self.connect() as db:evaluation_schema(db)
 
     def save_context(self, state, lease, manifest):
         with self.transaction() as db:
@@ -197,6 +199,8 @@ class Store:
             if updated['status'] in ('SUCCEEDED','FAILED','NEEDS_REVIEW','EXPIRED','CANCELLED'):
                 from .memory import archive
                 archive(db,updated)
+                from .agent_evaluation import record
+                record(db,updated)
         state["version"] = updated["version"]
 
     def actions(self, state):

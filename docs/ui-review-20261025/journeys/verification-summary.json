@@ -1,0 +1,120 @@
+{
+  "generatedAt": "2026-10-25T05:16:00.343618+00:00",
+  "baseURL": "http://127.0.0.1:8800",
+  "scores": "No composite score assigned by journey reviewer.",
+  "checks": [
+    {
+      "id": "skill-copy-close",
+      "passed": true,
+      "evidence": "results.json"
+    },
+    {
+      "id": "private-preference-json-lifecycle",
+      "passed": true,
+      "evidence": "results.json"
+    },
+    {
+      "id": "skill-search-composition",
+      "passed": true,
+      "evidence": "results.json"
+    },
+    {
+      "id": "task-agent-skill-roundtrip",
+      "passed": true,
+      "evidence": "results.json"
+    },
+    {
+      "id": "evaluation-record-return-link",
+      "passed": true,
+      "evidence": "results.json"
+    },
+    {
+      "id": "daily-blocked-next-step",
+      "passed": true,
+      "evidence": "results.json"
+    },
+    {
+      "id": "all-eleven-routes",
+      "passed": true,
+      "evidence": "results.json"
+    },
+    {
+      "id": "agent-skill-config-return",
+      "passed": true,
+      "evidence": "config-learning-results.json"
+    },
+    {
+      "id": "runtime-config-return",
+      "passed": true,
+      "evidence": "config-learning-results.json"
+    },
+    {
+      "id": "learning-deposit-library-return",
+      "passed": true,
+      "evidence": "config-learning-results.json"
+    },
+    {
+      "id": "ontology-no-agent-config-link",
+      "passed": true,
+      "evidence": "config-learning-results.json"
+    },
+    {
+      "id": "copy-save-preserves-package",
+      "passed": true,
+      "evidence": "skill-version-results.json"
+    },
+    {
+      "id": "version-switch-cancel-retains-draft",
+      "passed": true,
+      "evidence": "skill-version-results.json"
+    },
+    {
+      "id": "version-switch-discard-reads-frozen-v1",
+      "passed": true,
+      "evidence": "skill-version-results.json"
+    },
+    {
+      "id": "copy-archive-restore-keeps-versions",
+      "passed": true,
+      "evidence": "skill-version-results.json"
+    },
+    {
+      "id": "agent-search-ime-and-native-clear",
+      "passed": true,
+      "evidence": "search-results.json"
+    },
+    {
+      "id": "library-search-ime-submit-native-clear-preserves-status",
+      "passed": true,
+      "evidence": "search-results.json"
+    },
+    {
+      "id": "searchable-native-select-empty-recovery-and-ime-enter",
+      "passed": true,
+      "evidence": "search-results.json"
+    },
+    {
+      "id": "same-space-long-list-back",
+      "passed": true,
+      "evidence": "history-results.json"
+    },
+    {
+      "id": "cross-space-long-list-back",
+      "passed": true,
+      "evidence": "history-results.json"
+    },
+    {
+      "id": "blocked-plan-restores-through-real-settings",
+      "passed": true,
+      "evidence": "daily-recovery-results.json"
+    },
+    {
+      "id": "mixed-partial-keeps-frozen-facts-and-creates-manual-task",
+      "passed": true,
+      "evidence": "daily-recovery-results.json"
+    }
+  ],
+  "pageErrors": [],
+  "totalChecks": 22,
+  "passedChecks": 22
+}

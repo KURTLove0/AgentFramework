@@ -1,0 +1,81 @@
+{
+  "checks": [
+    {
+      "id": "C1-C2",
+      "passed": true,
+      "detail": "用途起点预填名称与岗位，创建保持三步"
+    },
+    {
+      "id": "C3",
+      "passed": true,
+      "detail": "搜索空结果可直接新建并选用业务领域"
+    },
+    {
+      "id": "F2-A1",
+      "passed": true,
+      "detail": "键盘搜索、空结果清除、选择与 Escape 取消保留焦点"
+    },
+    {
+      "id": "F1",
+      "passed": true,
+      "detail": "长模型目录与领域均可搜索，保留原生表单值"
+    },
+    {
+      "id": "F3",
+      "passed": true,
+      "detail": "长文本自动增高且计数准确，不溢出表单"
+    },
+    {
+      "id": "C4",
+      "passed": true,
+      "detail": "确认页可审查完整工作指令与业务领域"
+    },
+    {
+      "id": "R1",
+      "passed": true,
+      "detail": "双击保存只发送一次，失败保留所有输入"
+    },
+    {
+      "id": "C5-R3",
+      "passed": true,
+      "detail": "保存回执展示持久的开始使用入口"
+    },
+    {
+      "id": "U1-U3",
+      "passed": true,
+      "detail": "开始使用准确预选智能体，并隐藏重复的锁定选项"
+    },
+    {
+      "id": "F4",
+      "passed": true,
+      "detail": "错误与字段关联，修正后清除"
+    },
+    {
+      "id": "U2",
+      "passed": true,
+      "detail": "可编辑任务示例不会授予业务权限"
+    },
+    {
+      "id": "U4",
+      "passed": true,
+      "detail": "提交前展示所选智能体、任务范围与许可"
+    },
+    {
+      "id": "R1-task",
+      "passed": true,
+      "detail": "任务提交失败后可原样重试"
+    },
+    {
+      "id": "U5",
+      "passed": true,
+      "detail": "完成后优先展示结果与来源，手动切页不会被刷新覆盖"
+    },
+    {
+      "id": "A2",
+      "passed": true,
+      "detail": "六种视口与手机搜索弹层没有水平溢出或页脚遮挡"
+    }
+  ],
+  "errors": [],
+  "error": "The expression evaluated to a falsy value:\n\n  assert(values.border>=3)\n"
+}

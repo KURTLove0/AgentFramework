@@ -1,0 +1,92 @@
+{
+  "proposal_id": "learning-97ab72e0184a4c00",
+  "runtime": "codex",
+  "agent_revision": 1,
+  "facts": {
+    "outcome": "SUCCEEDED",
+    "acceptance": {
+      "passed": 3,
+      "total": 3
+    }
+  },
+  "generation": {
+    "model_calls": 1,
+    "skill_selection": null,
+    "usage": [
+      {
+        "cli_diagnostic_count": 1,
+        "mcp_calls": [],
+        "model": "gpt-6.1-sol",
+        "phase": "retrospective",
+        "usage": {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 19614,
+          "output_tokens": 813,
+          "reasoning_output_tokens": 0
+        }
+      }
+    ]
+  },
+  "assets": [
+    {
+      "ref": "learned-f895b052a2237e72b945c035@1",
+      "kind": "KNOWLEDGE",
+      "title": "失败测试对应高风险（已审阅）",
+      "status": "PUBLISHED",
+      "visibility": "PRIVATE",
+      "content_hash": "2878d1fbfc75ed51959404742559676da46890c4cd66164f391a5799dde538d7"
+    },
+    {
+      "ref": "learned-b20cc8a624f0d315022a018c@1",
+      "kind": "MEMORY",
+      "title": "本次评估与草稿结果",
+      "status": "DRAFT",
+      "visibility": "PRIVATE",
+      "content_hash": "20c399633665027b9cc2b36d792ff6beb1dc62fb9115d4ac1b6e4a5ea6e791a2"
+    },
+    {
+      "ref": "learned-7d8330f942e8bd15abeade33@1",
+      "kind": "EXPERIENCE",
+      "title": "修复失败测试后复核",
+      "status": "EVALUATED",
+      "visibility": "PRIVATE",
+      "content_hash": "944be25e9327e9e6c56f4a434d0d7bd4a66d71a57d96962486321421b3679d00"
+    },
+    {
+      "ref": "learned-ef1f6f4b2145ec4337e8ceed@1",
+      "kind": "CAPABILITY",
+      "title": "证据关联与草稿回读方法",
+      "status": "PUBLISHED",
+      "visibility": "PRIVATE",
+      "content_hash": "d744ec1849a9acd9cacf8fea2d1167845215f251ee837feb909c1c9df0450202"
+    }
+  ],
+  "experience_evaluation": {
+    "passed": true,
+    "historical_write_replays": 0,
+    "live_model_calls": 0
+  },
+  "capability_skill_export": {
+    "artifact": "capability-method.zip",
+    "sha256": "d0dc4feb3e25b7f9656d6d5ffe05e27f4fe99aaf9127014058542e5a44d4bf69",
+    "valid_standard_package": true,
+    "folder": "method-learned-ef1f6f4b2145ec4337e8ceed",
+    "files": [
+      "SKILL.md"
+    ],
+    "warnings": []
+  },
+  "ontology_versions": [
+    {
+      "ref": "learned-d149fbcdfde84fb8ca7cb93e@2",
+      "status": "PUBLISHED",
+      "sources_current": false
+    },
+    {
+      "ref": "learned-d149fbcdfde84fb8ca7cb93e@1",
+      "status": "PUBLISHED",
+      "sources_current": false
+    }
+  ]
+}

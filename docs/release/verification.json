@@ -1,0 +1,271 @@
+{
+  "version": "1.2.0",
+  "verified_at": "2026-10-23T04:47:14.521904+00:00",
+  "status": "generated-installed-and-verified",
+  "deployed_to_remote": false,
+  "business_tools": "simulated",
+  "access": "single-user-loopback",
+  "cleanup": {
+    "version": "1.2.0",
+    "cleaned_at": "2026-10-23T04:43:12.730908+00:00",
+    "backup": ".backups/release-1.2.0-20261023-124312",
+    "datasets": [
+      {
+        "source": "/Users/kurt/Desktop/CodeSpace/AgentFramework/.agent-data",
+        "backup_subdir": "active-data",
+        "files": 2,
+        "bytes": 299008,
+        "sha256": {
+          "mock-business.sqlite3": "462946c0569a81e1da915d128b3281fa46291ffb2bb7816a2e424e451a4f6a20",
+          "runtime.sqlite3": "ca85f71be16d7c04c3abee27b2c69aa73d22a9b0281b57749882accb5ba1bba9"
+        },
+        "hashes_verified": true,
+        "sqlite_quick_check": {
+          "mock-business.sqlite3": "ok",
+          "runtime.sqlite3": "ok"
+        }
+      },
+      {
+        "source": "/tmp/agent-interaction-review",
+        "backup_subdir": "interaction-review",
+        "files": 4,
+        "bytes": 548864,
+        "sha256": {
+          "data/mock-business.sqlite3": "dec6b53448b8ec53cfd71f9ca69971461a3ed6d41d9f46a3717261ed3b3f557c",
+          "data/runtime.sqlite3-wal": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data/runtime.sqlite3-shm": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+          "data/runtime.sqlite3": "03a618fb61a3c22887836839ac02fe4e0ecbfcf34a1e65d68e1f1e7e6948009b"
+        },
+        "hashes_verified": true,
+        "sqlite_quick_check": {
+          "data/mock-business.sqlite3": "ok",
+          "data/runtime.sqlite3": "ok"
+        }
+      }
+    ],
+    "historical_backups_preserved": true,
+    "runtime_data_in_release": false
+  },
+  "active_data_counts": {
+    "runtime.sqlite3": {
+      "compiled_agents": 0,
+      "capability_blocks": 0,
+      "native_reads": 0,
+      "runs": 0,
+      "events": 0,
+      "actions": 0,
+      "outbox": 0,
+      "evidence": 0,
+      "verifications": 0,
+      "grants": 0,
+      "experience_candidates": 0,
+      "asset_versions": 0,
+      "asset_events": 0,
+      "context_manifests": 0,
+      "episodic_memories": 0,
+      "experience_evaluations": 0,
+      "runtime_configuration": 0,
+      "model_catalog": 0,
+      "agent_profiles": 0,
+      "workspaces": 1,
+      "workflows": 0,
+      "workflow_runs": 0,
+      "workflow_events": 0,
+      "skill_heads": 2,
+      "skill_versions": 2,
+      "skill_events": 2
+    },
+    "mock-business.sqlite3": {
+      "changes": 0,
+      "drafts": 0,
+      "calls": 0
+    }
+  },
+  "sqlite_quick_check": {
+    "runtime.sqlite3": "ok",
+    "mock-business.sqlite3": "ok"
+  },
+  "package": {
+    "version": "1.2.0",
+    "package_files_matched_to_source": 63,
+    "outer_and_inner_checksums_verified": true,
+    "runtime_data_included": false,
+    "bundle_members": [
+      "README.md",
+      "RELEASE_NOTES.md",
+      "SHA256SUMS",
+      "bounded_agent_mvp-1.2.0-py3-none-any.whl",
+      "release.json",
+      "requirements.txt",
+      "scripts/install.sh",
+      "scripts/start.sh"
+    ],
+    "sha256": "73f6c5f15aa5546418810f1404a49a91ba87fcad5a43f01aa27d0c38556af7be",
+    "wheel_sha256": "43cf6789ab121b46500648b222daf637187033db2fbb1148dcad53a3dc71259a",
+    "artifact": "dist/agent-framework-1.2.0.tar.gz",
+    "wheel": "dist/bounded_agent_mvp-1.2.0-py3-none-any.whl",
+    "previous_release_sha256": "78fda0c93a5ce6b091183a0e47c6120f1a3f18cbeec1251cd2d33b54326894bc",
+    "same_version_overwrite_rejected": true,
+    "previous_release_unchanged": true
+  },
+  "tests": {
+    "unit": {
+      "passed": 184,
+      "total": 184,
+      "log": "tests-1.2.0.log"
+    },
+    "frontend_node": {
+      "passed": 125,
+      "total": 125,
+      "evidence": "../interactions/verification.json"
+    },
+    "installed_package_fault_matrix": {
+      "passed": 44,
+      "total": 44,
+      "report": "fault-matrix-1.2.0.json",
+      "normal_response_lost_restart_each_create_exactly_one_draft": true,
+      "denied_creates_zero_drafts": true,
+      "tampered_draft_requires_review": true,
+      "legacy_snapshot_and_intent_unchanged": true
+    },
+    "javascript_syntax": {
+      "passed": 10,
+      "total": 10
+    },
+    "shell_syntax": true,
+    "git_diff_check": true
+  },
+  "startup_verification": {
+    "version": "1.2.0",
+    "servers": {
+      "8787": {
+        "version": "1.2.0",
+        "business_tools": "simulated",
+        "static_resource_statuses": {
+          "/": 200,
+          "/journeys.js": 200,
+          "/agents.js": 200,
+          "/styles.css": 200,
+          "/space-grotesk.ttf": 200,
+          "/roles.js": 200,
+          "/skills.js": 200,
+          "/library.js": 200,
+          "/appearance.js": 200,
+          "/workspaces.js": 200,
+          "/workflow_designer.js": 200,
+          "/workflows.js": 200,
+          "/hig.css": 200,
+          "/app.js": 200
+        },
+        "static_hashes_match_source": true,
+        "counts": {
+          "runtime.sqlite3": {
+            "compiled_agents": 0,
+            "capability_blocks": 0,
+            "native_reads": 0,
+            "runs": 0,
+            "events": 0,
+            "actions": 0,
+            "outbox": 0,
+            "evidence": 0,
+            "verifications": 0,
+            "grants": 0,
+            "experience_candidates": 0,
+            "asset_versions": 0,
+            "asset_events": 0,
+            "context_manifests": 0,
+            "episodic_memories": 0,
+            "experience_evaluations": 0,
+            "runtime_configuration": 0,
+            "model_catalog": 0,
+            "agent_profiles": 0,
+            "workspaces": 1,
+            "workflows": 0,
+            "workflow_runs": 0,
+            "workflow_events": 0,
+            "skill_heads": 2,
+            "skill_versions": 2,
+            "skill_events": 2
+          },
+          "mock-business.sqlite3": {
+            "changes": 0,
+            "drafts": 0,
+            "calls": 0
+          }
+        },
+        "sqlite_quick_check": {
+          "runtime.sqlite3": "ok",
+          "mock-business.sqlite3": "ok"
+        },
+        "model_calls": 0
+      },
+      "54680": {
+        "version": "1.2.0",
+        "business_tools": "simulated",
+        "static_resource_statuses": {
+          "/": 200,
+          "/journeys.js": 200,
+          "/agents.js": 200,
+          "/styles.css": 200,
+          "/space-grotesk.ttf": 200,
+          "/roles.js": 200,
+          "/skills.js": 200,
+          "/library.js": 200,
+          "/appearance.js": 200,
+          "/workspaces.js": 200,
+          "/workflow_designer.js": 200,
+          "/workflows.js": 200,
+          "/hig.css": 200,
+          "/app.js": 200
+        },
+        "static_hashes_match_source": true,
+        "counts": {
+          "runtime.sqlite3": {
+            "compiled_agents": 0,
+            "capability_blocks": 0,
+            "native_reads": 0,
+            "runs": 0,
+            "events": 0,
+            "actions": 0,
+            "outbox": 0,
+            "evidence": 0,
+            "verifications": 0,
+            "grants": 0,
+            "experience_candidates": 0,
+            "asset_versions": 0,
+            "asset_events": 0,
+            "context_manifests": 0,
+            "episodic_memories": 0,
+            "experience_evaluations": 0,
+            "runtime_configuration": 0,
+            "model_catalog": 0,
+            "agent_profiles": 0,
+            "workspaces": 1,
+            "workflows": 0,
+            "workflow_runs": 0,
+            "workflow_events": 0,
+            "skill_heads": 2,
+            "skill_versions": 2,
+            "skill_events": 2
+          },
+          "mock-business.sqlite3": {
+            "changes": 0,
+            "drafts": 0,
+            "calls": 0
+          }
+        },
+        "sqlite_quick_check": {
+          "runtime.sqlite3": "ok",
+          "mock-business.sqlite3": "ok"
+        },
+        "model_calls": 0
+      }
+    },
+    "real_model_calls": 0
+  },
+  "model_calls": 0,
+  "temporary_verification_data_removed": true,
+  "main_workbench": "http://127.0.0.1:8787",
+  "main_service_retained": true,
+  "clean_workbench_screenshot": "clean-workbench-1.2.0.png"
+}

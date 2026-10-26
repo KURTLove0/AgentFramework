@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-10-25T05:05:04.545Z",
+  "workspaceId": "workspace-21b2e01fdf7e48f9",
+  "records": [
+    {
+      "name": "daily-settings",
+      "enabled": [],
+      "editable": false,
+      "request": {
+        "revision": 0,
+        "enabled": false,
+        "daily_time": "09:00",
+        "timezone": "Asia/Shanghai",
+        "auto_start": false,
+        "tasks": []
+      },
+      "receipt": {
+        "revision": 1,
+        "enabled": false,
+        "daily_time": "09:00",
+        "timezone": "Asia/Shanghai",
+        "auto_start": false,
+        "tasks": []
+      },
+      "lateInputDiscarded": false
+    },
+    {
+      "name": "workspace",
+      "enabled": [],
+      "editable": false,
+      "request": {
+        "revision": 0,
+        "name": "提交时的空间 1792904701323",
+        "business": "提交保护验收",
+        "scenario": "模拟等待保存",
+        "description": ""
+      },
+      "receipt": {
+        "business": "提交保护验收",
+        "description": "",
+        "name": "提交时的空间 1792904701323",
+        "scenario": "模拟等待保存",
+        "id": "workspace-fa25f31ab92e4fc9",
+        "revision": 1,
+        "project_id": "project-0095ea8ea0d34a62",
+        "deleted": false,
+        "created_at": 1792904704.0724459,
+        "updated_at": 1792904704.0724459
+      },
+      "lateInputDiscarded": false
+    },
+    {
+      "name": "knowledge",
+      "enabled": [],
+      "editable": false,
+      "request": {
+        "kind": "KNOWLEDGE",
+        "title": "提交时的资料",
+        "content": {
+          "text": "核对保存中的输入保护。"
+        },
+        "source_uri": "local:curated",
+        "source_version": "1",
+        "visibility": "PROJECT",
+        "effective_at": 1792904700,
+        "effective_until": 1824440700
+      },
+      "receipt": {
+        "ref": "asset-3c67e1a2dfe547c4@1",
+        "id": "asset-3c67e1a2dfe547c4",
+        "version": 1,
+        "kind": "KNOWLEDGE",
+        "status": "DRAFT",
+        "owner": "review-user",
+        "tenant_id": "review-ui",
+        "project_id": "project-40b8240967b0462e",
+        "environment": "test",
+        "visibility": "PROJECT",
+        "content_hash": "f1cc0384f131f58916a820c7bfe12e4c1ce3c5c5a712e0b368b9dad4e981463e",
+        "access_policy_ref": "task-scope-owner@1.0.0",
+        "conflict_key": "",
+        "content": {
+          "text": "核对保存中的输入保护。"
+        },
+        "critical": false,
+        "effective_at": 1792904700,
+        "effective_until": 1824440700,
+        "observed_at": 1792904704.537357,
+        "sensitivity": "project",
+        "source_uri": "local:curated",
+        "source_version": "1",
+        "space_ref": "simulated-change-context@1.0.0",
+        "standard_ref": null,
+        "supersedes": null,
+        "title": "提交时的资料"
+      },
+      "lateInputDiscarded": false
+    }
+  ],
+  "errors": []
+}

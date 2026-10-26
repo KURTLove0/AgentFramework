@@ -1,0 +1,12 @@
+{
+  "checkedBefore": true,
+  "permissionReset": true,
+  "originalPolicyPreserved": true,
+  "backgroundScheduler": {
+    "workspace": "workspace-04b622f641524c20",
+    "planId": "daily-8b7a0c8810b73f5ce95e0667",
+    "runId": "run-daily-03fc955ae441bfa855807d88",
+    "status": "SUCCEEDED"
+  },
+  "errors": []
+}

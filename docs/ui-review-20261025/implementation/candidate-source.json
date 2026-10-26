@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-10-25T05:36:00.352841+00:00",
+  "files": {
+    "agent_framework/webui/agent_domains.js": "b186a9ddea2347490414acbbacf11b2b81bccf39517c935987ab79b5a8b650d9",
+    "agent_framework/webui/agent_experience.js": "b7b9318a27196e7888ad49ef9dc5449c28987574c79d60acef6ecd327a9e5bd7",
+    "agent_framework/webui/agents.js": "63385041a18dd71a894ae4063eb6a572464013afff885baef4b202688aa611bc",
+    "agent_framework/webui/app.js": "66aa1473e4658e5cca3105bc14d26e6b7af85a75c6924a9c44cbc3ef085d66aa",
+    "agent_framework/webui/appearance.js": "cc0b279176e545da5701b33d44f83ccc4a89829e4c763c8cf23f016507df4ba3",
+    "agent_framework/webui/form_controls.css": "43a471ae1a08f636eae24f4fadcb709d24a39180a1c484591f98ef75512e01fb",
+    "agent_framework/webui/form_controls.js": "2c00a289393ba95bfc6c72738f60b363cd1300af75f960d4af950c66d25ec4ec",
+    "agent_framework/webui/hig.css": "9b17d1a17f329b5b8f955ea357f82922d86fbdaf561fec79b29580e10ba99d25",
+    "agent_framework/webui/index.html": "4721381b8e3487241a59d6df0ab3fb6cb5e5e223ddb8b61eb406fc63a51aebe9",
+    "agent_framework/webui/journeys.js": "ec6830f76aef48f5c62a8ea101934ad36890b5207645dcbdda5e55edf1fa839c",
+    "agent_framework/webui/learning.js": "c1eb0f3850edcb45f61e963422d056e57fe785fa38dc2bb16da5368a94f8838e",
+    "agent_framework/webui/library.js": "5df0d558dc3eeb8e41c299942b9559411eee2264ebcc58c4112553c83541a3e4",
+    "agent_framework/webui/ontology_model.js": "a438c953280f7795f29bd46c7d9a3ebe81057ad3b146fc2a8c4c0956b3e7c652",
+    "agent_framework/webui/operations.css": "de135584ef57d58b0ab9e1e9c84e7e67a1d4e1b5c719b6b3f9dd3e1aad1b93b1",
+    "agent_framework/webui/operations.js": "9f04e75fb7adf0f0dad004dcb4191164fb790587d746fd420c0dc630b58060ff",
+    "agent_framework/webui/roles.js": "9f79dbb0e6c6976cd5c5b473d091d815d533d23401a62f3e5a286c8b0f845a83",
+    "agent_framework/webui/skills.js": "055732ce09ba2abab91fa49e9c727caf38a93e7f7eba4723052986d906f53a6d",
+    "agent_framework/webui/styles.css": "2832a732930dec5cf1c8d149f612815d83f5fd1e61d8e95d404b0c43b783c7c3",
+    "agent_framework/webui/workflow_designer.js": "feb5161fd622a20ef90d2b891d145203784dd8c9fa15a15845391fb00483bded",
+    "agent_framework/webui/workflows.js": "3e6823628dd9600837314e1cf730aefa9f057d7b7650483676a30149e6a94280",
+    "agent_framework/webui/workspaces.js": "524b794d1a132f62fed1ff784ea8eae8aa44118c45b201db482d125e72b23372"
+  },
+  "bundleSHA256": "529f3e4885da58883bb403592f7c306dc0aa4bb154038ec4ef575a1636a27038",
+  "previousBundleSHA256": "33d7b94f861e4c5fb550d134a485a82dbcac51c2585a1c4be796445dc710c9ee",
+  "finalDelta": "Prevent populated ontology fieldsets and source selectors from widening mobile forms."
+}

@@ -1,0 +1,11 @@
+Processing ./bounded_agent_mvp-1.2.0-py3-none-any.whl (from -r /private/tmp/agent-release-1.2.0-verify-aa7s1w2m/agent-framework-1.2.0/requirements.txt (line 2))
+Collecting PyYAML==6.0.3 (from -r /private/tmp/agent-release-1.2.0-verify-aa7s1w2m/agent-framework-1.2.0/requirements.txt (line 1))
+  Using cached pyyaml-6.0.3-cp314-cp314-macosx_11_0_arm64.whl.metadata (2.4 kB)
+Using cached pyyaml-6.0.3-cp314-cp314-macosx_11_0_arm64.whl (173 kB)
+Installing collected packages: PyYAML, bounded-agent-mvp
+
+Successfully installed PyYAML-6.0.3 bounded-agent-mvp-1.2.0
+
+[notice] A new release of pip is available: 26.0 -> 26.2.2
+[notice] To update, run: /private/tmp/agent-release-1.2.0-verify-aa7s1w2m/agent-framework-1.2.0/.venv/bin/python -m pip install --upgrade pip
+安装完成。启动：sh scripts/start.sh

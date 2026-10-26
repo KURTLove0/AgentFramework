@@ -1,0 +1,43 @@
+{
+  "version": "1.2.0",
+  "requirements": [
+    {
+      "requirement": "清除测试模拟数据",
+      "passed": true,
+      "evidence": "cleanup-1.2.0.json; active_data_counts全业务表为0，保留默认空间和2系统Skills"
+    },
+    {
+      "requirement": "备份可恢复",
+      "passed": true,
+      "evidence": "清理前主库与验收库逐文件SHA256相等，SQLite quick_check=ok"
+    },
+    {
+      "requirement": "生成当前源码正式版本",
+      "passed": true,
+      "evidence": "package-1.2.0.json;63包文件逐一哈希匹配；内外层校验通过"
+    },
+    {
+      "requirement": "安装与启动可运行",
+      "passed": true,
+      "evidence": "install-1.2.0.log; startup-1.2.0.json; 全新venv安装，两个服务各14资源匹配"
+    },
+    {
+      "requirement": "授权验收幂等与旧任务兼容",
+      "passed": true,
+      "evidence": "184后端 +125前端Node +44安装包故障矩阵全通过"
+    },
+    {
+      "requirement": "临时数据清除与正式工作台保留",
+      "passed": true,
+      "evidence": "两轮临时数据目录均已删除，8787保持空白初始化"
+    },
+    {
+      "requirement": "保留旧版可回退",
+      "passed": true,
+      "evidence": "1.1.0安装包SHA256不变，同版本构建覆盖被拒绝"
+    }
+  ],
+  "remote_deployment_requested_this_turn": false,
+  "real_model_calls": 0,
+  "runtime_business_records": 0
+}

@@ -1,0 +1,255 @@
+{
+  "generatedAt": "2026-10-24T10:05:56.844Z",
+  "checks": [
+    {
+      "id": "authorization",
+      "detail": "具体提案的任务与范围可审查；明确授权后原任务完成",
+      "passed": true
+    },
+    {
+      "id": "missing-materials",
+      "detail": "缺材料演示说明限制，新任务回到正常场景且重新审查许可，原任务保留",
+      "passed": true
+    },
+    {
+      "id": "failure",
+      "detail": "失败任务提供轨迹入口，未误导继续重写",
+      "passed": true
+    },
+    {
+      "id": "cancelled",
+      "detail": "取消前可审查范围，取消后保留动作入口且不提供恢复执行",
+      "passed": true
+    },
+    {
+      "id": "interrupted",
+      "detail": "写后中断显示原任务恢复入口，恢复核对成功且外部写入未增加",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "workspaceId": "workspace-dd1e188f1db74db5",
+  "auth": "run-bd72b71af911488c",
+  "authorized": {
+    "calls": {
+      "change.read@1.0.0": 1,
+      "report.draft.create@1.0.0": 1,
+      "report.read@1.0.0": 1,
+      "standards.read@1.0.0": 1
+    },
+    "drafts": [
+      {
+        "change_id": "change-demo-001",
+        "content_hash": "7d8f8a27bce13a8f179c3fdcb4b6c3753ed1e843eed130b1fd9c4e69413ae1d0",
+        "created_at": 1792836343.718165,
+        "id": "draft-2716e3673d3fef5e",
+        "project_id": "project-49cb1b0ecd9f4cc8",
+        "report": {
+          "change_id": "change-demo-001",
+          "claims": [
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "version",
+              "value": 1
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "service",
+              "value": "payment-service"
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "dependencies",
+              "value": [
+                "order-service",
+                "ledger-service"
+              ]
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "tests",
+              "value": {
+                "failed": 1,
+                "passed": 38
+              }
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "rollback",
+              "value": "关闭 retry_enabled 开关并恢复上一版本"
+            }
+          ],
+          "limitations": [
+            "模拟数据；草稿供人工审核；未执行发布或部署。"
+          ],
+          "risk_level": "HIGH",
+          "sections": {
+            "impact": "服务 payment-service；依赖：order-service, ledger-service。",
+            "recommendation": "修复失败测试并复核后再决定发布。",
+            "risks": "依照 release-review-rubric@1.0.0 判为 HIGH。",
+            "rollback": "关闭 retry_enabled 开关并恢复上一版本",
+            "summary": "评估 change-demo-001，来源版本 1，风险 HIGH。 资料依据：builtin-risk-rubric-c835ece8fbd9@1。",
+            "test_results": "通过 38 项，失败 1 项。"
+          },
+          "source_version": 1,
+          "standard_ref": "evidence-87440a749302e784edc8",
+          "task_ref": "run-bd72b71af911488c:report:0",
+          "title": "支付服务增加超时重试 · 变更评估"
+        },
+        "source_version": 1,
+        "status": "DRAFT",
+        "tenant_id": "ui95",
+        "version": 1
+      }
+    ]
+  },
+  "missing": "run-3f5d6e0f6e4f4ca9",
+  "failed": "run-422ee6efba944360",
+  "cancelled": "run-caf3c207315944c3",
+  "crashed": "run-5ba6b18f35d7401f",
+  "before": {
+    "calls": {
+      "change.read@1.0.0": 1,
+      "report.draft.create@1.0.0": 1,
+      "standards.read@1.0.0": 1
+    },
+    "drafts": [
+      {
+        "change_id": "change-demo-001",
+        "content_hash": "d30d48f34ac6570fe18662084a13edbcfd45edee3d0d50553a4577fb2f7490da",
+        "created_at": 1792836352.171797,
+        "id": "draft-fd4454711d7f26dd",
+        "project_id": "project-49cb1b0ecd9f4cc8",
+        "report": {
+          "change_id": "change-demo-001",
+          "claims": [
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "version",
+              "value": 1
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "service",
+              "value": "payment-service"
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "dependencies",
+              "value": [
+                "order-service",
+                "ledger-service"
+              ]
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "tests",
+              "value": {
+                "failed": 1,
+                "passed": 38
+              }
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "rollback",
+              "value": "关闭 retry_enabled 开关并恢复上一版本"
+            }
+          ],
+          "limitations": [
+            "模拟数据；草稿供人工审核；未执行发布或部署。"
+          ],
+          "risk_level": "HIGH",
+          "sections": {
+            "impact": "服务 payment-service；依赖：order-service, ledger-service。",
+            "recommendation": "修复失败测试并复核后再决定发布。",
+            "risks": "依照 release-review-rubric@1.0.0 判为 HIGH。",
+            "rollback": "关闭 retry_enabled 开关并恢复上一版本",
+            "summary": "评估 change-demo-001，来源版本 1，风险 HIGH。 资料依据：builtin-risk-rubric-c835ece8fbd9@1。",
+            "test_results": "通过 38 项，失败 1 项。"
+          },
+          "source_version": 1,
+          "standard_ref": "evidence-87440a749302e784edc8",
+          "task_ref": "run-5ba6b18f35d7401f:report:0",
+          "title": "支付服务增加超时重试 · 变更评估"
+        },
+        "source_version": 1,
+        "status": "DRAFT",
+        "tenant_id": "ui95",
+        "version": 1
+      }
+    ]
+  },
+  "after": {
+    "calls": {
+      "change.read@1.0.0": 1,
+      "report.draft.create@1.0.0": 1,
+      "report.read@1.0.0": 1,
+      "standards.read@1.0.0": 1
+    },
+    "drafts": [
+      {
+        "change_id": "change-demo-001",
+        "content_hash": "d30d48f34ac6570fe18662084a13edbcfd45edee3d0d50553a4577fb2f7490da",
+        "created_at": 1792836352.171797,
+        "id": "draft-fd4454711d7f26dd",
+        "project_id": "project-49cb1b0ecd9f4cc8",
+        "report": {
+          "change_id": "change-demo-001",
+          "claims": [
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "version",
+              "value": 1
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "service",
+              "value": "payment-service"
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "dependencies",
+              "value": [
+                "order-service",
+                "ledger-service"
+              ]
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "tests",
+              "value": {
+                "failed": 1,
+                "passed": 38
+              }
+            },
+            {
+              "evidence_ref": "evidence-0a13c72d3524f3cf3154",
+              "path": "rollback",
+              "value": "关闭 retry_enabled 开关并恢复上一版本"
+            }
+          ],
+          "limitations": [
+            "模拟数据；草稿供人工审核；未执行发布或部署。"
+          ],
+          "risk_level": "HIGH",
+          "sections": {
+            "impact": "服务 payment-service；依赖：order-service, ledger-service。",
+            "recommendation": "修复失败测试并复核后再决定发布。",
+            "risks": "依照 release-review-rubric@1.0.0 判为 HIGH。",
+            "rollback": "关闭 retry_enabled 开关并恢复上一版本",
+            "summary": "评估 change-demo-001，来源版本 1，风险 HIGH。 资料依据：builtin-risk-rubric-c835ece8fbd9@1。",
+            "test_results": "通过 38 项，失败 1 项。"
+          },
+          "source_version": 1,
+          "standard_ref": "evidence-87440a749302e784edc8",
+          "task_ref": "run-5ba6b18f35d7401f:report:0",
+          "title": "支付服务增加超时重试 · 变更评估"
+        },
+        "source_version": 1,
+        "status": "DRAFT",
+        "tenant_id": "ui95",
+        "version": 1
+      }
+    ]
+  }
+}

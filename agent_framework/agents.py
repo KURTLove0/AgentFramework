@@ -89,7 +89,8 @@ class AgentRegistry:
 
     def save(self,data,identity=None):
         fields={'name','description','runtime','model','options','prompt','skills','mcp_servers','revision'}
-        if not isinstance(data,dict) or set(data) - (fields | {'definition'}) or not fields <= set(data):raise ValueError('Agent 配置字段不完整或包含未知字段')
+        if not isinstance(data,dict) or set(data) - (fields | {'definition','skill_bindings','evaluation_config','processing_domain_id'}) or not fields <= set(data):raise ValueError('Agent 配置字段不完整或包含未知字段')
+        prior = self.get(identity) if identity else None
         name=text(data['name'],'Agent 名称',80)
         description=text(data['description'],'Agent 描述',500,empty=True)
         provider=data['runtime']
@@ -116,7 +117,6 @@ class AgentRegistry:
         if len(canonical(profile).encode())>60000:raise ValueError('Agent 配置总大小超过 60 KB')
         from .definitions import normalize_definition
         # Old clients may omit the new structured field on edits. Preserve it.
-        prior = self.get(identity) if identity else None
         source = data.get('definition', (prior or {}).get('definition'))
         if source is not None:
             source = deepcopy(source)
@@ -124,8 +124,36 @@ class AgentRegistry:
                 raise ValueError('岗位 identity 必须是对象')
             source['identity']['name'] = name
         profile['definition'] = normalize_definition(source, name)
+        if 'processing_domain_id' in data:
+            domain_id = text(data['processing_domain_id'], '处理领域', 80, empty=True)
+            if domain_id:
+                from .agent_domains import AgentDomains
+                profile['processing_domain'] = AgentDomains(self.store,self.tenant,self.workspace_id).get(domain_id)
+        elif (prior or {}).get('processing_domain'):
+            profile['processing_domain'] = deepcopy(prior['processing_domain'])
+        if (profile.get('processing_domain') and
+                profile['processing_domain']['domain_pack_ref'] != profile['definition']['domain_pack_ref']):
+            raise ValueError('处理领域的工作方式与岗位配置不一致，请重新选择领域')
+        from .evaluation_contract import normalize_config
+        if 'evaluation_config' in data or (prior or {}).get('evaluation_config'):
+            profile['evaluation_config'] = normalize_config(data.get('evaluation_config', (prior or {}).get('evaluation_config')),
+                                                          profile['definition'], reconcile='evaluation_config' not in data)
         if len(canonical(profile).encode()) > 60000:
             raise ValueError('Agent 配置总大小超过 60 KB')
+        bindings=data.get('skill_bindings',(prior or {}).get('skill_bindings',[]))
+        if not isinstance(bindings,list) or len(bindings)+len(skills)>8:raise ValueError('最多绑定 8 个 Skill（含兼容方法）')
+        if bindings:
+            from .skills import SkillRegistry
+            registry=SkillRegistry(self.store,self.tenant,self.workspace_id);packages=[];seen=set();names={s['name'] for s in skills}
+            for binding in bindings:
+                frozen=next((s for s in (prior or {}).get('skill_packages',[]) if isinstance(binding,dict) and s['skill_id']==binding.get('skill_id') and s['version']==binding.get('version')),None)
+                if frozen and binding.get('enabled') is False and set(binding)=={'skill_id','version','enabled'}:
+                    resolved={**deepcopy(frozen),'enabled':False}
+                else:resolved=registry.resolve(binding)
+                if resolved['skill_id'] in seen or resolved['package']['name'] in names:raise ValueError('Skill 绑定与包名称不能重复')
+                seen.add(resolved['skill_id']);names.add(resolved['package']['name']);packages.append(resolved)
+            if len(canonical(packages).encode())>512000:raise ValueError('已选 Skill 总大小超过 512 KB')
+            profile.update(skill_bindings=deepcopy(bindings),skill_packages=packages)
         revision=data['revision']
         if type(revision) is not int or revision<0:raise ValueError('Agent 版本号无效')
         now=time.time()
@@ -148,12 +176,38 @@ class AgentRegistry:
             raise ConfigConflict('Agent 已更新，请重新加载')
         if profile['archived']:
             raise ValueError('此 Agent 已归档')
+        self.assert_skills_available(profile)
         compiled = AgentCompiler().compile(profile)
         # Content-addressed, tenant-scoped receipt; never modifies historical runs.
         with self.store.transaction() as db:
             db.execute('CREATE TABLE IF NOT EXISTS compiled_agents (tenant TEXT, hash TEXT, data TEXT, PRIMARY KEY(tenant,hash))')
             db.execute('INSERT OR IGNORE INTO compiled_agents VALUES(?,?,?)', (self.tenant, compiled['hash'], canonical(compiled)))
         return compiled
+
+    def evaluation_settings(self, identity):
+        from .evaluation_contract import normalize_config, compile_contract
+        profile = self.get(identity)
+        config = normalize_config(profile.get('evaluation_config'), profile['definition'])
+        return {'agent_id': identity, 'agent_name': profile['name'], 'revision': profile['revision'],
+                'config': config, 'contract': compile_contract(profile['definition'], config, processing_domain=profile.get('processing_domain'))}
+
+    def save_evaluation_settings(self, identity, data):
+        if not isinstance(data,dict) or set(data) != {'revision','config'}:
+            raise ValueError('岗位评测保存需要 revision 和 config')
+        profile = self.get(identity)
+        if profile['archived']:raise ValueError('此 Agent 已归档')
+        payload = {k: profile[k] for k in ('name','description','runtime','model','options','prompt','skills','mcp_servers','definition')}
+        payload.update(revision=data['revision'],evaluation_config=data['config'])
+        self.save(payload,identity)
+        return self.evaluation_settings(identity)
+
+    def assert_skills_available(self,profile):
+        if not profile.get('skill_packages'):return
+        from .skills import SkillRegistry
+        registry=SkillRegistry(self.store,self.tenant,self.workspace_id)
+        for item in profile['skill_packages']:
+            if item['enabled'] and registry.resolve({k:item[k] for k in ('skill_id','version','enabled')})!=item:
+                raise ValueError('Skill 版本内容已改变，请重新绑定')
 
     def archive(self,identity,revision,archived=True):
         if type(revision) is not int or type(archived) is not bool:raise ValueError('Agent 版本或归档状态无效')
@@ -182,6 +236,12 @@ def public_agent_context(profile, legacy=False):
                 'mcp_tools':[{'server':s['name'],'tools':s['tools']} for s in profile['mcp_servers'] if s['enabled']]}
     from .definitions import NATIVE_NAMES
     native = (profile.get('definition') or {}).get('native_read_refs', [])
-    return {'definition': profile.get('definition'), 'name':profile['name'],'description':profile['description'],'prompt':profile['prompt'],
+    result={'definition': profile.get('definition'), 'name':profile['name'],'description':profile['description'],'prompt':profile['prompt'],
             'skills':[s for s in profile['skills'] if s['enabled']],
             'mcp_tools':([{'server':'governed','tools':[NATIVE_NAMES[ref] for ref in native]}] if native else [])}
+    if profile.get('processing_domain'):
+        result['processing_domain'] = deepcopy(profile['processing_domain'])
+    if profile.get('skill_packages'):
+        from .skills import package_catalog
+        result['available_skills']=package_catalog(profile)
+    return result

@@ -1,0 +1,102 @@
+{
+  "scope": "source interaction improvements and existing captured evidence",
+  "date": "2026-10-23",
+  "target_release": "1.2.0",
+  "baseline_release": "1.1.0",
+  "baseline_artifacts_immutable": true,
+  "release_package_verification": "See docs/release for the separately recorded final build, installation and cleanup verification.",
+  "tests": {
+    "python_regression": {
+      "passed": 184,
+      "total": 184,
+      "log": "tests-tests.log"
+    },
+    "node_frontend_interactions": {
+      "passed": 125,
+      "total": 125,
+      "environment": "isolated synthetic DOM/API; these are not browser tests",
+      "suites": [
+        {"name": "session", "passed": 15, "log": "session-tests.log"},
+        {"name": "agent", "passed": 20, "log": "agent-tests.log"},
+        {"name": "task_journeys", "passed": 20, "log": "journeys-tests.log"},
+        {"name": "resources_and_workspaces", "passed": 36, "log": "resources-tests.log"},
+        {"name": "workflows", "passed": 34, "log": "workflow-tests.log"}
+      ]
+    }
+  },
+  "browser_evidence": {
+    "runtime": "Mock",
+    "data_scope": "isolated synthetic context",
+    "real_model_calls": 0,
+    "journey_records": {"count": 16, "evidence": "ui-journeys.json"},
+    "responsive_routes": {
+      "count": 45,
+      "routes": 9,
+      "sizes": [[320,740],[375,812],[768,1024],[1280,720],[812,375]],
+      "horizontal_overflow": false,
+      "horizontally_clipped_checked_controls": false,
+      "evidence": "responsive.json"
+    },
+    "dark_routes": {"count": 9, "horizontal_overflow": false, "evidence": "dark-routes.json"},
+    "workflow_dialogs": {
+      "count": 6,
+      "all_save_buttons_in_viewport": true,
+      "horizontal_overflow": false,
+      "evidence": "workflow-dialogs.json"
+    },
+    "task_dialogs": {
+      "count": 12,
+      "stages": [1,3],
+      "all_primary_actions_in_viewport": true,
+      "horizontal_overflow": false,
+      "evidence": "task-dialogs.json"
+    }
+  },
+  "governance_observations": {
+    "default_write_permission": "unchecked",
+    "without_grant": {"run_id": "run-e7c67e8b4afd4709", "drafts": 0, "create_calls": 0, "evidence": "ui-journeys.json"},
+    "response_lost_after_explicit_grant": {"run_id": "run-e7c67e8b4afd4709", "status": "SUCCEEDED", "drafts": 1, "create_calls": 1, "ui_acceptance_checks_passed": 3, "ui_acceptance_checks_total": 3},
+    "normal_from_saved_agent": {"run_id": "run-3ecbc54dc1be473e", "status": "SUCCEEDED", "drafts": 1, "create_calls": 1, "ui_acceptance_checks_passed": 3, "ui_acceptance_checks_total": 3},
+    "runtime_count_evidence": "runtime-verification.json",
+    "runtime_verification_detail_exported": true,
+    "all_runtime_acceptance_checks_passed": true,
+    "runtime_acceptance_checks": ["critical-claims-evidence", "draft-readback", "report-sections"],
+    "acceptance_detail_source": "SQLite verification records exported in runtime-verification.json; both runs have three passed checks, matching the UI.",
+    "process_restart_browser_repeated_this_round": false,
+    "process_restart_regression_coverage": "Python regression; final installed-package fault matrix belongs to release verification"
+  },
+  "backend_boundary_snapshot": {
+    "evidence": "backend-boundary.json",
+    "unchanged_python_files": 40,
+    "web_change": "/journeys.js static resource route only",
+    "original_theme_prefix_unchanged": true,
+    "timing": "interaction source freeze before 1.2.0 version metadata changes"
+  },
+  "implemented_journeys": [
+    "three-step task creation with explicit permission review and duplicate-submit protection",
+    "task configuration return with retained inputs and renewed permissions",
+    "Agent step validation, final review, fixed-version Skill selection and return",
+    "resource save feedback followed by explicit review or publish actions",
+    "workspace creation followed by explicit entry and preflight switching",
+    "workflow pointer and keyboard movement, panning, zoom and local layout restoration",
+    "mobile canvas-inspector panes and single-pointer move controls",
+    "status-specific next action, metric filters and route scroll continuity",
+    "reduced-motion behavior and route animations that do not replay during polling"
+  ],
+  "screenshots": [
+    "task-review-desktop.png",
+    "workflow-canvas-dark.png",
+    "workbench-clean.png",
+    "task-result.png",
+    "agent-review.png",
+    "task-mobile.png"
+  ],
+  "known_limits": [
+    "Business tools remain simulated and test-scoped; this is a single-user loopback workbench.",
+    "Unsaved task and Agent edit inputs live in the current page, not durable storage across reloads.",
+    "Workflow positions are stored locally per browser, tenant, workspace and workflow, without cross-browser synchronization.",
+    "Captured layouts and interactions cover the recorded sizes and cases, not all browser/device/content combinations or a full accessibility certification.",
+    "No real model request was made in this interaction verification.",
+    "The backend boundary snapshot and source tests do not replace verification of the newly built 1.2.0 distribution."
+  ]
+}

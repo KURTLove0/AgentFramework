@@ -1,0 +1,52 @@
+{
+  "checks": [
+    {
+      "id": "agent-search-ime-and-native-clear",
+      "passed": true,
+      "during": {
+        "sameNode": true,
+        "focused": true,
+        "value": "中文"
+      },
+      "after": {
+        "value": "中文",
+        "focus": "agent-search"
+      },
+      "summary": "显示 1 / 1 个 Agent"
+    },
+    {
+      "id": "library-search-ime-submit-native-clear-preserves-status",
+      "passed": true,
+      "during": {
+        "sameNode": true,
+        "focused": true,
+        "value": "发布"
+      },
+      "after": {
+        "value": "发布",
+        "focus": "hub-query"
+      },
+      "status": "DRAFT",
+      "count": 2
+    },
+    {
+      "id": "searchable-native-select-empty-recovery-and-ime-enter",
+      "passed": true,
+      "selected": "agent-41c8ec53534148c3",
+      "label": "中文风险助手 · Mock · v1"
+    }
+  ],
+  "errors": [],
+  "workspace": {
+    "business": "UI95 界面验收",
+    "description": "界面验收隔离数据",
+    "name": "目录搜索独立探索 mvndaqsl",
+    "scenario": "独立模拟",
+    "id": "workspace-9c481810f68c4364",
+    "revision": 1,
+    "project_id": "project-307fe177aa204059",
+    "deleted": false,
+    "created_at": 1792904920.8711529,
+    "updated_at": 1792904920.8711529
+  }
+}

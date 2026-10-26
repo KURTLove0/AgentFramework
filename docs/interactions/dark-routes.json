@@ -1,0 +1,47 @@
+[
+  {
+    "route": "任务工作台",
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "route": "运行记录",
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "route": "工作空间管理",
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "route": "智能体 Agent",
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "route": "工作流",
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "route": "技能 Skills",
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "route": "知识库",
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "route": "能力与标准",
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "route": "运行时配置",
+    "overflow": false,
+    "theme": "dark"
+  }
+]

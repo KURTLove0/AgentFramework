@@ -1,0 +1,27 @@
+CHECK workbench
+CHECK runs
+CHECK agents
+CHECK workflows
+CHECK skills
+CHECK library
+CHECK daily
+CHECK evaluations
+CHECK workspaces
+CHECK registry
+CHECK runtimes
+CHECK dialog workspace
+CHECK dialog agent
+CHECK dialog task
+CHECK dialog flow
+CHECK dialog flow-start
+CHECK dialog flow-chat
+CHECK dialog skill
+CHECK dialog asset
+CHECK dialog schedule
+CHECK dialog policy
+CHECK dialog role-contract
+CHECK dialog learning
+CHECK dialog help
+CHECK dialog command
+CHECK generated, failed and waiting-state surfaces
+MEASURED 540 contexts; 0 contexts need review; errors 0

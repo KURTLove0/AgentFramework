@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-25T05:23:56.871Z",
+  "url": "http://127.0.0.1:8800/?workspace_id=workspace-fe1ff5b539b84368#/daily",
+  "authorization": "父Agent明确授权8800只读保留受阻fixture；与8799同源码",
+  "cssSha256": "de135584ef57d58b0ab9e1e9c84e7e67a1d4e1b5c719b6b3f9dd3e1aad1b93b1",
+  "expected": "de135584ef57d58b0ab9e1e9c84e7e67a1d4e1b5c719b6b3f9dd3e1aad1b93b1",
+  "matches": true,
+  "rows": [
+    {
+      "width": 320,
+      "theme": "light",
+      "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+      "root": 320
+    },
+    {
+      "width": 320,
+      "theme": "dark",
+      "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+      "root": 320
+    },
+    {
+      "width": 375,
+      "theme": "light",
+      "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+      "root": 375
+    },
+    {
+      "width": 375,
+      "theme": "dark",
+      "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+      "root": 375
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+      "root": 1440
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+      "root": 1440
+    }
+  ]
+}

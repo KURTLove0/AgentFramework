@@ -1,6 +1,7 @@
 """The small, closed JSON Schema vocabulary shared with the model and local parser."""
 
 import json
+import math
 
 from .contracts import TOOLS
 
@@ -55,8 +56,13 @@ def validate(value, schema, path="$"):
             except SchemaError:
                 pass
         raise SchemaError(path + ": no matching schema variant")
-    types = {"object": dict, "array": list, "string": str, "integer": int, "null": type(None)}
-    if schema.get("type") not in types or type(value) is not types[schema["type"]]:
+    types = {"object": dict, "array": list, "string": str, "integer": int, "boolean": bool, "number": (int,float), "null": type(None)}
+    expected=types.get(schema.get('type'))
+    try:
+        valid_type=(type(value) in (int,float) and math.isfinite(value)) if schema.get('type')=='number' else expected is not None and type(value) is expected
+    except OverflowError:
+        valid_type=False
+    if not valid_type:
         raise SchemaError(path + ": unexpected type")
     if "enum" in schema and value not in schema["enum"]:
         raise SchemaError(path + ": unregistered value")
@@ -74,8 +80,8 @@ def validate(value, schema, path="$"):
     elif isinstance(value, str):
         if not schema.get("minLength", 0) <= len(value) <= schema.get("maxLength", 12000):
             raise SchemaError(path + ": invalid text length")
-    elif type(value) is int and value < schema.get("minimum", 0):
-        raise SchemaError(path + ": invalid integer")
+    elif type(value) in (int,float) and value < schema.get("minimum", float('-inf') if schema.get('type')=='number' else 0):
+        raise SchemaError(path + ": invalid number")
 
 
 def parse_json(text):

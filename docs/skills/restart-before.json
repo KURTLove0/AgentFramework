@@ -1,0 +1,20 @@
+{
+  "run_id": "run-ed003d10ea8b4b94",
+  "snapshot_hash": "122be1138dacbab37896b91db11fe0a7a24d313d7672c86e1232514a6797fd3f",
+  "compiled_hash": "90d45f0b626e2018979474df8e815807f0f476872ce350c341b895b9ecd714d9",
+  "skill_context": {
+    "activated_refs": [
+      "skill-f27345288a24411a@1"
+    ],
+    "ready": true,
+    "resource_reads": [
+      {
+        "path": "references/report.md",
+        "ref": "skill-f27345288a24411a@1"
+      }
+    ]
+  },
+  "profile_skill_version": 1,
+  "draft_count": 1,
+  "create_calls": 1
+}

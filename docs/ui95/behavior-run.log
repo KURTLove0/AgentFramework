@@ -1,0 +1,10 @@
+PASS empty-home 空白工作台只保留任务引导，未重复堆叠零值指标和空列表
+PASS route-loading 切页等待显示目标页面的加载状态，不把旧页面当成新页面
+PASS read-retry 读取失败可原地重试，恢复后清除错误并显示正确内容
+PASS form-errors 资源表单错误关联字段，首个错误可聚焦，填写后清除
+PASS short-dialog 320宽及375高的弹窗中，头部和操作区完整可见，正文独立滚动
+PASS settings-draft 设置关闭和Escape均保护未保存修改，返回继续编辑，明确放弃后保留原配置
+PASS feedback 通用提示位于顶部布局中，手机端页面操作无遮挡
+PASS dialog-feedback 弹窗提示可见，关闭后焦点保留在当前操作上下文
+PASS prerequisite 缺少智能体时提供直达配置入口，不显示只能失败的创建操作
+PASS help-journey 首次使用帮助可直接进入真实创建任务动线

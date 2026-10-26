@@ -1,0 +1,54 @@
+{
+  "checks": [
+    {
+      "id": "same-space-long-list-back",
+      "before": 5031,
+      "after": 5031,
+      "passed": true
+    },
+    {
+      "id": "cross-space-long-list-back",
+      "before": 5031,
+      "after": 5031,
+      "passed": true,
+      "actual": {
+        "top": 5031,
+        "url": "http://127.0.0.1:8800/?workspace_id=workspace-a2f25b608cb54da8#/skills",
+        "height": 6031,
+        "view": "skills"
+      }
+    }
+  ],
+  "errors": [],
+  "startedAt": "2026-10-25T05:12:06.992Z",
+  "workspace": {
+    "business": "UI95 界面验收",
+    "description": "界面验收隔离数据",
+    "name": "长列表返回独立探索 mvndf5wf",
+    "scenario": "独立模拟",
+    "id": "workspace-a2f25b608cb54da8",
+    "revision": 1,
+    "project_id": "project-ac92f7f98bde437e",
+    "deleted": false,
+    "created_at": 1792905127.073395,
+    "updated_at": 1792905127.073395
+  },
+  "before": {
+    "top": 5031,
+    "url": "http://127.0.0.1:8800/?workspace_id=workspace-a2f25b608cb54da8#/skills",
+    "height": 6031,
+    "view": "skills"
+  },
+  "other": {
+    "business": "验证业务",
+    "description": "",
+    "name": "长列表第二空间 mvndf6jx",
+    "scenario": "返回验证",
+    "id": "workspace-21c7ca7d14df454e",
+    "revision": 1,
+    "project_id": "project-90d0d6b9ea764394",
+    "deleted": false,
+    "created_at": 1792905127.9189508,
+    "updated_at": 1792905127.9189508
+  }
+}

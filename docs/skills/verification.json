@@ -1,0 +1,312 @@
+{
+  "verified_at": "2026-10-22T12:39:23.809083+00:00",
+  "standard": "https://agentskills.io/specification",
+  "integration": "https://agentskills.io/client-implementation/adding-skills-support",
+  "requirements": {
+    "portable_standard_package": true,
+    "safe_yaml_frontmatter": true,
+    "optional_resources_preserved": true,
+    "progressive_catalog_body_resources": true,
+    "independent_skill_management_ui": true,
+    "agent_published_version_picker": true,
+    "old_inline_migration_ui": true,
+    "immutable_version_binding": true,
+    "workspace_isolation": true,
+    "authorization_and_independent_acceptance": true,
+    "restart_without_duplicate_write": true
+  },
+  "tests": {
+    "full_regression": {
+      "passed": 184,
+      "total": 184,
+      "log": ".agent-data/skills-full-tests.log"
+    },
+    "skill_package_cases": {
+      "passed": 13,
+      "total": 13,
+      "log": ".agent-data/skills-package-tests.log"
+    },
+    "p0": {
+      "passed": 44,
+      "total": 44
+    }
+  },
+  "quick_validate": {
+    "builtins": 2,
+    "exported_package": 1,
+    "passed": true
+  },
+  "legacy_snapshots_unchanged": 28,
+  "legacy_runs": [
+    "run-1c003b0dadad45da",
+    "run-2bfe04180d5f47c1",
+    "run-cd6963a8eade4f19",
+    "run-27e6f6ed96b3414b",
+    "run-1af3949ae2c842a5",
+    "run-93944f938b9a4952",
+    "run-61558052cc844549",
+    "run-94951d4ff58a44e4",
+    "run-dacd2cd2f6df42f1",
+    "run-1d31032dc1f346e0",
+    "run-8b8ae865d97e4f0f",
+    "run-c96786f6da554068",
+    "run-1b386b79b4944bfd",
+    "run-67cc8c2ba39f4680",
+    "run-3b72a0f2f51d4fa2",
+    "run-9ee35440c6bd4e12",
+    "run-e717b3422559495b",
+    "run-2c01ebe306404139",
+    "run-84a68aa159cc462d",
+    "run-bb7abfdcfc214e92",
+    "run-2760243c40e94dd1",
+    "run-e01365896a5a4eef",
+    "run-ccf8ae5b94af48b0",
+    "run-3d23dadcfbac4dba",
+    "run-4b569b2e58cd4309",
+    "run-5f9c18ea690e4584",
+    "run-b20040b18bcb4087",
+    "run-0dd940c1ad3549e0"
+  ],
+  "skill_versions": {
+    "skill_id": "skill-f27345288a24411a",
+    "name": "release-evidence-review",
+    "v1_hash": "a9526302a0faa73f2a6a3a08112dd45603b5ad058f6836d73ac3933633cda765",
+    "v2_hash": "403ffd732c9366a6dfc64b2eb47327cfaac8100dc1d2f4c12cbb75c7d7516660",
+    "agent_id": "agent-b17b33057b924249",
+    "agent_pinned_version": 1,
+    "export_import_hash": "403ffd732c9366a6dfc64b2eb47327cfaac8100dc1d2f4c12cbb75c7d7516660",
+    "imported_workspace": "workspace-default",
+    "imported_skill_id": "skill-ed0b2f035ca3455d"
+  },
+  "migration": {
+    "agent_id": "agent-ed562c02e8944062",
+    "agent_revision": 2,
+    "inline_remaining": 0,
+    "standard_binding": [
+      {
+        "enabled": true,
+        "skill_id": "skill-af188ca4eef34627",
+        "version": 1
+      }
+    ]
+  },
+  "web_ui_runs": [
+    {
+      "run_id": "run-30043831139c43f4",
+      "status": "SUCCEEDED",
+      "checks": {
+        "critical-claims-evidence": {
+          "detail": "关键事实、来源哈希、版本与风险规则一致",
+          "evidence_refs": [
+            "evidence-01594f0a14b9e9f022ff",
+            "evidence-87440a749302e784edc8"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "draft-readback": {
+          "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+          "evidence_refs": [
+            "evidence-522f485454973eee1dcd"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "report-sections": {
+          "detail": "所有必选章节非空",
+          "evidence_refs": [
+            "evidence-01594f0a14b9e9f022ff",
+            "evidence-87440a749302e784edc8"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        }
+      },
+      "snapshot_hash": "122be1138dacbab37896b91db11fe0a7a24d313d7672c86e1232514a6797fd3f",
+      "skill_context": {
+        "activated_refs": [
+          "skill-f27345288a24411a@1"
+        ],
+        "ready": true,
+        "resource_reads": [
+          {
+            "path": "references/report.md",
+            "ref": "skill-f27345288a24411a@1"
+          }
+        ]
+      },
+      "activation_events": 1,
+      "resource_load_events": 1,
+      "draft_count": 1,
+      "create_calls": 1
+    },
+    {
+      "run_id": "run-ed003d10ea8b4b94",
+      "status": "SUCCEEDED",
+      "checks": {
+        "critical-claims-evidence": {
+          "detail": "关键事实、来源哈希、版本与风险规则一致",
+          "evidence_refs": [
+            "evidence-01594f0a14b9e9f022ff",
+            "evidence-87440a749302e784edc8"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "draft-readback": {
+          "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+          "evidence_refs": [
+            "evidence-f6c49a40a255d8a7db03"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "report-sections": {
+          "detail": "所有必选章节非空",
+          "evidence_refs": [
+            "evidence-01594f0a14b9e9f022ff",
+            "evidence-87440a749302e784edc8"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        }
+      },
+      "snapshot_hash": "122be1138dacbab37896b91db11fe0a7a24d313d7672c86e1232514a6797fd3f",
+      "skill_context": {
+        "activated_refs": [
+          "skill-f27345288a24411a@1"
+        ],
+        "ready": true,
+        "resource_reads": [
+          {
+            "path": "references/report.md",
+            "ref": "skill-f27345288a24411a@1"
+          }
+        ]
+      },
+      "activation_events": 1,
+      "resource_load_events": 1,
+      "draft_count": 1,
+      "create_calls": 1
+    }
+  ],
+  "live_model": {
+    "passed": true,
+    "data_dir": "/Users/kurt/Desktop/CodeSpace/AgentFramework/.agent-data/skills-live-4cc7e95210/data",
+    "run_id": "run-d7d2c3fb2028421f",
+    "agent_id": "agent-62bf4f97d50240f8",
+    "skill_id": "skill-0af899e97872426a",
+    "model": "gpt-6.1-sol",
+    "elapsed_seconds": 222.79,
+    "pre_grant_status": "WAITING_AUTH",
+    "pre_grant_drafts": 0,
+    "final_status": "SUCCEEDED",
+    "title": "【技能复核】支付服务增加超时重试模拟变更评估",
+    "checks": {
+      "critical-claims-evidence": {
+        "detail": "关键事实、来源哈希、版本与风险规则一致",
+        "evidence_refs": [
+          "evidence-904226a3e1bd7a393edf",
+          "evidence-87440a749302e784edc8"
+        ],
+        "passed": true,
+        "verifier_ref": "release-verifier@1.0.0"
+      },
+      "draft-readback": {
+        "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+        "evidence_refs": [
+          "evidence-0e2a653406a43c936808"
+        ],
+        "passed": true,
+        "verifier_ref": "release-verifier@1.0.0"
+      },
+      "report-sections": {
+        "detail": "所有必选章节非空",
+        "evidence_refs": [
+          "evidence-904226a3e1bd7a393edf",
+          "evidence-87440a749302e784edc8"
+        ],
+        "passed": true,
+        "verifier_ref": "release-verifier@1.0.0"
+      }
+    },
+    "selection": {
+      "activated_refs": [
+        "skill-0af899e97872426a@1"
+      ],
+      "ready": true,
+      "resource_reads": [
+        {
+          "path": "references/report.md",
+          "ref": "skill-0af899e97872426a@1"
+        }
+      ]
+    },
+    "model_calls": 9,
+    "model_tokens": 190989,
+    "model_phases": [
+      "skill_activate",
+      "skill_resources",
+      "plan",
+      "decide",
+      "decide",
+      "decide",
+      "compose",
+      "decide",
+      "decide"
+    ],
+    "drafts": 1,
+    "create_calls": 1,
+    "snapshot_hash": "462c551b33811883c227ed81e59fe868cbba33495e72eaeb1bc11249592c0b1a"
+  },
+  "rejected_unregistered_verifier": {
+    "run_id": "run-2393c78478464efb",
+    "status": "FAILED",
+    "reason": "动作提案被拒绝：unregistered expected verifier",
+    "draft_count": 0,
+    "business_calls": 0,
+    "frozen_planner_version": 5
+  },
+  "responsive_checks": [
+    {
+      "width": 1440,
+      "height": 1000,
+      "page_overflow": false,
+      "create_button_right": 1404
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "page_overflow": false,
+      "dialog_width": 355,
+      "dialog_scroll_width": 353,
+      "nav_overflow": false
+    },
+    {
+      "width": 896,
+      "height": 414,
+      "page_overflow": false,
+      "agent_dialog_right": 848
+    }
+  ],
+  "source_hashes": {
+    "agent_framework/skills.py": "42647cd86c770bac8980097c841208fe665a50327f87e1ce6c2294e384951557",
+    "agent_framework/skill_context.py": "6ee2dc43a5655e469c65ae9dcaa8d26bb3b865468c85c6d73329c4f3687401a4",
+    "agent_framework/agents.py": "a7af5bea9ee166b8e5972d8077ba69da1c0c6605e3afd7ae07f4fead022edc8c",
+    "agent_framework/definitions.py": "14faf5086b2f4f47635c28e67cc73078e1db82aa08c634904f75a1285a0116d2",
+    "agent_framework/llm.py": "71e216cef06e7014ff5434f3d52bb40f034f3e007c65f02e1c778c91e2dd7200",
+    "agent_framework/runtime.py": "e70bdfde395fc2e21aed10d0ca760e0ced225a4036ce509d5c0ca502d8dafdfc",
+    "agent_framework/context_builder.py": "2a165a342e34b6c98aa3a2823721ad6ad061a221ea24aa1fb078b8a5226e376e",
+    "agent_framework/workflows.py": "ed353d780a12514d187a3a41e12a65256cbffed3726287468e2e46bd37677e90",
+    "agent_framework/workflow_chat.py": "22f51326732fd7e80fa3b9bc8ccdc6b61992c21b8813f9a26f30680f469de211",
+    "agent_framework/web.py": "4678c4e59112b6af270c42005218f85cd5541ef439a8865705df339776920ec2",
+    "agent_framework/webui/skills.js": "f30515f5ea37a7c9f6575ba697f5e4a6c615c77e9f26e954294fa36c42bc1a18",
+    "agent_framework/webui/agents.js": "79a9bb36919f92175b58cc8aac8ea8632b4d91e7aef1e1aba54459ca87c2dd84",
+    "agent_framework/webui/app.js": "65abda08ee1bcacb277f345a08a93462a09b30b3881ef75e9d7f151908d74219",
+    "agent_framework/webui/workspaces.js": "a459132dbce10fc685f73d189b92be330404231c2e9b076021e1f9d0d134c73e",
+    "agent_framework/webui/index.html": "8288e12718c6f8228a0b7885dc7f9100cb0ffc00680f6f7e86d1e837e3a7def3",
+    "agent_framework/webui/styles.css": "567b41a47120f42603db0fde4c08f9345a7f3dbc18fae03237fd1a8b31a753a7",
+    "tests/test_skill_packages.py": "3d76a799ea21dc26b319b02579183490f32b222e7a7551a6d10912b29b52c734",
+    "pyproject.toml": "3ab59659e766222c5c0f8aef9d6a51642490409b80611c59e18845e93709daf2"
+  }
+}

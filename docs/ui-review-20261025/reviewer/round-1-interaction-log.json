@@ -1,0 +1,2072 @@
+[
+  {
+    "at": "2026-10-25T05:02:10.494Z",
+    "command": "await go('evaluations'); await p.locator('[data-view-evaluation]').first().click(); await p.locator('#operations-dialog[open]').waitFor(); await shot('evaluation-record-before-return'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/evaluations",
+      "view": "evaluations",
+      "dialogs": [
+        {
+          "id": "operations-dialog",
+          "text": "提醒时的评测记录\n验收失败执行的告警与证据回跳\n界面验收助手 · v1 · 10/25 12:59\n10 分 · 未达标\n岗位身份\n变更评估专家\n评测规则\njob-history@2.0.0\n评分阈值\n80 分\n契约版本\njob-contract@1.0.0\n契约来源\n执行时冻结\n身份一致性\n10 / 10\n职责履行\n0 / 35\n标准达成\n0 / 35\n任务交付\n0 / 20\ncritical-claims-evidence：运行证据缺失或哈希/作用域校验失败\ndraft-readback：运行证据缺失或哈希/作用域校验失败\nreport-sections：运行证据缺失或哈希/作用域校验失败\n职责「评估变更风险」达成 0 分，要求 100 分\n职责「创建并回读草稿」达成 0 分，要求 100 分\n标准 report-evidence@1.0.0 达成 0 分，要求 100 分\n标准 release-review-rubric@1.0.0 达成 0 分，要求 100 分\n任务终态为 FAILED，未完成交付\n总分 10 低于有效基础阈值 80\n岗位身份与执行边界\n通过 · 岗位身份与版本\n通过 · 岗位与任务领域一致\n通过 · 冻结快照和评测契约完整\n通过 · 执行能力未超出岗位边界\n职责与交付物\n\n评估变更风险\n\nrelease-report@1.0.0 · 达成 0 分 / 要求 100 分 · 权重 1\n\n未通过 · 关键事实与证据引用：运行证据缺失或哈希/作用域校验失败\n未通过 · 报告章节与风险规则：运行证据缺失或哈希/作用域校验失败\n\n创建并回读草稿\n\nrelease-draft@1.0.0 · 达成 0 分 / 要求 100 分 · 权重 1\n\n未通过 · 草稿独立回读核对：运行证据缺失或哈希/作用域校验失败\n基础标准\n\nreport-evidence@1.0.0 · 0 / 2 通过 · 达成 0 分 / 要求 100 分 · 权重 1\n\nrelease-review-rubric@1.0.0 · 0 / 3 通过 · 达成 0 分 / 要求 100 分 · 权重 1\n\n证据引用 0 条 · 快照 864f900ad619c5c4\n\n查看原执行记录\n关闭记录"
+        }
+      ],
+      "focus": {
+        "id": "",
+        "text": ""
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:02:16.529Z",
+    "command": "await p.locator('#operations-dialog').getByRole('link',{name:'查看原执行记录'}).click(); await p.waitForFunction(()=>state.view==='workbench'&&!state.busy); await shot('evaluation-return-blocked'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/workbench/run-e535fc248e5949c9",
+      "view": "workbench",
+      "dialogs": [
+        {
+          "id": "operations-dialog",
+          "text": "提醒时的评测记录\n验收失败执行的告警与证据回跳\n界面验收助手 · v1 · 10/25 12:59\n10 分 · 未达标\n岗位身份\n变更评估专家\n评测规则\njob-history@2.0.0\n评分阈值\n80 分\n契约版本\njob-contract@1.0.0\n契约来源\n执行时冻结\n身份一致性\n10 / 10\n职责履行\n0 / 35\n标准达成\n0 / 35\n任务交付\n0 / 20\ncritical-claims-evidence：运行证据缺失或哈希/作用域校验失败\ndraft-readback：运行证据缺失或哈希/作用域校验失败\nreport-sections：运行证据缺失或哈希/作用域校验失败\n职责「评估变更风险」达成 0 分，要求 100 分\n职责「创建并回读草稿」达成 0 分，要求 100 分\n标准 report-evidence@1.0.0 达成 0 分，要求 100 分\n标准 release-review-rubric@1.0.0 达成 0 分，要求 100 分\n任务终态为 FAILED，未完成交付\n总分 10 低于有效基础阈值 80\n岗位身份与执行边界\n通过 · 岗位身份与版本\n通过 · 岗位与任务领域一致\n通过 · 冻结快照和评测契约完整\n通过 · 执行能力未超出岗位边界\n职责与交付物\n\n评估变更风险\n\nrelease-report@1.0.0 · 达成 0 分 / 要求 100 分 · 权重 1\n\n未通过 · 关键事实与证据引用：运行证据缺失或哈希/作用域校验失败\n未通过 · 报告章节与风险规则：运行证据缺失或哈希/作用域校验失败\n\n创建并回读草稿\n\nrelease-draft@1.0.0 · 达成 0 分 / 要求 100 分 · 权重 1\n\n未通过 · 草稿独立回读核对：运行证据缺失或哈希/作用域校验失败\n基础标准\n\nreport-evidence@1.0.0 · 0 / 2 通过 · 达成 0 分 / 要求 100 分 · 权重 1\n\nrelease-review-rubric@1.0.0 · 0 / 3 通过 · 达成 0 分 / 要求 100 分 · 权重 1\n\n证据引用 0 条 · 快照 864f900ad619c5c4\n\n查看原执行记录\n关闭记录"
+        }
+      ],
+      "focus": {
+        "id": "",
+        "text": "查看原执行记录"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:02:59.714Z",
+    "command": "return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/agents",
+      "view": "agents",
+      "dialogs": [
+        {
+          "id": "operations-dialog",
+          "text": "提醒时的评测记录\n验收失败执行的告警与证据回跳\n界面验收助手 · v1 · 10/25 12:59\n10 分 · 未达标\n岗位身份\n变更评估专家\n评测规则\njob-history@2.0.0\n评分阈值\n80 分\n契约版本\njob-contract@1.0.0\n契约来源\n执行时冻结\n身份一致性\n10 / 10\n职责履行\n0 / 35\n标准达成\n0 / 35\n任务交付\n0 / 20\ncritical-claims-evidence：运行证据缺失或哈希/作用域校验失败\ndraft-readback：运行证据缺失或哈希/作用域校验失败\nreport-sections：运行证据缺失或哈希/作用域校验失败\n职责「评估变更风险」达成 0 分，要求 100 分\n职责「创建并回读草稿」达成 0 分，要求 100 分\n标准 report-evidence@1.0.0 达成 0 分，要求 100 分\n标准 release-review-rubric@1.0.0 达成 0 分，要求 100 分\n任务终态为 FAILED，未完成交付\n总分 10 低于有效基础阈值 80\n岗位身份与执行边界\n通过 · 岗位身份与版本\n通过 · 岗位与任务领域一致\n通过 · 冻结快照和评测契约完整\n通过 · 执行能力未超出岗位边界\n职责与交付物\n\n评估变更风险\n\nrelease-report@1.0.0 · 达成 0 分 / 要求 100 分 · 权重 1\n\n未通过 · 关键事实与证据引用：运行证据缺失或哈希/作用域校验失败\n未通过 · 报告章节与风险规则：运行证据缺失或哈希/作用域校验失败\n\n创建并回读草稿\n\nrelease-draft@1.0.0 · 达成 0 分 / 要求 100 分 · 权重 1\n\n未通过 · 草稿独立回读核对：运行证据缺失或哈希/作用域校验失败\n基础标准\n\nreport-evidence@1.0.0 · 0 / 2 通过 · 达成 0 分 / 要求 100 分 · 权重 1\n\nrelease-review-rubric@1.0.0 · 0 / 3 通过 · 达成 0 分 / 要求 100 分 · 权重 1\n\n证据引用 0 条 · 快照 864f900ad619c5c4\n\n查看原执行记录\n关闭记录"
+        }
+      ],
+      "focus": {
+        "id": "",
+        "text": "查看原执行记录"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:03:05.656Z",
+    "command": "await go('agents'); await p.locator('[data-action=new-agent]').first().click(); await shot('agent-create-step1'); return await snap();",
+    "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-action=new-agent]').first()\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"button primary\" data-action=\"new-agent\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <dialog open=\"\" data-saving=\"false\" id=\"operations-dialog\" class=\"structured-dialog\" aria-labelledby=\"operations-dialog-title\">…</dialog> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <dialog open=\"\" data-saving=\"false\" id=\"operations-dialog\" class=\"structured-dialog\" aria-labelledby=\"operations-dialog-title\">…</dialog> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    58 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <dialog open=\"\" data-saving=\"false\" id=\"operations-dialog\" class=\"structured-dialog\" aria-labelledby=\"operations-dialog-title\">…</dialog> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:03:07.317Z",
+    "command": "await p.keyboard.press('Escape'); return 'dismissed stuck modal';",
+    "result": "dismissed stuck modal"
+  },
+  {
+    "at": "2026-10-25T05:03:15.538Z",
+    "command": "go=async(r,id)=>{await p.goto('http://127.0.0.1:8799/?workspace_id='+fixture.workspaceId+'#/'+r+(id?'/'+id:''));await p.reload();await p.waitForFunction(()=>state.connected&&!state.busy);await p.locator('#appearance-select').selectOption('light');}; await go('agents'); await p.locator('[data-action=new-agent]').first().click(); await shot('agent-create-step1'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/agents",
+      "view": "agents",
+      "dialogs": [
+        {
+          "id": "agent-dialog",
+          "text": "创建智能体\n×\n\n选择业务领域，配置模型与指令，确认后即可创建。\n\n第 1 / 3 步 · 1 项已就绪\n1. 基本信息\n待配置\n2. 模型与指令\n读取中\n3. 确认创建\n已就绪\n先选一个起点\n查资料、回答问题\n依据知识库作答，并核对来源。\n评估变更、生成草稿\n核对风险证据，按授权创建草稿。\n智能体名称\n0 / 80\n角色与业务领域\n处理领域\n＋ 新建领域\n变更评估\n知识问答\n变更评估\n\n选择已有领域，或在这里创建适合业务的新领域。 · 工作方式：变更评估与草稿创建\n\n补充用途与岗位\n选填，已提供默认岗位\n\n下一步：请检查智能体名称：请填写此字段。\n\n下一步\n取消"
+        }
+      ],
+      "focus": {
+        "id": "agent-name",
+        "text": ""
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:03:23.571Z",
+    "command": "await p.locator('[data-agent-template=\"knowledge-answer@1.0.0\"]').click(); await p.waitForFunction(()=>!state.agentRoleLoading); await p.locator('#agent-name').fill('评审独立助手'); await p.locator('[data-agent-config-direction=\"1\"]').click(); await p.locator('#agent-runtime').selectOption('mock'); await shot('agent-create-step2-mock'); await p.locator('[data-agent-config-direction=\"1\"]').click(); await shot('agent-create-step3'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/agents",
+      "view": "agents",
+      "dialogs": [
+        {
+          "id": "agent-dialog",
+          "text": "创建智能体\n×\n\n选择业务领域，配置模型与指令，确认后即可创建。\n\n第 3 / 3 步 · 3 项已就绪\n1. 基本信息\n已就绪\n2. 模型与指令\n已就绪\n3. 确认创建\n已就绪\n确认智能体配置\n\n配置已就绪，创建后可用于新任务。\n\n智能体\n评审独立助手\n处理领域\n知识问答\n工作方式\n资料问答与来源核对\n岗位角色\n知识问答助手\n职责与标准\n1 项职责 · 1 项标准\n执行方式\n模拟运行时\n模型\n内置规划器\n额外技能\n0 项启用\n工作指令\n\n创建后可在新任务中选择此智能体。任务授权会在执行时单独确认。\n\n职责与验收标准\n已按领域配置，可调整\n添加技能\n可选\n能力绑定与编译预览\n历史 MCP 配置与迁移\n\n核对上方配置，确认后创建智能体。\n\n上一步\n取消\n创建智能体"
+        }
+      ],
+      "focus": {
+        "id": "agent-config-tab-advanced",
+        "text": "3. 确认创建已就绪预览与可选调整"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:03:35.714Z",
+    "command": "return await p.locator('#agent-dialog summary').allTextContents();",
+    "result": [
+      "补充用途与岗位 选填，已提供默认岗位",
+      "执行参数 可选",
+      "工作指令",
+      "职责与验收标准 已按领域配置，可调整",
+      "添加技能 可选",
+      "能力绑定与编译预览",
+      "历史 MCP 配置与迁移"
+    ]
+  },
+  {
+    "at": "2026-10-25T05:03:42.272Z",
+    "command": "p.setDefaultTimeout(5000); await p.locator('#agent-dialog summary').filter({hasText:'职责与验收标准'}).click(); await shot('agent-dynamic-role'); return await p.locator('#agent-dialog').innerText();",
+    "result": "创建智能体\n×\n\n选择业务领域，配置模型与指令，确认后即可创建。\n\n第 3 / 3 步 · 3 项已就绪\n1. 基本信息\n已就绪\n2. 模型与指令\n已就绪\n3. 确认创建\n已就绪\n确认智能体配置\n\n配置已就绪，创建后可用于新任务。\n\n智能体\n评审独立助手\n处理领域\n知识问答\n工作方式\n资料问答与来源核对\n岗位角色\n知识问答助手\n职责与标准\n1 项职责 · 1 项标准\n执行方式\n模拟运行时\n模型\n内置规划器\n额外技能\n0 项启用\n工作指令\n\n创建后可在新任务中选择此智能体。任务授权会在执行时单独确认。\n\n职责与验收标准\n已按领域配置，可调整\n职责与交付物\n添加职责\n\n每项职责绑定交付物与验收项，所有必选验收必须有职责负责。\n\n验收覆盖\n3 / 3 已就绪\n\n每项验收都需要对应职责和执行标准。下面的状态会随配置更新。\n\n回答与原文一致已指定职责 · 标准已覆盖\n来源属于任务范围已指定职责 · 标准已覆盖\n来源当前有效已指定职责 · 标准已覆盖\n职责 01\n职责说明\n交付物\n带原文引用的知识回答\n\n此职责负责哪些验收项？\n\n回答与原文一致\n来源属于任务范围\n来源当前有效\n移除此职责\n执行标准\n\n选择已登记的版本化标准；运行时独立执行检查，Prompt 无法覆盖这些标准。\n\n知识来源与引用\n回答逐字引用原文；检查来源范围、发布状态、版本与有效期。\nknowledge-source-evidence@1.0.0\n验收：回答与原文一致、来源属于任务范围、来源当前有效\n添加技能\n可选\n能力绑定与编译预览\n历史 MCP 配置与迁移\n\n核对上方配置，确认后创建智能体。\n\n上一步\n取消\n创建智能体"
+  },
+  {
+    "at": "2026-10-25T05:03:48.415Z",
+    "command": "return await p.locator('#agent-dialog button').evaluateAll(es=>es.map(e=>({text:e.textContent,attrs:[...e.attributes].filter(a=>a.name.startsWith('data-')).map(a=>[a.name,a.value])})));",
+    "result": [
+      {
+        "text": "×",
+        "attrs": [
+          [
+            "data-close",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "1. 基本信息已就绪名称、角色与业务领域",
+        "attrs": [
+          [
+            "data-agent-config-tab",
+            "identity"
+          ],
+          [
+            "data-step-state",
+            "complete"
+          ]
+        ]
+      },
+      {
+        "text": "2. 模型与指令已就绪选择模型与工作要求",
+        "attrs": [
+          [
+            "data-agent-config-tab",
+            "runtime"
+          ],
+          [
+            "data-step-state",
+            "complete"
+          ]
+        ]
+      },
+      {
+        "text": "3. 确认创建已就绪预览与可选调整",
+        "attrs": [
+          [
+            "data-agent-config-tab",
+            "advanced"
+          ],
+          [
+            "data-step-state",
+            "complete"
+          ]
+        ]
+      },
+      {
+        "text": "查资料、回答问题依据知识库作答，并核对来源。",
+        "attrs": [
+          [
+            "data-agent-template",
+            "knowledge-answer@1.0.0"
+          ]
+        ]
+      },
+      {
+        "text": "评估变更、生成草稿核对风险证据，按授权创建草稿。",
+        "attrs": [
+          [
+            "data-agent-template",
+            "change-assessment@2.0.0"
+          ]
+        ]
+      },
+      {
+        "text": "＋ 新建领域",
+        "attrs": []
+      },
+      {
+        "text": "知识问答",
+        "attrs": []
+      },
+      {
+        "text": "清除搜索",
+        "attrs": []
+      },
+      {
+        "text": "",
+        "attrs": []
+      },
+      {
+        "text": "取消新建",
+        "attrs": []
+      },
+      {
+        "text": "创建并选用",
+        "attrs": []
+      },
+      {
+        "text": "内置确定性规划器 · builtin",
+        "attrs": []
+      },
+      {
+        "text": "清除搜索",
+        "attrs": []
+      },
+      {
+        "text": "",
+        "attrs": []
+      },
+      {
+        "text": "刷新模型",
+        "attrs": [
+          [
+            "data-action",
+            "agent-refresh-models"
+          ]
+        ]
+      },
+      {
+        "text": "添加职责",
+        "attrs": [
+          [
+            "data-action",
+            "add-agent-duty"
+          ]
+        ]
+      },
+      {
+        "text": "移除此职责",
+        "attrs": [
+          [
+            "data-remove-duty",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "选择 Skill",
+        "attrs": [
+          [
+            "data-action",
+            "add-agent-skill"
+          ]
+        ]
+      },
+      {
+        "text": "管理 Skill 后返回",
+        "attrs": [
+          [
+            "data-manage-skills",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "添加 MCP",
+        "attrs": [
+          [
+            "data-action",
+            "add-agent-mcp"
+          ]
+        ]
+      },
+      {
+        "text": "上一步",
+        "attrs": [
+          [
+            "data-agent-config-direction",
+            "-1"
+          ]
+        ]
+      },
+      {
+        "text": "预览配置",
+        "attrs": [
+          [
+            "data-agent-config-direction",
+            "1"
+          ]
+        ]
+      },
+      {
+        "text": "取消",
+        "attrs": [
+          [
+            "data-close",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "创建智能体",
+        "attrs": []
+      }
+    ]
+  },
+  {
+    "at": "2026-10-25T05:03:59.060Z",
+    "command": "await p.locator('#agent-dialog').getByText('职责与验收标准',{exact:true}).click(); await shot('agent-dynamic-role'); return await p.locator('#agent-dialog').innerText();",
+    "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#agent-dialog').getByText('职责与验收标准', { exact: true })\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:04:00.108Z",
+    "command": "await p.locator('[data-action=add-agent-duty]').click(); await p.locator('[data-remove-duty]').last().click(); await p.locator('#agent-save').click(); await p.locator('#agent-dialog').waitFor({state:'hidden'}); global.reviewAgent=await p.evaluate(()=>state.agents.find(a=>a.name==='评审独立助手')); await p.locator('[data-agent-new-task=\"'+reviewAgent.id+'\"]').click(); await p.locator('#task-goal').fill('请引用发布风险规范中的风险规则。'); await shot('task-stage1'); await p.locator('#task-next').click(); await shot('task-stage2'); await p.locator('#task-next').click(); await shot('task-stage3'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/agents",
+      "view": "agents",
+      "dialogs": [
+        {
+          "id": "create-dialog",
+          "text": "新建知识问答\n1 · 任务\n2 · 执行\n3 · 审查\n\n第 3 / 3 步 · 审查与许可\n\n审查与许可\n核对任务\n尚未提交\n任务类型\n知识问答 · 只读\n执行 Agent\n评审独立助手 · v1\n运行时\n模拟运行时\n任务范围\nUI95 模块动线 mvnczczf\n写入授权\n只读，零业务写入\n运行预算\n24 步 / 120 秒\n\n请引用发布风险规范中的风险规则。\n\n只读取任务范围内的已发布知识，完成后核对引用与来源。\n\n执行预算\n取消\n上一步\n保存待启动\n创建并运行"
+        }
+      ],
+      "focus": {
+        "id": "task-permissions",
+        "text": "审查与许可核对任务尚未提交任务类型知识问答 · 只读执行 Agent评审独立助手 · v1运行时模拟运行时任务范围UI95 模块动线 mvn"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:04:08.010Z",
+    "command": "await p.locator('#task-submit-actions [value=start]').click(); await p.locator('#create-dialog').waitFor({state:'hidden'}); await p.waitForFunction(()=>state.detail?.run.status==='SUCCEEDED'); await shot('review-qa-result'); return {run:await p.evaluate(()=>state.detail.run.run_id),text:(await p.locator('#run-detail').innerText()).slice(0,4500)};",
+    "result": {
+      "run": "run-2d54cac982b0403d",
+      "text": "当前运行详情\n正常流程 / MOCK\n请引用发布风险规范中的风险规则。\nrun-2d54cac982b0403d\n已完成\n复盘与沉淀\n生成计划\n检索回读\n引用回答\n独立验收\n回答已完成并通过验收\n\n查看引用回答，或展开证据核对来源。\n\n阅读知识回答\n执行轨迹\n知识回答\n证据与验收\n动作提案\n请引用发布风险规范中的风险规则。\n引用回答\n\n变更评估：失败测试判 HIGH；否则有依赖判 MEDIUM，否则 LOW。报告需引用来源证据，草稿供人工审核；写入状态不明先按原幂等键核对。\n发布风险规范：失败测试必须先修复并复核。高风险变更需要准备回滚方案并保留测试证据。订单 ORD-001 当前状态为待审核，风险等级为高。\n\n来源与原文引用\n来源 1 · 原文引用\n来源 2 · 原文引用\n\n仅引用当前任务范围内已发布资料；未执行任何业务写入。\n\n运行信息\nAgent\n评审独立助手\nAgent 版本\n1\n运行时\nMock\n模型\n—\n领域包\nknowledge-answer@1.0.0\n项目\nproject-2bec2c87c7ca445a\n环境\ntest\n执行身份\nreview-user\n创建时间\n10/25 13:04\n步骤预算\n4 / 24\n重规划\n0 / 2\n模型调用\n0\n模型 tokens\n0\n业务写权限\n只读任务，无需写授权\n验收通过\n3 / 3\n只读任务 · 外部零写入\n0份草稿\n\n创建工具调用 0 次 · 数据来自外部模拟库\n\n来源撤回或失效后，停止使用旧读取证据。\n\n导出记录\n知识回答 .md\n运行结果 .json\n审计事件 .jsonl"
+    }
+  },
+  {
+    "at": "2026-10-25T05:04:28.776Z",
+    "command": "shot=async n=>{await p.evaluate(()=>new Promise(q=>requestAnimationFrame(()=>requestAnimationFrame(q))));await p.screenshot({path:out+'/screenshots/round-1/'+n+'.png',animations:'disabled'});return n}; await go('workspaces'); await p.locator('[data-action=new-workspace]').first().click(); await p.locator('#workspace-save').click(); await shot('workspace-validation'); await p.locator('#workspace-name').fill('评审未保存空间'); await p.keyboard.press('Escape'); await shot('workspace-discard'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/workspaces",
+      "view": "workspaces",
+      "dialogs": [
+        {
+          "id": "confirm-dialog",
+          "text": "放弃未保存的空间更改？\n\n工作空间的更改尚未保存。返回可继续编辑，放弃后不会保存本次更改。\n\n返回\n放弃更改"
+        },
+        {
+          "id": "workspace-dialog",
+          "text": "创建工作空间\n×\n\n空间分别保存 Agent、任务、知识和记忆。业务与场景用于说明用途；项目标识创建后固定。\n\n空间名称必填\n所属业务必填\n请填写所属业务。\n使用场景必填\n请填写使用场景。\n空间说明\n取消\n创建工作空间"
+        }
+      ],
+      "focus": {
+        "id": "",
+        "text": ""
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:04:36.696Z",
+    "command": "await p.keyboard.press('Escape'); const returned={focus:await p.locator(':focus').getAttribute('id'),value:await p.locator('#workspace-name').inputValue()}; await p.keyboard.press('Escape'); await p.locator('#confirm-submit').click(); await go('library'); await p.locator('[data-action=new-asset]').first().click(); await p.locator('#asset-save').click(); await shot('asset-validation'); return {returned,dialog:await snap(),kinds:await p.locator('#asset-kind option').allTextContents()};",
+    "result": {
+      "returned": {
+        "focus": "workspace-name",
+        "value": "评审未保存空间"
+      },
+      "dialog": {
+        "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/library",
+        "view": "library",
+        "dialogs": [
+          {
+            "id": "asset-dialog",
+            "text": "新增知识资料\n×\n\n资料先保存为草稿，经审核发布后才供任务检索。偏好仅对当前用户可见。\n\n资料类型\n项目知识\n私有偏好\n工作记忆\n能力方法\n标题必填\n请填写标题。\n正文 / 偏好 JSON必填\n请填写正文 / 偏好 JSON。\n\n使用清晰的文本描述事实与规范。保存为草稿后，需审核发布才会供任务检索。\n\n来源版本必填\n可见范围\n本空间共享\n仅本人\n生效时间必填\n失效时间必填\n来源标识必填\n取消\n保存草稿"
+          }
+        ],
+        "focus": {
+          "id": "asset-name",
+          "text": ""
+        },
+        "toast": ""
+      },
+      "kinds": [
+        "项目知识",
+        "私有偏好",
+        "工作记忆",
+        "能力方法"
+      ]
+    }
+  },
+  {
+    "at": "2026-10-25T05:04:44.454Z",
+    "command": "await p.locator('#asset-kind').selectOption('PREFERENCE'); await p.locator('#asset-name').fill('评审偏好'); await p.locator('#asset-content').fill('{ invalid'); await p.locator('#asset-save').click(); await shot('asset-json-error'); await p.setViewportSize({width:375,height:812}); await shot('asset-json-error-mobile'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/library",
+      "view": "library",
+      "dialogs": [
+        {
+          "id": "asset-dialog",
+          "text": "新增知识资料\n×\n\n资料先保存为草稿，经审核发布后才供任务检索。偏好仅对当前用户可见。\n\n资料类型\n项目知识\n私有偏好\n工作记忆\n能力方法\n标题必填\n正文 / 偏好 JSON必填\n\n填写 JSON 对象，例如 {\"language\":\"zh\",\"report_style\":\"concise\"}。偏好仅对当前用户可见。\n\n来源版本必填\n可见范围\n本空间共享\n仅本人\n生效时间必填\n失效时间必填\n来源标识必填\n\n偏好格式有误，请填写有效的 JSON 对象。\n\n取消\n保存草稿"
+        }
+      ],
+      "focus": {
+        "id": "asset-error",
+        "text": "偏好格式有误，请填写有效的 JSON 对象。"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:04:54.337Z",
+    "command": "await p.keyboard.press('Escape'); await p.locator('#confirm-submit').click(); await go('skills'); await p.locator('[data-skill-new]').first().click(); await p.locator('#skill-new-path').fill('../bad'); await p.locator('[data-skill-add-file]').click(); await shot('skill-path-validation-mobile'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/skills",
+      "view": "skills",
+      "dialogs": [
+        {
+          "id": "skill-editor-dialog",
+          "text": "创建 Skill\n×\nSkill 目录名称必填\n查看版本\n未保存\n未保存\n\nSKILL.md 包含 YAML name、description 与 Markdown 正文。references/、scripts/、assets/ 按需保留；脚本不会因导入而执行。\n\n包内文件\nSKILL.md\n新文件相对路径\n添加文本资源\n上传资源文件\nSKILL.md\n文件内容\n\n请填写包内相对路径，例如 references/checklist.md；不能包含上级目录或反斜杠。\n\n编辑后保存为新版本草稿，审核发布后即可在 Agent 中选择。\n\n关闭\n校验标准包\n保存草稿"
+        }
+      ],
+      "focus": {
+        "id": "skill-editor-error",
+        "text": "请填写包内相对路径，例如 references/checklist.md；不能包含上级目录或反斜杠。"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:05:09.059Z",
+    "command": "await p.keyboard.press('Escape'); await p.locator('#confirm-submit').click().catch(()=>{}); await go('workflows'); await p.locator('[data-flow-new]').first().click(); await shot('workflow-new-mobile'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/workflows",
+      "view": "workflows",
+      "dialogs": [
+        {
+          "id": "flow-editor-dialog",
+          "text": "创建工作流\n×\n1. 命名工作流\n流程名称\n说明\n流程画布\n点击节点配置 · 点击输出端口，再点目标输入端口连线\n适应画布\nRAG 模板\n＋ Agent 节点\n添加互斥分支\n−\n100%\n＋\n定位\n整理\n拖动手柄移动节点 · 空白处拖动平移 · 布局仅保存在此浏览器\n画布\n节点配置\n1 个节点 · 检索知识 → Agent 执行 → 独立验收\n＋\n01 / Agent 执行\n评审独立助手\n评审独立助手 · v1\n接收流程输入\n→\n\n2. 选择节点编辑属性；拖动节点右上角手柄调整布局，空白处拖动平移。保存后可创建运行。\n\n取消\n保存工作流"
+        }
+      ],
+      "focus": {
+        "id": "flow-canvas-region",
+        "text": "1 个节点 · 检索知识 → Agent 执行 → 独立验收＋01 / Agent 执行评审独立助手评审独立助手 · v1接收流程输入→"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:05:21.455Z",
+    "command": "return await p.locator('#flow-editor-dialog button').evaluateAll(es=>es.filter(e=>e.getClientRects().length).map(e=>({text:e.textContent,attrs:[...e.attributes].filter(a=>a.name.startsWith('data-')).map(a=>[a.name,a.value])})));",
+    "result": [
+      {
+        "text": "×",
+        "attrs": [
+          [
+            "data-close",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "适应画布",
+        "attrs": [
+          [
+            "data-flow-fit",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "RAG 模板",
+        "attrs": [
+          [
+            "data-flow-rag-template",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "＋ Agent 节点",
+        "attrs": [
+          [
+            "data-add-flow-node",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "添加互斥分支",
+        "attrs": [
+          [
+            "data-flow-branch",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "−",
+        "attrs": [
+          [
+            "data-flow-zoom",
+            "out"
+          ]
+        ]
+      },
+      {
+        "text": "100%",
+        "attrs": [
+          [
+            "data-flow-zoom",
+            "reset"
+          ]
+        ]
+      },
+      {
+        "text": "＋",
+        "attrs": [
+          [
+            "data-flow-zoom",
+            "in"
+          ]
+        ]
+      },
+      {
+        "text": "定位",
+        "attrs": [
+          [
+            "data-flow-locate",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "整理",
+        "attrs": [
+          [
+            "data-flow-arrange",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "画布",
+        "attrs": [
+          [
+            "data-flow-pane",
+            "canvas"
+          ]
+        ]
+      },
+      {
+        "text": "节点配置",
+        "attrs": [
+          [
+            "data-flow-pane",
+            "inspector"
+          ]
+        ]
+      },
+      {
+        "text": "＋",
+        "attrs": [
+          [
+            "data-flow-input",
+            "node-00096298"
+          ]
+        ]
+      },
+      {
+        "text": "",
+        "attrs": [
+          [
+            "data-flow-drag",
+            "node-00096298"
+          ]
+        ]
+      },
+      {
+        "text": "01 / Agent 执行评审独立助手评审独立助手 · v1接收流程输入",
+        "attrs": [
+          [
+            "data-flow-select",
+            "node-00096298"
+          ]
+        ]
+      },
+      {
+        "text": "→",
+        "attrs": [
+          [
+            "data-flow-output",
+            "node-00096298"
+          ]
+        ]
+      },
+      {
+        "text": "取消",
+        "attrs": [
+          [
+            "data-close",
+            ""
+          ]
+        ]
+      },
+      {
+        "text": "保存工作流",
+        "attrs": []
+      }
+    ]
+  },
+  {
+    "at": "2026-10-25T05:05:29.086Z",
+    "command": "await p.locator('[data-flow-select]').first().click(); await p.locator('[data-flow-pane=inspector]').click(); await shot('workflow-inspector-mobile'); await p.locator('[data-add-flow-node]').click(); await shot('workflow-added-node-mobile'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/workflows",
+      "view": "workflows",
+      "dialogs": [
+        {
+          "id": "flow-editor-dialog",
+          "text": "创建工作流\n×\n1. 命名工作流\n流程名称\n说明\n流程画布\n点击节点配置 · 点击输出端口，再点目标输入端口连线\n适应画布\nRAG 模板\n＋ Agent 节点\n添加互斥分支\n−\n100%\n＋\n定位\n整理\n拖动手柄移动节点 · 空白处拖动平移 · 布局仅保存在此浏览器\n画布\n节点配置\n\n节点 2 / 2\n\n节点配置\nAgent 执行\n\n起始节点，接收本次运行的输入。\n\n节点名称\n执行 Agent\n评审独立助手 · v1\n资料验收助手 · v2\n界面验收助手 · v1\n节点目标\n从哪些上游接收结果\n评审独立助手\n上游完成时如何继续\n全部上游成功\n任一上游成功\n\n等待所有上游结束后汇合；“任一成功”适合合并互斥分支，被跳过的分支不创建任务。\n\n先检索知识（RAG）\n\n将当前空间的知识作为节点参考，可配置查询词与引用数量。\n\n仅在满足条件时执行\n\n先选择上游节点，再设置进入此节点的条件。\n\n调整节点位置\n删除此节点\n\n已添加节点。先选择执行 Agent，再设置目标和上游连接。\n\n取消\n保存工作流"
+        }
+      ],
+      "focus": {
+        "id": "",
+        "text": ""
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:06:18.488Z",
+    "command": "await go('skills'); await p.locator('[data-skill-new]').first().click(); await shot('skill-editor-mobile-footer'); return await p.locator('#skill-editor-dialog .dialog-foot').evaluate(e=>({text:e.innerText,rect:e.getBoundingClientRect().toJSON(),scroll:e.scrollWidth,buttons:[...e.querySelectorAll('button')].map(b=>({text:b.innerText,rect:b.getBoundingClientRect().toJSON(),display:getComputedStyle(b).display}))}));",
+    "result": {
+      "text": "关闭\n校验标准包\n保存草稿",
+      "rect": {
+        "x": 9,
+        "y": 734,
+        "width": 357,
+        "height": 69,
+        "top": 734,
+        "right": 366,
+        "bottom": 803,
+        "left": 9
+      },
+      "scroll": 357,
+      "buttons": [
+        {
+          "text": "关闭",
+          "rect": {
+            "x": 63.5,
+            "y": 747,
+            "width": 54,
+            "height": 44,
+            "top": 747,
+            "right": 117.5,
+            "bottom": 791,
+            "left": 63.5
+          },
+          "display": "flex"
+        },
+        {
+          "text": "校验标准包",
+          "rect": {
+            "x": 125.5,
+            "y": 747,
+            "width": 96,
+            "height": 44,
+            "top": 747,
+            "right": 221.5,
+            "bottom": 791,
+            "left": 125.5
+          },
+          "display": "flex"
+        },
+        {
+          "text": "发布此版本",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "display": "none"
+        },
+        {
+          "text": "保存草稿",
+          "rect": {
+            "x": 268,
+            "y": 747,
+            "width": 82,
+            "height": 44,
+            "top": 747,
+            "right": 350,
+            "bottom": 791,
+            "left": 268
+          },
+          "display": "flex"
+        }
+      ]
+    }
+  },
+  {
+    "at": "2026-10-25T05:07:30.192Z",
+    "command": "await p.locator('#skill-new-path').fill('../bad'); await p.locator('[data-skill-add-file]').click(); await shot('skill-path-validation-mobile-confirmed'); return await p.locator('#skill-save').evaluate(e=>({rect:e.getBoundingClientRect().toJSON(),style:{opacity:getComputedStyle(e).opacity,visibility:getComputedStyle(e).visibility,display:getComputedStyle(e).display},disabled:e.disabled,html:e.outerHTML}));",
+    "result": {
+      "rect": {
+        "x": 268,
+        "y": 747,
+        "width": 82,
+        "height": 44,
+        "top": 747,
+        "right": 350,
+        "bottom": 791,
+        "left": 268
+      },
+      "style": {
+        "opacity": "1",
+        "visibility": "visible",
+        "display": "flex"
+      },
+      "disabled": false,
+      "html": "<button type=\"submit\" class=\"button primary\" id=\"skill-save\">保存草稿</button>"
+    }
+  },
+  {
+    "at": "2026-10-25T05:08:36.282Z",
+    "command": "await go('workbench'); await p.locator('#sidebar-toggle').click(); let navCheck=await p.evaluate(()=>({shellInert:document.querySelector('.shell').inert,role:document.querySelector('#app-sidebar').getAttribute('role'),focus:document.activeElement.getAttribute('aria-label')})); await p.keyboard.press('Shift+Tab'); let reverse=await p.locator(':focus').getAttribute('class'); await p.keyboard.press('Tab'); await shot('mobile-navigation-focus'); await p.keyboard.press('Escape'); await p.keyboard.press('Meta+k'); await p.locator('#command-input').fill('技能'); await p.keyboard.press('ArrowDown'); await shot('mobile-command-keyboard'); await p.keyboard.press('Enter'); return {navCheck,reverse,final:await snap()};",
+    "result": {
+      "navCheck": {
+        "shellInert": true,
+        "role": "dialog",
+        "focus": "关闭导航"
+      },
+      "reverse": "sidebar-help",
+      "final": {
+        "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/skills",
+        "view": "skills",
+        "dialogs": [],
+        "focus": {
+          "id": "sidebar-toggle",
+          "text": ""
+        },
+        "toast": ""
+      }
+    }
+  },
+  {
+    "at": "2026-10-25T05:09:35.978Z",
+    "command": "await p.reload(); await p.waitForFunction(()=>state.connected&&!state.busy); await p.keyboard.press('Tab'); let a=await p.locator(':focus').evaluate(e=>({tag:e.tagName,text:e.textContent,id:e.id})); await p.keyboard.press('Enter'); return {before:a,after:await snap()};",
+    "result": {
+      "before": {
+        "tag": "A",
+        "text": "跳至主要内容",
+        "id": ""
+      },
+      "after": {
+        "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#content",
+        "view": "workbench",
+        "dialogs": [],
+        "focus": {
+          "id": "content",
+          "text": "任务工作台正在读取当前空间的内容…"
+        },
+        "toast": ""
+      }
+    }
+  },
+  {
+    "at": "2026-10-25T05:09:43.778Z",
+    "command": "await p.waitForFunction(()=>!state.busy); await shot('skip-link-resets-route'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#content",
+      "view": "workbench",
+      "dialogs": [],
+      "focus": {
+        "id": "content",
+        "text": "AGENT WORKSPACE任务工作台让目标成为可执行的计划，跟进动作、授权与最终结果。新建任务全部任务6已保存的任务执行中0查看正在执行"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:10:36.099Z",
+    "command": "await p.setViewportSize({width:1440,height:1000}); await go('workflows'); await p.locator('[data-flow-new]').first().click(); await p.locator('#flow-name').fill('评审资料核对流程'); await p.locator('[data-design-field=agent_id]').selectOption(reviewAgent.id); await p.locator('[data-design-field=goal]').fill('请引用发布风险规范中的规则'); await p.locator('#flow-editor-form [type=submit]').click(); await p.locator('#flow-editor-dialog').waitFor({state:'hidden'}); global.reviewFlow=await p.evaluate(()=>state.flows.workflows.find(w=>w.name==='评审资料核对流程')); await p.locator('[data-start-flow=\"'+reviewFlow.id+'\"]').click(); await shot('flow-run-review'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/workflows",
+      "view": "workflows",
+      "dialogs": [
+        {
+          "id": "flow-start-dialog",
+          "text": "运行工作流\n×\n评审资料核对流程 v1\n\n确认输入与许可后创建运行。每个节点使用已审查的 Agent 版本。\n\n检查 1 个执行节点\n\n此流程只读取当前空间的资料，无需填写变更标识或授予草稿写入权限。\n\n模拟故障注入\n取消\n创建运行并执行"
+        }
+      ],
+      "focus": {
+        "id": "",
+        "text": "×"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:10:44.867Z",
+    "command": "await p.locator('#flow-start-form [type=submit]').click(); await p.locator('#flow-start-dialog').waitFor({state:'hidden'}); await p.waitForFunction(id=>state.flows.runs.some(r=>r.workflow_id===id&&r.status==='SUCCEEDED'),reviewFlow.id); global.reviewFlowRun=await p.evaluate(id=>state.flows.runs.find(r=>r.workflow_id===id),reviewFlow.id); await p.locator('[data-select-flow-run=\"'+reviewFlowRun.id+'\"]').click(); await shot('review-flow-result'); return await p.locator('#flow-run-detail').innerText();",
+    "error": "locator.click: Error: strict mode violation: locator('[data-select-flow-run=\"flowrun-3cf1c4284b46180bfdd1fff0\"]') resolved to 2 elements:\n    1) <button class=\"button secondary\" data-select-flow-run=\"flowrun-3cf1c4284b46180bfdd1fff0\">查看本次运行</button> aka getByRole('button', { name: '查看本次运行' })\n    2) <button aria-current=\"true\" class=\"flow-run-row selected\" aria-label=\"查看 评审资料核对流程 的运行，已完成\" data-select-flow-run=\"flowrun-3cf1c4284b46180bfdd1fff0\">…</button> aka getByRole('button', { name: '查看 评审资料核对流程 的运行，已完成' })\n\nCall log:\n\u001b[2m  - waiting for locator('[data-select-flow-run=\"flowrun-3cf1c4284b46180bfdd1fff0\"]')\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:11:26.877Z",
+    "command": "return 'ready';",
+    "result": "ready"
+  },
+  {
+    "at": "2026-10-25T05:11:42.236Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-skill-batch.js','utf8'));",
+    "result": {
+      "flow": "flowrun-3cf1c4284b46180bfdd1fff0",
+      "skill": {
+        "id": "skill-a8b41a4aaf7548c6",
+        "name": "review-source-guide",
+        "revision": 1,
+        "version": 1,
+        "status": "DRAFT",
+        "archived": false,
+        "builtin": false,
+        "metadata": {
+          "description": "说明此技能的用途，以及应在何时使用。",
+          "name": "review-source-guide"
+        },
+        "hash": "7bf5b7022e9ae25fe4443f7fb9161894db2d575d239e26c2157cbca4f0a6a4c6",
+        "versions": [
+          {
+            "version": 1,
+            "status": "DRAFT",
+            "hash": "7bf5b7022e9ae25fe4443f7fb9161894db2d575d239e26c2157cbca4f0a6a4c6",
+            "created": 1792905102.06367,
+            "metadata": {
+              "description": "说明此技能的用途，以及应在何时使用。",
+              "name": "review-source-guide"
+            }
+          }
+        ],
+        "files": [
+          {
+            "path": "SKILL.md",
+            "size": 385,
+            "hash": "862159223febc04da4454b51e5f625b09fcba0c574dd5f69b18c0a6603974718",
+            "encoding": "utf-8"
+          },
+          {
+            "path": "references/checks.md",
+            "size": 48,
+            "hash": "9f73b4e60ef36d8888f4968fa1be4069aaabb7222e9001fc99eec7ca44787b34",
+            "encoding": "utf-8"
+          }
+        ],
+        "package": {
+          "body": "# 使用方法\n\n填写能改善 Agent 工作方式的指导。将详细资料放入 references/，并在需要时通过相对路径引用。\n---\nname: review-source-guide\ndescription: 核对资料来源与引用范围。\n---\n\n# 核对方法\n逐条核对来源是否支持结论。",
+          "files": {
+            "SKILL.md": {
+              "content": "---\nname: review-source-guide\ndescription: \"说明此技能的用途，以及应在何时使用。\"\n---\n\n# 使用方法\n\n填写能改善 Agent 工作方式的指导。将详细资料放入 references/，并在需要时通过相对路径引用。\n---\nname: review-source-guide\ndescription: 核对资料来源与引用范围。\n---\n\n# 核对方法\n逐条核对来源是否支持结论。",
+              "encoding": "utf-8",
+              "hash": "862159223febc04da4454b51e5f625b09fcba0c574dd5f69b18c0a6603974718",
+              "size": 385
+            },
+            "references/checks.md": {
+              "content": "# 检查清单\n核对来源范围与有效期。",
+              "encoding": "utf-8",
+              "hash": "9f73b4e60ef36d8888f4968fa1be4069aaabb7222e9001fc99eec7ca44787b34",
+              "size": 48
+            }
+          },
+          "format": "agent-skills@1",
+          "hash": "7bf5b7022e9ae25fe4443f7fb9161894db2d575d239e26c2157cbca4f0a6a4c6",
+          "metadata": {
+            "description": "说明此技能的用途，以及应在何时使用。",
+            "name": "review-source-guide"
+          },
+          "name": "review-source-guide"
+        },
+        "warnings": []
+      }
+    }
+  },
+  {
+    "at": "2026-10-25T05:11:56.962Z",
+    "command": "await p.locator('#skill-editor-dialog [data-close]').last().click(); const card=p.locator('#skill-card-'+reviewSkill.id); await card.locator('summary').click(); const d=p.waitForEvent('download'); await card.getByRole('link',{name:'导出 ZIP'}).click(); const zip=await d; await zip.saveAs(out+'/review-skill.zip'); await card.locator('[data-skill-operation=withdraw]').click(); await p.locator('#confirm-submit').click(); await p.locator('#confirm-dialog').waitFor({state:'hidden'}); await shot('review-skill-withdrawn'); return {zip:zip.suggestedFilename(),status:await card.innerText()};",
+    "error": "locator.innerText: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#skill-card-skill-a8b41a4aaf7548c6')\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:12:25.931Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-library-batch.js','utf8'));",
+    "error": "locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-action=learning]')\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:12:40.489Z",
+    "command": "return await p.locator('#run-detail button').evaluateAll(es=>es.map(e=>({text:e.innerText,attrs:[...e.attributes].filter(a=>a.name.startsWith('data-')).map(a=>[a.name,a.value])})));",
+    "result": [
+      {
+        "text": "",
+        "attrs": [
+          [
+            "data-action",
+            "copy-id"
+          ]
+        ]
+      },
+      {
+        "text": "复盘与沉淀",
+        "attrs": [
+          [
+            "data-retrospective",
+            "run-2d54cac982b0403d"
+          ]
+        ]
+      },
+      {
+        "text": "阅读知识回答",
+        "attrs": [
+          [
+            "data-open-run-tab",
+            "report"
+          ]
+        ]
+      },
+      {
+        "text": "执行轨迹",
+        "attrs": [
+          [
+            "data-tab",
+            "trace"
+          ]
+        ]
+      },
+      {
+        "text": "知识回答",
+        "attrs": [
+          [
+            "data-tab",
+            "report"
+          ]
+        ]
+      },
+      {
+        "text": "证据与验收",
+        "attrs": [
+          [
+            "data-tab",
+            "evidence"
+          ]
+        ]
+      },
+      {
+        "text": "动作提案",
+        "attrs": [
+          [
+            "data-tab",
+            "actions"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "at": "2026-10-25T05:12:51.318Z",
+    "command": "await p.locator('[data-retrospective]').click(); await p.locator('#learning-agent').selectOption(reviewAgent.id); await p.locator('[data-learning-generate]').click(); await p.locator('[data-learning-deposit]').waitFor(); await shot('review-retrospective-review'); await p.locator('[data-learning-deposit]').click(); await p.locator('[data-learning-asset]').first().waitFor(); await shot('review-retrospective-receipt'); await p.locator('[data-learning-asset]').first().click(); return await snap();",
+    "error": "locator.click: Error: strict mode violation: locator('[data-retrospective]') resolved to 7 elements:\n    1) <button aria-label=\"复盘 请引用发布风险规范中的规则\" data-retrospective=\"run-20f2d3ceebfa738b\" class=\"button secondary run-review-button\">复盘</button> aka getByRole('button', { name: '复盘 请引用发布风险规范中的规则' })\n    2) <button aria-label=\"复盘 请引用发布风险规范中的风险规则。\" data-retrospective=\"run-2d54cac982b0403d\" class=\"button secondary run-review-button\">复盘</button> aka getByRole('button', { name: '复盘 请引用发布风险规范中的风险规则。' })\n    3) <button aria-label=\"复盘 验收失败执行的告警与证据回跳\" data-retrospective=\"run-e535fc248e5949c9\" class=\"button secondary run-review-button\">复盘</button> aka getByRole('button', { name: '复盘 验收失败执行的告警与证据回跳' })\n    4) <button aria-label=\"复盘 每日核对发布风险并创建评估草稿\" class=\"button secondary run-review-button\" data-retrospective=\"run-daily-bf4e53fd36c7003bed2fca6e\">复盘</button> aka getByRole('button', { name: '复盘 每日核对发布风险并创建评估草稿' })\n    5) <button aria-label=\"复盘 评估变更风险并创建评估草稿\" data-retrospective=\"run-b624076b59a25395\" class=\"button secondary run-review-button\">复盘</button> aka getByRole('button', { name: '复盘 评估变更风险并创建评估草稿' })\n    6) <button aria-label=\"复盘 发布风险规范中的风险规则是什么？请引用来源。\" data-retrospective=\"run-56ed8ca417994958\" class=\"button secondary run-review-button\">复盘</button> aka getByRole('button', { name: '复盘 发布风险规范中的风险规则是什么？请引用来源。' })\n    7) <button class=\"button secondary\" data-retrospective=\"run-2d54cac982b0403d\">…</button> aka getByRole('button', { name: '复盘与沉淀' })\n\nCall log:\n\u001b[2m  - waiting for locator('[data-retrospective]')\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:12:58.724Z",
+    "command": "await p.locator('#run-detail [data-retrospective]').click(); await p.locator('#learning-agent').selectOption(reviewAgent.id); await p.locator('[data-learning-generate]').click(); await p.locator('[data-learning-deposit]').waitFor(); await shot('review-retrospective-review'); await p.locator('[data-learning-deposit]').click(); await p.locator('[data-learning-asset]').first().waitFor(); await shot('review-retrospective-receipt'); await p.locator('[data-learning-asset]').first().click(); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/workbench/run-2d54cac982b0403d",
+      "view": "workbench",
+      "dialogs": [],
+      "focus": {
+        "id": "",
+        "text": "复盘与沉淀"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:13:08.622Z",
+    "command": "await p.waitForFunction(()=>state.view==='library'&&!state.busy); await shot('review-retrospective-return'); await p.locator('#hub-tab-ontology').click(); await p.locator('[data-new-ontology]').first().click(); await p.locator('#learning-agent').selectOption(reviewAgent.id); await p.locator('[data-ontology-source][value=\"'+reviewAsset.ref+'\"]').check(); await p.locator('[data-learning-generate]').click(); await p.locator('[data-learning-deposit]').waitFor(); await shot('review-ontology-editor'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/library",
+      "view": "library",
+      "dialogs": [
+        {
+          "id": "learning-dialog",
+          "text": "生成领域本体\n建议待审阅\n逐项核对内容与引用；保存不代表发布，也不改变工具权限。\n本体名称\n领域说明\n评审资料有效期规则\n概念与属性 · 1\n添加概念\n评审资料有效期规则 · 1 个属性\nconcept-1\n删除概念及关联关系\n概念名称\n定义\n别名（每行一条）\n依据来源\nasset-716358c059a94d8b@1\n属性\n添加属性\n属性名称\n类型\nstring\nnumber\nboolean\ndate\n说明\n删除属性\n概念关系 · 0\n添加关系\n\n没有已确认的关系。可选择两个概念添加，不会根据共现自动推断关系。\n\n业务对象模型\n\n类型描述结构，实例记录事实；动作仅映射已登记能力，执行仍通过任务授权。\n\n校验模型与实例\n\n编辑后可校验。保存与发布也会校验全部约束。\n\n对象类型 · 0\n添加对象类型\n关系类型 · 0\n对象实例 · 0\n实例关系 · 0\n登记能力映射 · 0\n生成信息与冻结来源\n返回\n重新读取已存提案\n保存审阅\n保存本体草稿"
+        }
+      ],
+      "focus": {
+        "id": "learning-title",
+        "text": "生成领域本体"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:13:24.374Z",
+    "command": "await p.locator('[data-concept-add]').click(); await p.locator('[data-concept-remove]').last().click(); await p.locator('[data-property-add]').first().click(); await p.locator('[data-property-remove]').last().click(); await p.locator('[data-learning-deposit]').click(); await p.locator('[data-learning-asset]').first().waitFor(); const ref=await p.locator('[data-learning-asset]').first().getAttribute('data-learning-asset'); await p.locator('[data-learning-asset]').first().click(); await p.waitForFunction(()=>state.view==='library'&&!document.querySelector('#learning-dialog[open]')); global.reviewOntology=ref; return {ref,view:await snap()};",
+    "error": "locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-concept-remove]').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-concept-remove=\"1\" class=\"text-button danger-text\">删除概念及关联关系</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    10 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:13:44.556Z",
+    "command": "await p.locator('.learning-ontology-concepts details').last().locator('summary').click(); await p.locator('[data-concept-remove]').last().click(); await p.locator('[data-property-add]').first().click(); await p.locator('[data-property-remove]').last().click(); await p.locator('[data-learning-deposit]').click(); await p.locator('[data-learning-asset]').first().waitFor(); global.reviewOntology=await p.locator('[data-learning-asset]').first().getAttribute('data-learning-asset'); await p.locator('[data-learning-asset]').first().click(); await p.waitForFunction(()=>state.view==='library'&&!document.querySelector('#learning-dialog[open]')); return {ref:reviewOntology,view:await snap()};",
+    "result": {
+      "ref": "learned-712c8268bc8779f4eff2379b@1",
+      "view": {
+        "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/library",
+        "view": "library",
+        "dialogs": [],
+        "focus": {
+          "id": "",
+          "text": "查看本体 · 资料领域本体"
+        },
+        "toast": ""
+      }
+    }
+  },
+  {
+    "at": "2026-10-25T05:13:56.395Z",
+    "command": "for(const op of ['review','publish']){await p.locator('[data-asset-op='+op+'][data-ref=\"'+reviewOntology+'\"]').first().click();await p.locator('[data-asset-op='+(op==='review'?'publish':'withdraw')+'][data-ref=\"'+reviewOntology+'\"]').first().waitFor();} await p.locator('[data-ontology-explore=\"'+fixture.ontologyRef+'\"]').click(); await p.locator('#ontology-explorer[open]').waitFor(); await shot('review-ontology-explorer'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/library",
+      "view": "library",
+      "dialogs": [
+        {
+          "id": "ontology-explorer",
+          "text": "业务对象浏览\n\n当前已发布本体的结构化对象与来源。对象类型和动作映射不会扩大 Agent 的执行范围。\n\n对象类型\n全部类型\n搜索对象属性\n\n显示 0 / 0 个对象\n\n没有匹配的对象实例。可在本体编辑中添加并校验实例，再审核发布。\n\n关闭"
+        }
+      ],
+      "focus": {
+        "id": "ontology-object-filter",
+        "text": "全部类型"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:14:40.451Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-operations-batch.js','utf8'));",
+    "error": "locator.waitFor: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-dispatch-plan]').first() to be visible\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:14:53.028Z",
+    "command": "await shot('review-daily-after-generate'); return {snapshot:await snap(),text:await p.locator('#content').innerText()};",
+    "result": {
+      "snapshot": {
+        "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/daily",
+        "view": "daily",
+        "dialogs": [],
+        "focus": {
+          "id": "",
+          "text": "\n跳至主要内容\n\n  Agent Framework智能体工作空间\n  当前工作空间默认工作空间UI95 模块动线 mvnczczf独立评审"
+        },
+        "toast": "今日计划已汇总，可审查后派发"
+      },
+      "text": "每日任务\n\n汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。\n\n计划设置\n生成今日计划\n每日计划尚未开启\n\n每天 09:00 · Asia/Shanghai · 2 项任务模板\n\n派发为待启动任务，可在工作台逐项启动\n\n手动使用\n\n定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。\n\n2026-10-25 Asia/Shanghai\n\n待派发 0 项 · 已派发 1 项 · 受阻 0 项 · 复用待办 0 项\n\n已派发\n每日核对发布风险并创建评估草稿\n\n界面验收助手 · 固定 v1 · 已授予草稿创建权限\n\n已完成\n查看任务\n配置 v1 · 10/25 12:59\n配置已更新；已派发计划保持冻结，未派发预览可重新生成。"
+    }
+  },
+  {
+    "at": "2026-10-25T05:15:08.128Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-policy-batch.js','utf8'));",
+    "result": {
+      "returnState": {
+        "open": false,
+        "focus": "run-detail",
+        "detail": true
+      },
+      "controls": {
+        "busy": "true",
+        "editable": []
+      },
+      "stillOpen": "",
+      "recovered": {
+        "disabled": false,
+        "value": "91"
+      }
+    }
+  },
+  {
+    "at": "2026-10-25T05:15:15.606Z",
+    "command": "await go('skills'); await p.keyboard.press('Tab'); const link=await p.locator(':focus').innerText(); await p.keyboard.press('Enter'); await shot('skip-link-route-preserved'); return {link,after:await snap()};",
+    "result": {
+      "link": "跳至主要内容",
+      "after": {
+        "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/skills",
+        "view": "skills",
+        "dialogs": [],
+        "focus": {
+          "id": "content",
+          "text": "AGENT SKILLS技能 Skills把可复用的方法整理为标准包，为 Agent 选择合适的工作方式。导入 ZIP创建 Skill3 自"
+        },
+        "toast": ""
+      }
+    }
+  },
+  {
+    "at": "2026-10-25T05:16:00.491Z",
+    "command": "await go('workspaces'); await p.locator('[data-action=new-workspace]').first().click(); await p.locator('#workspace-name').fill('独立评审每日受阻 '+Date.now()); await p.locator('#workspace-business').fill('隔离界面验证'); await p.locator('#workspace-scenario').fill('模拟任务'); const req=p.waitForResponse(r=>r.url().endsWith('/api/workspaces')&&r.request().method()==='POST'); await p.locator('#workspace-save').click(); global.dailySpace=await(await req).json(); await p.locator('#workspace-dialog').waitFor({state:'hidden'}); await p.locator('#workspace-feedback [data-switch-workspace]').click(); await p.waitForFunction(id=>state.workspaceId===id&&state.connected&&!state.busy,dailySpace.id); return dailySpace;",
+    "result": {
+      "business": "隔离界面验证",
+      "description": "",
+      "name": "独立评审每日受阻 1792905360218",
+      "scenario": "模拟任务",
+      "id": "workspace-81ebdac12dd34a17",
+      "revision": 1,
+      "project_id": "project-9e72464ceda6411c",
+      "deleted": false,
+      "created_at": 1792905360.247234,
+      "updated_at": 1792905360.247234
+    }
+  },
+  {
+    "at": "2026-10-25T05:16:20.653Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-daily-blocked.js','utf8'));",
+    "result": {
+      "space": "workspace-81ebdac12dd34a17",
+      "text": "每日任务\n\n汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。\n\n计划设置\n生成今日计划\n每日计划尚未开启\n\n每天 09:00 · Asia/Shanghai · 1 项任务模板\n\n派发为待启动任务，可在工作台逐项启动\n\n手动使用\n\n定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。\n\n2026-10-25 Asia/Shanghai\n\n待派发 0 项 · 已派发 0 项 · 受阻 1 项 · 复用待办 0 项\n\n部分阻塞\n评审每日受阻的恢复路径\n\n每日受阻评审助手 · 固定 v1 · 业务写入需逐项授权\n\n每日任务的 Agent 已归档\n\n受阻\n配置 v1 · 10/25 13:16\n\n请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+      "buttons": [
+        "计划设置",
+        "生成今日计划",
+        "调整计划设置"
+      ]
+    }
+  },
+  {
+    "at": "2026-10-25T05:16:38.922Z",
+    "command": "await p.getByRole('button',{name:'调整计划设置'}).scrollIntoViewIfNeeded(); await shot('daily-blocked-mobile-320-recovery'); await p.setViewportSize({width:375,height:812}); await p.locator('#appearance-select').selectOption('dark'); await shot('daily-blocked-mobile-375-dark-recovery'); await p.getByRole('button',{name:'调整计划设置'}).click(); await shot('daily-blocked-recovery-settings-mobile'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-81ebdac12dd34a17#/daily",
+      "view": "daily",
+      "dialogs": [
+        {
+          "id": "operations-dialog",
+          "text": "每日计划设置\n\n每天汇总当前空间待办，并将以下任务派发给指定版本的 Agent。\n\n每日执行时间必填\n时区必填\n开启每日定时汇总与派发\n本地服务需保持运行；关闭后停止未来派发。\n派发后自动启动任务\n未选中时，任务进入工作台，等待手动启动。\n每日任务模板\n添加任务\n任务 1\n执行 Agent必填\n原固定版本 v1 已变化，请重新选择\n删除\n每日目标必填\n变更 / 对象标识必填\n允许此模板每日任务创建模拟草稿\n限当前空间、指定对象与 test 环境。只读岗位无需选择。\n允许真实模型接收任务、证据、范围内知识与本人记忆\n仅真实模型 Agent 需要；使用所选 CLI 的模型服务和登录态。\n允许该 Agent 的受控 MCP 读取\n仅配置了受控读取能力的 Agent 需要。\n\nAgent 编辑后需重新选择并保存版本。相同目标已有未完成任务时会跳过新建。每项许可适用于此模板的后续每日执行。\n\n取消\n保存计划设置"
+        }
+      ],
+      "focus": {
+        "id": "",
+        "text": ""
+      },
+      "toast": "今日任务已核对派发"
+    }
+  },
+  {
+    "at": "2026-10-25T05:17:04.547Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-daily-restore.js','utf8'));",
+    "error": "locator.waitFor: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#operations-dialog') to be hidden\u001b[22m\n\u001b[2m    - locator resolved to visible <dialog open=\"\" data-saving=\"true\" id=\"operations-dialog\" class=\"structured-dialog\" aria-labelledby=\"operations-dialog-title\">…</dialog>\u001b[22m\n\u001b[2m    13 × locator resolved to visible <dialog open=\"\" data-saving=\"false\" id=\"operations-dialog\" class=\"structured-dialog\" aria-labelledby=\"operations-dialog-title\">…</dialog>\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:17:16.871Z",
+    "command": "return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-81ebdac12dd34a17#/daily",
+      "view": "daily",
+      "dialogs": [
+        {
+          "id": "operations-dialog",
+          "text": "每日计划设置\n\n每天汇总当前空间待办，并将以下任务派发给指定版本的 Agent。\n\n每日执行时间必填\n时区必填\n开启每日定时汇总与派发\n本地服务需保持运行；关闭后停止未来派发。\n派发后自动启动任务\n未选中时，任务进入工作台，等待手动启动。\n每日任务模板\n添加任务\n任务 1\n执行 Agent必填\n原固定版本 v1 已变化，请重新选择\n每日受阻评审助手 · v3 · Mock\n删除\n每日目标必填\n变更 / 对象标识必填\n允许此模板每日任务创建模拟草稿\n限当前空间、指定对象与 test 环境。只读岗位无需选择。\n允许真实模型接收任务、证据、范围内知识与本人记忆\n仅真实模型 Agent 需要；使用所选 CLI 的模型服务和登录态。\n允许该 Agent 的受控 MCP 读取\n仅配置了受控读取能力的 Agent 需要。\n\nAgent 编辑后需重新选择并保存版本。相同目标已有未完成任务时会跳过新建。每项许可适用于此模板的后续每日执行。\n\n每日任务的 Agent 版本已变化，请重新选择并保存\n\n取消\n保存计划设置"
+        }
+      ],
+      "focus": {
+        "id": "operations-error",
+        "text": "每日任务的 Agent 版本已变化，请重新选择并保存"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:17:30.704Z",
+    "command": "await p.locator('[data-task-field=agent_id]').selectOption({label:'每日受阻评审助手 · v3 · Mock'}); const consent=await p.locator('[data-task-field=grant]').isChecked(); await p.locator('[data-task-field=grant]').check(); await p.locator('#operations-form [type=submit]').click(); await p.locator('#operations-dialog').waitFor({state:'hidden'}); await p.locator('[data-operation=plan-generate]').click(); await p.locator('[data-dispatch-plan]').first().click(); await p.locator('.operations-items a[href*=\"/workbench/run-\"]').first().waitFor(); await shot('daily-recovered-dispatched-mobile'); return {consent,text:await p.locator('#content').innerText()};",
+    "result": {
+      "consent": false,
+      "text": "每日任务\n\n汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。\n\n计划设置\n生成今日计划\n每日计划尚未开启\n\n每天 09:00 · Asia/Shanghai · 1 项任务模板\n\n派发为待启动任务，可在工作台逐项启动\n\n手动使用\n\n定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。\n\n2026-10-25 Asia/Shanghai\n\n待派发 0 项 · 已派发 1 项 · 受阻 0 项 · 复用待办 0 项\n\n已派发\n评审每日受阻的恢复路径\n\n每日受阻评审助手 · 固定 v3 · 已授予草稿创建权限\n\n待启动\n查看任务\n配置 v2 · 10/25 13:17\n核对已派发任务"
+    }
+  },
+  {
+    "at": "2026-10-25T05:18:12.500Z",
+    "command": "await go('workflows'); await p.locator('[data-flow-new]').first().click(); await p.locator('[data-add-flow-node]').focus(); await p.keyboard.press('Enter'); const after=await p.locator(':focus').evaluate(e=>({tag:e.tagName,id:e.id,role:e.getAttribute('role'),label:e.getAttribute('aria-label'),text:e.textContent.slice(0,100)})); await p.keyboard.press('Tab'); const next=await p.locator(':focus').evaluate(e=>({tag:e.tagName,id:e.id,label:e.getAttribute('aria-label'),text:e.textContent.slice(0,100)})); await shot('workflow-keyboard-add-node'); return {after,next};",
+    "result": {
+      "after": {
+        "tag": "INPUT",
+        "id": "",
+        "role": null,
+        "label": null,
+        "text": ""
+      },
+      "next": {
+        "tag": "SELECT",
+        "id": "",
+        "label": null,
+        "text": "每日受阻评审助手 · v3"
+      }
+    }
+  },
+  {
+    "at": "2026-10-25T05:18:24.591Z",
+    "command": "await go('skills'); await p.locator('[data-skill-new]').first().click(); await p.locator('#skill-folder').fill('review-replace-check'); await p.locator('#skill-folder').press('Tab'); await p.locator('#skill-file-content').click(); await p.keyboard.press('Meta+a'); await p.keyboard.insertText('---\\nname: review-replace-check\\ndescription: 独立替换检查。\\n---\\n\\n# 方法\\n核对来源。'); const val=await p.locator('#skill-file-content').inputValue(); await p.locator('#skill-new-path').fill('references/check.md'); await p.locator('[data-skill-add-file]').click(); await p.locator('[data-skill-file=\"SKILL.md\"]').click(); return {nativeValue:val,retained:await p.locator('#skill-file-content').inputValue()};",
+    "result": {
+      "nativeValue": "---\nname: review-replace-check\ndescription: 独立替换检查。\n---\n\n# 方法\n核对来源。",
+      "retained": "---\nname: review-replace-check\ndescription: 独立替换检查。\n---\n\n# 方法\n核对来源。"
+    }
+  },
+  {
+    "at": "2026-10-25T05:18:42.616Z",
+    "command": "fixture=origFixture; await go('runtimes'); return await p.locator('#content').innerText();",
+    "result": "运行时配置\n\n为规划与动作提案选择运行时，此设备上的运行时配置由所有工作空间共用。\n\n配置版本 0\n模拟运行时\n默认\n内置，无需安装\nCodex CLI\n已发现本机命令\nCursor CLI\n已发现本机命令\n配置只用于后续新任务。已有任务恢复时使用提交时冻结的运行时、模型与策略。\nCodex CLI\n\n业务工具、写入授权与验收规则继续由本地运行时管理。\n\n检测 CLI\nCodex 配置\n模型 ID\n请选择 CLI 模型\nGPT-6.1-Sol · gpt-6.1-sol\nGPT-6-Astra · gpt-6-astra\nGPT-6-Sol · gpt-6-sol\nGPT-6-Luna · gpt-6-luna\nGPT-5.6-Sol · gpt-5.6-sol\nGPT-5.6-Terra · gpt-5.6-terra\nGPT-5.6-Luna · gpt-5.6-luna\n刷新模型\n\n来源：codex app-server model/list · 7 个模型 · 缓存目录\n\n单次模型超时（秒）\n结构化输出修复上限\n1 次\n2 次\n3 次\n推理强度\nlow\nmedium\nhigh\nxhigh\nmax\nultra\n使用本机 Codex CLI 登录态\n\n在终端执行 codex login 完成登录；界面不保存密钥。提交真实模型任务时仍需确认上下文发送许可。\n\n新任务默认运行时\n模拟运行时\nCodex CLI\nCursor CLI\n\n新建任务时仍可单独切换。保存配置不会触发模型调用。\n\n重新加载\n基于此运行时创建 Agent\n保存配置"
+  },
+  {
+    "at": "2026-10-25T05:19:48.749Z",
+    "command": "await p.setViewportSize({width:1440,height:1000}); await go('runtimes'); return await p.locator('#content button').evaluateAll(es=>es.map(e=>({text:e.innerText,id:e.id,attrs:[...e.attributes].filter(a=>a.name.startsWith('data-')).map(a=>[a.name,a.value])})));",
+    "result": [
+      {
+        "text": "模拟运行时\n默认\n确定性规划，离线演示与故障回归\n内置，无需安装",
+        "id": "",
+        "attrs": [
+          [
+            "data-provider",
+            "mock"
+          ]
+        ]
+      },
+      {
+        "text": "Codex CLI\n使用本机 Codex 登录态和结构化输出\n已发现本机命令",
+        "id": "",
+        "attrs": [
+          [
+            "data-provider",
+            "codex"
+          ]
+        ]
+      },
+      {
+        "text": "Cursor CLI\n使用 Cursor Ask 模式和受限工具权限\n已发现本机命令",
+        "id": "",
+        "attrs": [
+          [
+            "data-provider",
+            "cursor"
+          ]
+        ]
+      },
+      {
+        "text": "检测 CLI",
+        "id": "",
+        "attrs": [
+          [
+            "data-action",
+            "detect-runtime"
+          ]
+        ]
+      },
+      {
+        "text": "刷新模型",
+        "id": "",
+        "attrs": [
+          [
+            "data-action",
+            "reload-models"
+          ],
+          [
+            "data-model-target",
+            "codex"
+          ]
+        ]
+      },
+      {
+        "text": "刷新模型",
+        "id": "",
+        "attrs": [
+          [
+            "data-action",
+            "reload-models"
+          ],
+          [
+            "data-model-target",
+            "cursor"
+          ]
+        ]
+      },
+      {
+        "text": "重新加载",
+        "id": "",
+        "attrs": [
+          [
+            "data-action",
+            "reload-runtime"
+          ]
+        ]
+      },
+      {
+        "text": "基于此运行时创建 Agent",
+        "id": "",
+        "attrs": [
+          [
+            "data-action",
+            "runtime-create-agent"
+          ]
+        ]
+      },
+      {
+        "text": "保存配置",
+        "id": "runtime-save",
+        "attrs": []
+      }
+    ]
+  },
+  {
+    "at": "2026-10-25T05:19:57.126Z",
+    "command": "await p.locator('[data-provider=mock]').click(); await p.locator('#runtime-save').click(); await p.waitForFunction(()=>!state.runtimeSaving); await shot('runtime-mock-saved'); await p.locator('[data-action=runtime-create-agent]').click(); await p.locator('#agent-dialog[open]').waitFor(); const runtime=await p.locator('#agent-runtime').inputValue(); await shot('runtime-create-agent-next-step'); return {runtime,snap:await snap()};",
+    "result": {
+      "runtime": "mock",
+      "snap": {
+        "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/runtimes",
+        "view": "runtimes",
+        "dialogs": [
+          {
+            "id": "agent-dialog",
+            "text": "创建智能体\n×\n\n选择业务领域，配置模型与指令，确认后即可创建。\n\n第 1 / 3 步 · 2 项已就绪\n1. 基本信息\n待配置\n2. 模型与指令\n已就绪\n3. 确认创建\n已就绪\n先选一个起点\n查资料、回答问题\n依据知识库作答，并核对来源。\n评估变更、生成草稿\n核对风险证据，按授权创建草稿。\n智能体名称\n0 / 80\n角色与业务领域\n处理领域\n＋ 新建领域\n变更评估\n知识问答\n变更评估\n\n选择已有领域，或在这里创建适合业务的新领域。 · 工作方式：变更评估与草稿创建\n\n补充用途与岗位\n选填，已提供默认岗位\n\n下一步：请检查智能体名称：请填写此字段。\n\n下一步\n取消"
+          }
+        ],
+        "focus": {
+          "id": "agent-name",
+          "text": ""
+        },
+        "toast": ""
+      }
+    }
+  },
+  {
+    "at": "2026-10-25T05:20:14.747Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-workspace-lifecycle.js','utf8'));",
+    "result": {
+      "id": "workspace-f18834fb84c04066",
+      "current": "workspace-fa7a3aad24654815",
+      "description": "编辑说明，检查保存、删除和恢复。"
+    }
+  },
+  {
+    "at": "2026-10-25T05:20:48.099Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-contrast-batch.js','utf8'));",
+    "result": {
+      "samples": 1880,
+      "violations": []
+    }
+  },
+  {
+    "at": "2026-10-25T05:22:04.237Z",
+    "command": "await go('skills'); await p.locator('#skill-zip-upload').setInputFiles(out+'/review-skill.zip'); await p.locator('#skill-editor-dialog[open]').waitFor(); await shot('skill-zip-import-preview'); return {folder:await p.locator('#skill-folder').inputValue(),files:await p.locator('#skill-file-list').innerText()};",
+    "error": "locator.waitFor: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#skill-editor-dialog[open]') to be visible\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:22:16.256Z",
+    "command": "return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/skills",
+      "view": "skills",
+      "dialogs": [],
+      "focus": {
+        "id": "",
+        "text": "\n跳至主要内容\n\n  Agent Framework智能体工作空间\n  当前工作空间默认工作空间UI95 模块动线 mvnczczf独立评审"
+      },
+      "toast": "当前空间已有同名 Skill"
+    }
+  },
+  {
+    "at": "2026-10-25T05:22:26.782Z",
+    "command": "fixture={...origFixture,workspaceId:dailySpace.id}; await go('skills'); await p.locator('#skill-zip-upload').setInputFiles(out+'/review-skill.zip'); await p.locator('#skill-editor-dialog[open]').waitFor(); await shot('skill-zip-import-preview'); const result={folder:await p.locator('#skill-folder').inputValue(),files:await p.locator('#skill-file-list').innerText()}; fixture=origFixture; return result;",
+    "result": {
+      "folder": "review-source-guide",
+      "files": "SKILL.md\nreferences/checks.md"
+    }
+  },
+  {
+    "at": "2026-10-25T05:22:35.731Z",
+    "command": "await go('workflows'); await p.locator('[data-flow-chat]').first().click(); await p.locator('#flow-chat-agent').selectOption(reviewAgent.id); await p.locator('#flow-chat-message').fill('先让资料验收助手检索资料，再让界面验收助手完成变更评估并创建草稿。'); await p.locator('#flow-chat-send').click(); await p.locator('[data-adopt-flow]').waitFor(); await shot('review-workflow-proposal'); await p.locator('[data-adopt-flow]').click(); await p.locator('#flow-editor-dialog[open]').waitFor(); await shot('review-workflow-proposal-review'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/workflows",
+      "view": "workflows",
+      "dialogs": [
+        {
+          "id": "flow-editor-dialog",
+          "text": "审查工作流提案\n×\n基本信息 · Agent 协作流程\n流程名称\n说明\n流程画布\n点击节点配置 · 点击输出端口，再点目标输入端口连线\n适应画布\nRAG 模板\n＋ Agent 节点\n添加互斥分支\n−\n100%\n＋\n定位\n整理\n拖动手柄移动节点 · 空白处拖动平移 · 布局仅保存在此浏览器\n画布\n节点配置\n2 个节点 · 检索知识 → Agent 执行 → 独立验收\n验收后\n＋\n01 / Agent 执行\n资料验收助手\n资料验收助手 · v2\n接收流程输入\n→\n＋\n02 / Agent 执行\n界面验收助手\n界面验收助手 · v1\n1 条输入 · 全部成功后继续\n→\n\n2. 选择节点编辑属性；拖动节点右上角手柄调整布局，空白处拖动平移。保存后可创建运行。\n\n取消\n保存工作流"
+        }
+      ],
+      "focus": {
+        "id": "flow-canvas-region",
+        "text": "2 个节点 · 检索知识 → Agent 执行 → 独立验收验收后＋01 / Agent 执行资料验收助手资料验收助手 · v2接收流程输入"
+      },
+      "toast": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:22:45.963Z",
+    "command": "await go('agents'); await p.locator('[data-agent-new-task=\"'+fixture.agentId+'\"]').click(); await p.locator('#task-goal').fill('返回配置后保留这段任务目标'); await p.locator('#task-next').click(); await p.locator('[data-action=open-runtime-config]').click(); await p.locator('#agent-dialog[open]').waitFor(); await p.locator('#agent-dialog [data-close]').last().click(); await p.locator('[data-action=return-task-draft]').click(); await p.locator('#create-dialog[open]').waitFor(); await shot('task-config-roundtrip-preserved'); return {goal:await p.locator('#task-goal').inputValue(),grant:await p.locator('#create-form [name=grant]').isChecked(),state:await snap()};",
+    "error": "locator.click: Error: strict mode violation: locator('[data-action=open-runtime-config]') resolved to 2 elements:\n    1) <button type=\"button\" class=\"text-button\" data-action=\"open-runtime-config\">查看或调整智能体配置</button> aka getByRole('button', { name: '查看或调整智能体配置' })\n    2) <a href=\"#/agents\" data-action=\"open-runtime-config\">查看 Agent 配置</a> aka getByText('查看 Agent 配置')\n\nCall log:\n\u001b[2m  - waiting for locator('[data-action=open-runtime-config]')\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:22:53.150Z",
+    "command": "await p.locator('#task-agent-execution [data-action=open-runtime-config]').click(); await p.locator('#agent-dialog[open]').waitFor(); await p.locator('#agent-dialog [data-close]').last().click(); await p.locator('[data-action=return-task-draft]').click(); await p.locator('#create-dialog[open]').waitFor(); await shot('task-config-roundtrip-preserved'); return {goal:await p.locator('#task-goal').inputValue(),grant:await p.locator('#create-form [name=grant]').isChecked(),state:await snap()};",
+    "result": {
+      "goal": "返回配置后保留这段任务目标",
+      "grant": false,
+      "state": {
+        "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/agents",
+        "view": "agents",
+        "dialogs": [
+          {
+            "id": "create-dialog",
+            "text": "新建评估任务\n1 · 任务\n2 · 执行\n3 · 审查\n\n第 2 / 3 步 · 执行方式\n\n已更新可用配置，任务说明已保留。请重新审查本次许可。\n\n确认执行方式\n由“界面验收助手”执行\n\n使用内置规划器模拟运行，无需连接模型。 配置已随智能体固定。\n\n查看或调整智能体配置\n模拟场景与恢复演示（可选）\n取消\n上一步\n下一步：审查许可"
+          }
+        ],
+        "focus": {
+          "id": "task-execution",
+          "text": "确认执行方式由“界面验收助手”执行使用内置规划器模拟运行，无需连接模型。 配置已随智能体固定。查看或调整智能体配置目标运行时模拟运行时 · "
+        },
+        "toast": ""
+      }
+    }
+  },
+  {
+    "at": "2026-10-25T05:23:56.871Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-blocked-final.js','utf8'));",
+    "result": {
+      "at": "2026-10-25T05:23:56.871Z",
+      "url": "http://127.0.0.1:8800/?workspace_id=workspace-fe1ff5b539b84368#/daily",
+      "authorization": "父Agent明确授权8800只读保留受阻fixture；与8799同源码",
+      "cssSha256": "de135584ef57d58b0ab9e1e9c84e7e67a1d4e1b5c719b6b3f9dd3e1aad1b93b1",
+      "expected": "de135584ef57d58b0ab9e1e9c84e7e67a1d4e1b5c719b6b3f9dd3e1aad1b93b1",
+      "matches": true,
+      "rows": [
+        {
+          "width": 320,
+          "theme": "light",
+          "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+          "root": 320
+        },
+        {
+          "width": 320,
+          "theme": "dark",
+          "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+          "root": 320
+        },
+        {
+          "width": 375,
+          "theme": "light",
+          "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+          "root": 375
+        },
+        {
+          "width": 375,
+          "theme": "dark",
+          "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+          "root": 375
+        },
+        {
+          "width": 1440,
+          "theme": "light",
+          "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+          "root": 1440
+        },
+        {
+          "width": 1440,
+          "theme": "dark",
+          "text": "请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。\n\n调整计划设置\n检查 Agent",
+          "root": 1440
+        }
+      ]
+    }
+  },
+  {
+    "at": "2026-10-25T05:24:20.741Z",
+    "command": "await p.setViewportSize({width:1440,height:1000}); await go('library'); await p.locator('#hub-tab-ontology').click(); await p.locator('[data-edit-ontology=\"'+reviewOntology+'\"]').click(); await p.locator('[data-model-action=type-add]').click(); await p.locator('.ontology-model-section').filter({hasText:'对象实例 ·'}).locator('summary').click(); await p.locator('[data-model-action=object-add]').click(); await p.locator('[data-model-action=validate]').click(); await shot('ontology-object-validation'); return await p.locator('#ontology-model-validation').innerText();",
+    "result": "1 项约束未通过\n\nobject-d135cc33 · id：缺少必填属性或属性值数量不足 MinCountConstraintComponent"
+  },
+  {
+    "at": "2026-10-25T05:24:34.820Z",
+    "command": "await p.locator('[data-model-object=\"0\"][data-model-value=id]').fill('REVIEW-001'); await p.locator('[data-model-action=validate]').click(); await shot('ontology-object-valid'); const req=p.waitForResponse(r=>r.url().includes('/api/ontologies/')&&r.url().endsWith('/revise')&&r.request().method()==='POST'); await p.locator('[data-ontology-save]').click(); global.reviewOntology2=await(await req).json(); await p.locator('#learning-dialog').waitFor({state:'hidden'}); return {ref:reviewOntology2.ref,copy:await snap()};",
+    "error": "locator.fill: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-model-object=\"0\"][data-model-value=id]')\u001b[22m\n\u001b[2m    - locator resolved to <input value=\"\" type=\"text\" data-model-object=\"0\" data-model-value=\"id\"/>\u001b[22m\n\u001b[2m    - fill(\"REVIEW-001\")\u001b[22m\n\u001b[2m  - attempting fill action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    10 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying fill action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:25:23.419Z",
+    "command": "await p.locator('.ontology-model-section').filter({hasText:'对象实例 ·'}).locator('summary').click(); await p.locator('[data-model-object=\"0\"][data-model-value=id]').fill('REVIEW-001'); await p.locator('[data-model-action=validate]').click(); await shot('ontology-object-valid'); const req=p.waitForResponse(r=>r.url().includes('/api/ontologies/')&&r.url().endsWith('/revise')&&r.request().method()==='POST'); await p.locator('[data-ontology-save]').click(); global.reviewOntology2=await(await req).json(); await p.locator('#learning-dialog').waitFor({state:'hidden'}); return {ref:reviewOntology2.ref,copy:await snap()};",
+    "result": {
+      "ref": "learned-712c8268bc8779f4eff2379b@2",
+      "copy": {
+        "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/library",
+        "view": "library",
+        "dialogs": [],
+        "focus": {
+          "id": "",
+          "text": "\n跳至主要内容\n\n  Agent Framework智能体工作空间\n  当前工作空间默认工作空间UI95 模块动线 mvnczczf独立评审"
+        },
+        "toast": ""
+      }
+    }
+  },
+  {
+    "at": "2026-10-25T05:25:33.198Z",
+    "command": "for(const op of ['review','publish']){await p.locator('[data-asset-op='+op+'][data-ref=\"'+reviewOntology2.ref+'\"]').first().click();await p.locator('[data-asset-op='+(op==='review'?'publish':'withdraw')+'][data-ref=\"'+reviewOntology2.ref+'\"]').first().waitFor();} await p.locator('[data-ontology-explore=\"'+reviewOntology2.ref+'\"]').click(); await p.locator('#ontology-explorer[open]').waitFor(); await shot('ontology-published-object'); return await snap();",
+    "result": {
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/library",
+      "view": "library",
+      "dialogs": [
+        {
+          "id": "ontology-explorer",
+          "text": "业务对象浏览\n\n当前已发布本体的结构化对象与来源。对象类型和动作映射不会扩大 Agent 的执行范围。\n\n对象类型\n全部类型\n评审资料有效期规则对象\n搜索对象属性\n\n显示 1 / 1 个对象\n\nREVIEW-001\n\n评审资料有效期规则对象 · object-d135cc33\n\n业务标识\nREVIEW-001\n\n来源：asset-716358c059a94d8b@1\n\n关闭"
+        }
+      ],
+      "focus": {
+        "id": "ontology-object-filter",
+        "text": "全部类型评审资料有效期规则对象"
+      },
+      "toast": "本体已保存为新版本草稿，审核发布后生效。"
+    }
+  },
+  {
+    "at": "2026-10-25T05:25:47.818Z",
+    "command": "await p.keyboard.press('Escape'); const art=p.locator('[id=\"library-asset-'+reviewOntology2.ref+'\"]'); const down=p.waitForEvent('download'); await art.getByRole('link',{name:'导出 JSON-LD'}).click(); const f=await down; await f.saveAs(out+'/review-ontology.jsonld'); await art.locator('summary').first().click(); await shot('ontology-graph-source'); await art.locator('[data-edit-ontology]').click(); await p.locator('[data-concept-add]').click(); await p.locator('[data-relation-add]').click(); await shot('ontology-relation-fields'); return {download:f.suggestedFilename(),relations:await p.locator('[data-relation-field=predicate] option').allTextContents()};",
+    "result": {
+      "download": "ontology.jsonld",
+      "relations": [
+        "属于 / 上位概念",
+        "组成部分",
+        "相关",
+        "依赖",
+        "产出",
+        "验证"
+      ]
+    }
+  },
+  {
+    "at": "2026-10-25T05:26:39.199Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-agent-advanced.js','utf8'));",
+    "result": {
+      "error": null,
+      "domain": {
+        "description": "核对已发布资料和来源有效期。",
+        "domain_pack_ref": "knowledge-answer@1.0.0",
+        "id": "domain-05f7fc21b3719a4c66739496",
+        "name": "独立来源核对领域",
+        "revision": 1
+      },
+      "nativeReads": [
+        "knowledge.search@1.0.0"
+      ],
+      "consent": "允许启动此 Agent 配置的 MCP 服务并调用白名单工具。\ngoverned [knowledge.search@1.0.0]"
+    }
+  },
+  {
+    "at": "2026-10-25T05:27:11.010Z",
+    "command": "fixture=origFixture; await go('runtimes'); await p.locator('[data-provider=codex]').click(); await p.locator('[data-action=detect-runtime]').click(); await p.locator('[data-action=detect-runtime]').waitFor({state:'visible'}); await p.waitForFunction(()=>!document.querySelector('[data-action=detect-runtime]').disabled); await p.locator('[data-action=reload-models][data-model-target=codex]').click(); await p.waitForFunction(()=>!document.querySelector('[data-action=reload-models][data-model-target=codex]').disabled); await shot('runtime-detect-models'); return {detection:await p.locator('#runtime-detection').innerText(),models:await p.locator('#content').innerText()};",
+    "result": {
+      "detection": "codex-cli 0.162.0 · CLI 检测完成；登录态与模型权限将在执行时确认",
+      "models": "运行时配置\n\n为规划与动作提案选择运行时，此设备上的运行时配置由所有工作空间共用。\n\n配置版本 1\n模拟运行时\n默认\n确定性规划，离线演示与故障回归\n内置，无需安装\nCodex CLI\n使用本机 Codex 登录态和结构化输出\n已发现本机命令\nCursor CLI\n使用 Cursor Ask 模式和受限工具权限\n已发现本机命令\n配置只用于后续新任务。已有任务恢复时使用提交时冻结的运行时、模型与策略。\nCodex CLI\n\n业务工具、写入授权与验收规则继续由本地运行时管理。\n\n检测 CLI\ncodex-cli 0.162.0 · CLI 检测完成；登录态与模型权限将在执行时确认\nCodex 配置\n模型 ID\ngpt-6.1-sol\n刷新模型\n\n正在通过 Codex CLI 获取模型…\n\n单次模型超时（秒）\n结构化输出修复上限\n1 次\n2 次\n3 次\n推理强度\nminimal\nlow\nmedium\nhigh\nxhigh\nmax\n使用本机 Codex CLI 登录态\n\n在终端执行 codex login 完成登录；界面不保存密钥。提交真实模型任务时仍需确认上下文发送许可。\n\n新任务默认运行时\n模拟运行时\nCodex CLI\nCursor CLI\n\n新建任务时仍可单独切换。保存配置不会触发模型调用。\n\n重新加载\n基于此运行时创建 Agent\n保存配置"
+    }
+  },
+  {
+    "at": "2026-10-25T05:27:30.288Z",
+    "command": "await p.waitForFunction(()=>!document.querySelector('#content').innerText.includes('正在通过 Codex CLI 获取模型')); await shot('runtime-detect-models-complete'); return (await p.locator('#content').innerText()).slice(0,1700);",
+    "result": "运行时配置\n\n为规划与动作提案选择运行时，此设备上的运行时配置由所有工作空间共用。\n\n配置版本 1\n模拟运行时\n默认\n确定性规划，离线演示与故障回归\n内置，无需安装\nCodex CLI\n使用本机 Codex 登录态和结构化输出\n已发现本机命令\nCursor CLI\n使用 Cursor Ask 模式和受限工具权限\n已发现本机命令\n配置只用于后续新任务。已有任务恢复时使用提交时冻结的运行时、模型与策略。\nCodex CLI\n\n业务工具、写入授权与验收规则继续由本地运行时管理。\n\n检测 CLI\ncodex-cli 0.162.0 · CLI 检测完成；登录态与模型权限将在执行时确认\nCodex 配置\n模型 ID\n请选择 CLI 模型\nGPT-6.1-Sol · gpt-6.1-sol\nGPT-6-Astra · gpt-6-astra\nGPT-6-Sol · gpt-6-sol\nGPT-6-Luna · gpt-6-luna\nGPT-5.6-Sol · gpt-5.6-sol\nGPT-5.6-Terra · gpt-5.6-terra\nGPT-5.6-Luna · gpt-5.6-luna\n刷新模型\n\n来源：codex app-server model/list · 7 个模型\n\n单次模型超时（秒）\n结构化输出修复上限\n1 次\n2 次\n3 次\n推理强度\nlow\nmedium\nhigh\nxhigh\nmax\nultra\n使用本机 Codex CLI 登录态\n\n在终端执行 codex login 完成登录；界面不保存密钥。提交真实模型任务时仍需确认上下文发送许可。\n\n新任务默认运行时\n模拟运行时\nCodex CLI\nCursor CLI\n\n新建任务时仍可单独切换。保存配置不会触发模型调用。\n\n重新加载\n基于此运行时创建 Agent\n保存配置"
+  },
+  {
+    "at": "2026-10-25T05:27:52.197Z",
+    "command": "await go('agents'); await p.locator('[data-action=new-agent]').first().click(); return await p.locator('#agent-dialog [role=combobox]').evaluateAll(es=>es.map(e=>({tag:e.tagName,for:e.getAttribute('data-for'),label:e.getAttribute('aria-label'),controls:e.getAttribute('aria-controls')})));",
+    "result": [
+      {
+        "tag": "BUTTON",
+        "for": null,
+        "label": null,
+        "controls": "agent-domain-options"
+      },
+      {
+        "tag": "INPUT",
+        "for": null,
+        "label": "搜索处理领域",
+        "controls": "agent-domain-options"
+      },
+      {
+        "tag": "BUTTON",
+        "for": null,
+        "label": null,
+        "controls": "agent-model-options"
+      },
+      {
+        "tag": "INPUT",
+        "for": null,
+        "label": "搜索CLI 模型",
+        "controls": "agent-model-options"
+      }
+    ]
+  },
+  {
+    "at": "2026-10-25T05:28:04.606Z",
+    "command": "await p.locator('#agent-domain-picker').focus(); await p.keyboard.press('Enter'); await p.getByRole('combobox',{name:'搜索处理领域'}).fill('没有这个领域'); await shot('domain-picker-no-results'); await p.keyboard.press('Escape'); const restored=await p.locator(':focus').getAttribute('id'); await p.keyboard.press('Enter'); await p.getByRole('combobox',{name:'搜索处理领域'}).fill('知识'); await p.keyboard.press('ArrowDown'); await p.keyboard.press('Enter'); return {restored,value:await p.locator('#agent-domain').inputValue(),name:await p.locator('#agent-domain-picker').innerText()};",
+    "result": {
+      "restored": "agent-domain-picker",
+      "value": "knowledge-answer@1.0.0",
+      "name": "知识问答"
+    }
+  },
+  {
+    "at": "2026-10-25T05:28:19.385Z",
+    "command": "await go('workflows'); await p.locator('[data-flow-new]').first().click(); const handle=p.locator('[data-flow-drag]').first(); await handle.focus(); const before=await handle.boundingBox(); await p.keyboard.press('ArrowRight'); const after=await handle.boundingBox(); await p.locator('[data-flow-branch]').click(); await shot('workflow-branch-inspector'); await p.locator('[data-flow-pane=canvas]').click(); await p.locator('[data-flow-select]').first().focus(); await p.keyboard.press('End'); return {movement:{before,after},focused:await p.locator(':focus').getAttribute('data-flow-select'),nodes:await p.locator('[data-flow-select]').count()};",
+    "error": "locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-flow-pane=canvas]')\u001b[22m\n\u001b[2m    - locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" id=\"flow-pane-canvas\" aria-selected=\"false\" data-flow-pane=\"canvas\" class=\"button secondary\" aria-controls=\"flow-canvas-region\">画布</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    9 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n"
+  },
+  {
+    "at": "2026-10-25T05:28:36.400Z",
+    "command": "const h=p.locator('[data-flow-drag]').first(); await h.focus(); const a=await h.boundingBox(); await p.keyboard.press('ArrowRight'); const z=await h.boundingBox(); await p.locator('[data-add-flow-node]').click(); const id=await p.locator('[data-flow-select]').last().getAttribute('data-flow-select'); await p.locator('[data-flow-output]').first().focus(); await p.keyboard.press('Enter'); await p.locator('[data-flow-input=\"'+id+'\"]').focus(); await p.keyboard.press('Enter'); await p.locator('[data-flow-select]').first().focus(); await p.keyboard.press('End'); await shot('workflow-keyboard-connect-move'); return {move:{before:a,after:z},nodes:await p.locator('[data-flow-select]').count(),focus:await p.locator(':focus').getAttribute('data-flow-select')};",
+    "result": {
+      "move": {
+        "before": {
+          "x": 285,
+          "y": 465.859375,
+          "width": 44,
+          "height": 44
+        },
+        "after": {
+          "x": 293,
+          "y": 465.859375,
+          "width": 44,
+          "height": 44
+        }
+      },
+      "nodes": 4,
+      "focus": "node-31d4f557"
+    }
+  },
+  {
+    "at": "2026-10-25T05:30:16.521Z",
+    "command": "await go('skills'); await p.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight)); const before=await p.evaluate(()=>scrollY); await p.locator('#workspace-picker').selectOption('workspace-default'); await p.waitForFunction(()=>state.workspaceId==='workspace-default'&&state.connected&&!state.busy); await p.goBack(); await p.waitForFunction(id=>state.workspaceId===id&&state.view==='skills'&&state.connected&&!state.busy,origFixture.workspaceId); await p.waitForTimeout(250); await shot('cross-space-back-position-restored'); return {before,after:await p.evaluate(()=>scrollY),url:p.url()};",
+    "result": {
+      "before": 730,
+      "after": 730,
+      "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/skills"
+    }
+  },
+  {
+    "at": "2026-10-25T05:30:29.376Z",
+    "command": "await p.locator('#skill-search').fill('不存在的评审技能'); await shot('skill-no-results'); await p.locator('#skill-search').fill(''); await go('library'); await p.locator('#hub-query').fill('不存在的评审来源'); await p.locator('#hub-search-form [type=submit]').click(); await p.waitForFunction(()=>!state.busy); await shot('library-no-results'); await p.locator('[data-hub-clear]').first().click(); await p.locator('#hub-tab-knowledge').focus(); await p.keyboard.press('ArrowRight'); return {libraryTab:await p.locator('[role=tab][aria-selected=true]').innerText(),state:await snap()};",
+    "result": {
+      "libraryTab": "记忆\n9",
+      "state": {
+        "url": "http://127.0.0.1:8799/?workspace_id=workspace-fa7a3aad24654815#/library",
+        "view": "library",
+        "dialogs": [],
+        "focus": {
+          "id": "hub-tab-memory",
+          "text": "记忆9"
+        },
+        "toast": ""
+      }
+    }
+  },
+  {
+    "at": "2026-10-25T05:30:57.806Z",
+    "command": "await go('library'); await p.locator('#hub-tab-ontology').click(); await p.locator('[data-edit-ontology=\"'+reviewOntology2.ref+'\"]').click(); const d=p.locator('.ontology-model-section').filter({hasText:'对象实例 ·'}); if(await d.getAttribute('open')===null)await d.locator('summary').click(); await p.locator('[data-model-object=\"0\"][data-model-value=id]').fill(''); await d.locator('summary').click(); await p.locator('[data-model-action=validate]').click(); await shot('ontology-mincount-focus-fixed'); return {focus:await p.locator(':focus').evaluate(e=>({object:e.dataset.modelObject,value:e.dataset.modelValue,invalid:e.getAttribute('aria-invalid'),describedby:e.getAttribute('aria-describedby')})),open:await d.getAttribute('open'),error:await p.locator('#ontology-model-validation').innerText()};",
+    "result": {
+      "focus": {
+        "object": "0",
+        "value": "id",
+        "invalid": "true",
+        "describedby": "ontology-model-error-0"
+      },
+      "open": "",
+      "error": "1 项约束未通过\n\nobject-d135cc33 · id：缺少必填属性或属性值数量不足 MinCountConstraintComponent"
+    }
+  },
+  {
+    "at": "2026-10-25T05:31:12.247Z",
+    "command": "await p.setViewportSize({width:375,height:812}); await p.locator('#appearance-select').selectOption('dark'); await p.locator('[data-model-error]').first().focus(); await p.keyboard.press('Enter'); await shot('ontology-mincount-fixed-mobile-dark'); const focused=await p.locator(':focus').getAttribute('data-model-value'); await p.locator('[data-model-object=\"0\"][data-model-value=id]').fill('REVIEW-001'); await p.locator('[data-model-action=validate]').click(); await shot('ontology-valid-fixed-mobile-dark'); return {focused,copy:await p.locator('#ontology-model-validation').innerText(),value:await p.locator('[data-model-object=\"0\"][data-model-value=id]').inputValue(),invalid:await p.locator('[data-model-object=\"0\"][data-model-value=id]').getAttribute('aria-invalid'),open:await p.locator('.ontology-model-section').filter({hasText:'对象实例 ·'}).getAttribute('open')};",
+    "result": {
+      "focused": "id",
+      "copy": "模型与实例校验通过",
+      "value": "REVIEW-001",
+      "invalid": null,
+      "open": ""
+    }
+  },
+  {
+    "at": "2026-10-25T05:31:42.561Z",
+    "command": "await p.setViewportSize({width:320,height:812}); await p.locator('[data-model-object=\"0\"][data-model-value=id]').fill(''); await p.locator('[data-model-action=validate]').click(); await shot('ontology-mincount-fixed-mobile-320'); return await p.locator(':focus').evaluate(e=>({value:e.dataset.modelValue,rect:e.getBoundingClientRect().toJSON(),invalid:e.getAttribute('aria-invalid'),description:document.getElementById(e.getAttribute('aria-describedby'))?.innerText}));",
+    "result": {
+      "value": "id",
+      "rect": {
+        "x": 9,
+        "y": 353.234375,
+        "width": 374.546875,
+        "height": 46,
+        "top": 353.234375,
+        "right": 383.546875,
+        "bottom": 399.234375,
+        "left": 9
+      },
+      "invalid": "true",
+      "description": "缺少必填属性或属性值数量不足"
+    }
+  },
+  {
+    "at": "2026-10-25T05:32:24.802Z",
+    "command": "return await p.locator('[data-model-object=\"0\"][data-model-value=id]').evaluate(e=>{const a=[];let n=e;while(n&&n!==document.body){const s=getComputedStyle(n),r=n.getBoundingClientRect();a.push({tag:n.tagName,cls:n.className,id:n.id,x:r.x,w:r.width,right:r.right,scroll:n.scrollWidth,minInline:s.minInlineSize,minWidth:s.minWidth,width:s.width,overflow:s.overflowX});n=n.parentElement;}return a;});",
+    "result": [
+      {
+        "tag": "INPUT",
+        "cls": "",
+        "id": "",
+        "x": 9,
+        "w": 374.546875,
+        "right": 383.546875,
+        "scroll": 373,
+        "minInline": "0px",
+        "minWidth": "0px",
+        "width": "374.547px",
+        "overflow": "clip"
+      },
+      {
+        "tag": "LABEL",
+        "cls": "",
+        "id": "",
+        "x": 9,
+        "w": 374.546875,
+        "right": 383.546875,
+        "scroll": 375,
+        "minInline": "0px",
+        "minWidth": "0px",
+        "width": "374.547px",
+        "overflow": "visible"
+      },
+      {
+        "tag": "FIELDSET",
+        "cls": "daily-task-field",
+        "id": "",
+        "x": -8,
+        "w": 408.546875,
+        "right": 400.546875,
+        "scroll": 407,
+        "minInline": "0px",
+        "minWidth": "0px",
+        "width": "408.547px",
+        "overflow": "visible"
+      },
+      {
+        "tag": "DETAILS",
+        "cls": "ontology-model-section",
+        "id": "",
+        "x": -8,
+        "w": 408.546875,
+        "right": 400.546875,
+        "scroll": 409,
+        "minInline": "0px",
+        "minWidth": "0px",
+        "width": "408.547px",
+        "overflow": "visible"
+      },
+      {
+        "tag": "SECTION",
+        "cls": "learning-item ontology-operational",
+        "id": "",
+        "x": -23,
+        "w": 270,
+        "right": 247,
+        "scroll": 423,
+        "minInline": "0px",
+        "minWidth": "0px",
+        "width": "270px",
+        "overflow": "visible"
+      },
+      {
+        "tag": "DIV",
+        "cls": "learning-body",
+        "id": "",
+        "x": 9,
+        "w": 302,
+        "right": 311,
+        "scroll": 440,
+        "minInline": "0px",
+        "minWidth": "0px",
+        "width": "302px",
+        "overflow": "auto"
+      },
+      {
+        "tag": "DIALOG",
+        "cls": "learning-dialog",
+        "id": "learning-dialog",
+        "x": 8,
+        "w": 304,
+        "right": 312,
+        "scroll": 302,
+        "minInline": "0px",
+        "minWidth": "0px",
+        "width": "304px",
+        "overflow": "hidden"
+      }
+    ]
+  },
+  {
+    "at": "2026-10-25T05:33:37.120Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-library-submodules.js','utf8'));",
+    "result": {
+      "memory": "asset-0092b67ae2a24d03@1",
+      "capability": "asset-2e7cbbbe143d433b@1",
+      "experience": "learned-c1bba4037caf6c153df00f22@1",
+      "copy": "任务复盘的可复用经验\n仅本人版本 1\n已撤回\n\n先获取可信证据，再按授权执行；结果以独立验收为准，写入状态不明时先核对再决定后续动作。\n\n有效至 2027/10/25 13:12:58最近评测通过\n来源、适用范围与版本信息\n查看原始运行\n查看评测记录"
+    }
+  },
+  {
+    "at": "2026-10-25T05:34:49.312Z",
+    "command": "global.shotFinal=async n=>{await p.evaluate(()=>new Promise(q=>requestAnimationFrame(()=>requestAnimationFrame(q))));await p.screenshot({path:out+'/screenshots/final/'+n+'.png',animations:'disabled'});}; await go('library'); await p.locator('#hub-tab-ontology').click(); await p.locator('[data-edit-ontology=\"'+reviewOntology2.ref+'\"]').click(); return 'final candidate opened';",
+    "result": "final candidate opened"
+  },
+  {
+    "at": "2026-10-25T05:35:09.869Z",
+    "command": "return await eval(fs.readFileSync('/tmp/review-ontology-final.js','utf8'));",
+    "result": {
+      "at": "2026-10-25T05:35:09.868Z",
+      "source": "99bea8309b8e57d9c7a7d16f6bc28d101e3ee61b81a8a3b29591bf9bb1504288",
+      "rows": [
+        {
+          "width": 320,
+          "theme": "light",
+          "focus": true,
+          "invalid": "true",
+          "describedby": "ontology-model-error-0",
+          "rect": {
+            "x": 57,
+            "y": 353.203125,
+            "width": 206,
+            "height": 46,
+            "top": 353.203125,
+            "right": 263,
+            "bottom": 399.203125,
+            "left": 57
+          },
+          "viewport": 320,
+          "bodyWidth": 302,
+          "bodyScrollWidth": 302,
+          "sectionOpen": true,
+          "summaryFocus": true,
+          "valid": "编辑后可校验。保存与发布也会校验全部约束。",
+          "retained": "REVIEW-001",
+          "invalidAfter": null
+        },
+        {
+          "width": 320,
+          "theme": "dark",
+          "focus": true,
+          "invalid": "true",
+          "describedby": "ontology-model-error-0",
+          "rect": {
+            "x": 57,
+            "y": 353.203125,
+            "width": 206,
+            "height": 46,
+            "top": 353.203125,
+            "right": 263,
+            "bottom": 399.203125,
+            "left": 57
+          },
+          "viewport": 320,
+          "bodyWidth": 302,
+          "bodyScrollWidth": 302,
+          "sectionOpen": true,
+          "summaryFocus": true,
+          "valid": "编辑后可校验。保存与发布也会校验全部约束。",
+          "retained": "REVIEW-001",
+          "invalidAfter": null
+        },
+        {
+          "width": 375,
+          "theme": "light",
+          "focus": true,
+          "invalid": "true",
+          "describedby": "ontology-model-error-0",
+          "rect": {
+            "x": 57,
+            "y": 353.421875,
+            "width": 261,
+            "height": 46,
+            "top": 353.421875,
+            "right": 318,
+            "bottom": 399.421875,
+            "left": 57
+          },
+          "viewport": 375,
+          "bodyWidth": 357,
+          "bodyScrollWidth": 357,
+          "sectionOpen": true,
+          "summaryFocus": true,
+          "valid": "编辑后可校验。保存与发布也会校验全部约束。",
+          "retained": "REVIEW-001",
+          "invalidAfter": null
+        },
+        {
+          "width": 375,
+          "theme": "dark",
+          "focus": true,
+          "invalid": "true",
+          "describedby": "ontology-model-error-0",
+          "rect": {
+            "x": 57,
+            "y": 353.421875,
+            "width": 261,
+            "height": 46,
+            "top": 353.421875,
+            "right": 318,
+            "bottom": 399.421875,
+            "left": 57
+          },
+          "viewport": 375,
+          "bodyWidth": 357,
+          "bodyScrollWidth": 357,
+          "sectionOpen": true,
+          "summaryFocus": true,
+          "valid": "编辑后可校验。保存与发布也会校验全部约束。",
+          "retained": "REVIEW-001",
+          "invalidAfter": null
+        }
+      ]
+    }
+  },
+  {
+    "at": "2026-10-25T05:35:39.618Z",
+    "command": "await go('library'); await p.locator('#hub-tab-ontology').click(); await p.locator('[data-edit-ontology=\"'+reviewOntology2.ref+'\"]').click(); return await eval(fs.readFileSync('/tmp/review-ontology-final.js','utf8'));",
+    "result": {
+      "at": "2026-10-25T05:35:39.617Z",
+      "source": "aa5dee52814e4b0978cfae2816040677d8b8637a09ea6699e8d29ed9d57b5f32",
+      "rows": [
+        {
+          "width": 320,
+          "theme": "light",
+          "focus": true,
+          "invalid": "true",
+          "describedby": "ontology-model-error-0",
+          "rect": {
+            "x": 57,
+            "y": 353.203125,
+            "width": 206,
+            "height": 46,
+            "top": 353.203125,
+            "right": 263,
+            "bottom": 399.203125,
+            "left": 57
+          },
+          "viewport": 320,
+          "bodyWidth": 302,
+          "bodyScrollWidth": 302,
+          "sectionOpen": true,
+          "summaryFocus": true,
+          "valid": "模型与实例校验通过",
+          "retained": "REVIEW-001",
+          "invalidAfter": null
+        },
+        {
+          "width": 320,
+          "theme": "dark",
+          "focus": true,
+          "invalid": "true",
+          "describedby": "ontology-model-error-0",
+          "rect": {
+            "x": 57,
+            "y": 353.203125,
+            "width": 206,
+            "height": 46,
+            "top": 353.203125,
+            "right": 263,
+            "bottom": 399.203125,
+            "left": 57
+          },
+          "viewport": 320,
+          "bodyWidth": 302,
+          "bodyScrollWidth": 302,
+          "sectionOpen": true,
+          "summaryFocus": true,
+          "valid": "模型与实例校验通过",
+          "retained": "REVIEW-001",
+          "invalidAfter": null
+        },
+        {
+          "width": 375,
+          "theme": "light",
+          "focus": true,
+          "invalid": "true",
+          "describedby": "ontology-model-error-0",
+          "rect": {
+            "x": 57,
+            "y": 353.421875,
+            "width": 261,
+            "height": 46,
+            "top": 353.421875,
+            "right": 318,
+            "bottom": 399.421875,
+            "left": 57
+          },
+          "viewport": 375,
+          "bodyWidth": 357,
+          "bodyScrollWidth": 357,
+          "sectionOpen": true,
+          "summaryFocus": true,
+          "valid": "模型与实例校验通过",
+          "retained": "REVIEW-001",
+          "invalidAfter": null
+        },
+        {
+          "width": 375,
+          "theme": "dark",
+          "focus": true,
+          "invalid": "true",
+          "describedby": "ontology-model-error-0",
+          "rect": {
+            "x": 57,
+            "y": 353.421875,
+            "width": 261,
+            "height": 46,
+            "top": 353.421875,
+            "right": 318,
+            "bottom": 399.421875,
+            "left": 57
+          },
+          "viewport": 375,
+          "bodyWidth": 357,
+          "bodyScrollWidth": 357,
+          "sectionOpen": true,
+          "summaryFocus": true,
+          "valid": "模型与实例校验通过",
+          "retained": "REVIEW-001",
+          "invalidAfter": null
+        }
+      ]
+    }
+  },
+  {
+    "at": "2026-10-25T05:37:48.700Z",
+    "command": "await p.setViewportSize({width:1440,height:1000}); await go('runs'); await p.locator('#run-search').fill('不存在的运行'); await shotFinal('runs-no-results'); await p.locator('[data-action=clear-filter]').click(); await p.locator('#status-filter').selectOption('group:running'); const filtered=await p.locator('#content').innerText(); await p.locator('[data-action=clear-filter]').click(); await go('daily'); await p.locator('[data-operation=schedule-edit]').first().click(); const before=await p.locator('[data-daily-task]').count(); await p.locator('#daily-task-add').click(); const added=await p.locator('[data-daily-task]').count(); await p.locator('[data-remove-daily-task]').last().click(); const after=await p.locator('[data-daily-task]').count(); await shotFinal('daily-add-remove-template'); return {filterEmpty:filtered.includes('没有匹配的运行'),templates:{before,added,after},goals:await p.locator('[data-task-field=goal]').evaluateAll(es=>es.map(e=>e.value))};",
+    "result": {
+      "filterEmpty": true,
+      "templates": {
+        "before": 2,
+        "added": 3,
+        "after": 2
+      },
+      "goals": [
+        "每日核对发布风险并创建评估草稿",
+        "复核每日资料来源与有效期"
+      ]
+    }
+  },
+  {
+    "at": "2026-10-25T05:41:38.373Z",
+    "command": "await b.close(); return 'review browser closed';",
+    "result": "review browser closed"
+  }
+]

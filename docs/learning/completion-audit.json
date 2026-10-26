@@ -1,0 +1,43 @@
+{
+  "objective": "运行复盘调用Agent总结，四类沉淀到知识库；知识库增加Ontology生成能力和模块",
+  "requirements": [
+    {
+      "requirement": "运行记录增加复盘入口",
+      "passed": true,
+      "evidence": "webui/app.js list/detail; mobile UI verified"
+    },
+    {
+      "requirement": "选择智能体进行总结",
+      "passed": true,
+      "evidence": "learning.py agent_generate; successful Codex retrospective; closed output schema"
+    },
+    {
+      "requirement": "审阅并沉淀知识、记忆、经验、能力",
+      "passed": true,
+      "evidence": "four-module-verification.json; four private assets, evaluation gate and valid exported Skill"
+    },
+    {
+      "requirement": "知识库增加可生成的 Ontology 模块",
+      "passed": true,
+      "evidence": "7 concepts,15 properties,7 relations; ontology editor screenshots and revisions"
+    },
+    {
+      "requirement": "本体的来源、发布与实际检索有效",
+      "passed": true,
+      "evidence": "ontology-rag.json: alias-only retrieval SUCCEEDED3/3, withdrawal -> zero hits and WAITING_INPUT"
+    },
+    {
+      "requirement": "授权、隔离、验收、恢复及幂等保持有效",
+      "passed": true,
+      "evidence": "209 backend +134 frontend; runtime-verification.json restart receipt and no duplicate assets/writes"
+    },
+    {
+      "requirement": "完成界面验收并保持主数据清洁",
+      "passed": true,
+      "evidence": "20 responsive dialog checks,5 mobile modules; main_runtime_counts zero business records"
+    }
+  ],
+  "status": "complete",
+  "source_feature_only": true,
+  "temporary_data_removed": true
+}

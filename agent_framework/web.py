@@ -67,6 +67,28 @@ class Application:
         self.closed = False
         from .workflows import schema as workflow_schema
         workflow_schema(self.runtime().store)
+        from .workspace_scheduler import schema as scheduler_schema
+        scheduler_schema(self.runtime().store)
+        self.scheduler_stop = threading.Event()
+        self.scheduler_thread = None
+
+    def start_scheduler(self):
+        with self.lock:
+            if self.scheduler_thread or self.closed:
+                return
+            def loop():
+                from .workspace_scheduler import tick
+                while not self.scheduler_stop.is_set():
+                    try:
+                        with self.lock:
+                            if self.closed:
+                                break
+                            tick(self)
+                    except Exception:
+                        logging.getLogger(__name__).exception('Workspace scheduler tick failed')
+                    self.scheduler_stop.wait(15)
+            self.scheduler_thread = threading.Thread(target=loop, name='workspace-scheduler', daemon=True)
+            self.scheduler_thread.start()
 
     def runtime(self, planner=None):
         return Runtime(self.data_dir, planner=planner, lease_seconds=self.lease_seconds, tool_timeout=self.tool_timeout)
@@ -88,6 +110,10 @@ class Application:
     def library(self):
         from .knowledge import Library
         return Library(self.runtime().store)
+
+    def skills(self):
+        from .skills import SkillRegistry
+        return SkillRegistry(self.runtime().store,self.tenant,self.workspace['id'])
 
     def workflows(self):
         from .workflows import Workflows
@@ -172,6 +198,8 @@ class Application:
         return {k: state[k] for k in ("run_id", "status", "created_at", "deadline", "steps", "replans", "scenario", "last_error")} | {
             "goal": state["task"]["goal"], "change_id": state["task"]["change_id"],
             "project_id": state["task"]["project_id"], "planner_ref": state["snapshot"]["planner_ref"],
+            "agent_id": state["snapshot"].get("agent_profile", {}).get("id"),
+            "agent_revision": state["snapshot"].get("agent_profile", {}).get("revision"),
             "model": state["snapshot"].get("planner", {}).get("config", {}).get("model"),
             "risk_level": (state["report"] or {}).get("risk_level"), "draft": state["draft"],
             "model_calls": state.get("model_calls", 0), "model_tokens": state.get("model_tokens", 0), "job": job}
@@ -206,12 +234,12 @@ class Application:
                 "job": job, "lease": self.lease(run_id),
                 "grant": {"valid": grant_valid, "expires_at": grant["expires_at"] if grant else None}}
 
-    def create(self, data):
+    def create(self, data, *, run_id=None):
         with self.lock:
             self.workspace=self.workspaces.get(self.workspace['id'])
-            return self._create(data)
+            return self._create(data, run_id=run_id)
 
-    def _create(self, data):
+    def _create(self, data, *, run_id=None):
         allowed = {"goal", "change_id", "project_id", "domain_pack_ref", "planner", "runtime", "runtime_revision", "agent_id", "agent_revision", "mcp_consent", "scenario", "grant", "consent", "budget", "start"}
         if not isinstance(data, dict) or set(data) - allowed:
             raise ValueError("任务包含不支持的字段")
@@ -223,6 +251,7 @@ class Application:
             raise ValueError("运行时与规划器选择不一致")
         settings = self.configuration.get()
         profile = self.agents.get(identifier(data['agent_id'])) if data.get('agent_id') else None
+        if profile:self.agents.assert_skills_available(profile)
         if profile:
             if profile['archived']:
                 raise ValueError('Agent 已归档')
@@ -255,7 +284,7 @@ class Application:
                             project_id=self.workspace['project_id'], tenant_id=self.tenant,
                             principal=self.principal, agent_ref=agent_ref(profile) if profile else 'release-assistant@1.0.0', budget=Budget(**budget))
         runtime = self.runtime(planner)
-        state = runtime.submit(task, scenario=data.get("scenario", "normal"), grant=data.get("grant", True), agent_profile=profile)
+        state = runtime.submit(task, scenario=data.get("scenario", "normal"), grant=data.get("grant", True), agent_profile=profile, run_id=run_id)
         lease = runtime.store.acquire(self.tenant, state["run_id"], self.lease_seconds)
         try:
             runtime.checkpoint(state, lease, 'runtime.config_selected', {'provider': planner_name, 'revision': settings['revision']})
@@ -346,11 +375,14 @@ class Application:
         return self.detail(run_id)
 
     def close(self):
+        self.scheduler_stop.set()
         with self.lock:
             self.closed = True
             for job in self.jobs.values():
                 if job["active"]:
                     job["cancel"].set()
+        if self.scheduler_thread:
+            self.scheduler_thread.join(timeout=5)
         self.pool.shutdown(wait=True, cancel_futures=False)
 
 
@@ -363,6 +395,7 @@ class WebServer(ThreadingHTTPServer):
             raise ValueError("Web UI 仅支持本机回环地址")
         self.application = application
         super().__init__(address, Handler)
+        application.start_scheduler()
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -381,7 +414,9 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'")
         if filename:
-            self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
+            from urllib.parse import quote
+            safe=filename.encode('ascii','ignore').decode().replace('"','').replace('\r','').replace('\n','') or 'download'
+            self.send_header("Content-Disposition", f'attachment; filename="{safe}"; filename*=UTF-8\'\'{quote(filename)}')
         self.end_headers()
         try:
             self.wfile.write(payload)
@@ -414,20 +449,34 @@ class Handler(BaseHTTPRequestHandler):
             data = None
             if mutation:
                 length = int(self.headers.get("Content-Length", "0"))
-                if not 0 < length <= 65536:
-                    raise APIError(413, "请求大小须在 1–65536 字节之间")
+                limit=1_500_000 if path.startswith('/api/skills') or path.startswith('/api/agents') else 500000 if path.startswith(('/api/learning-proposals','/api/ontologies','/api/ontology-validate')) else 65536
+                if not 0 < length <= limit:
+                    raise APIError(413, "请求超过该接口的大小预算")
                 data = parse_json(self.rfile.read(length).decode("utf-8"))
                 if not isinstance(data, dict):
                     raise ValueError("请求必须为 JSON 对象")
             assets = {"/": ("index.html", "text/html; charset=utf-8"),
                       "/app.js": ("app.js", "text/javascript; charset=utf-8"),
                       "/agents.js": ("agents.js", "text/javascript; charset=utf-8"),
+                      "/form_controls.js": ("form_controls.js", "text/javascript; charset=utf-8"),
+                      "/agent_experience.js": ("agent_experience.js", "text/javascript; charset=utf-8"),
                       "/library.js": ("library.js", "text/javascript; charset=utf-8"),
                       "/workspaces.js": ("workspaces.js", "text/javascript; charset=utf-8"),
                       "/roles.js": ("roles.js", "text/javascript; charset=utf-8"),
+                      "/agent_domains.js": ("agent_domains.js", "text/javascript; charset=utf-8"),
                       "/workflows.js": ("workflows.js", "text/javascript; charset=utf-8"),
                       "/workflow_designer.js": ("workflow_designer.js", "text/javascript; charset=utf-8"),
+                      "/skills.js": ("skills.js", "text/javascript; charset=utf-8"),
                       "/styles.css": ("styles.css", "text/css; charset=utf-8"),
+                      "/hig.css": ("hig.css", "text/css; charset=utf-8"),
+                      "/agents.css": ("agents.css", "text/css; charset=utf-8"),
+                      "/form_controls.css": ("form_controls.css", "text/css; charset=utf-8"),
+                      "/appearance.js": ("appearance.js", "text/javascript; charset=utf-8"),
+                      "/journeys.js": ("journeys.js", "text/javascript; charset=utf-8"),
+                      "/learning.js": ("learning.js", "text/javascript; charset=utf-8"),
+                      "/operations.js": ("operations.js", "text/javascript; charset=utf-8"),
+                      "/ontology_model.js": ("ontology_model.js", "text/javascript; charset=utf-8"),
+                      "/operations.css": ("operations.css", "text/css; charset=utf-8"),
                       "/space-grotesk.ttf": ("space-grotesk.ttf", "font/ttf")}
             if not mutation and path in assets:
                 name, content_type = assets[path]
@@ -448,9 +497,143 @@ class Handler(BaseHTTPRequestHandler):
                 app=app.scoped(selected)
             if path == "/api/session" and not mutation:
                 return self.reply(200, app.metadata())
+            if path == '/api/workspace-schedule':
+                from .workspace_scheduler import WorkspaceScheduler
+                service = WorkspaceScheduler(app)
+                return self.reply(200, service.save(data)) if mutation else self.reply(200, service.overview())
+            if path == '/api/daily-plans/generate' and mutation:
+                from .workspace_scheduler import WorkspaceScheduler
+                if data:raise ValueError('生成每日计划不接受额外字段')
+                return self.reply(200, WorkspaceScheduler(app).generate())
+            operations_path = path.strip('/').split('/')
+            if len(operations_path) == 4 and operations_path[:2] == ['api', 'daily-plans'] and operations_path[3] == 'dispatch' and mutation:
+                from .workspace_scheduler import WorkspaceScheduler
+                if data:raise ValueError('派发每日计划不接受额外字段')
+                return self.reply(200, WorkspaceScheduler(app).dispatch(identifier(operations_path[2])))
+            if path == '/api/agent-evaluations' and not mutation:
+                from .agent_evaluation import AgentEvaluations
+                return self.reply(200, AgentEvaluations(app).overview())
+            if path == '/api/operation-status' and not mutation:
+                with app.runtime().store.connect() as db:
+                    count = db.execute('SELECT COUNT(*) FROM agent_alerts WHERE tenant=? AND project=? AND principal=? AND acknowledged IS NULL',
+                                       (app.tenant, app.workspace['project_id'], app.principal)).fetchone()[0]
+                return self.reply(200, {'open_alert_count': count})
+            if path == '/api/agent-evaluations/evaluate' and mutation:
+                from .agent_evaluation import AgentEvaluations
+                if set(data) - {'run_id'}:raise ValueError('评测参数无效')
+                return self.reply(200, AgentEvaluations(app).evaluate(data.get('run_id')))
+            if len(operations_path) == 3 and operations_path[:2] == ['api', 'agent-evaluations'] and not mutation:
+                from .agent_evaluation import AgentEvaluations
+                return self.reply(200, AgentEvaluations(app).get(identifier(operations_path[2])))
+            if path == '/api/evaluation-policy' and mutation:
+                from .agent_evaluation import AgentEvaluations
+                return self.reply(200, AgentEvaluations(app).save_policy(data))
+            if len(operations_path) == 4 and operations_path[:2] == ['api', 'agent-alerts'] and operations_path[3] == 'acknowledge' and mutation:
+                from .agent_evaluation import AgentEvaluations
+                if data:raise ValueError('确认提醒不接受额外字段')
+                return self.reply(200, AgentEvaluations(app).acknowledge(identifier(operations_path[2])))
             if path=='/api/knowledge-hub' and not mutation:
                 from .knowledge_hub import hub
                 return self.reply(200,hub(app,query.get('query',[''])[0]))
+            if path=='/api/learning-proposals':
+                from .learning import Learning
+                learning=Learning(app)
+                return self.reply(201,learning.generate(data)) if mutation else self.reply(200,{'proposals':learning.list(query.get('run_id',[None])[0],query.get('purpose',[None])[0])})
+            learning_path=path.strip('/').split('/')
+            if len(learning_path)==4 and learning_path[:3]==['api','learning','run'] and not mutation:
+                from .learning import Learning
+                return self.reply(200,Learning(app).run_context(identifier(learning_path[3])))
+            if len(learning_path) in (3,4) and learning_path[:2]==['api','learning-proposals']:
+                from .learning import Learning
+                service=Learning(app);identity=identifier(learning_path[2])
+                if len(learning_path)==3:
+                    return self.reply(200,service.save(identity,data)) if mutation else self.reply(200,service.get(identity))
+                if mutation and learning_path[3]=='deposit':return self.reply(200,service.deposit(identity,data))
+            if path=='/api/ontology-search' and not mutation:
+                from .ontology import expand
+                return self.reply(200,expand(app.library(),app.library_access(),query.get('query',[''])[0],
+                                           max_hops=int(query.get('max_hops',['2'])[0]),predicates=query.get('predicate')))
+            if path=='/api/ontology-validate' and mutation:
+                from .ontology import source_context
+                from .ontology_model import validation_report
+                if set(data)!={'content','source_refs'}:raise ValueError('本体校验需要 content 和 source_refs')
+                context=source_context(app.library(),app.library_access(),data['source_refs'])
+                return self.reply(200,validation_report(data['content'],{s['ref'] for s in context['sources']}))
+            if len(learning_path)==4 and learning_path[:2]==['api','ontologies']:
+                from .ontology import revise,export_jsonld
+                ref=unquote(learning_path[2]);asset=app.library().get(app.library_access(),ref)
+                if asset['kind']!='ONTOLOGY':raise ValueError('不是本体资料')
+                if mutation and learning_path[3]=='revise':return self.reply(201,revise(app.library(),app.library_access(),ref,data))
+                if not mutation and learning_path[3]=='export':return self.reply(200,json.dumps(export_jsonld(asset),ensure_ascii=False),'application/ld+json; charset=utf-8','ontology.jsonld')
+                if not mutation and learning_path[3]=='validate':
+                    from .ontology_model import validation_report
+                    from .ontology import sources_current
+                    report=validation_report(asset['content'],{s['ref'] for s in asset['provenance']['sources']})
+                    report['sources_current']=sources_current(app.library(),app.library_access(),asset)
+                    if not report['sources_current']:
+                        report['conforms']=False
+                        report['results'].append({'focus_node':asset['ref'],'path':'source_refs','constraint':'SourceCurrentConstraint','severity':'Violation','message':'来源已撤回、过期、变化或不再可访问','value':None})
+                    return self.reply(200,report)
+                if not mutation and learning_path[3]=='objects':
+                    from .ontology_model import object_set
+                    return self.reply(200,object_set(app.library(),app.library_access(),asset,query.get('query',[''])[0],query.get('type_id',[None])[0],int(query.get('limit',['50'])[0])))
+                if mutation and learning_path[3]=='action-preview':
+                    from .ontology_model import object_set
+                    if set(data)!={'action_id','object_id','agent_id','agent_revision'}:raise ValueError('请选择动作、对象和岗位版本')
+                    object_set(app.library(),app.library_access(),asset)
+                    model=asset['content'].get('model',{})
+                    action=next((a for a in model.get('action_types',[]) if a['id']==data['action_id']),None)
+                    instance=next((o for o in model.get('objects',[]) if o['id']==data['object_id']),None)
+                    if not action or not instance or instance['type_id']!=action['target_type']:raise ValueError('动作与对象类型不匹配')
+                    compiled=app.agents.compile(identifier(data['agent_id']),data['agent_revision'])
+                    from .definitions import capability_definitions
+                    capability=capability_definitions()[action['capability_ref']]
+                    return self.reply(200,{'action':action,'object':instance,'agent_ref':compiled['ref'],
+                                          'available_to_agent':action['capability_ref'] in compiled['capabilities'],
+                                          'effect':capability['effect'],'input_schema':capability['input_schema'],
+                                          'requires_task_authorization':capability['effect']=='WRITE','executed':False})
+            if len(learning_path)==4 and learning_path[:2]==['api','capability-methods'] and learning_path[3]=='skill' and not mutation:
+                from .learning import capability_skill_zip
+                asset=app.library().get(app.library_access(),unquote(learning_path[2]))
+                return self.reply(200,capability_skill_zip(asset),'application/zip','capability-method.zip')
+            if path=='/api/skills':
+                return self.reply(201,app.skills().save(data)) if mutation else self.reply(200,{'skills':app.skills().list(),'specification':'https://agentskills.io/specification'})
+            if path=='/api/skills/validate' and mutation:
+                from .skills import normalize_package
+                if set(data)!={'folder','files'}:raise ValueError('校验需要 folder 和 files')
+                package,warnings=normalize_package(data['folder'],data['files'])
+                return self.reply(200,{'valid':True,'metadata':package['metadata'],'hash':package['hash'],'warnings':warnings})
+            if path=='/api/skills/import' and mutation:
+                from .skills import import_zip
+                if set(data)!={'zip_base64','revision','skill_id'}:raise ValueError('导入参数无效')
+                folder,entries=import_zip(data['zip_base64'])
+                return self.reply(201,app.skills().save({'folder':folder,'files':entries,'revision':data['revision']},data['skill_id'] or None))
+            if path=='/api/skills/migrate' and mutation:
+                from .contracts import digest
+                if set(data)!={'agent_id','agent_revision','index'} or type(data['index']) is not int:raise ValueError('请选择历史内联 Skill')
+                p=app.agents.get(identifier(data['agent_id']))
+                if p['revision']!=data['agent_revision']:raise ConfigConflict('Agent 已更新')
+                if not 0<=data['index']<len(p['skills']):raise ValueError('历史 Skill 不存在')
+                legacy=p['skills'][data['index']];name='migrated-method-'+digest(legacy)[:12];registry=app.skills()
+                found=next((s for s in registry.list() if s['name']==name),None)
+                if found:return self.reply(200,registry.get(found['id']))
+                content='---\nname: '+name+'\ndescription: '+json.dumps('迁移自内联方法「'+legacy['name']+'」，用于该方法涉及的任务；请进一步完善适用条件。',ensure_ascii=False)+'\n---\n\n'+legacy['instructions']+'\n'
+                skill=registry.save({'folder':name,'files':{'SKILL.md':{'encoding':'utf-8','content':content}},'revision':0})
+                return self.reply(201,skill)
+            skill_path=path.strip('/').split('/')
+            if len(skill_path) in (3,4) and skill_path[:2]==['api','skills']:
+                identity=identifier(skill_path[2]);version=query.get('version',[None])[0];version=int(version) if version is not None else None
+                registry=app.skills()
+                if len(skill_path)==3:return self.reply(200,registry.save(data,identity)) if mutation else self.reply(200,registry.get(identity,version))
+                op=skill_path[3]
+                if op=='export' and not mutation:
+                    from .skills import export_zip
+                    skill=registry.get(identity,version)
+                    return self.reply(200,export_zip(skill['package']),'application/zip',skill['name']+'.zip')
+                if op=='events' and not mutation:return self.reply(200,{'events':registry.events(identity)})
+                if mutation and op in ('publish','withdraw','archive','restore'):
+                    if set(data)!={'revision','version'}:raise ValueError('Skill 操作需要 revision 和 version')
+                    return self.reply(200,registry.lifecycle(identity,data['revision'],op,data['version']))
             if path=='/api/workflows':
                 return self.reply(201,app.workflows().save(data)) if mutation else self.reply(200,{'workflows':app.workflows().list(),'runs':app.workflows().runs()})
             if path=='/api/workflow-chat':
@@ -496,21 +679,26 @@ class Handler(BaseHTTPRequestHandler):
                 return self.reply(200, app.configuration.detect(data['provider']))
             if path == '/api/runtime-config/models' and not mutation:
                 return self.reply(200, app.models.list(query.get('provider',[''])[0], query.get('refresh',['0'])[0]=='1'))
-            if path in ('/api/capabilities', '/api/skills', '/api/standards', '/api/domain-packs', '/api/agent-definition-default') and not mutation:
+            if path in ('/api/capabilities', '/api/standards', '/api/domain-packs', '/api/agent-definition-default') and not mutation:
                 from .definitions import capability_definitions, DOMAIN, STANDARDS, default_definition, get_domain
                 catalog = {'/api/capabilities': {'capabilities': list(capability_definitions().values())},
-                           '/api/skills': {'skills': [DOMAIN.descriptor()['skill'],get_domain('knowledge-answer@1.0.0').descriptor()['skill']]},
                            '/api/standards': {'standards': [{'ref': r, 'verifier_refs': v} for r, v in STANDARDS.items()]},
                            '/api/domain-packs': {'domain_packs': [DOMAIN.descriptor(),get_domain('knowledge-answer@1.0.0').descriptor()]},
                            '/api/agent-definition-default': {'definition': default_definition(domain_ref=query.get('domain',['change-assessment@2.0.0'])[0])}}
                 return self.reply(200, catalog[path])
             if path == '/api/agents':
                 return self.reply(201, app.agents.save(data)) if mutation else self.reply(200, {'agents':app.agents.list()})
+            if path == '/api/agent-domains':
+                from .agent_domains import AgentDomains
+                domains = AgentDomains(app.agents.store, app.tenant, app.workspace['id'])
+                return self.reply(201, domains.create(data)) if mutation else self.reply(200, {'domains': domains.list()})
             agent_path = path.strip('/').split('/')
             if len(agent_path) in (3,4) and agent_path[:2]==['api','agents']:
                 identity=identifier(agent_path[2])
                 if len(agent_path)==3:
                     return self.reply(200, app.agents.save(data,identity)) if mutation else self.reply(200, app.agents.get(identity))
+                if agent_path[3]=='evaluation-contract':
+                    return self.reply(200,app.agents.save_evaluation_settings(identity,data)) if mutation else self.reply(200,app.agents.evaluation_settings(identity))
                 if mutation and agent_path[3]=='compile':
                     if set(data) != {'revision'}:
                         raise ValueError('编译需要当前 Agent revision')

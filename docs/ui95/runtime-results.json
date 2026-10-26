@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-10-24T10:05:31.807Z",
+  "checks": [
+    {
+      "id": "runtime-validation",
+      "detail": "运行时参数就近显示中文错误、聚焦字段，修改后清除",
+      "passed": true
+    },
+    {
+      "id": "runtime-pending",
+      "detail": "保存期间冻结字段、防重复提交；切页后仍能正确接收回执，不访问已移除表单",
+      "passed": true
+    },
+    {
+      "id": "runtime-retry",
+      "detail": "保存失败保留参数并释放禁用状态；原样重试后得到保存版本",
+      "passed": true
+    }
+  ],
+  "posts": 4,
+  "errors": [],
+  "restoredTimeout": "60"
+}

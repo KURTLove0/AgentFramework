@@ -1,0 +1,225 @@
+{
+  "round": 2,
+  "score": 96,
+  "target": 90,
+  "method": "固定量表的实现审查与回归验收；不是独立用户研究结论",
+  "critical_gates": {
+    "创建使用闭环": "通过",
+    "全程键盘": "通过",
+    "未提交内容保持": "通过",
+    "空间隔离与旧响应守卫": "通过"
+  },
+  "items": [
+    {
+      "id": "C1",
+      "category": "创建动线",
+      "criterion": "可按用途选择起点，展示当前选择",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "两种用途起点可预填名称与岗位，选中状态可见。"
+    },
+    {
+      "id": "C2",
+      "category": "创建动线",
+      "criterion": "主路径不超过三步，必填项使用业务语言",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "创建维持三步；主路径只填名称与领域，岗位、用途和执行参数按需展开。"
+    },
+    {
+      "id": "C3",
+      "category": "创建动线",
+      "criterion": "可内联创建并复用领域，切换不丢内容",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "领域可从搜索空结果新建，选择与复用已经过浏览器验证。"
+    },
+    {
+      "id": "C4",
+      "category": "创建动线",
+      "criterion": "确认页可读、可修改且能核对工作指令",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "确认页展示身份、领域、执行方式与可展开的完整工作指令。"
+    },
+    {
+      "id": "C5",
+      "category": "创建动线",
+      "criterion": "保存成功后提供直接使用的下一步",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "持久的成功回执提供开始使用，焦点会到达此入口。"
+    },
+    {
+      "id": "U1",
+      "category": "使用动线",
+      "criterion": "从智能体发起任务时准确预选身份和版本",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "开始使用预选同一个智能体ID与版本，目标输入框自动获焦。"
+    },
+    {
+      "id": "U2",
+      "category": "使用动线",
+      "criterion": "任务目标有匹配工作方式的可编辑示例",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "示例匹配工作方式和自建领域，可编辑且不自动勾选业务授权。"
+    },
+    {
+      "id": "U3",
+      "category": "使用动线",
+      "criterion": "展示执行摘要，隐藏无关或重复的锁定字段",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "所选智能体以摘要展示，重复的锁定下拉框隐藏；仍可更换智能体。"
+    },
+    {
+      "id": "U4",
+      "category": "使用动线",
+      "criterion": "提交前可审查范围和必要许可",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "执行前保留范围、身份、预算与明确许可审查。"
+    },
+    {
+      "id": "U5",
+      "category": "使用动线",
+      "criterion": "完成后易于看到回答或报告，并能找到来源",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "成功后默认打开回答或报告；引用可展开查看原文，手动切页不被刷新覆盖。"
+    },
+    {
+      "id": "F1",
+      "category": "表单控件",
+      "criterion": "领域、智能体和长模型目录支持搜索筛选",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "领域、智能体和80项模型测试目录均支持搜索。"
+    },
+    {
+      "id": "F2",
+      "category": "表单控件",
+      "criterion": "搜索选择器支持完整键盘选择、取消和空结果处理",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "方向键、Enter、Escape、Tab与空结果清除均已实际操作。"
+    },
+    {
+      "id": "F3",
+      "category": "表单控件",
+      "criterion": "长文本自适应高度并提供长度提示",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "工作指令与任务目标有长度提示、自适应高度和上限。"
+    },
+    {
+      "id": "F4",
+      "category": "表单控件",
+      "criterion": "错误与具体字段关联，修正后清除",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "任务错误与字段关联，修正及输入法完成后清除旧错误。"
+    },
+    {
+      "id": "F5",
+      "category": "表单控件",
+      "criterion": "输入和选择控件具备清晰焦点、禁用和加载状态",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "选择器保留原生值、必填约束、加载/禁用反馈及可见焦点。"
+    },
+    {
+      "id": "R1",
+      "category": "反馈与状态保持",
+      "criterion": "保存防重入，失败后保留输入",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "智能体双击保存只产生一次POST；智能体与任务失败后均可原样重试。"
+    },
+    {
+      "id": "R2",
+      "category": "反馈与状态保持",
+      "criterion": "域切换和配置往返保留未提交内容",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "领域来回切换保留工作指令，任务配置往返保留目标与预算；取消搜索不误标脏数据。"
+    },
+    {
+      "id": "R3",
+      "category": "反馈与状态保持",
+      "criterion": "保存回执不被列表读取失败覆盖",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "保存回执仍是权威状态，列表读失败不回退已保存结果（现有回归覆盖）。"
+    },
+    {
+      "id": "R4",
+      "category": "反馈与状态保持",
+      "criterion": "配置后返回任务保留目标并重新确认许可",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "任务直接打开对应智能体配置，返回采用新版本并清空旧许可。"
+    },
+    {
+      "id": "R5",
+      "category": "反馈与状态保持",
+      "criterion": "异步响应不越空间覆盖，输入法输入不被中断",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "空间切换、过期响应、输入法与并发提交守卫的交互回归均通过。"
+    },
+    {
+      "id": "A1",
+      "category": "可访问性与布局",
+      "criterion": "主要流程可用键盘完成，焦点归还可预测",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "全程键盘完成命名、确认创建、开始使用、任务审查、提交到成功结果。"
+    },
+    {
+      "id": "A2",
+      "category": "可访问性与布局",
+      "criterion": "320/375/414/768/1440及横屏无页面横向溢出",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "320/375/414/768/1440与812横屏无页面横向溢出，手机弹层不超出视口。"
+    },
+    {
+      "id": "A3",
+      "category": "可访问性与布局",
+      "criterion": "浅深色正文和关键控件边界对比可辨",
+      "points": 4,
+      "maximum": 4,
+      "evidence": "稳定非悬停状态实测：文本对比最低6.78:1，控件边界最低3.78:1。"
+    },
+    {
+      "id": "A4",
+      "category": "可访问性与布局",
+      "criterion": "200%文本和固定页脚下字段不被遮挡，触控目标至少44px",
+      "points": 2,
+      "maximum": 4,
+      "evidence": "触控目标最低44px，375px下200%文字仍可操作；固定头部在此条件下偏密集，保留2分。"
+    },
+    {
+      "id": "A5",
+      "category": "可访问性与布局",
+      "criterion": "语义标签完整，减少动态效果偏好得到尊重",
+      "points": 2,
+      "maximum": 4,
+      "evidence": "已核对角色、名称、关联提示和减少动态效果；尚未以真实屏幕阅读器完成实测，保守保留2分。"
+    }
+  ],
+  "evidence": [
+    "browser-results.json",
+    "keyboard-results.json",
+    "python-tests.log",
+    "ui-tests.log",
+    "agent-tests.log",
+    "journey-tests.log"
+  ],
+  "status": "withdrawn",
+  "withdrawn_on": "2026-10-24",
+  "withdrawal_reason": "遗漏空状态下容器SVG样式污染按钮图标：图标变灰、尺寸变大、偏离文字中线，导致按钮异常增高。流程测试不足以支撑综合视觉96分。"
+}

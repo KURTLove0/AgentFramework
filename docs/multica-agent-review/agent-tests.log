@@ -1,0 +1,16 @@
+test_agent_identity_needs_no_team_and_legacy_team_survives_edits (test_agents.AgentTests.test_agent_identity_needs_no_team_and_legacy_team_survives_edits) ... ok
+test_agent_prompt_policy_is_unambiguous_and_old_snapshots_still_restore (test_agents.AgentTests.test_agent_prompt_policy_is_unambiguous_and_old_snapshots_still_restore) ... ok
+test_business_authorization_and_readback_still_apply_to_custom_agents (test_agents.AgentTests.test_business_authorization_and_readback_still_apply_to_custom_agents) ... ok
+test_create_edit_archive_tenant_and_version_conflicts (test_agents.AgentTests.test_create_edit_archive_tenant_and_version_conflicts) ... ok
+test_custom_cursor_frozen_agent_restores_and_never_recreates (test_agents.AgentTests.test_custom_cursor_frozen_agent_restores_and_never_recreates) ... ok
+test_models_must_be_from_cli_and_mcp_definitions_are_validated (test_agents.AgentTests.test_models_must_be_from_cli_and_mcp_definitions_are_validated) ... ok
+test_prompt_skills_and_mcp_metadata_reach_planning_without_secrets (test_agents.AgentTests.test_prompt_skills_and_mcp_metadata_reach_planning_without_secrets) ... ok
+test_task_agent_revision_and_separate_mcp_consent (test_agents.AgentTests.test_task_agent_revision_and_separate_mcp_consent) ... ok
+test_unpublished_domain_is_rejected_before_saving_or_updating (test_agents.AgentTests.test_unpublished_domain_is_rejected_before_saving_or_updating) ... ok
+test_http_credentials_are_environment_references_and_missing_values_fail (test_agents.NativeMCPTests.test_http_credentials_are_environment_references_and_missing_values_fail) ... ok
+test_only_enabled_servers_and_explicit_tools_are_exposed (test_agents.NativeMCPTests.test_only_enabled_servers_and_explicit_tools_are_exposed) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 2.208s
+
+OK

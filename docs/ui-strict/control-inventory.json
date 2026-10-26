@@ -1,0 +1,575 @@
+[
+  {
+    "route": "agents",
+    "label": "创建智能体",
+    "class": "button primary",
+    "width": 130,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(1 0 0)",
+        "buttonColor": "oklch(1 0 0)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "agents",
+    "label": "创建智能体",
+    "class": "button primary",
+    "width": 130,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(1 0 0)",
+        "buttonColor": "oklch(1 0 0)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "workbench",
+    "label": "新建任务",
+    "class": "button primary",
+    "width": 116,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(1 0 0)",
+        "buttonColor": "oklch(1 0 0)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "workbench",
+    "label": "全部任务0已保存的任务",
+    "class": "metric metric-link ",
+    "width": 270,
+    "height": 140.890625,
+    "icons": [
+      {
+        "w": 16,
+        "h": 16,
+        "margin": "0px",
+        "color": "oklch(0.49 0.197 257)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": -34.4453125
+      },
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(0.47 0.025 258)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": 43.4453125
+      }
+    ]
+  },
+  {
+    "route": "workbench",
+    "label": "执行中0查看正在执行与核对的任务",
+    "class": "metric metric-link blue",
+    "width": 270,
+    "height": 140.890625,
+    "icons": [
+      {
+        "w": 16,
+        "h": 16,
+        "margin": "0px",
+        "color": "oklch(0.49 0.197 257)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": -34.4453125
+      },
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(0.47 0.025 258)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": 43.4453125
+      }
+    ]
+  },
+  {
+    "route": "workbench",
+    "label": "等待处理0查看授权、补充材料与待核对项",
+    "class": "metric metric-link amber",
+    "width": 270,
+    "height": 140.890625,
+    "icons": [
+      {
+        "w": 16,
+        "h": 16,
+        "margin": "0px",
+        "color": "oklch(0.43 0.105 64)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": -34.4453125
+      },
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(0.47 0.025 258)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": 43.4453125
+      }
+    ]
+  },
+  {
+    "route": "workbench",
+    "label": "已完成0查看全部验收通过的任务",
+    "class": "metric metric-link green",
+    "width": 270,
+    "height": 140.890625,
+    "icons": [
+      {
+        "w": 16,
+        "h": 16,
+        "margin": "0px",
+        "color": "oklch(0.39 0.098 161)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": -34.4453125
+      },
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(0.47 0.025 258)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": 43.4453125
+      }
+    ]
+  },
+  {
+    "route": "workbench",
+    "label": "创建第一个任务",
+    "class": "button primary",
+    "width": 158,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(1 0 0)",
+        "buttonColor": "oklch(1 0 0)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "workbench",
+    "label": "配置 Agent",
+    "class": "button secondary",
+    "width": 105.296875,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "workbench",
+    "label": "新建任务",
+    "class": "button secondary",
+    "width": 90,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "runs",
+    "label": "新建任务",
+    "class": "button primary",
+    "width": 116,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(1 0 0)",
+        "buttonColor": "oklch(1 0 0)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "runs",
+    "label": "新建任务",
+    "class": "button secondary",
+    "width": 90,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "workspaces",
+    "label": "创建工作空间",
+    "class": "button primary",
+    "width": 144,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(1 0 0)",
+        "buttonColor": "oklch(1 0 0)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "workspaces",
+    "label": "正在使用",
+    "class": "button secondary",
+    "width": 86,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "workspaces",
+    "label": "编辑",
+    "class": "button secondary",
+    "width": 60,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "workspaces",
+    "label": "删除",
+    "class": "text-button danger-text",
+    "width": 50,
+    "height": 44.796875,
+    "icons": []
+  },
+  {
+    "route": "skills",
+    "label": "导入 ZIP",
+    "class": "button secondary",
+    "width": 87.828125,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "skills",
+    "label": "创建 Skill",
+    "class": "button primary",
+    "width": 119.578125,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(1 0 0)",
+        "buttonColor": "oklch(1 0 0)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "skills",
+    "label": "查看技能",
+    "class": "button primary",
+    "width": 86,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "skills",
+    "label": "v1 · 已发布",
+    "class": "text-button",
+    "width": 86.875,
+    "height": 47.390625,
+    "icons": []
+  },
+  {
+    "route": "skills",
+    "label": "导出 ZIP",
+    "class": "button secondary",
+    "width": 113.828125,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(0.24 0.022 258)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "skills",
+    "label": "复制为新包",
+    "class": "button secondary",
+    "width": 130,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(0.24 0.022 258)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "skills",
+    "label": "查看技能",
+    "class": "button primary",
+    "width": 86,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "skills",
+    "label": "v1 · 已发布",
+    "class": "text-button",
+    "width": 86.875,
+    "height": 47.390625,
+    "icons": []
+  },
+  {
+    "route": "skills",
+    "label": "导出 ZIP",
+    "class": "button secondary",
+    "width": 113.828125,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(0.24 0.022 258)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "skills",
+    "label": "复制为新包",
+    "class": "button secondary",
+    "width": 130,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(0.24 0.022 258)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "workflows",
+    "label": "对话设计",
+    "class": "button secondary",
+    "width": 116,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(0.24 0.022 258)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "workflows",
+    "label": "可视化创建",
+    "class": "button primary",
+    "width": 130,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(1 0 0)",
+        "buttonColor": "oklch(1 0 0)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "workflows",
+    "label": "配置 Agent",
+    "class": "button primary",
+    "width": 105.296875,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "library",
+    "label": "新增资料",
+    "class": "button primary",
+    "width": 116,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(1 0 0)",
+        "buttonColor": "oklch(1 0 0)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "library",
+    "label": "知识0",
+    "class": "button primary",
+    "width": 77.921875,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "library",
+    "label": "记忆0",
+    "class": "button secondary",
+    "width": 77.921875,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "library",
+    "label": "经验0",
+    "class": "button secondary",
+    "width": 77.921875,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "library",
+    "label": "能力6",
+    "class": "button secondary",
+    "width": 77.953125,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "library",
+    "label": "本体 Ontology0",
+    "class": "button secondary",
+    "width": 142.75,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "library",
+    "label": "搜索",
+    "class": "button secondary",
+    "width": 62,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "library",
+    "label": "新增第一份资料",
+    "class": "button primary",
+    "width": 132,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "daily",
+    "label": "计划设置",
+    "class": "button secondary",
+    "width": 116,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(0.24 0.022 258)",
+        "buttonColor": "oklch(0.24 0.022 258)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "daily",
+    "label": "生成今日计划",
+    "class": "button primary",
+    "width": 144,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(1 0 0)",
+        "buttonColor": "oklch(1 0 0)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "daily",
+    "label": "配置每日计划",
+    "class": "button primary",
+    "width": 118,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "evaluations",
+    "label": "岗位评测契约",
+    "class": "button secondary",
+    "width": 118,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "evaluations",
+    "label": "空间评测设置",
+    "class": "button secondary",
+    "width": 118,
+    "height": 44,
+    "icons": []
+  },
+  {
+    "route": "evaluations",
+    "label": "评测执行历史",
+    "class": "button primary",
+    "width": 144,
+    "height": 44,
+    "icons": [
+      {
+        "w": 18,
+        "h": 18,
+        "margin": "0px",
+        "color": "oklch(1 0 0)",
+        "buttonColor": "oklch(1 0 0)",
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "route": "evaluations",
+    "label": "查看 Agent",
+    "class": "button secondary",
+    "width": 105.296875,
+    "height": 44,
+    "icons": []
+  }
+]

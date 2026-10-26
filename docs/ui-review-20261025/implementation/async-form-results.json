@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-10-25T05:12:17.864Z",
+  "workspaceId": "workspace-b11d59be9f134c39",
+  "records": [
+    {
+      "name": "agent",
+      "enabled": [],
+      "posts": 1,
+      "inputPreserved": true,
+      "escapeProtected": true,
+      "errorFocused": true
+    },
+    {
+      "name": "skill-save",
+      "enabled": [],
+      "posts": 1,
+      "inputPreserved": true,
+      "escapeProtected": true,
+      "errorFocused": true
+    },
+    {
+      "name": "workflow-start",
+      "enabled": [],
+      "posts": 1,
+      "inputPreserved": true,
+      "escapeProtected": true,
+      "errorFocused": true
+    },
+    {
+      "name": "workflow-chat",
+      "enabled": [],
+      "posts": 1,
+      "inputPreserved": true,
+      "escapeProtected": true,
+      "errorFocused": true
+    },
+    {
+      "name": "private-preference",
+      "enabled": [],
+      "posts": 1,
+      "inputPreserved": true,
+      "escapeProtected": true,
+      "errorFocused": true
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: a real Agent requires fresh model context consent before any request
+ok 1 - a real Agent requires fresh model context consent before any request
+  ---
+  duration_ms: 1.675083
+  type: 'test'
+  ...
+# Subtest: unknown generation response is not retried and can be reconciled by request id
+ok 2 - unknown generation response is not retried and can be reconciled by request id
+  ---
+  duration_ms: 1.651542
+  type: 'test'
+  ...
+# Subtest: lost deposition receipt locks further writes until a read resolves it
+ok 3 - lost deposition receipt locks further writes until a read resolves it
+  ---
+  duration_ms: 0.55175
+  type: 'test'
+  ...
+# Subtest: saving edited advice precedes deposition and uses returned revision
+ok 4 - saving edited advice precedes deposition and uses returned revision
+  ---
+  duration_ms: 0.548583
+  type: 'test'
+  ...
+# Subtest: a pending request disables editing and prevents duplicate dispatch
+ok 5 - a pending request disables editing and prevents duplicate dispatch
+  ---
+  duration_ms: 2.63625
+  type: 'test'
+  ...
+# Subtest: changing instruction resets previous model consent
+ok 6 - changing instruction resets previous model consent
+  ---
+  duration_ms: 0.455542
+  type: 'test'
+  ...
+# Subtest: ontology graph escapes user supplied labels and has graph-scoped marker ids
+ok 7 - ontology graph escapes user supplied labels and has graph-scoped marker ids
+  ---
+  duration_ms: 0.563209
+  type: 'test'
+  ...
+# Subtest: empty selection cannot deposit any asset
+ok 8 - empty selection cannot deposit any asset
+  ---
+  duration_ms: 0.358125
+  type: 'test'
+  ...
+# Subtest: unknown ontology revision is resolved by reading latest versions without a second write
+ok 9 - unknown ontology revision is resolved by reading latest versions without a second write
+  ---
+  duration_ms: 0.962292
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 244.98675

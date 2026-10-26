@@ -1,0 +1,50 @@
+[
+  {
+    "height": 740,
+    "overflow": false,
+    "saveBottom": 725.28125,
+    "saveInViewport": true,
+    "saveTop": 681.28125,
+    "width": 320
+  },
+  {
+    "height": 812,
+    "overflow": false,
+    "saveBottom": 748.7890625,
+    "saveInViewport": true,
+    "saveTop": 704.7890625,
+    "width": 375
+  },
+  {
+    "height": 812,
+    "overflow": false,
+    "saveBottom": 733.84375,
+    "saveInViewport": true,
+    "saveTop": 689.4453125,
+    "width": 640
+  },
+  {
+    "height": 1024,
+    "overflow": false,
+    "saveBottom": 839.4375,
+    "saveInViewport": true,
+    "saveTop": 795.0390625,
+    "width": 768
+  },
+  {
+    "height": 720,
+    "overflow": false,
+    "saveBottom": 693,
+    "saveInViewport": true,
+    "saveTop": 648.6015625,
+    "width": 1280
+  },
+  {
+    "height": 375,
+    "overflow": false,
+    "saveBottom": 346,
+    "saveInViewport": true,
+    "saveTop": 301.6015625,
+    "width": 812
+  }
+]

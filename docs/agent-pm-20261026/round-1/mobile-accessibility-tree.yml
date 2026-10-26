@@ -1,0 +1,35 @@
+- table "当前工作空间的智能体目录":
+  - caption: 当前工作空间的智能体目录
+  - rowgroup:
+    - row "智能体 状态 操作":
+      - columnheader "智能体"
+      - columnheader "状态"
+      - columnheader "操作"
+  - rowgroup:
+    - row "查看 变更评估助手 的详情 可用 使用 变更评估助手 创建任务":
+      - cell "查看 变更评估助手 的详情":
+        - link "查看 变更评估助手 的详情":
+          - /url: "#/agents/agent-11a515cb6ce34d4b"
+          - strong: 变更评估助手
+          - text: 变更评估专家 变更评估
+      - cell "可用"
+      - cell "使用 变更评估助手 创建任务":
+        - button "使用 变更评估助手 创建任务"
+    - row "查看 资料问答助手 的详情 可用 使用 资料问答助手 创建任务":
+      - cell "查看 资料问答助手 的详情":
+        - link "查看 资料问答助手 的详情":
+          - /url: "#/agents/agent-fc6e7b5f1d9340aa"
+          - strong: 资料问答助手
+          - text: 知识问答助手 知识问答
+      - cell "可用"
+      - cell "使用 资料问答助手 创建任务":
+        - button "使用 资料问答助手 创建任务"
+    - row "查看 售后支持与退换货政策资料查询助手ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 的详情 可用 使用 售后支持与退换货政策资料查询助手ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 创建任务":
+      - cell "查看 售后支持与退换货政策资料查询助手ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 的详情":
+        - link "查看 售后支持与退换货政策资料查询助手ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 的详情":
+          - /url: "#/agents/agent-5d91d2650f6d4c42"
+          - strong: 售后支持与退换货政策资料查询助手ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+          - text: 知识问答助手 知识问答
+      - cell "可用"
+      - cell "使用 售后支持与退换货政策资料查询助手ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 创建任务":
+        - button "使用 售后支持与退换货政策资料查询助手ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 创建任务"

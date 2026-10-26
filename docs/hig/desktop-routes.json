@@ -1,0 +1,50 @@
+[
+  {
+    "active": "工作空间管理",
+    "errors": false,
+    "heading": "工作空间管理",
+    "overflow": false
+  },
+  {
+    "active": "运行记录0",
+    "errors": false,
+    "heading": "运行记录",
+    "overflow": false
+  },
+  {
+    "active": "智能体 Agent",
+    "errors": false,
+    "heading": "智能体 Agent",
+    "overflow": false
+  },
+  {
+    "active": "技能 Skills",
+    "errors": false,
+    "heading": "技能 Skills",
+    "overflow": false
+  },
+  {
+    "active": "工作流",
+    "errors": false,
+    "heading": "工作流",
+    "overflow": false
+  },
+  {
+    "active": "知识库",
+    "errors": false,
+    "heading": "知识库",
+    "overflow": false
+  },
+  {
+    "active": "能力与标准",
+    "errors": false,
+    "heading": "能力与标准",
+    "overflow": false
+  },
+  {
+    "active": "运行时配置",
+    "errors": false,
+    "heading": "运行时配置",
+    "overflow": false
+  }
+]

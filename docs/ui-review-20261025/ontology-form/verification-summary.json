@@ -1,0 +1,68 @@
+{
+  "generatedAt": "2026-10-25T05:35:24.908092+00:00",
+  "scope": "本体表单披露状态、服务器校验错误可见性与焦点定位，以及本体局部窄屏布局",
+  "source": [
+    {
+      "path": "agent_framework/webui/learning.js",
+      "sha256": "c1eb0f3850edcb45f61e963422d056e57fe785fa38dc2bb16da5368a94f8838e"
+    },
+    {
+      "path": "agent_framework/webui/ontology_model.js",
+      "sha256": "a438c953280f7795f29bd46c7d9a3ebe81057ad3b146fc2a8c4c0956b3e7c652"
+    },
+    {
+      "path": "agent_framework/webui/hig.css",
+      "sha256": "9b17d1a17f329b5b8f955ea357f82922d86fbdaf561fec79b29580e10ba99d25"
+    },
+    {
+      "path": "tests/verify_ui_review_ontology_form.cjs",
+      "sha256": "7c35c6f7596fdbbe5d05789277b041276b6cbcfdf6a923d4ffd5bd708a6fb9eb"
+    }
+  ],
+  "baselineEvidence": {
+    "form": [
+      "docs/ui-review-20261025/reviewer/round-1-interaction-log.json",
+      "docs/ui-review-20261025/reviewer/screenshots/round-1/ontology-object-validation.png"
+    ],
+    "layout": "docs/ui-review-20261025/ontology-form/before-layout-fix/missing-id-focused.png"
+  },
+  "browser": {
+    "result": "docs/ui-review-20261025/ontology-form/results.json",
+    "passed": 10,
+    "errors": [],
+    "workspaceId": "workspace-8c375abab09944b7",
+    "ontologyRef": "learned-4f0049f23fbcad249df0ab68@1",
+    "revisedRef": "learned-4f0049f23fbcad249df0ab68@2",
+    "failure": null,
+    "layoutCombinations": 8,
+    "layoutWidths": [
+      320,
+      375,
+      414,
+      768
+    ],
+    "layoutThemes": [
+      "light",
+      "dark"
+    ],
+    "populatedModelCounts": {
+      "types": 1,
+      "objects": 2,
+      "links": 1,
+      "actions": 1
+    },
+    "allBodiesHaveNoHorizontalOverflow": true,
+    "allFieldsAndActionsWithinDialog": true,
+    "longSourceReferencesScrollInsideControls": true
+  },
+  "existingInteractionTests": {
+    "tests/test_ontology_model_interactions.js": {
+      "passed": 8
+    },
+    "tests/test_learning_interactions.js": {
+      "passed": 9
+    }
+  },
+  "readOnlyPeerReview": "JS与局部CSS未发现阻塞问题；后端验证API、权限、发布、来源契约未改。未改颜色字体，未通过overflow裁切掩盖布局溢出。",
+  "contract": "校验错误直接使用服务器report；客户端仅将报告映射到现有输入，无客户端业务校验规则。"
+}

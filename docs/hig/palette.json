@@ -1,0 +1,48 @@
+[
+  {
+    "colors": {
+      "action": "oklch(49% .197 257)",
+      "amber": "oklch(43% .105 64)",
+      "amber-soft": "oklch(97% .03 80)",
+      "blue": "oklch(49% .197 257)",
+      "blue-soft": "oklch(95.3% .025 257)",
+      "border-strong": "oklch(65.5% .024 258)",
+      "canvas": "oklch(97.5% .005 255)",
+      "green": "oklch(39% .098 161)",
+      "green-soft": "oklch(95.8% .024 161)",
+      "ink": "oklch(24% .022 258)",
+      "muted": "oklch(47% .025 258)",
+      "nav": "oklch(96.3% .008 255)",
+      "nav-text": "oklch(39% .025 258)",
+      "red": "oklch(47% .178 25)",
+      "red-soft": "oklch(96% .022 25)",
+      "subtle": "oklch(98.1% .005 255)",
+      "surface": "oklch(100% 0 0)",
+      "white": "oklch(100% 0 0)"
+    },
+    "theme": "light"
+  },
+  {
+    "colors": {
+      "action": "oklch(49% .197 257)",
+      "amber": "oklch(83% .105 80)",
+      "amber-soft": "oklch(29% .045 75)",
+      "blue": "oklch(77% .125 252)",
+      "blue-soft": "oklch(28% .063 258)",
+      "border-strong": "oklch(57% .035 258)",
+      "canvas": "oklch(16.8% .017 258)",
+      "green": "oklch(79% .11 160)",
+      "green-soft": "oklch(27% .047 160)",
+      "ink": "oklch(95% .007 258)",
+      "muted": "oklch(75% .023 258)",
+      "nav": "oklch(19% .02 258)",
+      "nav-text": "oklch(81% .018 258)",
+      "red": "oklch(79% .11 25)",
+      "red-soft": "oklch(29% .048 25)",
+      "subtle": "oklch(24.2% .021 258)",
+      "surface": "oklch(21.3% .02 258)",
+      "white": "oklch(100% 0 0)"
+    },
+    "theme": "dark"
+  }
+]

@@ -1,0 +1,358 @@
+{
+  "method": "Composed CSS backgrounds. Canvas sRGB pixel conversion of browser OKLCH/RGB colors; visible direct-text elements; disabled/inert/hidden/decorative/screen-reader-only excluded.",
+  "at": "2026-10-25T05:20:48.097Z",
+  "rows": [
+    {
+      "route": "workbench",
+      "width": 1440,
+      "theme": "light",
+      "count": 85,
+      "min": 5.56,
+      "bad": []
+    },
+    {
+      "route": "runs",
+      "width": 1440,
+      "theme": "light",
+      "count": 85,
+      "min": 5.56,
+      "bad": []
+    },
+    {
+      "route": "daily",
+      "width": 1440,
+      "theme": "light",
+      "count": 48,
+      "min": 5.56,
+      "bad": []
+    },
+    {
+      "route": "evaluations",
+      "width": 1440,
+      "theme": "light",
+      "count": 61,
+      "min": 5.56,
+      "bad": []
+    },
+    {
+      "route": "workspaces",
+      "width": 1440,
+      "theme": "light",
+      "count": 70,
+      "min": 5.56,
+      "bad": []
+    },
+    {
+      "route": "agents",
+      "width": 1440,
+      "theme": "light",
+      "count": 71,
+      "min": 5.56,
+      "bad": []
+    },
+    {
+      "route": "workflows",
+      "width": 1440,
+      "theme": "light",
+      "count": 52,
+      "min": 5.56,
+      "bad": []
+    },
+    {
+      "route": "skills",
+      "width": 1440,
+      "theme": "light",
+      "count": 81,
+      "min": 5.56,
+      "bad": []
+    },
+    {
+      "route": "library",
+      "width": 1440,
+      "theme": "light",
+      "count": 69,
+      "min": 5.56,
+      "bad": []
+    },
+    {
+      "route": "registry",
+      "width": 1440,
+      "theme": "light",
+      "count": 59,
+      "min": 5.56,
+      "bad": []
+    },
+    {
+      "route": "runtimes",
+      "width": 1440,
+      "theme": "light",
+      "count": 58,
+      "min": 5.56,
+      "bad": []
+    },
+    {
+      "route": "workbench",
+      "width": 1440,
+      "theme": "dark",
+      "count": 85,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "runs",
+      "width": 1440,
+      "theme": "dark",
+      "count": 85,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "daily",
+      "width": 1440,
+      "theme": "dark",
+      "count": 48,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "evaluations",
+      "width": 1440,
+      "theme": "dark",
+      "count": 61,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "workspaces",
+      "width": 1440,
+      "theme": "dark",
+      "count": 70,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "agents",
+      "width": 1440,
+      "theme": "dark",
+      "count": 71,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "workflows",
+      "width": 1440,
+      "theme": "dark",
+      "count": 52,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "skills",
+      "width": 1440,
+      "theme": "dark",
+      "count": 81,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "library",
+      "width": 1440,
+      "theme": "dark",
+      "count": 69,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "registry",
+      "width": 1440,
+      "theme": "dark",
+      "count": 59,
+      "min": 7.07,
+      "bad": []
+    },
+    {
+      "route": "runtimes",
+      "width": 1440,
+      "theme": "dark",
+      "count": 58,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "workbench",
+      "width": 375,
+      "theme": "light",
+      "count": 20,
+      "min": 6.31,
+      "bad": []
+    },
+    {
+      "route": "runs",
+      "width": 375,
+      "theme": "light",
+      "count": 14,
+      "min": 6.31,
+      "bad": []
+    },
+    {
+      "route": "daily",
+      "width": 375,
+      "theme": "light",
+      "count": 16,
+      "min": 6.31,
+      "bad": []
+    },
+    {
+      "route": "evaluations",
+      "width": 375,
+      "theme": "light",
+      "count": 14,
+      "min": 6.31,
+      "bad": []
+    },
+    {
+      "route": "workspaces",
+      "width": 375,
+      "theme": "light",
+      "count": 19,
+      "min": 6.31,
+      "bad": []
+    },
+    {
+      "route": "agents",
+      "width": 375,
+      "theme": "light",
+      "count": 18,
+      "min": 6.31,
+      "bad": []
+    },
+    {
+      "route": "workflows",
+      "width": 375,
+      "theme": "light",
+      "count": 20,
+      "min": 6.31,
+      "bad": []
+    },
+    {
+      "route": "skills",
+      "width": 375,
+      "theme": "light",
+      "count": 21,
+      "min": 6.31,
+      "bad": []
+    },
+    {
+      "route": "library",
+      "width": 375,
+      "theme": "light",
+      "count": 29,
+      "min": 5.92,
+      "bad": []
+    },
+    {
+      "route": "registry",
+      "width": 375,
+      "theme": "light",
+      "count": 15,
+      "min": 6.31,
+      "bad": []
+    },
+    {
+      "route": "runtimes",
+      "width": 375,
+      "theme": "light",
+      "count": 15,
+      "min": 5.93,
+      "bad": []
+    },
+    {
+      "route": "workbench",
+      "width": 375,
+      "theme": "dark",
+      "count": 20,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "runs",
+      "width": 375,
+      "theme": "dark",
+      "count": 14,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "daily",
+      "width": 375,
+      "theme": "dark",
+      "count": 16,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "evaluations",
+      "width": 375,
+      "theme": "dark",
+      "count": 14,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "workspaces",
+      "width": 375,
+      "theme": "dark",
+      "count": 19,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "agents",
+      "width": 375,
+      "theme": "dark",
+      "count": 18,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "workflows",
+      "width": 375,
+      "theme": "dark",
+      "count": 20,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "skills",
+      "width": 375,
+      "theme": "dark",
+      "count": 21,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "library",
+      "width": 375,
+      "theme": "dark",
+      "count": 29,
+      "min": 6.36,
+      "bad": []
+    },
+    {
+      "route": "registry",
+      "width": 375,
+      "theme": "dark",
+      "count": 15,
+      "min": 7.96,
+      "bad": []
+    },
+    {
+      "route": "runtimes",
+      "width": 375,
+      "theme": "dark",
+      "count": 15,
+      "min": 6.58,
+      "bad": []
+    }
+  ]
+}

@@ -1,0 +1,285 @@
+{
+  "checks": [
+    {
+      "id": "same-space-back",
+      "actual": 5031,
+      "expected": 5031,
+      "passed": true
+    },
+    {
+      "id": "same-space-forward-and-back",
+      "actual": 5031,
+      "expected": 5031,
+      "passed": true
+    },
+    {
+      "id": "first-space-entry-starts-at-top",
+      "actual": 0,
+      "expected": 0,
+      "passed": true
+    },
+    {
+      "id": "different-workspace-same-route-starts-at-top",
+      "actual": 0,
+      "expected": 0,
+      "passed": true
+    },
+    {
+      "id": "second-space-local-back",
+      "actual": 2450,
+      "expected": 2450,
+      "passed": true
+    },
+    {
+      "id": "cross-space-back-restores-long-list",
+      "actual": 5031,
+      "expected": 5031,
+      "passed": true
+    },
+    {
+      "id": "cross-space-back-keeps-scope",
+      "actual": [
+        "workspace-db04783ca2244937",
+        "workspace-db04783ca2244937",
+        "workspace-db04783ca2244937",
+        "workspace-db04783ca2244937"
+      ],
+      "expected": [
+        "workspace-db04783ca2244937",
+        "workspace-db04783ca2244937",
+        "workspace-db04783ca2244937",
+        "workspace-db04783ca2244937"
+      ],
+      "passed": true
+    },
+    {
+      "id": "cross-space-forward-workbench",
+      "actual": 0,
+      "expected": 0,
+      "passed": true
+    },
+    {
+      "id": "cross-space-forward-restores-own-list",
+      "actual": 2450,
+      "expected": 2450,
+      "passed": true
+    },
+    {
+      "id": "new-tab-deep-link-starts-at-top",
+      "actual": 0,
+      "expected": 0,
+      "passed": true
+    },
+    {
+      "id": "new-tab-deep-link-keeps-scope",
+      "actual": [
+        "workspace-db04783ca2244937",
+        "workspace-db04783ca2244937"
+      ],
+      "expected": [
+        "workspace-db04783ca2244937",
+        "workspace-db04783ca2244937"
+      ],
+      "passed": true
+    },
+    {
+      "id": "skip-link-first-keyboard-target",
+      "actual": "跳至主要内容",
+      "expected": "跳至主要内容",
+      "passed": true
+    },
+    {
+      "id": "skip-link-keeps-route-and-history",
+      "actual": [
+        "http://127.0.0.1:8800/?workspace_id=workspace-db04783ca2244937#/skills",
+        1,
+        1,
+        "skills",
+        "content"
+      ],
+      "expected": [
+        "http://127.0.0.1:8800/?workspace_id=workspace-db04783ca2244937#/skills",
+        1,
+        1,
+        "skills",
+        "content"
+      ],
+      "passed": true
+    },
+    {
+      "id": "reload-restores-position",
+      "actual": 5031,
+      "expected": 5031,
+      "passed": true
+    },
+    {
+      "id": "reenter-existing-space-starts-at-top",
+      "actual": 0,
+      "expected": 0,
+      "passed": true
+    },
+    {
+      "id": "fresh-navigation-ignores-stored-list-position",
+      "actual": 0,
+      "expected": 0,
+      "passed": true
+    },
+    {
+      "id": "earlier-entry-keeps-own-position-after-fresh-visit",
+      "actual": 5031,
+      "expected": 5031,
+      "passed": true
+    },
+    {
+      "id": "shortened-list-renders",
+      "actual": 2,
+      "expected": 2,
+      "passed": true
+    },
+    {
+      "id": "shortened-list-clamps-to-end",
+      "actual": 1,
+      "expected": 1,
+      "passed": true
+    },
+    {
+      "id": "invalid-storage-does-not-break-route",
+      "actual": "workspace-db04783ca2244937",
+      "expected": "workspace-db04783ca2244937",
+      "passed": true
+    },
+    {
+      "id": "unavailable-workspace-falls-back-safely",
+      "actual": [
+        "workspace-default",
+        "workspace-default",
+        "workbench"
+      ],
+      "expected": [
+        "workspace-default",
+        "workspace-default",
+        "workbench"
+      ],
+      "passed": true
+    },
+    {
+      "id": "unavailable-workspace-starts-at-top",
+      "actual": 0,
+      "expected": 0,
+      "passed": true
+    },
+    {
+      "id": "browser-errors",
+      "actual": [],
+      "expected": [],
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "startedAt": "2026-10-25T05:12:32.318Z",
+  "base": "http://127.0.0.1:8800",
+  "workspaceA": {
+    "business": "UI95 界面验收",
+    "description": "界面验收隔离数据",
+    "name": "历史位置修正 A mvndfpfz",
+    "scenario": "独立模拟",
+    "id": "workspace-db04783ca2244937",
+    "revision": 1,
+    "project_id": "project-6a304bd077044816",
+    "deleted": false,
+    "created_at": 1792905152.401552,
+    "updated_at": 1792905152.401552
+  },
+  "original": {
+    "workspace": "workspace-db04783ca2244937",
+    "picker": "workspace-db04783ca2244937",
+    "view": "skills",
+    "top": 5031,
+    "max": 5031,
+    "url": "http://127.0.0.1:8800/?workspace_id=workspace-db04783ca2244937#/skills",
+    "key": "[\"workspace-db04783ca2244937\",\"skills\",\"\"]",
+    "tenant": "review-journeys",
+    "sessionWorkspace": "workspace-db04783ca2244937",
+    "cards": 26
+  },
+  "workspaceB": {
+    "business": "界面验收",
+    "description": "独立验证空间",
+    "name": "历史位置修正 B mvndfq88",
+    "scenario": "空间隔离",
+    "id": "workspace-958e7380d2a449ea",
+    "revision": 1,
+    "project_id": "project-bf7944f0e6d54cbd",
+    "deleted": false,
+    "created_at": 1792905153.4176252,
+    "updated_at": 1792905153.4176252
+  },
+  "second": {
+    "workspace": "workspace-958e7380d2a449ea",
+    "picker": "workspace-958e7380d2a449ea",
+    "view": "skills",
+    "top": 2450,
+    "max": 2450,
+    "url": "http://127.0.0.1:8800/?workspace_id=workspace-958e7380d2a449ea#/skills",
+    "key": "[\"workspace-958e7380d2a449ea\",\"skills\",\"\"]",
+    "tenant": "review-journeys",
+    "sessionWorkspace": "workspace-958e7380d2a449ea",
+    "cards": 14
+  },
+  "crossSpaceBack": {
+    "workspace": "workspace-db04783ca2244937",
+    "picker": "workspace-db04783ca2244937",
+    "view": "skills",
+    "top": 5031,
+    "max": 5031,
+    "url": "http://127.0.0.1:8800/?workspace_id=workspace-db04783ca2244937#/skills",
+    "key": "[\"workspace-db04783ca2244937\",\"skills\",\"\"]",
+    "tenant": "review-journeys",
+    "sessionWorkspace": "workspace-db04783ca2244937",
+    "cards": 26
+  },
+  "newTab": {
+    "workspace": "workspace-db04783ca2244937",
+    "picker": "workspace-db04783ca2244937",
+    "view": "skills",
+    "top": 0,
+    "max": 5031,
+    "url": "http://127.0.0.1:8800/?workspace_id=workspace-db04783ca2244937#/skills",
+    "key": "[\"workspace-db04783ca2244937\",\"skills\",\"\"]",
+    "tenant": "review-journeys",
+    "sessionWorkspace": "workspace-db04783ca2244937",
+    "cards": 26
+  },
+  "skipLink": {
+    "url": "http://127.0.0.1:8800/?workspace_id=workspace-db04783ca2244937#/skills",
+    "length": 1,
+    "version": 1,
+    "view": "skills",
+    "focus": "content"
+  },
+  "shortened": {
+    "workspace": "workspace-db04783ca2244937",
+    "picker": "workspace-db04783ca2244937",
+    "view": "skills",
+    "top": 1,
+    "max": 1,
+    "url": "http://127.0.0.1:8800/?workspace_id=workspace-db04783ca2244937#/skills",
+    "key": "[\"workspace-db04783ca2244937\",\"skills\",\"\"]",
+    "tenant": "review-journeys",
+    "sessionWorkspace": "workspace-db04783ca2244937",
+    "cards": 2
+  },
+  "invalidWorkspace": {
+    "workspace": "workspace-default",
+    "picker": "workspace-default",
+    "view": "workbench",
+    "top": 0,
+    "max": 1,
+    "url": "http://127.0.0.1:8800/?workspace_id=workspace-default#/workbench",
+    "key": "[\"workspace-default\",\"workbench\",\"\"]",
+    "tenant": "review-journeys",
+    "sessionWorkspace": "workspace-default",
+    "cards": 0
+  },
+  "finishedAt": "2026-10-25T05:12:36.167Z"
+}

@@ -1,0 +1,1007 @@
+{
+  "schema": "af-independent-ui-review/1",
+  "reviewer": "ui_review 独立评审Agent",
+  "signed_at": "2026-10-25T05:40:05.640265+00:00",
+  "score": 97.0,
+  "max_score": 100,
+  "threshold": 95,
+  "verdict": "PASS",
+  "rubric_sha256": "7cd7cfae976a663d3a5f906ca2e653271659ea9f44a6ba69d6da5e6bfd01f13f",
+  "source_sha256": "aa5dee52814e4b0978cfae2816040677d8b8637a09ea6699e8d29ed9d57b5f32",
+  "source_algorithm": "SHA256 of sorted relative path + NUL + each file SHA256 + LF; includes agent_framework text/resources/fonts plus design.md, excludes __pycache__.",
+  "parent_webui_bundle_sha256": "529f3e4885da58883bb403592f7c306dc0aa4bb154038ec4ef575a1636a27038",
+  "source_manifest": "final-source-manifest.json",
+  "source_recheck": "final-after-source-manifest.json",
+  "baseline_score": 87.25,
+  "baseline_source_sha256": "5976b19fff249921ff999b4cbb6bf149066a421cc2703970c43b56ca431ad4f9",
+  "independence": "未修改产品文件；未读取8787；旧docs/ui95综合分不作为证据。视觉分来自独立目视本轮渲染，自动/他人实机记录仅补充操作证据并明示归属。",
+  "modules": [
+    {
+      "route": "workbench",
+      "name": "任务工作台",
+      "points": 4,
+      "journey": "创建任务三步→保存或模拟运行→结果、来源、验收与恢复",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。",
+          "earned": 1,
+          "status": "verified"
+        }
+      ],
+      "earned": 4,
+      "evidence": [
+        "screenshots/round-1/task-stage1.png",
+        "screenshots/round-1/task-stage3.png",
+        "screenshots/round-1/review-qa-result.png",
+        "screenshots/round-1/task-config-roundtrip-preserved.png",
+        "../implementation/recovery/recovery-results.json",
+        "screenshots/round-2/workbench-1440-light.png",
+        "screenshots/round-2/workbench-1440-dark.png",
+        "screenshots/round-2/workbench-375-light.png",
+        "screenshots/round-2/workbench-375-dark.png"
+      ]
+    },
+    {
+      "route": "runs",
+      "name": "运行记录",
+      "points": 4,
+      "journey": "搜索/筛选→历史详情→报告/证据→续跑或恢复",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。",
+          "earned": 1,
+          "status": "verified"
+        }
+      ],
+      "earned": 4,
+      "evidence": [
+        "screenshots/final/runs-no-results.png",
+        "screenshots/round-1/review-qa-result.png",
+        "../implementation/recovery/recovery-results.json",
+        "screenshots/round-2/runs-1440-light.png",
+        "screenshots/round-2/runs-1440-dark.png",
+        "screenshots/round-2/runs-375-light.png",
+        "screenshots/round-2/runs-375-dark.png"
+      ]
+    },
+    {
+      "route": "daily",
+      "name": "每日任务",
+      "points": 4,
+      "journey": "计划设置→动态模板→生成→审查派发→跳转任务→同日复用",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。",
+          "earned": 1,
+          "status": "verified"
+        }
+      ],
+      "earned": 4,
+      "evidence": [
+        "screenshots/round-1/daily-recovered-dispatched-mobile.png",
+        "screenshots/final/daily-add-remove-template.png",
+        "screenshots/round-2/blocked-final-320-light.png",
+        "round-2-blocked-visual.json",
+        "screenshots/round-2/daily-1440-light.png",
+        "screenshots/round-2/daily-1440-dark.png",
+        "screenshots/round-2/daily-375-light.png",
+        "screenshots/round-2/daily-375-dark.png"
+      ]
+    },
+    {
+      "route": "evaluations",
+      "name": "岗位评测",
+      "points": 4,
+      "journey": "历史补评→提醒→冻结评测详情→确认→空间/岗位契约",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。",
+          "earned": 1,
+          "status": "verified"
+        }
+      ],
+      "earned": 4,
+      "evidence": [
+        "screenshots/round-1/evaluation-return-fixed.png",
+        "screenshots/round-1/pending-policy-failure-recover.png",
+        "screenshots/round-2/evaluation-contract-375-light.png",
+        "screenshots/round-2/evaluations-1440-light.png",
+        "screenshots/round-2/evaluations-1440-dark.png",
+        "screenshots/round-2/evaluations-375-light.png",
+        "screenshots/round-2/evaluations-375-dark.png"
+      ]
+    },
+    {
+      "route": "workspaces",
+      "name": "工作空间管理",
+      "points": 4,
+      "journey": "创建→明确进入→编辑→切换→删除/恢复",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。",
+          "earned": 1,
+          "status": "verified"
+        }
+      ],
+      "earned": 4,
+      "evidence": [
+        "screenshots/round-1/workspace-discard.png",
+        "screenshots/round-1/workspace-deleted-recovery.png",
+        "screenshots/round-1/workspace-restored.png",
+        "screenshots/round-2/workspaces-1440-light.png",
+        "screenshots/round-2/workspaces-1440-dark.png",
+        "screenshots/round-2/workspaces-375-light.png",
+        "screenshots/round-2/workspaces-375-dark.png"
+      ]
+    },
+    {
+      "route": "agents",
+      "name": "智能体 Agent",
+      "points": 4,
+      "journey": "用途预设→三步创建/编辑→角色职责交付标准/领域/技能/MCP→保存→开始使用",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。",
+          "earned": 1,
+          "status": "verified"
+        }
+      ],
+      "earned": 4,
+      "evidence": [
+        "screenshots/round-1/agent-domain-created.png",
+        "screenshots/round-1/agent-mcp-args-error.png",
+        "screenshots/round-1/task-controlled-read-consent.png",
+        "screenshots/round-1/domain-picker-no-results.png",
+        "screenshots/round-2/agents-1440-light.png",
+        "screenshots/round-2/agents-1440-dark.png",
+        "screenshots/round-2/agents-375-light.png",
+        "screenshots/round-2/agents-375-dark.png"
+      ]
+    },
+    {
+      "route": "workflows",
+      "name": "工作流",
+      "points": 4,
+      "journey": "对话提案→采用审查或手动画布→节点/连线/分支→保存→授权运行→节点结果",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。",
+          "earned": 0.75,
+          "status": "verified"
+        }
+      ],
+      "earned": 3.75,
+      "evidence": [
+        "screenshots/round-1/review-workflow-proposal.png",
+        "screenshots/round-1/review-workflow-proposal-review.png",
+        "screenshots/round-1/workflow-keyboard-connect-move.png",
+        "screenshots/round-2/flow-inspector-375-light.png",
+        "screenshots/round-2/workflows-1440-light.png",
+        "screenshots/round-2/workflows-1440-dark.png",
+        "screenshots/round-2/workflows-375-light.png",
+        "screenshots/round-2/workflows-375-dark.png"
+      ]
+    },
+    {
+      "route": "skills",
+      "name": "技能 Skills",
+      "points": 4,
+      "journey": "新建/ZIP导入→资源文件编辑→校验→保存→发布→固定版本/导出/撤回",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。",
+          "earned": 1,
+          "status": "verified"
+        }
+      ],
+      "earned": 4,
+      "evidence": [
+        "screenshots/round-1/review-skill-published.png",
+        "screenshots/round-1/review-skill-withdrawn.png",
+        "screenshots/round-1/skill-zip-import-preview.png",
+        "screenshots/round-1/cross-space-back-position-restored.png",
+        "screenshots/round-2/skills-1440-light.png",
+        "screenshots/round-2/skills-1440-dark.png",
+        "screenshots/round-2/skills-375-light.png",
+        "screenshots/round-2/skills-375-dark.png"
+      ]
+    },
+    {
+      "route": "library",
+      "name": "知识库",
+      "points": 4,
+      "journey": "知识/记忆/经验/能力/本体→创建/修订→审核发布/撤回→搜索→复盘与本体探索",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。",
+          "earned": 0.75,
+          "status": "verified"
+        }
+      ],
+      "earned": 3.75,
+      "evidence": [
+        "screenshots/round-1/review-knowledge-published.png",
+        "screenshots/round-1/review-knowledge-revision.png",
+        "screenshots/round-1/memory-created-published.png",
+        "screenshots/round-1/capability-created-published-export.png",
+        "screenshots/round-1/experience-offline-evaluated.png",
+        "screenshots/round-1/experience-published.png",
+        "screenshots/round-1/experience-withdrawn.png",
+        "screenshots/final/ontology-mincount-320-light.png",
+        "final-ontology-recheck.json",
+        "screenshots/round-2/library-1440-light.png",
+        "screenshots/round-2/library-1440-dark.png",
+        "screenshots/round-2/library-375-light.png",
+        "screenshots/round-2/library-375-dark.png"
+      ]
+    },
+    {
+      "route": "registry",
+      "name": "能力与标准",
+      "points": 4,
+      "journey": "可读职责→能力/领域/标准检索或详情→边界/规则披露",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。",
+          "earned": 1,
+          "status": "verified"
+        }
+      ],
+      "earned": 4,
+      "evidence": [
+        "screenshots/round-2/registry-1440-light.png",
+        "screenshots/round-2/registry-375-dark.png",
+        "screenshots/round-2/registry-1440-light.png",
+        "screenshots/round-2/registry-1440-dark.png",
+        "screenshots/round-2/registry-375-light.png",
+        "screenshots/round-2/registry-375-dark.png"
+      ]
+    },
+    {
+      "route": "runtimes",
+      "name": "运行时配置",
+      "points": 4,
+      "journey": "运行时切换→配置/检测/模型读取→保存→基于配置创建Agent",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。",
+          "earned": 1,
+          "status": "verified"
+        }
+      ],
+      "earned": 4,
+      "evidence": [
+        "screenshots/round-1/runtime-mock-saved.png",
+        "screenshots/round-1/runtime-create-agent-next-step.png",
+        "screenshots/round-1/runtime-detect-models-complete.png",
+        "screenshots/round-2/runtimes-1440-light.png",
+        "screenshots/round-2/runtimes-1440-dark.png",
+        "screenshots/round-2/runtimes-375-light.png",
+        "screenshots/round-2/runtimes-375-dark.png"
+      ]
+    }
+  ],
+  "cross_cutting": [
+    {
+      "id": "visual",
+      "name": "视觉质量与设计一致性",
+      "points": 14,
+      "criteria": [
+        {
+          "id": "hierarchy",
+          "points": 4,
+          "standard": "层级、正文/辅助文字、行长与任务密度清楚；无竞争主按钮、无无意义空洞或重复空态。",
+          "earned": 3,
+          "status": "verified"
+        },
+        {
+          "id": "system",
+          "points": 4,
+          "standard": "11模块沿用 design.md 的 System Blue、系统字、间距、表面与组件语言；无突兀风格或错误图标语义。",
+          "earned": 4,
+          "status": "verified"
+        },
+        {
+          "id": "themes",
+          "points": 4,
+          "standard": "浅色和深色均逐项目视，正常文字≥4.5:1、重要边界/焦点≥3:1；弹层、选中、禁用状态可辨。",
+          "earned": 4,
+          "status": "verified"
+        },
+        {
+          "id": "craft",
+          "points": 2,
+          "standard": "对齐、截断、换行、图标与滚动固定区精细稳定，真实内容与长文本均无视觉破碎。",
+          "earned": 1.5,
+          "status": "verified"
+        }
+      ],
+      "earned": 12.5
+    },
+    {
+      "id": "forms",
+      "name": "动态表单与编辑",
+      "points": 12,
+      "criteria": [
+        {
+          "id": "validation",
+          "points": 3,
+          "standard": "各动态表单标签/说明关联、字段名错误、首错定位、修正和重开清错一致。",
+          "earned": 2.7,
+          "status": "verified"
+        },
+        {
+          "id": "disclosure",
+          "points": 3,
+          "standard": "Agent三步、任务三步、每日模板、岗位职责/标准、工作流节点/分支、资源类型和技能文件切换均能理解并保留正确值。",
+          "earned": 3,
+          "status": "verified"
+        },
+        {
+          "id": "editing",
+          "points": 3,
+          "standard": "增加/删除/重排/类型切换及搜索选择控件可用，输入法、长文本和已编辑焦点不受刷新破坏。",
+          "earned": 3,
+          "status": "verified"
+        },
+        {
+          "id": "drafts",
+          "points": 3,
+          "standard": "编辑取消/Escape/切换上下文和配置往返有明确草稿保存或放弃机制，保存后可见结果与下一步。",
+          "earned": 3,
+          "status": "verified"
+        }
+      ],
+      "earned": 11.7
+    },
+    {
+      "id": "journeys",
+      "name": "跨模块完整动线",
+      "points": 10,
+      "criteria": [
+        {
+          "id": "agent_task",
+          "points": 3,
+          "standard": "空间→Agent→开始使用→目标→执行→许可→模拟运行→报告/引用/验收→恢复完整。",
+          "earned": 3,
+          "status": "verified"
+        },
+        {
+          "id": "reuse",
+          "points": 3,
+          "standard": "资料/技能保存发布→Agent可用版本→任务冻结上下文；运行复盘→审阅→沉淀→资源回跳可见。",
+          "earned": 3,
+          "status": "verified"
+        },
+        {
+          "id": "orchestration",
+          "points": 2,
+          "standard": "工作流提案/画布→保存→运行许可→节点结果；每日设置→派发→任务；评测提醒→证据可追溯。",
+          "earned": 2,
+          "status": "verified"
+        },
+        {
+          "id": "scope",
+          "points": 2,
+          "standard": "工作空间和运行时变更的影响可理解，冻结配置和授权范围审查清楚，用户能安全退回继续。",
+          "earned": 2,
+          "status": "verified"
+        }
+      ],
+      "earned": 10
+    },
+    {
+      "id": "responsive",
+      "name": "手机与适配",
+      "points": 10,
+      "criteria": [
+        {
+          "id": "phone",
+          "points": 4,
+          "standard": "320/375/414宽度无页面横溢、遮挡或不可达动作；主要路由和长表单真实操作。",
+          "earned": 4,
+          "status": "verified"
+        },
+        {
+          "id": "tablet",
+          "points": 2,
+          "standard": "768/1024/1440宽度密度合理，无断点错位；画布只在标记区域平移。",
+          "earned": 2,
+          "status": "verified"
+        },
+        {
+          "id": "overlays",
+          "points": 2,
+          "standard": "手机导航、弹层、键盘假定占用与固定头尾部留白合理；滚动后动作可达。",
+          "earned": 1.5,
+          "status": "verified"
+        },
+        {
+          "id": "text",
+          "points": 2,
+          "standard": "200%文字/放大及375横屏可读，reduced-motion下内容/焦点无遗漏。",
+          "earned": 2,
+          "status": "verified"
+        }
+      ],
+      "earned": 9.5
+    },
+    {
+      "id": "keyboard",
+      "name": "键盘与辅助语义",
+      "points": 8,
+      "criteria": [
+        {
+          "id": "navigation",
+          "points": 2,
+          "standard": "Tab顺序/可见焦点/跳转主内容、Cmd/Ctrl+K、Escape和命令搜索完整。",
+          "earned": 2,
+          "status": "verified"
+        },
+        {
+          "id": "dialogs",
+          "points": 2,
+          "standard": "弹层和手机导航焦点捕获、关闭恢复、背景inert与连续打开行为可靠。",
+          "earned": 2,
+          "status": "verified"
+        },
+        {
+          "id": "widgets",
+          "points": 2,
+          "standard": "搜索选择、标签页、画布节点移动/连接替代、动态行增删均有明确键盘路径。",
+          "earned": 2,
+          "status": "verified"
+        },
+        {
+          "id": "semantics",
+          "points": 2,
+          "standard": "控件有名称，标签页/展开/选中/忙碌/错误状态语义正确，颜色以外仍可读。",
+          "earned": 1.8,
+          "status": "verified"
+        }
+      ],
+      "earned": 7.8
+    },
+    {
+      "id": "feedback",
+      "name": "反馈稳定性",
+      "points": 2,
+      "criteria": [
+        {
+          "id": "pending",
+          "points": 1,
+          "standard": "保存/载入/生成有及时忙碌反馈，防止重复提交；无意外跳动。",
+          "earned": 1,
+          "status": "verified"
+        },
+        {
+          "id": "recovery",
+          "points": 1,
+          "standard": "断网/服务错误/失败运行可理解且可恢复，刷新不重建当前表单或改变路由。",
+          "earned": 1,
+          "status": "verified"
+        }
+      ],
+      "earned": 2
+    }
+  ],
+  "blocking_issues": [],
+  "unresolved_p0_p1_p2": [],
+  "resolved_findings": [
+    {
+      "id": "F1",
+      "priority": "P1",
+      "title": "提交中仍可编辑，响应后晚输入消失",
+      "steps": "设置/空间/资料提交时延迟响应，再编辑已有字段；原提交成功关闭表单，晚输入未保存。",
+      "files": [
+        "agent_framework/webui/form_controls.js",
+        "agent_framework/webui/operations.js",
+        "agent_framework/webui/workspaces.js",
+        "agent_framework/webui/library.js",
+        "agent_framework/webui/agents.js",
+        "agent_framework/webui/skills.js",
+        "agent_framework/webui/workflows.js"
+      ],
+      "baseline_evidence": [
+        "../implementation/pending-baseline.json"
+      ],
+      "resolution": "提交锁定整组控件，保留原禁用态，失败后恢复；Escape与重复提交被拦截。",
+      "verification": [
+        "screenshots/round-1/pending-policy-locked.png",
+        "screenshots/round-1/pending-policy-failure-recover.png",
+        "../implementation/async-form-results.json"
+      ],
+      "status": "resolved",
+      "blocks_final": false
+    },
+    {
+      "id": "F2",
+      "priority": "P2",
+      "title": "评测记录回跳后旧弹窗仍覆盖目标",
+      "steps": "岗位评测→提醒时的评测记录→查看原执行记录；URL转运行详情而operations-dialog仍open。",
+      "files": [
+        "agent_framework/webui/operations.js"
+      ],
+      "baseline_evidence": [
+        "screenshots/round-1/evaluation-return-blocked.png"
+      ],
+      "resolution": "关闭原弹窗后导航并聚焦run-detail。",
+      "verification": [
+        "screenshots/round-1/evaluation-return-fixed.png"
+      ],
+      "status": "resolved",
+      "blocks_final": false
+    },
+    {
+      "id": "F3",
+      "priority": "P2",
+      "title": "跨空间后退丢失长列表阅读位置",
+      "steps": "Skills长列表滚动至5031→切另一个空间→浏览器后退；空间和模块正确而scrollY=0。",
+      "files": [
+        "agent_framework/webui/app.js"
+      ],
+      "baseline_evidence": [
+        "../journeys/history-baseline-results.json",
+        "../journeys/cross-space-list-return-baseline.png"
+      ],
+      "resolution": "跨文档保存并恢复位置；独立8799复核730→730，专项5031→5031。",
+      "verification": [
+        "screenshots/round-1/cross-space-back-position-restored.png",
+        "../history-fix/results.json"
+      ],
+      "status": "resolved",
+      "blocks_final": false
+    },
+    {
+      "id": "F4",
+      "priority": "P2",
+      "title": "跳至主要内容会重置当前模块",
+      "steps": "Skills刷新→Tab到跳至主要内容→Enter；#content触发路由fallback至workbench。",
+      "files": [
+        "agent_framework/webui/app.js",
+        "agent_framework/webui/index.html"
+      ],
+      "baseline_evidence": [
+        "screenshots/round-1/skip-link-resets-route.png"
+      ],
+      "resolution": "阻止hash导航，保持原模块，直接聚焦主内容。",
+      "verification": [
+        "screenshots/round-1/skip-link-route-preserved.png"
+      ],
+      "status": "resolved",
+      "blocks_final": false
+    },
+    {
+      "id": "F5",
+      "priority": "P2",
+      "title": "每日派发受阻后摘要过期且缺恢复入口",
+      "steps": "生成计划→归档固定Agent→派发；条目受阻而摘要仍可派发1/阻塞0，缺少调整配置入口。",
+      "files": [
+        "agent_framework/webui/operations.js",
+        "agent_framework/webui/operations.css"
+      ],
+      "baseline_evidence": [
+        "../journeys/daily-blocked-next-step-baseline.png"
+      ],
+      "resolution": "按当前条目状态计数，提供调整设置/检查Agent；恢复版本后重新确认许可、重新生成、去重派发。",
+      "verification": [
+        "screenshots/round-1/daily-recovered-dispatched-mobile.png",
+        "round-2-blocked-visual.json",
+        "screenshots/round-2/blocked-final-1440-light.png"
+      ],
+      "status": "resolved",
+      "blocks_final": false
+    },
+    {
+      "id": "F6",
+      "priority": "P2",
+      "title": "本体校验失败后错误字段折叠且丢失焦点",
+      "steps": "本体添加对象类型/实例→id留空→折叠实例区→校验；MinCount出现但实例区仍折叠，焦点回标题。",
+      "files": [
+        "agent_framework/webui/learning.js",
+        "agent_framework/webui/ontology_model.js"
+      ],
+      "baseline_evidence": [
+        "screenshots/round-1/ontology-object-validation.png",
+        "round-1-interaction-log.json"
+      ],
+      "resolution": "稳定保留披露状态，错误摘要可操作，自动展开/聚焦并关联aria错误，修正后清除。",
+      "verification": [
+        "final-ontology-recheck.json",
+        "screenshots/final/ontology-mincount-320-light.png",
+        "screenshots/final/ontology-mincount-375-dark.png"
+      ],
+      "status": "resolved",
+      "blocks_final": false
+    },
+    {
+      "id": "F7",
+      "priority": "P2",
+      "title": "有真实对象与长来源的本体表单在手机横向裁切",
+      "steps": "打开含实例与来源的本体→375/320；320时id字段right383.55，learning-body宽302而scrollWidth440。",
+      "files": [
+        "agent_framework/webui/hig.css"
+      ],
+      "baseline_evidence": [
+        "screenshots/round-1/ontology-mincount-fixed-mobile-dark.png",
+        "screenshots/round-1/ontology-mincount-fixed-mobile-320.png"
+      ],
+      "resolution": "本体局部grid/fieldset/details可收缩，多选来源在控件内部滚动；不使用页面裁切掩盖。",
+      "verification": [
+        "final-ontology-recheck.json",
+        "screenshots/final/ontology-mincount-320-light.png",
+        "../ontology-form/results.json"
+      ],
+      "status": "resolved",
+      "blocks_final": false
+    }
+  ],
+  "remaining_minor_findings": [
+    {
+      "id": "R1",
+      "priority": "P3",
+      "title": "资料类型切换后的弹窗标题较泛",
+      "steps": "新增资料中从项目知识切换私有偏好/能力方法，标题仍为新增知识资料。",
+      "files": [
+        "agent_framework/webui/library.js"
+      ],
+      "evidence": [
+        "screenshots/round-1/asset-json-error-mobile.png"
+      ],
+      "suggestion": "标题随当前资料类型更新。",
+      "deductions": [
+        "modules.library.information"
+      ]
+    },
+    {
+      "id": "R2",
+      "priority": "P3",
+      "title": "手机工作流工具区占用较多编辑高度",
+      "steps": "375打开流程并切节点配置；工具区占多行，属性正文需在较短区域滚动。",
+      "files": [
+        "agent_framework/webui/workflow_designer.js",
+        "agent_framework/webui/hig.css"
+      ],
+      "evidence": [
+        "screenshots/round-2/flow-inspector-375-light.png",
+        "screenshots/round-2/flow-inspector-375-dark.png"
+      ],
+      "suggestion": "将低频工具收进次级菜单，保留常用移动/连接入口。",
+      "deductions": [
+        "modules.workflows.information",
+        "responsive.overlays"
+      ],
+      "note": "分别计入模块信息密度及窄屏有效编辑面积；主要动作仍可达，无门禁问题。"
+    },
+    {
+      "id": "R3",
+      "priority": "P3",
+      "title": "部分运行状态存在重复说明",
+      "steps": "FAILED详情同时显示通用未完成提示与下一步行动提示，内容部分重复。",
+      "files": [
+        "agent_framework/webui/app.js"
+      ],
+      "evidence": [
+        "screenshots/round-1/evaluation-return-fixed.png"
+      ],
+      "suggestion": "合并重复说明，保留状态与明确下一步。",
+      "deductions": [
+        "visual.hierarchy"
+      ]
+    },
+    {
+      "id": "R4",
+      "priority": "P3",
+      "title": "资源元数据分隔略紧",
+      "steps": "资料/经验卡片的仅本人和版本、有效期和评测结果之间缺少稳定间隔。",
+      "files": [
+        "agent_framework/webui/library.js",
+        "agent_framework/webui/hig.css"
+      ],
+      "evidence": [
+        "screenshots/round-1/experience-published.png",
+        "screenshots/round-1/memory-created-published.png"
+      ],
+      "suggestion": "给并列元数据增加一致间距或分隔符。",
+      "deductions": [
+        "visual.craft"
+      ]
+    },
+    {
+      "id": "R5",
+      "priority": "P3",
+      "title": "偏好JSON格式错误仍以底部摘要呈现",
+      "steps": "私有偏好输入无效JSON并保存；摘要说明格式错误，但未像必填校验一样直接标记正文控件。",
+      "files": [
+        "agent_framework/webui/library.js"
+      ],
+      "evidence": [
+        "screenshots/round-1/asset-json-error.png"
+      ],
+      "suggestion": "复用字段错误关联与返回正文的定位入口。",
+      "deductions": [
+        "forms.validation",
+        "keyboard.semantics"
+      ],
+      "note": "分别评价错误就地反馈和辅助语义；摘要已命名偏好格式且可聚焦，未阻断修正。"
+    }
+  ],
+  "coverage_file": "coverage-status.json",
+  "required_ui_coverage_complete": true,
+  "limits": [
+    {
+      "id": "external-model",
+      "area": "真实模型/MCP执行",
+      "status": "out_of_scope_authorized_limit",
+      "evidence": [
+        "round-1-interaction-log.json"
+      ],
+      "detail": "用户/父任务明确禁止真实模型；MCP仅查配置和许可、不启动外部进程。无外部写入。"
+    },
+    {
+      "id": "physical-device",
+      "area": "实体手机/Safari/屏幕阅读器",
+      "status": "limitation",
+      "evidence": [],
+      "detail": "Chrome桌面引擎和CSS视口模拟，非实体软键盘/VoiceOver/NVDA兼容性认证；已验证键盘、语义和可达状态。"
+    }
+  ],
+  "provenance": {
+    "round_1": "44路由首屏采集前后同baseline SHA；之后探索截图目录继续使用round-1，不能将其全部冒认为基线。具体行为时间/命令见round-1-interaction-log.json。",
+    "round_2": "44主路由与43动态/边界/文字放大状态在36f92858...源码采集前后不变。最终仅learning.js/ontology_model.js及本体局部hig.css变化；主路由截图仍适用于未受影响布局。",
+    "final": "受影响本体表单在最终完整源码SHA下独立重测320/375浅深，body scrollWidth==clientWidth、首错定位/摘要/清错/值保留通过。"
+  }
+}

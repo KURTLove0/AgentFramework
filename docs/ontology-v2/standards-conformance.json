@@ -1,0 +1,52 @@
+{
+  "rdflib": "7.6.0",
+  "pyshacl": "0.40.1",
+  "cases": [
+    {
+      "case": "valid",
+      "conforms": true,
+      "triple_count": 151,
+      "report": "Validation Report\nConforms: True\n"
+    },
+    {
+      "case": "wrong-type",
+      "conforms": false,
+      "triple_count": 151,
+      "report": "Validation Report\nConforms: False\nResults (2):\nConstraint Violation in DatatypeConstraintComponent (http://www.w3.org/ns/shacl#DatatypeConstraintComponent):\n\tSeverity: sh:Violation\n\tSource Shape: [ sh:datatype xsd:decimal ; sh:maxCount Literal(\"1\", datatype=xsd:integer) ; sh:maxInclusive Literal(\"100\", datatype=xsd:integer) ; sh:minCount Literal(\"0\", datatype=xsd:integer) ; sh:minInclusive Literal(\"0\", datatype=xsd:integer) ; sh:path <urn:agent-framework:ontology:conformance-example:property:change:score> ]\n\tFocus Node: <urn:agent-framework:ontology:conformance-example:object:change-1>\n\tValue Node: Literal(\"not-a-number\", datatype=xsd:decimal)\n\tResult Path: <urn:agent-framework:ontology:conformance-example:property:change:score>\n\tMessage: Value is not Literal with datatype xsd:decimal\nConstraint Violation in MinInclusiveConstraintComponent (http://www.w3.org/ns/shacl#MinInclusiveConstraintComponent):\n\tSeverity: sh:Violation\n\tSource Shape: [ sh:datatype xsd:decimal ; sh:maxCount Literal(\"1\", datatype=xsd:integer) ; sh:maxInclusive Literal(\"100\", datatype=xsd:integer) ; sh:minCount Literal(\"0\", datatype=xsd:integer) ; sh:minInclusive Literal(\"0\", datatype=xsd:integer) ; sh:path <urn:agent-framework:ontology:conformance-example:property:change:score> ]\n\tFocus Node: <urn:agent-framework:ontology:conformance-example:object:change-1>\n\tValue Node: Literal(\"not-a-number\", datatype=xsd:decimal)\n\tResult Path: <urn:agent-framework:ontology:conformance-example:property:change:score>\n\tMessage: Value is not >= Literal(\"0\", datatype=xsd:integer)\n"
+    },
+    {
+      "case": "out-of-range",
+      "conforms": false,
+      "triple_count": 151,
+      "report": "Validation Report\nConforms: False\nResults (1):\nConstraint Violation in MaxInclusiveConstraintComponent (http://www.w3.org/ns/shacl#MaxInclusiveConstraintComponent):\n\tSeverity: sh:Violation\n\tSource Shape: [ sh:datatype xsd:decimal ; sh:maxCount Literal(\"1\", datatype=xsd:integer) ; sh:maxInclusive Literal(\"100\", datatype=xsd:integer) ; sh:minCount Literal(\"0\", datatype=xsd:integer) ; sh:minInclusive Literal(\"0\", datatype=xsd:integer) ; sh:path <urn:agent-framework:ontology:conformance-example:property:change:score> ]\n\tFocus Node: <urn:agent-framework:ontology:conformance-example:object:change-1>\n\tValue Node: Literal(\"101\", datatype=xsd:decimal)\n\tResult Path: <urn:agent-framework:ontology:conformance-example:property:change:score>\n\tMessage: Value is not <= Literal(\"100\", datatype=xsd:integer)\n"
+    },
+    {
+      "case": "bad-date",
+      "conforms": false,
+      "triple_count": 151,
+      "report": "Validation Report\nConforms: False\nResults (1):\nConstraint Violation in DatatypeConstraintComponent (http://www.w3.org/ns/shacl#DatatypeConstraintComponent):\n\tSeverity: sh:Violation\n\tSource Shape: [ sh:datatype xsd:date ; sh:maxCount Literal(\"1\", datatype=xsd:integer) ; sh:minCount Literal(\"0\", datatype=xsd:integer) ; sh:path <urn:agent-framework:ontology:conformance-example:property:change:day> ]\n\tFocus Node: <urn:agent-framework:ontology:conformance-example:object:change-1>\n\tValue Node: Literal(\"2026-02-30\", datatype=xsd:date)\n\tResult Path: <urn:agent-framework:ontology:conformance-example:property:change:day>\n\tMessage: Value is not Literal with datatype xsd:date\n"
+    },
+    {
+      "case": "bad-enum",
+      "conforms": false,
+      "triple_count": 151,
+      "report": "Validation Report\nConforms: False\nResults (1):\nConstraint Violation in InConstraintComponent (http://www.w3.org/ns/shacl#InConstraintComponent):\n\tSeverity: sh:Violation\n\tSource Shape: [ sh:datatype xsd:string ; sh:in ( Literal(\"HIGH\", datatype=xsd:string) Literal(\"LOW\", datatype=xsd:string) ) ; sh:maxCount Literal(\"1\", datatype=xsd:integer) ; sh:minCount Literal(\"1\", datatype=xsd:integer) ; sh:path <urn:agent-framework:ontology:conformance-example:property:change:risk> ]\n\tFocus Node: <urn:agent-framework:ontology:conformance-example:object:change-1>\n\tValue Node: Literal(\"MEDIUM\", datatype=xsd:string)\n\tResult Path: <urn:agent-framework:ontology:conformance-example:property:change:risk>\n\tMessage: Value Literal(\"MEDIUM\", datatype=xsd:string) not in list ['Literal(\"LOW\", datatype=xsd:string)', 'Literal(\"HIGH\", datatype=xsd:string)']\n"
+    },
+    {
+      "case": "empty-primary-key",
+      "conforms": false,
+      "triple_count": 151,
+      "report": "Validation Report\nConforms: False\nResults (1):\nConstraint Violation in PatternConstraintComponent (http://www.w3.org/ns/shacl#PatternConstraintComponent):\n\tSeverity: sh:Violation\n\tSource Shape: [ sh:datatype xsd:string ; sh:maxCount Literal(\"1\", datatype=xsd:integer) ; sh:minCount Literal(\"1\", datatype=xsd:integer) ; sh:minLength Literal(\"1\", datatype=xsd:integer) ; sh:path <urn:agent-framework:ontology:conformance-example:property:change:id> ; sh:pattern Literal(\"\\S\") ]\n\tFocus Node: <urn:agent-framework:ontology:conformance-example:object:change-1>\n\tValue Node: Literal(\" \", datatype=xsd:string)\n\tResult Path: <urn:agent-framework:ontology:conformance-example:property:change:id>\n\tMessage: Value does not match pattern '\\S'\n"
+    },
+    {
+      "case": "inverse-cardinality",
+      "conforms": false,
+      "triple_count": 164,
+      "report": "Validation Report\nConforms: False\nResults (1):\nConstraint Violation in MaxCountConstraintComponent (http://www.w3.org/ns/shacl#MaxCountConstraintComponent):\n\tSeverity: sh:Violation\n\tSource Shape: [ sh:maxCount Literal(\"1\", datatype=xsd:integer) ; sh:path [ sh:inversePath <urn:agent-framework:ontology:conformance-example:link:produces> ] ]\n\tFocus Node: <urn:agent-framework:ontology:conformance-example:object:report-1>\n\tResult Path: [ sh:inversePath <urn:agent-framework:ontology:conformance-example:link:produces> ]\n\tMessage: More than 1 values on <urn:agent-framework:ontology:conformance-example:object:report-1>->[ sh:inversePath <urn:agent-framework:ontology:conformance-example:link:produces> ]\n"
+    }
+  ],
+  "numeric_scientific_notation_roundtrip": {
+    "conforms": true,
+    "report": "Validation Report\nConforms: True\n"
+  }
+}

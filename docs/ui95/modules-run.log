@@ -1,0 +1,12 @@
+PASS agent-task 三步创建智能体、开始使用、审查授权并完成模拟任务
+PASS knowledge-publish 资料从草稿提交审核并发布，显示版本、来源和状态
+PASS knowledge-revise 编辑产生新草稿版本，原已发布资料继续保留
+PASS grounded-result 只读问答无需写入授权，结果和引用原文可展开查看
+PASS skill-lifecycle 技能添加资源、校验、保存、发布与导出完整闭环
+PASS skill-import-withdraw 撤回需审查影响，ZIP 导入为草稿并可审阅资源
+PASS workflow-run 工作流在画布保存后审查权限运行，节点完成结果可回读
+PASS workflow-chat 模拟智能体给出提案，采用后进入画布审查，未自动运行或授权
+PASS daily-plan 计划配置、生成、派发和任务回跳可完成，重复派发未重复创建任务
+PASS evaluation-loop 失败历史产生低分提醒，可查看冻结评测、确认已阅并保存空间/岗位阈值
+PASS retrospective 模拟总结、人工审阅入口、沉淀回执与资料回跳完整，不调用真实模型
+PASS ontology-loop 本体从资料生成、审阅保存、审核发布到浏览业务对象形成闭环

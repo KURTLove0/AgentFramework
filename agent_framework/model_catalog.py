@@ -11,6 +11,7 @@ import threading
 import time
 
 from .contracts import canonical
+from . import __version__
 from .store import Store
 
 
@@ -95,7 +96,7 @@ class ModelCatalog:
                         if 'error' in data:raise ModelDiscoveryError('Codex model request rejected')
                         return data['result']
             try:
-                send({'id':1,'method':'initialize','params':{'clientInfo':{'name':'agent-framework-models','version':'0.1.0'}}})
+                send({'id':1,'method':'initialize','params':{'clientInfo':{'name':'agent-framework-models','version':__version__}}})
                 response(1);send({'method':'initialized'})
                 models=[];cursor=None
                 for page in range(20):

@@ -1,0 +1,2874 @@
+{
+  "startedAt": "2026-10-25T05:35:05.525Z",
+  "base": "http://127.0.0.1:8800",
+  "baseline": false,
+  "width": 1440,
+  "checks": [
+    {
+      "id": "isolated-mock-fixture",
+      "passed": true,
+      "detail": {
+        "workspace": "workspace-8c375abab09944b7",
+        "agent": "agent-47b7a5660e7441e1",
+        "ontology": "learned-4f0049f23fbcad249df0ab68@1",
+        "modelCalls": 0
+      }
+    },
+    {
+      "id": "add-instance-preserves-disclosure",
+      "passed": true,
+      "detail": [
+        {
+          "name": "对象类型 · 1",
+          "open": true
+        },
+        {
+          "name": "关系类型 · 0",
+          "open": false
+        },
+        {
+          "name": "对象实例 · 1",
+          "open": true
+        },
+        {
+          "name": "实例关系 · 0",
+          "open": false
+        },
+        {
+          "name": "登记能力映射 · 0",
+          "open": false
+        }
+      ]
+    },
+    {
+      "id": "server-error-expands-and-focuses-field",
+      "passed": true,
+      "detail": {
+        "validation": {
+          "profile": "operational-ontology@1.0.0",
+          "conforms": false,
+          "results": [
+            {
+              "focus_node": "object-d888a73c",
+              "path": "id",
+              "constraint": "MinCountConstraintComponent",
+              "severity": "Violation",
+              "message": "缺少必填属性或属性值数量不足",
+              "value": null
+            }
+          ],
+          "counts": {
+            "object_types": 1,
+            "link_types": 0,
+            "objects": 1,
+            "links": 0,
+            "action_types": 0
+          }
+        },
+        "details": [
+          {
+            "name": "对象类型 · 1",
+            "open": false
+          },
+          {
+            "name": "关系类型 · 0",
+            "open": true
+          },
+          {
+            "name": "对象实例 · 1",
+            "open": true
+          },
+          {
+            "name": "实例关系 · 0",
+            "open": false
+          },
+          {
+            "name": "登记能力映射 · 0",
+            "open": true
+          }
+        ],
+        "describedBy": "ontology-model-error-0"
+      }
+    },
+    {
+      "id": "error-summary-is-keyboard-target",
+      "passed": true,
+      "detail": {
+        "button": "object-d888a73c · id：缺少必填属性或属性值数量不足"
+      }
+    },
+    {
+      "id": "edit-clears-stale-error",
+      "passed": true,
+      "detail": {
+        "id": "FORM-001"
+      }
+    },
+    {
+      "id": "successful-validation-retains-input-and-focus",
+      "passed": true,
+      "detail": {
+        "profile": "operational-ontology@1.0.0",
+        "conforms": true,
+        "results": [],
+        "counts": {
+          "object_types": 1,
+          "link_types": 0,
+          "objects": 1,
+          "links": 0,
+          "action_types": 0
+        }
+      }
+    },
+    {
+      "id": "full-editor-update-retains-disclosures-and-values",
+      "passed": true,
+      "detail": [
+        {
+          "name": "对象类型 · 1",
+          "open": false
+        },
+        {
+          "name": "关系类型 · 0",
+          "open": true
+        },
+        {
+          "name": "对象实例 · 1",
+          "open": true
+        },
+        {
+          "name": "实例关系 · 0",
+          "open": false
+        },
+        {
+          "name": "登记能力映射 · 0",
+          "open": true
+        }
+      ]
+    },
+    {
+      "id": "property-update-retains-focus-and-values",
+      "passed": true,
+      "detail": {
+        "type": "string",
+        "id": "FORM-001"
+      }
+    },
+    {
+      "id": "revision-preserves-existing-save-contract",
+      "passed": true,
+      "detail": {
+        "ref": "learned-4f0049f23fbcad249df0ab68@2",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": "populated-ontology-layouts",
+      "passed": true,
+      "detail": [
+        {
+          "theme": "light",
+          "viewport": 320,
+          "rootWidth": 320,
+          "dialog": {
+            "left": 8,
+            "right": 312
+          },
+          "body": {
+            "client": 302,
+            "scroll": 302,
+            "left": 9,
+            "right": 311
+          },
+          "focused": {
+            "left": 57,
+            "right": 263,
+            "top": 446.90625,
+            "bottom": 492.90625
+          },
+          "error": {
+            "left": 57,
+            "right": 263,
+            "top": 504.90625,
+            "bottom": 578.5
+          },
+          "overflow": [],
+          "counts": {
+            "types": 1,
+            "objects": 2,
+            "links": 1,
+            "actions": 1
+          },
+          "sources": [
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            },
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            },
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            },
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            },
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            },
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            }
+          ],
+          "footer": [
+            {
+              "text": "返回",
+              "left": 25,
+              "right": 77
+            },
+            {
+              "text": "核对本体版本",
+              "left": 89,
+              "right": 295
+            },
+            {
+              "text": "保存为新版本草稿",
+              "left": 89,
+              "right": 295
+            }
+          ]
+        },
+        {
+          "theme": "dark",
+          "viewport": 320,
+          "rootWidth": 320,
+          "dialog": {
+            "left": 8,
+            "right": 312
+          },
+          "body": {
+            "client": 302,
+            "scroll": 302,
+            "left": 9,
+            "right": 311
+          },
+          "focused": {
+            "left": 57,
+            "right": 263,
+            "top": 446.90625,
+            "bottom": 492.90625
+          },
+          "error": {
+            "left": 57,
+            "right": 263,
+            "top": 504.90625,
+            "bottom": 578.5
+          },
+          "overflow": [],
+          "counts": {
+            "types": 1,
+            "objects": 2,
+            "links": 1,
+            "actions": 1
+          },
+          "sources": [
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            },
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            },
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            },
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            },
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            },
+            {
+              "client": 204,
+              "scroll": 231,
+              "overflow": "auto"
+            }
+          ],
+          "footer": [
+            {
+              "text": "返回",
+              "left": 25,
+              "right": 77
+            },
+            {
+              "text": "核对本体版本",
+              "left": 89,
+              "right": 295
+            },
+            {
+              "text": "保存为新版本草稿",
+              "left": 89,
+              "right": 295
+            }
+          ]
+        },
+        {
+          "theme": "light",
+          "viewport": 375,
+          "rootWidth": 375,
+          "dialog": {
+            "left": 8,
+            "right": 367
+          },
+          "body": {
+            "client": 357,
+            "scroll": 357,
+            "left": 9,
+            "right": 366
+          },
+          "focused": {
+            "left": 57,
+            "right": 318,
+            "top": 447.125,
+            "bottom": 493.125
+          },
+          "error": {
+            "left": 57,
+            "right": 318,
+            "top": 505.125,
+            "bottom": 554.921875
+          },
+          "overflow": [],
+          "counts": {
+            "types": 1,
+            "objects": 2,
+            "links": 1,
+            "actions": 1
+          },
+          "sources": [
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            },
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            },
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            },
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            },
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            },
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            }
+          ],
+          "footer": [
+            {
+              "text": "返回",
+              "left": 25,
+              "right": 77
+            },
+            {
+              "text": "核对本体版本",
+              "left": 89,
+              "right": 350
+            },
+            {
+              "text": "保存为新版本草稿",
+              "left": 89,
+              "right": 350
+            }
+          ]
+        },
+        {
+          "theme": "dark",
+          "viewport": 375,
+          "rootWidth": 375,
+          "dialog": {
+            "left": 8,
+            "right": 367
+          },
+          "body": {
+            "client": 357,
+            "scroll": 357,
+            "left": 9,
+            "right": 366
+          },
+          "focused": {
+            "left": 57,
+            "right": 318,
+            "top": 447.125,
+            "bottom": 493.125
+          },
+          "error": {
+            "left": 57,
+            "right": 318,
+            "top": 505.125,
+            "bottom": 554.921875
+          },
+          "overflow": [],
+          "counts": {
+            "types": 1,
+            "objects": 2,
+            "links": 1,
+            "actions": 1
+          },
+          "sources": [
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            },
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            },
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            },
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            },
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            },
+            {
+              "client": 259,
+              "scroll": 259,
+              "overflow": "auto"
+            }
+          ],
+          "footer": [
+            {
+              "text": "返回",
+              "left": 25,
+              "right": 77
+            },
+            {
+              "text": "核对本体版本",
+              "left": 89,
+              "right": 350
+            },
+            {
+              "text": "保存为新版本草稿",
+              "left": 89,
+              "right": 350
+            }
+          ]
+        },
+        {
+          "theme": "light",
+          "viewport": 414,
+          "rootWidth": 414,
+          "dialog": {
+            "left": 8,
+            "right": 406
+          },
+          "body": {
+            "client": 396,
+            "scroll": 396,
+            "left": 9,
+            "right": 405
+          },
+          "focused": {
+            "left": 57,
+            "right": 357,
+            "top": 472.6875,
+            "bottom": 518.6875
+          },
+          "error": {
+            "left": 57,
+            "right": 357,
+            "top": 530.6875,
+            "bottom": 580.484375
+          },
+          "overflow": [],
+          "counts": {
+            "types": 1,
+            "objects": 2,
+            "links": 1,
+            "actions": 1
+          },
+          "sources": [
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            },
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            },
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            },
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            },
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            },
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            }
+          ],
+          "footer": [
+            {
+              "text": "返回",
+              "left": 25,
+              "right": 75
+            },
+            {
+              "text": "核对本体版本",
+              "left": 161,
+              "right": 259
+            },
+            {
+              "text": "保存为新版本草稿",
+              "left": 267,
+              "right": 389
+            }
+          ]
+        },
+        {
+          "theme": "dark",
+          "viewport": 414,
+          "rootWidth": 414,
+          "dialog": {
+            "left": 8,
+            "right": 406
+          },
+          "body": {
+            "client": 396,
+            "scroll": 396,
+            "left": 9,
+            "right": 405
+          },
+          "focused": {
+            "left": 57,
+            "right": 357,
+            "top": 472.6875,
+            "bottom": 518.6875
+          },
+          "error": {
+            "left": 57,
+            "right": 357,
+            "top": 530.6875,
+            "bottom": 580.484375
+          },
+          "overflow": [],
+          "counts": {
+            "types": 1,
+            "objects": 2,
+            "links": 1,
+            "actions": 1
+          },
+          "sources": [
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            },
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            },
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            },
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            },
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            },
+            {
+              "client": 298,
+              "scroll": 298,
+              "overflow": "auto"
+            }
+          ],
+          "footer": [
+            {
+              "text": "返回",
+              "left": 25,
+              "right": 75
+            },
+            {
+              "text": "核对本体版本",
+              "left": 161,
+              "right": 259
+            },
+            {
+              "text": "保存为新版本草稿",
+              "left": 267,
+              "right": 389
+            }
+          ]
+        },
+        {
+          "theme": "light",
+          "viewport": 768,
+          "rootWidth": 768,
+          "dialog": {
+            "left": 24,
+            "right": 744
+          },
+          "body": {
+            "client": 718,
+            "scroll": 718,
+            "left": 25,
+            "right": 743
+          },
+          "focused": {
+            "left": 87,
+            "right": 681,
+            "top": 445.796875,
+            "bottom": 489.796875
+          },
+          "error": {
+            "left": 87,
+            "right": 681,
+            "top": 501.796875,
+            "bottom": 551.59375
+          },
+          "overflow": [],
+          "counts": {
+            "types": 1,
+            "objects": 2,
+            "links": 1,
+            "actions": 1
+          },
+          "sources": [
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            },
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            },
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            },
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            },
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            },
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            }
+          ],
+          "footer": [
+            {
+              "text": "返回",
+              "left": 49,
+              "right": 111
+            },
+            {
+              "text": "核对本体版本",
+              "left": 49,
+              "right": 167
+            },
+            {
+              "text": "保存为新版本草稿",
+              "left": 175,
+              "right": 321
+            }
+          ]
+        },
+        {
+          "theme": "dark",
+          "viewport": 768,
+          "rootWidth": 768,
+          "dialog": {
+            "left": 24,
+            "right": 744
+          },
+          "body": {
+            "client": 718,
+            "scroll": 718,
+            "left": 25,
+            "right": 743
+          },
+          "focused": {
+            "left": 87,
+            "right": 681,
+            "top": 445.796875,
+            "bottom": 489.796875
+          },
+          "error": {
+            "left": 87,
+            "right": 681,
+            "top": 501.796875,
+            "bottom": 551.59375
+          },
+          "overflow": [],
+          "counts": {
+            "types": 1,
+            "objects": 2,
+            "links": 1,
+            "actions": 1
+          },
+          "sources": [
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            },
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            },
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            },
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            },
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            },
+            {
+              "client": 592,
+              "scroll": 592,
+              "overflow": "auto"
+            }
+          ],
+          "footer": [
+            {
+              "text": "返回",
+              "left": 49,
+              "right": 111
+            },
+            {
+              "text": "核对本体版本",
+              "left": 49,
+              "right": 167
+            },
+            {
+              "text": "保存为新版本草稿",
+              "left": 175,
+              "right": 321
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "validationRequests": [
+    {
+      "content": {
+        "concepts": [
+          {
+            "aliases": [],
+            "definition": "订单业务资料用于验证本体编辑，所有对象事实由人工填写。",
+            "id": "concept-1",
+            "label": "本体表单验证资料",
+            "properties": [
+              {
+                "description": "该概念依据的资料版本引用",
+                "id": "source-version",
+                "label": "来源版本",
+                "type": "string"
+              }
+            ],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          }
+        ],
+        "description": "未保存领域说明应保留",
+        "model": {
+          "action_types": [],
+          "link_types": [],
+          "links": [],
+          "object_types": [
+            {
+              "id": "type-2da1aa52",
+              "label": "本体表单验证资料对象",
+              "concept_id": "concept-1",
+              "primary_key": "id",
+              "properties": [
+                {
+                  "id": "id",
+                  "label": "业务标识",
+                  "description": "",
+                  "type": "string",
+                  "min_count": 1,
+                  "max_count": 1,
+                  "enum_values": [],
+                  "min_value": null,
+                  "max_value": null
+                },
+                {
+                  "id": "source-version",
+                  "label": "来源版本",
+                  "description": "该概念依据的资料版本引用",
+                  "type": "string",
+                  "min_count": 0,
+                  "max_count": 1,
+                  "enum_values": [],
+                  "min_value": null,
+                  "max_value": null
+                }
+              ],
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "objects": [
+            {
+              "id": "object-d888a73c",
+              "type_id": "type-2da1aa52",
+              "values": {
+                "source-version": "保留中的来源版本"
+              },
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "version": "operational-ontology@1.0.0"
+        },
+        "name": "资料领域本体",
+        "relations": []
+      },
+      "source_refs": [
+        "asset-d3b0a028ba8c4a78@1"
+      ]
+    },
+    {
+      "content": {
+        "concepts": [
+          {
+            "aliases": [],
+            "definition": "订单业务资料用于验证本体编辑，所有对象事实由人工填写。",
+            "id": "concept-1",
+            "label": "本体表单验证资料",
+            "properties": [
+              {
+                "description": "该概念依据的资料版本引用",
+                "id": "source-version",
+                "label": "来源版本",
+                "type": "string"
+              }
+            ],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          }
+        ],
+        "description": "未保存领域说明应保留",
+        "model": {
+          "action_types": [],
+          "link_types": [],
+          "links": [],
+          "object_types": [
+            {
+              "id": "type-2da1aa52",
+              "label": "本体表单验证资料对象",
+              "concept_id": "concept-1",
+              "primary_key": "id",
+              "properties": [
+                {
+                  "id": "id",
+                  "label": "业务标识",
+                  "description": "",
+                  "type": "string",
+                  "min_count": 1,
+                  "max_count": 1,
+                  "enum_values": [],
+                  "min_value": null,
+                  "max_value": null
+                },
+                {
+                  "id": "source-version",
+                  "label": "来源版本",
+                  "description": "该概念依据的资料版本引用",
+                  "type": "string",
+                  "min_count": 0,
+                  "max_count": 1,
+                  "enum_values": [],
+                  "min_value": null,
+                  "max_value": null
+                }
+              ],
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "objects": [
+            {
+              "id": "object-d888a73c",
+              "type_id": "type-2da1aa52",
+              "values": {
+                "source-version": "保留中的来源版本"
+              },
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "version": "operational-ontology@1.0.0"
+        },
+        "name": "资料领域本体",
+        "relations": []
+      },
+      "source_refs": [
+        "asset-d3b0a028ba8c4a78@1"
+      ]
+    },
+    {
+      "content": {
+        "concepts": [
+          {
+            "aliases": [],
+            "definition": "订单业务资料用于验证本体编辑，所有对象事实由人工填写。",
+            "id": "concept-1",
+            "label": "本体表单验证资料",
+            "properties": [
+              {
+                "description": "该概念依据的资料版本引用",
+                "id": "source-version",
+                "label": "来源版本",
+                "type": "string"
+              }
+            ],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          }
+        ],
+        "description": "未保存领域说明应保留",
+        "model": {
+          "action_types": [],
+          "link_types": [],
+          "links": [],
+          "object_types": [
+            {
+              "id": "type-2da1aa52",
+              "label": "本体表单验证资料对象",
+              "concept_id": "concept-1",
+              "primary_key": "id",
+              "properties": [
+                {
+                  "id": "id",
+                  "label": "业务标识",
+                  "description": "",
+                  "type": "string",
+                  "min_count": 1,
+                  "max_count": 1,
+                  "enum_values": [],
+                  "min_value": null,
+                  "max_value": null
+                },
+                {
+                  "id": "source-version",
+                  "label": "来源版本",
+                  "description": "该概念依据的资料版本引用",
+                  "type": "string",
+                  "min_count": 0,
+                  "max_count": 1,
+                  "enum_values": [],
+                  "min_value": null,
+                  "max_value": null
+                }
+              ],
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "objects": [
+            {
+              "id": "object-d888a73c",
+              "type_id": "type-2da1aa52",
+              "values": {
+                "source-version": "保留中的来源版本",
+                "id": "FORM-001"
+              },
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "version": "operational-ontology@1.0.0"
+        },
+        "name": "资料领域本体",
+        "relations": []
+      },
+      "source_refs": [
+        "asset-d3b0a028ba8c4a78@1"
+      ]
+    },
+    {
+      "content": {
+        "concepts": [
+          {
+            "aliases": [],
+            "definition": "订单业务资料用于验证本体编辑，所有对象事实由人工填写。",
+            "id": "concept-1",
+            "label": "本体表单验证资料",
+            "properties": [
+              {
+                "description": "该概念依据的资料版本引用",
+                "id": "source-version",
+                "label": "来源版本",
+                "type": "string"
+              }
+            ],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          },
+          {
+            "aliases": [],
+            "definition": "请填写定义",
+            "id": "concept-266e92a0",
+            "label": "新概念",
+            "properties": [],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          }
+        ],
+        "description": "未保存领域说明应保留",
+        "model": {
+          "action_types": [
+            {
+              "id": "action-8723ed99",
+              "label": "新动作映射",
+              "target_type": "type-2da1aa52",
+              "capability_ref": "change.read@1.0.0",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "link_types": [
+            {
+              "id": "link-type-f9887bbf",
+              "label": "新关系",
+              "source_type": "type-2da1aa52",
+              "target_type": "type-2da1aa52",
+              "cardinality": "MANY_TO_MANY",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "links": [
+            {
+              "type_id": "link-type-f9887bbf",
+              "source": "object-d888a73c",
+              "target": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "object_types": [
+            {
+              "concept_id": "concept-1",
+              "id": "type-2da1aa52",
+              "label": "本体表单验证资料对象",
+              "primary_key": "id",
+              "properties": [
+                {
+                  "description": "",
+                  "enum_values": [],
+                  "id": "id",
+                  "label": "业务标识",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 1,
+                  "min_value": null,
+                  "type": "string"
+                },
+                {
+                  "description": "该概念依据的资料版本引用",
+                  "enum_values": [],
+                  "id": "source-version",
+                  "label": "来源版本",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 0,
+                  "min_value": null,
+                  "type": "string"
+                }
+              ],
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "objects": [
+            {
+              "id": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ],
+              "type_id": "type-2da1aa52",
+              "values": {
+                "source-version": "保留中的来源版本"
+              }
+            },
+            {
+              "id": "object-d645e645",
+              "type_id": "type-2da1aa52",
+              "values": {
+                "id": "FORM-002"
+              },
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "version": "operational-ontology@1.0.0"
+        },
+        "name": "资料领域本体",
+        "relations": []
+      },
+      "source_refs": [
+        "asset-d3b0a028ba8c4a78@1"
+      ]
+    },
+    {
+      "content": {
+        "concepts": [
+          {
+            "aliases": [],
+            "definition": "订单业务资料用于验证本体编辑，所有对象事实由人工填写。",
+            "id": "concept-1",
+            "label": "本体表单验证资料",
+            "properties": [
+              {
+                "description": "该概念依据的资料版本引用",
+                "id": "source-version",
+                "label": "来源版本",
+                "type": "string"
+              }
+            ],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          },
+          {
+            "aliases": [],
+            "definition": "请填写定义",
+            "id": "concept-266e92a0",
+            "label": "新概念",
+            "properties": [],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          }
+        ],
+        "description": "未保存领域说明应保留",
+        "model": {
+          "action_types": [
+            {
+              "id": "action-8723ed99",
+              "label": "新动作映射",
+              "target_type": "type-2da1aa52",
+              "capability_ref": "change.read@1.0.0",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "link_types": [
+            {
+              "id": "link-type-f9887bbf",
+              "label": "新关系",
+              "source_type": "type-2da1aa52",
+              "target_type": "type-2da1aa52",
+              "cardinality": "MANY_TO_MANY",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "links": [
+            {
+              "type_id": "link-type-f9887bbf",
+              "source": "object-d888a73c",
+              "target": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "object_types": [
+            {
+              "concept_id": "concept-1",
+              "id": "type-2da1aa52",
+              "label": "本体表单验证资料对象",
+              "primary_key": "id",
+              "properties": [
+                {
+                  "description": "",
+                  "enum_values": [],
+                  "id": "id",
+                  "label": "业务标识",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 1,
+                  "min_value": null,
+                  "type": "string"
+                },
+                {
+                  "description": "该概念依据的资料版本引用",
+                  "enum_values": [],
+                  "id": "source-version",
+                  "label": "来源版本",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 0,
+                  "min_value": null,
+                  "type": "string"
+                }
+              ],
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "objects": [
+            {
+              "id": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ],
+              "type_id": "type-2da1aa52",
+              "values": {
+                "source-version": "保留中的来源版本"
+              }
+            },
+            {
+              "id": "object-d645e645",
+              "type_id": "type-2da1aa52",
+              "values": {
+                "id": "FORM-002"
+              },
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "version": "operational-ontology@1.0.0"
+        },
+        "name": "资料领域本体",
+        "relations": []
+      },
+      "source_refs": [
+        "asset-d3b0a028ba8c4a78@1"
+      ]
+    },
+    {
+      "content": {
+        "concepts": [
+          {
+            "aliases": [],
+            "definition": "订单业务资料用于验证本体编辑，所有对象事实由人工填写。",
+            "id": "concept-1",
+            "label": "本体表单验证资料",
+            "properties": [
+              {
+                "description": "该概念依据的资料版本引用",
+                "id": "source-version",
+                "label": "来源版本",
+                "type": "string"
+              }
+            ],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          },
+          {
+            "aliases": [],
+            "definition": "请填写定义",
+            "id": "concept-266e92a0",
+            "label": "新概念",
+            "properties": [],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          }
+        ],
+        "description": "未保存领域说明应保留",
+        "model": {
+          "action_types": [
+            {
+              "id": "action-8723ed99",
+              "label": "新动作映射",
+              "target_type": "type-2da1aa52",
+              "capability_ref": "change.read@1.0.0",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "link_types": [
+            {
+              "id": "link-type-f9887bbf",
+              "label": "新关系",
+              "source_type": "type-2da1aa52",
+              "target_type": "type-2da1aa52",
+              "cardinality": "MANY_TO_MANY",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "links": [
+            {
+              "type_id": "link-type-f9887bbf",
+              "source": "object-d888a73c",
+              "target": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "object_types": [
+            {
+              "concept_id": "concept-1",
+              "id": "type-2da1aa52",
+              "label": "本体表单验证资料对象",
+              "primary_key": "id",
+              "properties": [
+                {
+                  "description": "",
+                  "enum_values": [],
+                  "id": "id",
+                  "label": "业务标识",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 1,
+                  "min_value": null,
+                  "type": "string"
+                },
+                {
+                  "description": "该概念依据的资料版本引用",
+                  "enum_values": [],
+                  "id": "source-version",
+                  "label": "来源版本",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 0,
+                  "min_value": null,
+                  "type": "string"
+                }
+              ],
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "objects": [
+            {
+              "id": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ],
+              "type_id": "type-2da1aa52",
+              "values": {
+                "source-version": "保留中的来源版本"
+              }
+            },
+            {
+              "id": "object-d645e645",
+              "type_id": "type-2da1aa52",
+              "values": {
+                "id": "FORM-002"
+              },
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "version": "operational-ontology@1.0.0"
+        },
+        "name": "资料领域本体",
+        "relations": []
+      },
+      "source_refs": [
+        "asset-d3b0a028ba8c4a78@1"
+      ]
+    },
+    {
+      "content": {
+        "concepts": [
+          {
+            "aliases": [],
+            "definition": "订单业务资料用于验证本体编辑，所有对象事实由人工填写。",
+            "id": "concept-1",
+            "label": "本体表单验证资料",
+            "properties": [
+              {
+                "description": "该概念依据的资料版本引用",
+                "id": "source-version",
+                "label": "来源版本",
+                "type": "string"
+              }
+            ],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          },
+          {
+            "aliases": [],
+            "definition": "请填写定义",
+            "id": "concept-266e92a0",
+            "label": "新概念",
+            "properties": [],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          }
+        ],
+        "description": "未保存领域说明应保留",
+        "model": {
+          "action_types": [
+            {
+              "id": "action-8723ed99",
+              "label": "新动作映射",
+              "target_type": "type-2da1aa52",
+              "capability_ref": "change.read@1.0.0",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "link_types": [
+            {
+              "id": "link-type-f9887bbf",
+              "label": "新关系",
+              "source_type": "type-2da1aa52",
+              "target_type": "type-2da1aa52",
+              "cardinality": "MANY_TO_MANY",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "links": [
+            {
+              "type_id": "link-type-f9887bbf",
+              "source": "object-d888a73c",
+              "target": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "object_types": [
+            {
+              "concept_id": "concept-1",
+              "id": "type-2da1aa52",
+              "label": "本体表单验证资料对象",
+              "primary_key": "id",
+              "properties": [
+                {
+                  "description": "",
+                  "enum_values": [],
+                  "id": "id",
+                  "label": "业务标识",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 1,
+                  "min_value": null,
+                  "type": "string"
+                },
+                {
+                  "description": "该概念依据的资料版本引用",
+                  "enum_values": [],
+                  "id": "source-version",
+                  "label": "来源版本",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 0,
+                  "min_value": null,
+                  "type": "string"
+                }
+              ],
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "objects": [
+            {
+              "id": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ],
+              "type_id": "type-2da1aa52",
+              "values": {
+                "source-version": "保留中的来源版本"
+              }
+            },
+            {
+              "id": "object-d645e645",
+              "type_id": "type-2da1aa52",
+              "values": {
+                "id": "FORM-002"
+              },
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "version": "operational-ontology@1.0.0"
+        },
+        "name": "资料领域本体",
+        "relations": []
+      },
+      "source_refs": [
+        "asset-d3b0a028ba8c4a78@1"
+      ]
+    },
+    {
+      "content": {
+        "concepts": [
+          {
+            "aliases": [],
+            "definition": "订单业务资料用于验证本体编辑，所有对象事实由人工填写。",
+            "id": "concept-1",
+            "label": "本体表单验证资料",
+            "properties": [
+              {
+                "description": "该概念依据的资料版本引用",
+                "id": "source-version",
+                "label": "来源版本",
+                "type": "string"
+              }
+            ],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          },
+          {
+            "aliases": [],
+            "definition": "请填写定义",
+            "id": "concept-266e92a0",
+            "label": "新概念",
+            "properties": [],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          }
+        ],
+        "description": "未保存领域说明应保留",
+        "model": {
+          "action_types": [
+            {
+              "id": "action-8723ed99",
+              "label": "新动作映射",
+              "target_type": "type-2da1aa52",
+              "capability_ref": "change.read@1.0.0",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "link_types": [
+            {
+              "id": "link-type-f9887bbf",
+              "label": "新关系",
+              "source_type": "type-2da1aa52",
+              "target_type": "type-2da1aa52",
+              "cardinality": "MANY_TO_MANY",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "links": [
+            {
+              "type_id": "link-type-f9887bbf",
+              "source": "object-d888a73c",
+              "target": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "object_types": [
+            {
+              "concept_id": "concept-1",
+              "id": "type-2da1aa52",
+              "label": "本体表单验证资料对象",
+              "primary_key": "id",
+              "properties": [
+                {
+                  "description": "",
+                  "enum_values": [],
+                  "id": "id",
+                  "label": "业务标识",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 1,
+                  "min_value": null,
+                  "type": "string"
+                },
+                {
+                  "description": "该概念依据的资料版本引用",
+                  "enum_values": [],
+                  "id": "source-version",
+                  "label": "来源版本",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 0,
+                  "min_value": null,
+                  "type": "string"
+                }
+              ],
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "objects": [
+            {
+              "id": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ],
+              "type_id": "type-2da1aa52",
+              "values": {
+                "source-version": "保留中的来源版本"
+              }
+            },
+            {
+              "id": "object-d645e645",
+              "type_id": "type-2da1aa52",
+              "values": {
+                "id": "FORM-002"
+              },
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "version": "operational-ontology@1.0.0"
+        },
+        "name": "资料领域本体",
+        "relations": []
+      },
+      "source_refs": [
+        "asset-d3b0a028ba8c4a78@1"
+      ]
+    },
+    {
+      "content": {
+        "concepts": [
+          {
+            "aliases": [],
+            "definition": "订单业务资料用于验证本体编辑，所有对象事实由人工填写。",
+            "id": "concept-1",
+            "label": "本体表单验证资料",
+            "properties": [
+              {
+                "description": "该概念依据的资料版本引用",
+                "id": "source-version",
+                "label": "来源版本",
+                "type": "string"
+              }
+            ],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          },
+          {
+            "aliases": [],
+            "definition": "请填写定义",
+            "id": "concept-266e92a0",
+            "label": "新概念",
+            "properties": [],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          }
+        ],
+        "description": "未保存领域说明应保留",
+        "model": {
+          "action_types": [
+            {
+              "id": "action-8723ed99",
+              "label": "新动作映射",
+              "target_type": "type-2da1aa52",
+              "capability_ref": "change.read@1.0.0",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "link_types": [
+            {
+              "id": "link-type-f9887bbf",
+              "label": "新关系",
+              "source_type": "type-2da1aa52",
+              "target_type": "type-2da1aa52",
+              "cardinality": "MANY_TO_MANY",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "links": [
+            {
+              "type_id": "link-type-f9887bbf",
+              "source": "object-d888a73c",
+              "target": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "object_types": [
+            {
+              "concept_id": "concept-1",
+              "id": "type-2da1aa52",
+              "label": "本体表单验证资料对象",
+              "primary_key": "id",
+              "properties": [
+                {
+                  "description": "",
+                  "enum_values": [],
+                  "id": "id",
+                  "label": "业务标识",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 1,
+                  "min_value": null,
+                  "type": "string"
+                },
+                {
+                  "description": "该概念依据的资料版本引用",
+                  "enum_values": [],
+                  "id": "source-version",
+                  "label": "来源版本",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 0,
+                  "min_value": null,
+                  "type": "string"
+                }
+              ],
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "objects": [
+            {
+              "id": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ],
+              "type_id": "type-2da1aa52",
+              "values": {
+                "source-version": "保留中的来源版本"
+              }
+            },
+            {
+              "id": "object-d645e645",
+              "type_id": "type-2da1aa52",
+              "values": {
+                "id": "FORM-002"
+              },
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "version": "operational-ontology@1.0.0"
+        },
+        "name": "资料领域本体",
+        "relations": []
+      },
+      "source_refs": [
+        "asset-d3b0a028ba8c4a78@1"
+      ]
+    },
+    {
+      "content": {
+        "concepts": [
+          {
+            "aliases": [],
+            "definition": "订单业务资料用于验证本体编辑，所有对象事实由人工填写。",
+            "id": "concept-1",
+            "label": "本体表单验证资料",
+            "properties": [
+              {
+                "description": "该概念依据的资料版本引用",
+                "id": "source-version",
+                "label": "来源版本",
+                "type": "string"
+              }
+            ],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          },
+          {
+            "aliases": [],
+            "definition": "请填写定义",
+            "id": "concept-266e92a0",
+            "label": "新概念",
+            "properties": [],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          }
+        ],
+        "description": "未保存领域说明应保留",
+        "model": {
+          "action_types": [
+            {
+              "id": "action-8723ed99",
+              "label": "新动作映射",
+              "target_type": "type-2da1aa52",
+              "capability_ref": "change.read@1.0.0",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "link_types": [
+            {
+              "id": "link-type-f9887bbf",
+              "label": "新关系",
+              "source_type": "type-2da1aa52",
+              "target_type": "type-2da1aa52",
+              "cardinality": "MANY_TO_MANY",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "links": [
+            {
+              "type_id": "link-type-f9887bbf",
+              "source": "object-d888a73c",
+              "target": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "object_types": [
+            {
+              "concept_id": "concept-1",
+              "id": "type-2da1aa52",
+              "label": "本体表单验证资料对象",
+              "primary_key": "id",
+              "properties": [
+                {
+                  "description": "",
+                  "enum_values": [],
+                  "id": "id",
+                  "label": "业务标识",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 1,
+                  "min_value": null,
+                  "type": "string"
+                },
+                {
+                  "description": "该概念依据的资料版本引用",
+                  "enum_values": [],
+                  "id": "source-version",
+                  "label": "来源版本",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 0,
+                  "min_value": null,
+                  "type": "string"
+                }
+              ],
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "objects": [
+            {
+              "id": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ],
+              "type_id": "type-2da1aa52",
+              "values": {
+                "source-version": "保留中的来源版本"
+              }
+            },
+            {
+              "id": "object-d645e645",
+              "type_id": "type-2da1aa52",
+              "values": {
+                "id": "FORM-002"
+              },
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "version": "operational-ontology@1.0.0"
+        },
+        "name": "资料领域本体",
+        "relations": []
+      },
+      "source_refs": [
+        "asset-d3b0a028ba8c4a78@1"
+      ]
+    },
+    {
+      "content": {
+        "concepts": [
+          {
+            "aliases": [],
+            "definition": "订单业务资料用于验证本体编辑，所有对象事实由人工填写。",
+            "id": "concept-1",
+            "label": "本体表单验证资料",
+            "properties": [
+              {
+                "description": "该概念依据的资料版本引用",
+                "id": "source-version",
+                "label": "来源版本",
+                "type": "string"
+              }
+            ],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          },
+          {
+            "aliases": [],
+            "definition": "请填写定义",
+            "id": "concept-266e92a0",
+            "label": "新概念",
+            "properties": [],
+            "source_refs": [
+              "asset-d3b0a028ba8c4a78@1"
+            ]
+          }
+        ],
+        "description": "未保存领域说明应保留",
+        "model": {
+          "action_types": [
+            {
+              "id": "action-8723ed99",
+              "label": "新动作映射",
+              "target_type": "type-2da1aa52",
+              "capability_ref": "change.read@1.0.0",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "link_types": [
+            {
+              "id": "link-type-f9887bbf",
+              "label": "新关系",
+              "source_type": "type-2da1aa52",
+              "target_type": "type-2da1aa52",
+              "cardinality": "MANY_TO_MANY",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "links": [
+            {
+              "type_id": "link-type-f9887bbf",
+              "source": "object-d888a73c",
+              "target": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "object_types": [
+            {
+              "concept_id": "concept-1",
+              "id": "type-2da1aa52",
+              "label": "本体表单验证资料对象",
+              "primary_key": "id",
+              "properties": [
+                {
+                  "description": "",
+                  "enum_values": [],
+                  "id": "id",
+                  "label": "业务标识",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 1,
+                  "min_value": null,
+                  "type": "string"
+                },
+                {
+                  "description": "该概念依据的资料版本引用",
+                  "enum_values": [],
+                  "id": "source-version",
+                  "label": "来源版本",
+                  "max_count": 1,
+                  "max_value": null,
+                  "min_count": 0,
+                  "min_value": null,
+                  "type": "string"
+                }
+              ],
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "objects": [
+            {
+              "id": "object-d888a73c",
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ],
+              "type_id": "type-2da1aa52",
+              "values": {
+                "source-version": "保留中的来源版本"
+              }
+            },
+            {
+              "id": "object-d645e645",
+              "type_id": "type-2da1aa52",
+              "values": {
+                "id": "FORM-002"
+              },
+              "source_refs": [
+                "asset-d3b0a028ba8c4a78@1"
+              ]
+            }
+          ],
+          "version": "operational-ontology@1.0.0"
+        },
+        "name": "资料领域本体",
+        "relations": []
+      },
+      "source_refs": [
+        "asset-d3b0a028ba8c4a78@1"
+      ]
+    }
+  ],
+  "workspace": {
+    "business": "UI95 界面验收",
+    "description": "界面验收隔离数据",
+    "name": "本体表单连续性验证 mvne8pwb",
+    "scenario": "独立模拟",
+    "id": "workspace-8c375abab09944b7",
+    "revision": 1,
+    "project_id": "project-55131a7bd86343ec",
+    "deleted": false,
+    "created_at": 1792906506.013268,
+    "updated_at": 1792906506.013268
+  },
+  "agent": {
+    "definition": {
+      "adapter_bindings": {},
+      "capability_refs": [
+        "knowledge.search@1.0.0",
+        "knowledge.read@1.0.0"
+      ],
+      "domain_pack_ref": "knowledge-answer@1.0.0",
+      "identity": {
+        "name": "本体表单 Mock 助手",
+        "role": "知识问答助手"
+      },
+      "knowledge_spaces": [
+        "simulated-change-context@1.0.0"
+      ],
+      "native_read_refs": [],
+      "policy_ref": "knowledge-reader-policy@1.0.0",
+      "prompt_template_ref": "profile-prompt@1",
+      "responsibilities": [
+        {
+          "check_refs": [
+            "answer-grounded",
+            "answer-scope",
+            "answer-current"
+          ],
+          "deliverable_ref": "knowledge-answer@1.0.0",
+          "description": "依据有来源的知识回答问题"
+        }
+      ],
+      "runtime_profile_ref": "profile-runtime@1",
+      "skill_refs": [
+        "source-grounded-answer@1.0.0"
+      ],
+      "standard_refs": [
+        "knowledge-source-evidence@1.0.0"
+      ]
+    },
+    "description": "",
+    "mcp_servers": [],
+    "model": "builtin",
+    "name": "本体表单 Mock 助手",
+    "options": {},
+    "prompt": "你是一名知识问答助手。根据任务范围内已发布的模拟知识回答问题，使用清晰的中文逐字引用原文并注明来源；证据不足时说明缺失材料。",
+    "runtime": "mock",
+    "skills": [],
+    "id": "agent-47b7a5660e7441e1",
+    "revision": 1,
+    "created_at": 1792906506.894995,
+    "updated_at": 1792906506.894995,
+    "archived": false
+  },
+  "ontologyRef": "learned-4f0049f23fbcad249df0ab68@1",
+  "revisedRef": "learned-4f0049f23fbcad249df0ab68@2",
+  "layouts": [
+    {
+      "theme": "light",
+      "viewport": 320,
+      "rootWidth": 320,
+      "dialog": {
+        "left": 8,
+        "right": 312
+      },
+      "body": {
+        "client": 302,
+        "scroll": 302,
+        "left": 9,
+        "right": 311
+      },
+      "focused": {
+        "left": 57,
+        "right": 263,
+        "top": 446.90625,
+        "bottom": 492.90625
+      },
+      "error": {
+        "left": 57,
+        "right": 263,
+        "top": 504.90625,
+        "bottom": 578.5
+      },
+      "overflow": [],
+      "counts": {
+        "types": 1,
+        "objects": 2,
+        "links": 1,
+        "actions": 1
+      },
+      "sources": [
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        },
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        },
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        },
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        },
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        },
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        }
+      ],
+      "footer": [
+        {
+          "text": "返回",
+          "left": 25,
+          "right": 77
+        },
+        {
+          "text": "核对本体版本",
+          "left": 89,
+          "right": 295
+        },
+        {
+          "text": "保存为新版本草稿",
+          "left": 89,
+          "right": 295
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "viewport": 320,
+      "rootWidth": 320,
+      "dialog": {
+        "left": 8,
+        "right": 312
+      },
+      "body": {
+        "client": 302,
+        "scroll": 302,
+        "left": 9,
+        "right": 311
+      },
+      "focused": {
+        "left": 57,
+        "right": 263,
+        "top": 446.90625,
+        "bottom": 492.90625
+      },
+      "error": {
+        "left": 57,
+        "right": 263,
+        "top": 504.90625,
+        "bottom": 578.5
+      },
+      "overflow": [],
+      "counts": {
+        "types": 1,
+        "objects": 2,
+        "links": 1,
+        "actions": 1
+      },
+      "sources": [
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        },
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        },
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        },
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        },
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        },
+        {
+          "client": 204,
+          "scroll": 231,
+          "overflow": "auto"
+        }
+      ],
+      "footer": [
+        {
+          "text": "返回",
+          "left": 25,
+          "right": 77
+        },
+        {
+          "text": "核对本体版本",
+          "left": 89,
+          "right": 295
+        },
+        {
+          "text": "保存为新版本草稿",
+          "left": 89,
+          "right": 295
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "viewport": 375,
+      "rootWidth": 375,
+      "dialog": {
+        "left": 8,
+        "right": 367
+      },
+      "body": {
+        "client": 357,
+        "scroll": 357,
+        "left": 9,
+        "right": 366
+      },
+      "focused": {
+        "left": 57,
+        "right": 318,
+        "top": 447.125,
+        "bottom": 493.125
+      },
+      "error": {
+        "left": 57,
+        "right": 318,
+        "top": 505.125,
+        "bottom": 554.921875
+      },
+      "overflow": [],
+      "counts": {
+        "types": 1,
+        "objects": 2,
+        "links": 1,
+        "actions": 1
+      },
+      "sources": [
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        },
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        },
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        },
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        },
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        },
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        }
+      ],
+      "footer": [
+        {
+          "text": "返回",
+          "left": 25,
+          "right": 77
+        },
+        {
+          "text": "核对本体版本",
+          "left": 89,
+          "right": 350
+        },
+        {
+          "text": "保存为新版本草稿",
+          "left": 89,
+          "right": 350
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "viewport": 375,
+      "rootWidth": 375,
+      "dialog": {
+        "left": 8,
+        "right": 367
+      },
+      "body": {
+        "client": 357,
+        "scroll": 357,
+        "left": 9,
+        "right": 366
+      },
+      "focused": {
+        "left": 57,
+        "right": 318,
+        "top": 447.125,
+        "bottom": 493.125
+      },
+      "error": {
+        "left": 57,
+        "right": 318,
+        "top": 505.125,
+        "bottom": 554.921875
+      },
+      "overflow": [],
+      "counts": {
+        "types": 1,
+        "objects": 2,
+        "links": 1,
+        "actions": 1
+      },
+      "sources": [
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        },
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        },
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        },
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        },
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        },
+        {
+          "client": 259,
+          "scroll": 259,
+          "overflow": "auto"
+        }
+      ],
+      "footer": [
+        {
+          "text": "返回",
+          "left": 25,
+          "right": 77
+        },
+        {
+          "text": "核对本体版本",
+          "left": 89,
+          "right": 350
+        },
+        {
+          "text": "保存为新版本草稿",
+          "left": 89,
+          "right": 350
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "viewport": 414,
+      "rootWidth": 414,
+      "dialog": {
+        "left": 8,
+        "right": 406
+      },
+      "body": {
+        "client": 396,
+        "scroll": 396,
+        "left": 9,
+        "right": 405
+      },
+      "focused": {
+        "left": 57,
+        "right": 357,
+        "top": 472.6875,
+        "bottom": 518.6875
+      },
+      "error": {
+        "left": 57,
+        "right": 357,
+        "top": 530.6875,
+        "bottom": 580.484375
+      },
+      "overflow": [],
+      "counts": {
+        "types": 1,
+        "objects": 2,
+        "links": 1,
+        "actions": 1
+      },
+      "sources": [
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        },
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        },
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        },
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        },
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        },
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        }
+      ],
+      "footer": [
+        {
+          "text": "返回",
+          "left": 25,
+          "right": 75
+        },
+        {
+          "text": "核对本体版本",
+          "left": 161,
+          "right": 259
+        },
+        {
+          "text": "保存为新版本草稿",
+          "left": 267,
+          "right": 389
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "viewport": 414,
+      "rootWidth": 414,
+      "dialog": {
+        "left": 8,
+        "right": 406
+      },
+      "body": {
+        "client": 396,
+        "scroll": 396,
+        "left": 9,
+        "right": 405
+      },
+      "focused": {
+        "left": 57,
+        "right": 357,
+        "top": 472.6875,
+        "bottom": 518.6875
+      },
+      "error": {
+        "left": 57,
+        "right": 357,
+        "top": 530.6875,
+        "bottom": 580.484375
+      },
+      "overflow": [],
+      "counts": {
+        "types": 1,
+        "objects": 2,
+        "links": 1,
+        "actions": 1
+      },
+      "sources": [
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        },
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        },
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        },
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        },
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        },
+        {
+          "client": 298,
+          "scroll": 298,
+          "overflow": "auto"
+        }
+      ],
+      "footer": [
+        {
+          "text": "返回",
+          "left": 25,
+          "right": 75
+        },
+        {
+          "text": "核对本体版本",
+          "left": 161,
+          "right": 259
+        },
+        {
+          "text": "保存为新版本草稿",
+          "left": 267,
+          "right": 389
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "viewport": 768,
+      "rootWidth": 768,
+      "dialog": {
+        "left": 24,
+        "right": 744
+      },
+      "body": {
+        "client": 718,
+        "scroll": 718,
+        "left": 25,
+        "right": 743
+      },
+      "focused": {
+        "left": 87,
+        "right": 681,
+        "top": 445.796875,
+        "bottom": 489.796875
+      },
+      "error": {
+        "left": 87,
+        "right": 681,
+        "top": 501.796875,
+        "bottom": 551.59375
+      },
+      "overflow": [],
+      "counts": {
+        "types": 1,
+        "objects": 2,
+        "links": 1,
+        "actions": 1
+      },
+      "sources": [
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        },
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        },
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        },
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        },
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        },
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        }
+      ],
+      "footer": [
+        {
+          "text": "返回",
+          "left": 49,
+          "right": 111
+        },
+        {
+          "text": "核对本体版本",
+          "left": 49,
+          "right": 167
+        },
+        {
+          "text": "保存为新版本草稿",
+          "left": 175,
+          "right": 321
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "viewport": 768,
+      "rootWidth": 768,
+      "dialog": {
+        "left": 24,
+        "right": 744
+      },
+      "body": {
+        "client": 718,
+        "scroll": 718,
+        "left": 25,
+        "right": 743
+      },
+      "focused": {
+        "left": 87,
+        "right": 681,
+        "top": 445.796875,
+        "bottom": 489.796875
+      },
+      "error": {
+        "left": 87,
+        "right": 681,
+        "top": 501.796875,
+        "bottom": 551.59375
+      },
+      "overflow": [],
+      "counts": {
+        "types": 1,
+        "objects": 2,
+        "links": 1,
+        "actions": 1
+      },
+      "sources": [
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        },
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        },
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        },
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        },
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        },
+        {
+          "client": 592,
+          "scroll": 592,
+          "overflow": "auto"
+        }
+      ],
+      "footer": [
+        {
+          "text": "返回",
+          "left": 49,
+          "right": 111
+        },
+        {
+          "text": "核对本体版本",
+          "left": 49,
+          "right": 167
+        },
+        {
+          "text": "保存为新版本草稿",
+          "left": 175,
+          "right": 321
+        }
+      ]
+    }
+  ],
+  "finishedAt": "2026-10-25T05:35:10.889Z"
+}

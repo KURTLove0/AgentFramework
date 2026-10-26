@@ -1,0 +1,36 @@
+PASS navigation is added once and selected node has a move handle
+PASS pointer press and tiny jitter do not alter a draft
+PASS node dragging updates snapped coordinates and keeps business nodes unchanged
+PASS dragging accounts for the current canvas zoom
+PASS Escape cancels a drag and restores the clean draft
+PASS pointer cancellation restores layout without affecting the graph
+PASS blank canvas panning changes only viewport scroll
+PASS keyboard handle movement supports Shift acceleration and coordinate bounds
+PASS IME keys and text-field arrows never move nodes
+PASS zoom is bounded and does not mark a draft as changed
+PASS zoom preserves the logical point under its anchor
+PASS fit considers both viewport dimensions and remains a view-only change
+PASS fit keeps readable size when actual nodes already fit, ignoring blank canvas extent
+PASS ordinary wheel scrolling remains native and modified wheel zooms
+PASS selection updates inspector, dependencies and the visible canvas area
+PASS layout cache is scoped and contains only coordinates
+PASS invalid layout data degrades to automatic layout
+PASS automatic arrange restores the original clean layout and routing
+PASS node deletion undo restores manual layout and the complete branch definition
+PASS validation selects, marks and reveals the node with a missing goal
+PASS tap direction controls move a node without a drag and preserve its API definition
+PASS mobile editor opens on canvas and selects properties only on an explicit node click
+PASS mobile dragging stays on canvas while zoom and locate return from properties
+PASS mobile pane tabs support arrows and desktop always restores both panes
+PASS layout data never enters the workflow node API contract
+PASS saving disables canvas movement and user cancellation cannot discard the request
+PASS dragging is included in the existing unsaved-close protection
+PASS successful save keeps the original API contract and stores layout separately
+PASS save success followed by GET failure retains its receipt without reporting a failed save
+PASS saving an adopted chat proposal survives a later partial refresh failure without duplicate creation
+PASS a failed or unknown POST keeps the editor open and never triggers a replay or follow-up refresh
+PASS start success preserves the single created run and stable request identity when refresh fails
+PASS granted run receipt remains successful when the subsequent GET fails
+PASS archive receipt stays authoritative when the following list refresh fails
+
+34 isolated workflow interaction checks passed.

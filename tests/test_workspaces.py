@@ -137,6 +137,22 @@ class WorkspaceHTTPTests(unittest.TestCase):
         r=c.getresponse();status=r.status;raw=r.read();c.close()
         return status,json.loads(raw)
 
+    def test_teamless_create_and_custom_domain_rejected_over_http(self):
+        status,defaults=self.request('/api/agent-definition-default')
+        self.assertEqual(status,200)
+        self.assertNotIn('owner_team',defaults['definition']['identity'])
+        data=role();data['definition']=defaults['definition']
+        data['definition']['identity']['name']=data['name']
+        status,saved=self.request('/api/agents',data)
+        self.assertEqual(status,201)
+        self.assertNotIn('owner_team',saved['definition']['identity'])
+        data['definition']['domain_pack_ref']='custom-domain@1.0.0'
+        self.assertEqual(self.request('/api/agents',data)[0],400)
+        data['revision']=1
+        self.assertEqual(self.request('/api/agents/'+saved['id'],data)[0],400)
+        self.assertEqual(self.request('/api/agents/'+saved['id'])[1]['revision'],1)
+        self.assertEqual(self.request('/api/agent-definition-default?domain=custom-domain@1.0.0')[0],400)
+
     def test_routes_isolate_scopes_downloads_and_deleted_spaces(self):
         status,w=self.request('/api/workspaces',space());self.assertEqual(status,201);wid=w['id']
         self.assertEqual(self.request('/api/session',workspace=wid)[1]['workspace']['id'],wid)

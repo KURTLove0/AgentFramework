@@ -128,14 +128,14 @@ def domain_for(snapshot):
 def default_definition(name='变更评估助手', domain_ref=DOMAIN_REF):
     if domain_ref != DOMAIN_REF:
         domain=get_domain(domain_ref)
-        return {'identity':{'name':name,'role':'knowledge_assistant','owner_team':'engineering-platform'},
+        return {'identity':{'name':name,'role':'knowledge_assistant'},
                 'responsibilities':[{'description':'依据有来源的知识回答问题','deliverable_ref':'knowledge-answer@1.0.0','check_refs':list(domain.checks)}],
                 'domain_pack_ref':domain.ref,'standard_refs':['knowledge-source-evidence@1.0.0'],
                 'knowledge_spaces':[KNOWLEDGE],'skill_refs':[domain.skill_ref],'capability_refs':list(domain.capabilities),
                 'policy_ref':domain.policy_ref,'runtime_profile_ref':'profile-runtime@1','prompt_template_ref':'profile-prompt@1',
                 'adapter_bindings':{},'native_read_refs':[]}
 
-    return {'identity': {'name': name, 'role': 'release_reviewer', 'owner_team': 'engineering-platform'},
+    return {'identity': {'name': name, 'role': 'release_reviewer'},
             'responsibilities': [
                 {'description': '评估变更风险', 'deliverable_ref': 'release-report@1.0.0', 'check_refs': list(CHECKS[:2])},
                 {'description': '创建并回读草稿', 'deliverable_ref': 'release-draft@1.0.0', 'check_refs': [CHECKS[2]]}],
@@ -155,10 +155,12 @@ def normalize_definition(value, name):
         raise ValueError('岗位定义字段不完整或包含未知字段')
     result = deepcopy(value)
     identity = result['identity']
-    if not isinstance(identity, dict) or set(identity) != {'name', 'role', 'owner_team'}:
-        raise ValueError('岗位身份需要 name、role、owner_team')
+    if (not isinstance(identity, dict) or not {'name', 'role'} <= set(identity)
+            or set(identity) - {'name', 'role', 'owner_team'}):
+        raise ValueError('岗位身份需要 name、role，且不能包含未知字段')
     for key in identity:
-        identity[key] = text(identity[key], '岗位身份', 100)
+        # Keep existing team metadata without requiring it for new Agents.
+        identity[key] = text(identity[key], '岗位身份', 100, empty=key == 'owner_team')
     if identity['name'] != name:
         raise ValueError('岗位身份名称必须与 Agent 名称一致')
     responsibilities = result['responsibilities']
@@ -176,6 +178,10 @@ def normalize_definition(value, name):
             raise ValueError(key + ' 包含重复引用')
     for key in ('domain_pack_ref', 'policy_ref', 'runtime_profile_ref', 'prompt_template_ref'):
         result[key] = text(result[key], key, 120)
+    try:
+        get_domain(result['domain_pack_ref'])
+    except ValueError as error:
+        raise ValueError('请为处理领域选择可用的工作方式') from error
     if not isinstance(result['adapter_bindings'], dict):
         raise ValueError('adapter_bindings 必须是引用映射')
     return result
@@ -250,6 +256,12 @@ class AgentCompiler:
                 raise ValueError('unregistered cognitive runtime')
             runtime_binding = LLMPlanner(config_type(model=profile['model'], **profile['options']), agent_profile=profile).descriptor()
         domain_descriptor = domain.descriptor()
+        processing_domain = (profile or {}).get('processing_domain')
+        if processing_domain:
+            from .agent_domains import normalize_domain
+            processing_domain = normalize_domain(processing_domain, frozen=True)
+            if processing_domain['domain_pack_ref'] != domain.ref:
+                raise ValueError('处理领域与工作方式不一致')
         result = {'schema_version': 2, 'ref': agent_ref(profile) if profile else ('release-assistant@1.0.0' if domain.ref==DOMAIN_REF else 'knowledge-assistant@1.0.0'),
                   'definition': definition, 'domain_pack': domain_descriptor, 'capabilities': compiled_caps,
                   'standards': {ref: {'ref': ref, 'verifier_refs': list(STANDARDS[ref])} for ref in definition['standard_refs']},
@@ -257,6 +269,16 @@ class AgentCompiler:
                                                 for s in (profile or {}).get('skills', []) if s['enabled']],
                   'runtime': runtime_binding,
                   'prompt': (profile or {}).get('prompt', ''), 'cognition_schema_hash': domain_descriptor['cognition_schema_hash']}
+        from .evaluation_contract import compile_contract
+        if processing_domain:
+            result['processing_domain'] = processing_domain
+        result['evaluation_contract'] = compile_contract(definition, (profile or {}).get('evaluation_config'), result['standards'], processing_domain=processing_domain)
+        if (profile or {}).get('skill_packages'):
+            from .skills import validate_frozen
+            for item in profile['skill_packages']:
+                validate_frozen(item['package'])
+                if item['ref']!=item['skill_id']+'@'+str(item['version']):raise ValueError('Skill version binding mismatch')
+                if item['enabled']:result['skills'].append({'kind':'agent-skill-package',**deepcopy(item)})
         return {**result, 'hash': digest(result)}
 
     @staticmethod
@@ -265,6 +287,10 @@ class AgentCompiler:
         if digest(body) != compiled.get('hash'):
             raise ValueError('CompiledAgent hash mismatch')
         domain_for({'compiled_agent': compiled})
+        for item in compiled.get('skills',[]):
+            if item.get('kind')=='agent-skill-package':
+                from .skills import validate_frozen
+                validate_frozen(item['package'])
         for ref, cap in compiled['capabilities'].items():
             resolve_capability({'compiled_agent': compiled}, ref)
 

@@ -1,0 +1,4380 @@
+{
+  "records": [
+    {
+      "name": "workbench",
+      "dialog": null,
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 123,
+      "contrastPairs": [
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "52px",
+          "sample": "任务工作台",
+          "selector": "h1."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "让目标成为可执行的计划，跟进动作、授权与最终结果。",
+          "selector": "p."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "新建任务",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "全部任务",
+          "selector": "span.metric-label"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "56px",
+          "sample": "9",
+          "selector": "span.metric-value."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "已保存的任务",
+          "selector": "small."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "56px",
+          "sample": "0",
+          "selector": "span.metric-value.blue"
+        },
+        {
+          "ratio": 8.387691233778044,
+          "color": "oklch(0.43 0.105 64)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "56px",
+          "sample": "0",
+          "selector": "span.metric-value.amber"
+        },
+        {
+          "ratio": 9.06762065734054,
+          "color": "oklch(0.39 0.098 161)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "56px",
+          "sample": "8",
+          "selector": "span.metric-value.green"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "34px",
+          "sample": "最近运行",
+          "selector": "h2#runs-heading"
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "9",
+          "selector": "small."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "发布风险规范中的风险规则是什么？请引用来源。",
+          "selector": "button.task-link"
+        },
+        {
+          "ratio": 8.071187905331698,
+          "color": "oklch(0.39 0.098 161)",
+          "background": [
+            228,
+            246,
+            236
+          ],
+          "fontSize": "24px",
+          "sample": "已完成",
+          "selector": "span.pill.good"
+        },
+        {
+          "ratio": 6.624960555076124,
+          "color": "oklch(0.47 0.178 25)",
+          "background": [
+            255,
+            237,
+            234
+          ],
+          "fontSize": "24px",
+          "sample": "执行失败",
+          "selector": "span.pill.bad"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "查看全部",
+          "selector": "a.text-button"
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "当前运行详情",
+          "selector": "div.section-label"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "正常流程 / MOCK",
+          "selector": "div.eyebrow"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "36px",
+          "sample": "评估本次变更风险并生成评估草稿",
+          "selector": "h2."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "复盘与沉淀",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "生成计划",
+          "selector": "div.phase.done"
+        },
+        {
+          "ratio": 14.587736285476794,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            228,
+            246,
+            236
+          ],
+          "fontSize": "28px",
+          "sample": "评估已完成，草稿已通过回读验收",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.042237661186227,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            228,
+            246,
+            236
+          ],
+          "fontSize": "26px",
+          "sample": "任务成功表示完成评估并创建草稿，变更是否可发布仍需依据报告判断。",
+          "selector": "p."
+        },
+        {
+          "ratio": 5.561466063123614,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            229,
+            241,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "评估报告",
+          "selector": "button#tab-report"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "支付服务增加超时重试 · 变更评估",
+          "selector": "h3."
+        },
+        {
+          "ratio": 6.1862282414551855,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            243,
+            223
+          ],
+          "fontSize": "28px",
+          "sample": "模拟数据；草稿供人工审核；未执行发布或部署。",
+          "selector": "div.report-limits"
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "26px",
+          "sample": "Agent",
+          "selector": "dt."
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "26px",
+          "sample": "界面验收助手",
+          "selector": "dd."
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "50px",
+          "sample": "1",
+          "selector": "div.proof-number"
+        },
+        {
+          "ratio": 6.020971764157388,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "评估报告 .md",
+          "selector": "a."
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "runs",
+      "dialog": null,
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 52,
+      "contrastPairs": [
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "52px",
+          "sample": "运行记录",
+          "selector": "h1."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "每一次执行都有迹可循。查看结果、审查证据，或继续未完成的任务。",
+          "selector": "p."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "新建任务",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "34px",
+          "sample": "全部运行",
+          "selector": "h2#runs-heading"
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "9",
+          "selector": "small."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "发布风险规范中的风险规则是什么？请引用来源。",
+          "selector": "button.task-link"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "change-demo-001",
+          "selector": "small."
+        },
+        {
+          "ratio": 8.071187905331698,
+          "color": "oklch(0.39 0.098 161)",
+          "background": [
+            228,
+            246,
+            236
+          ],
+          "fontSize": "24px",
+          "sample": "已完成",
+          "selector": "span.pill.good"
+        },
+        {
+          "ratio": 6.624960555076124,
+          "color": "oklch(0.47 0.178 25)",
+          "background": [
+            255,
+            237,
+            234
+          ],
+          "fontSize": "24px",
+          "sample": "执行失败",
+          "selector": "span.pill.bad"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "agents",
+      "dialog": null,
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 77,
+      "contrastPairs": [
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "52px",
+          "sample": "智能体 Agent",
+          "selector": "h1."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "创建适合业务的助理，交给它一个任务，再核对结果与来源。",
+          "selector": "p."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "创建智能体",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "显示 2 / 2 个 Agent",
+          "selector": "span#agent-filter-summary"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "36px",
+          "sample": "界面验收助手",
+          "selector": "h2#title-agent-446ef89914864f62"
+        },
+        {
+          "ratio": 8.071187905331698,
+          "color": "oklch(0.39 0.098 161)",
+          "background": [
+            228,
+            246,
+            236
+          ],
+          "fontSize": "24px",
+          "sample": "可用",
+          "selector": "span.pill.good"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "添加用途描述，方便团队选择合适的 Agent。",
+          "selector": "p.agent-description"
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "变更评估",
+          "selector": "span.pill"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "职责 / 标准",
+          "selector": "dt."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "2 项 / 2 项",
+          "selector": "dd."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "查看职责与标准",
+          "selector": "summary."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "builtin",
+          "selector": "dd.mono"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "开始使用",
+          "selector": "button#agent-new-task-agent-446ef89914864f62"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "执行评测",
+          "selector": "a.text-button"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "workflows",
+      "dialog": null,
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 116,
+      "contrastPairs": [
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "52px",
+          "sample": "工作流",
+          "selector": "h1."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "将知识检索、Agent 执行与结果验收连接成可恢复的流程。",
+          "selector": "p."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "对话设计",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "可视化创建",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "26px",
+          "sample": "设计 → 审查并保存 → 运行与授权",
+          "selector": "span.field-help"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "36px",
+          "sample": "画布与分支验收 mvm8ggol",
+          "selector": "h2."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "v1",
+          "selector": "span.pill"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "为 Agent 编排任务，按节点依赖逐步执行。",
+          "selector": "p."
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "5 个 Agent 节点",
+          "selector": "span."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "界面验收助手",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "输入：流程输入",
+          "selector": "small."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "节点标识",
+          "selector": "summary."
+        },
+        {
+          "ratio": 5.561466063123614,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            229,
+            241,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "当「界面验收助手」的风险等级 等于 高风险",
+          "selector": "p.flow-config-summary"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "等待所有上游结束，被跳过的分支不创建任务。",
+          "selector": "p.field-help"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "运行工作流",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "归档",
+          "selector": "button.text-button"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "34px",
+          "sample": "运行记录",
+          "selector": "h2#flow-runs-heading"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "每次运行保留独立的流程与 Agent 版本快照",
+          "selector": "small."
+        },
+        {
+          "ratio": 8.071187905331698,
+          "color": "oklch(0.39 0.098 161)",
+          "background": [
+            228,
+            246,
+            236
+          ],
+          "fontSize": "24px",
+          "sample": "已完成",
+          "selector": "span.pill.good"
+        },
+        {
+          "ratio": 9.06762065734054,
+          "color": "oklch(0.39 0.098 161)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "独立验收 3 / 3 · 草稿 1 份",
+          "selector": "p.flow-proof"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "skills",
+      "dialog": null,
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 82,
+      "contrastPairs": [
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "52px",
+          "sample": "技能 Skills",
+          "selector": "h1."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "把可复用的方法整理为标准包，为 Agent 选择合适的工作方式。",
+          "selector": "p."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "导入 ZIP",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "创建 Skill",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "26px",
+          "sample": "自定义技能包",
+          "selector": "span."
+        },
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "40px",
+          "sample": "2",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "4 个技能包",
+          "selector": "p.resource-results"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "36px",
+          "sample": "ui95-imported",
+          "selector": "h2."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "当前工作空间 · 自定义包",
+          "selector": "small."
+        },
+        {
+          "ratio": 7.643894524688,
+          "color": "oklch(0.43 0.105 64)",
+          "background": [
+            255,
+            243,
+            223
+          ],
+          "fontSize": "24px",
+          "sample": "草稿 · v1",
+          "selector": "span.pill.warn"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "用于核对来源和保存评估依据的验收技能。",
+          "selector": "p.skill-description"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "SKILL.md",
+          "selector": "span."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "查看技能",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "发布 v1",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "1",
+          "selector": "span.section-count"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "v1 · 草稿",
+          "selector": "button.text-button"
+        },
+        {
+          "ratio": 7.498428441854854,
+          "color": "oklch(0.47 0.178 25)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "归档技能包",
+          "selector": "button.text-button.danger-text"
+        },
+        {
+          "ratio": 8.071187905331698,
+          "color": "oklch(0.39 0.098 161)",
+          "background": [
+            228,
+            246,
+            236
+          ],
+          "fontSize": "24px",
+          "sample": "已发布 · v1",
+          "selector": "span.pill.good"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "library",
+      "dialog": null,
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 69,
+      "contrastPairs": [
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "52px",
+          "sample": "知识库",
+          "selector": "h1."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "连接知识、记忆、经验与能力，让每次任务都有依据。",
+          "selector": "p."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "新增资料",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "26px",
+          "sample": "当前空间",
+          "selector": "span."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "知识与经验提供指导，业务动作仍需独立授权。",
+          "selector": "span.field-help"
+        },
+        {
+          "ratio": 5.917016637401196,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "知识",
+          "selector": "button#hub-tab-knowledge"
+        },
+        {
+          "ratio": 5.917016637401196,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "4",
+          "selector": "small."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "搜索",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "34px",
+          "sample": "知识资料",
+          "selector": "h2."
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "4",
+          "selector": "span.section-count"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "编辑生成新版本，保留已发布内容",
+          "selector": "small."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "32px",
+          "sample": "任务事实与验收依据",
+          "selector": "h3."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "仅本人",
+          "selector": "span."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "目标：评估本次变更风险并生成评估草稿\n结果：SUCCEEDED；验收 3/3，步骤 6，重规划 0。",
+          "selector": "p.asset-preview."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "来源、适用范围与版本信息",
+          "selector": "summary."
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "{\n  \"ref\": \"learned-c850570e22f2f9bb11630633@1\",\n  \"id\": \"learned-c850570e22f2f9bb11630633\",\n  \"vers",
+          "selector": "pre."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "查看原始运行",
+          "selector": "a.button.secondary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "提交审核",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 8.071187905331698,
+          "color": "oklch(0.39 0.098 161)",
+          "background": [
+            228,
+            246,
+            236
+          ],
+          "fontSize": "24px",
+          "sample": "已发布",
+          "selector": "span.pill.good"
+        },
+        {
+          "ratio": 7.498428441854854,
+          "color": "oklch(0.47 0.178 25)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "撤回",
+          "selector": "button.text-button.danger-text"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "daily",
+      "dialog": null,
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 19,
+      "contrastPairs": [
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "52px",
+          "sample": "每日任务",
+          "selector": "h1."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。",
+          "selector": "p."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "计划设置",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "生成今日计划",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "40px",
+          "sample": "每日计划尚未开启",
+          "selector": "h2."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "每天 09:00 · Asia/Shanghai · 1 项任务模板",
+          "selector": "p.muted"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "派发为待启动任务，可在工作台逐项启动",
+          "selector": "p."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "手动使用",
+          "selector": "span.pill."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "26px",
+          "sample": "定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。",
+          "selector": "p.field-help.operations-note"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "34px",
+          "sample": "2026-10-24",
+          "selector": "h2."
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "Asia/Shanghai",
+          "selector": "small."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "工作空间有 0 项未完成任务；今日可派发 1 项，阻塞 0 项，避免重复 0 项。",
+          "selector": "p."
+        },
+        {
+          "ratio": 8.071187905331698,
+          "color": "oklch(0.39 0.098 161)",
+          "background": [
+            228,
+            246,
+            236
+          ],
+          "fontSize": "24px",
+          "sample": "已派发",
+          "selector": "span.pill.good"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "界面验收助手 · 固定 v1 · 已授予草稿创建权限",
+          "selector": "p.field-help"
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "26px",
+          "sample": "配置 v1 · 10/24 18:05",
+          "selector": "small.field-help"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "evaluations",
+      "dialog": null,
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 391,
+      "contrastPairs": [
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "52px",
+          "sample": "岗位评测",
+          "selector": "h1."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "依据执行时的身份、职责与标准评估历史，每项扣分都可以回到验收记录。",
+          "selector": "p."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "岗位评测契约",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "评测执行历史",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "40px",
+          "sample": "基础阈值 90 分",
+          "selector": "h2."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "近 30 天 · 任务结束后自动评测 · 0 条未确认提醒",
+          "selector": "p.muted"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "每次执行使用冻结的岗位身份、职责权重、交付物与标准。岗位和空间阈值取较严格者；基础验收失败仍会提醒。取消不计分，等待中的任务暂不评测。",
+          "selector": "p.field-help"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "34px",
+          "sample": "基础标准提醒",
+          "selector": "h2#agent-alerts-title"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "确认后保留评测与记录",
+          "selector": "small."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "界面验收助手 · 10 分",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "查看运行与证据",
+          "selector": "a.text-button"
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "已确认",
+          "selector": "span.pill"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "88px",
+          "sample": "100",
+          "selector": "p.evaluation-number"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "/ 100",
+          "selector": "small."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "资料验收助手 · v2 · 10/24 18:05",
+          "selector": "small."
+        },
+        {
+          "ratio": 8.071187905331698,
+          "color": "oklch(0.39 0.098 161)",
+          "background": [
+            228,
+            246,
+            236
+          ],
+          "fontSize": "24px",
+          "sample": "100 分 · 达标",
+          "selector": "span.pill.good"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "知识问答助手",
+          "selector": "dd."
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "30px",
+          "sample": "身份一致性",
+          "selector": "span."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "32px",
+          "sample": "岗位身份与执行边界",
+          "selector": "h3."
+        },
+        {
+          "ratio": 7.643894524688,
+          "color": "oklch(0.43 0.105 64)",
+          "background": [
+            255,
+            243,
+            223
+          ],
+          "fontSize": "24px",
+          "sample": "10 分 · 未达标",
+          "selector": "span.pill.warn"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "workspaces",
+      "dialog": null,
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 789,
+      "contrastPairs": [
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "52px",
+          "sample": "工作空间管理",
+          "selector": "h1."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "为不同业务和场景建立独立空间，让 Agent、任务与知识各就其位。",
+          "selector": "p."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "创建工作空间",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "26px",
+          "sample": "个可用空间",
+          "selector": "span."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "各空间独立管理配置与数据，共用本机运行时和能力目录。",
+          "selector": "span.field-help"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "36px",
+          "sample": "默认工作空间",
+          "selector": "h2."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "请编辑业务与场景，或创建新的工作空间。",
+          "selector": "p.workspace-card-description.muted"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "所属业务",
+          "selector": "dt."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "待配置",
+          "selector": "dd."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "project-demo",
+          "selector": "dd.mono"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "进入空间",
+          "selector": "button.button.primary"
+        },
+        {
+          "ratio": 7.498428441854854,
+          "color": "oklch(0.47 0.178 25)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "删除",
+          "selector": "button.text-button.danger-text"
+        },
+        {
+          "ratio": 8.071187905331698,
+          "color": "oklch(0.39 0.098 161)",
+          "background": [
+            228,
+            246,
+            236
+          ],
+          "fontSize": "24px",
+          "sample": "当前空间",
+          "selector": "span.pill.good"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "registry",
+      "dialog": null,
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 43,
+      "contrastPairs": [
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "52px",
+          "sample": "能力与标准",
+          "selector": "h1."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "查看岗位负责什么、可以使用哪些能力，以及每次任务如何验收。",
+          "selector": "p."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "配置智能体",
+          "selector": "a.button.secondary"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "默认岗位",
+          "selector": "p.eyebrow"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "36px",
+          "sample": "变更评估助手",
+          "selector": "h2."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "评估变更风险",
+          "selector": "span."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "岗位版本",
+          "selector": "dt."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "release-assistant@1.0.0",
+          "selector": "dd.mono"
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "只读 · 限任务范围",
+          "selector": "span.pill."
+        },
+        {
+          "ratio": 7.643894524688,
+          "color": "oklch(0.43 0.105 64)",
+          "background": [
+            255,
+            243,
+            223
+          ],
+          "fontSize": "24px",
+          "sample": "写入 · 需授权",
+          "selector": "span.pill.warn"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "40px",
+          "sample": "执行与验收",
+          "selector": "h2."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "提交任务时保存岗位与规则版本。执行中逐项检查授权，结束后核对报告、证据与外部回读结果；中断恢复沿用原有版本和执行记录。",
+          "selector": "p."
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "runtimes",
+      "dialog": null,
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 28,
+      "contrastPairs": [
+        {
+          "ratio": 15.242519831808771,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "52px",
+          "sample": "运行时配置",
+          "selector": "h1."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "28px",
+          "sample": "为规划与动作提案选择运行时，此设备上的运行时配置由所有工作空间共用。",
+          "selector": "p."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "配置版本 9",
+          "selector": "span.pill"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "模拟运行时",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "默认",
+          "selector": "span.runtime-default"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "内置，无需安装",
+          "selector": "small."
+        },
+        {
+          "ratio": 14.326604428532614,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            229,
+            241,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "Codex CLI",
+          "selector": "strong."
+        },
+        {
+          "ratio": 5.934076894519883,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            229,
+            241,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "已发现本机命令",
+          "selector": "small."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "26px",
+          "sample": "配置只用于后续新任务。已有任务恢复时使用提交时冻结的运行时、模型与策略。",
+          "selector": "div.runtime-boundary"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "34px",
+          "sample": "Codex CLI",
+          "selector": "h2#runtime-editor-title"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "检测 CLI",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "模型 ID",
+          "selector": "label."
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "26px",
+          "sample": "使用本机 Codex CLI 登录态",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "26px",
+          "sample": "在终端执行 完成登录；界面不保存密钥。提交真实模型任务时仍需确认上下文发送许可。",
+          "selector": "p."
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "codex login",
+          "selector": "code."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "保存配置",
+          "selector": "button#runtime-save"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-workspace",
+      "dialog": {
+        "id": "workspace-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 794,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 9,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "40px",
+          "sample": "创建工作空间",
+          "selector": "h2#workspace-dialog-title"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "×",
+          "selector": "button.icon-button"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "空间分别保存 Agent、任务、知识和记忆。业务与场景用于说明用途；项目标识创建后固定。",
+          "selector": "p.field-help"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "空间名称",
+          "selector": "label."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "创建工作空间",
+          "selector": "button#workspace-save"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-agent",
+      "dialog": {
+        "id": "agent-dialog",
+        "rect": {
+          "x": 10,
+          "y": 12,
+          "width": 355,
+          "height": 788,
+          "top": 12,
+          "right": 365,
+          "bottom": 800,
+          "left": 10
+        },
+        "scrollHeight": 933,
+        "clientHeight": 786
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 24,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "46px",
+          "sample": "创建智能体",
+          "selector": "h2#agent-dialog-title"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "×",
+          "selector": "button.icon-button"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "选择业务领域，配置模型与指令，确认后即可创建。",
+          "selector": "p#agent-config-intro"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "第 1 / 3 步 · 2 项已就绪",
+          "selector": "span#agent-config-progress-text"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "1. 基本信息",
+          "selector": "span."
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "2. 模型与指令",
+          "selector": "span."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "先选一个起点",
+          "selector": "h3."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "查资料、回答问题",
+          "selector": "strong."
+        },
+        {
+          "ratio": 14.326604428532614,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            229,
+            241,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "评估变更、生成草稿",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "＋ 新建领域",
+          "selector": "button#agent-domain-new"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "变更评估",
+          "selector": "span#agent-domain-selected"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "下一步",
+          "selector": "button.button.primary"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-task",
+      "dialog": {
+        "id": "create-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 796,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 22,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "46px",
+          "sample": "新建评估任务",
+          "selector": "h2#create-title"
+        },
+        {
+          "ratio": 5.561466063123614,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            229,
+            241,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "1 · 任务",
+          "selector": "button.active"
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "2 · 执行",
+          "selector": "button."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "第 1 / 3 步 · 任务与范围",
+          "selector": "p#task-step-status"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "评估指定变更，生成报告，并在授权范围内创建草稿。",
+          "selector": "p#task-intro"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "交给它一个任务",
+          "selector": "h3."
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "30px",
+          "sample": "界面验收助手",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "26px",
+          "sample": "变更评估 · 模拟试用 · v2",
+          "selector": "p."
+        },
+        {
+          "ratio": 6.020971764157388,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "28px",
+          "sample": "更换",
+          "selector": "button.text-button"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "任务目标",
+          "selector": "label."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "试试这些任务示例",
+          "selector": "summary."
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "28px",
+          "sample": "评估本次变更的主要风险，并生成评估草稿。",
+          "selector": "button."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "取消",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "下一步：执行方式",
+          "selector": "button#task-next"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-flow",
+      "dialog": {
+        "id": "flow-editor-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 794,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 29,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "46px",
+          "sample": "创建工作流",
+          "selector": "h2#flow-editor-title"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "×",
+          "selector": "button.icon-button"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "1. 命名工作流",
+          "selector": "summary."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "流程名称",
+          "selector": "label."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "流程画布",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "画布",
+          "selector": "button#flow-pane-canvas"
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "26px",
+          "sample": "节点配置",
+          "selector": "button#flow-pane-inspector"
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "1 个节点 · 检索知识 → Agent 执行 → 独立验收",
+          "selector": "div.flow-canvas-caption"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "34px",
+          "sample": "＋",
+          "selector": "button.flow-port.input"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "01 / Agent 执行",
+          "selector": "span.flow-node-stage"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "界面验收助手",
+          "selector": "strong."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "取消",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "保存工作流",
+          "selector": "button.button.primary"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-flow-start",
+      "dialog": {
+        "id": "flow-start-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 794,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 19,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "40px",
+          "sample": "运行工作流",
+          "selector": "h2#flow-start-title"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "×",
+          "selector": "button.icon-button"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "32px",
+          "sample": "界面验收流程",
+          "selector": "h3."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "v2",
+          "selector": "span.pill"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "确认输入与许可后创建运行。每个节点使用已审查的 Agent 版本。",
+          "selector": "p.field-help"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "检查 1 个执行节点",
+          "selector": "summary."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "资料验收助手",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "输入：流程输入",
+          "selector": "small."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "节点标识",
+          "selector": "summary."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "创建运行并执行",
+          "selector": "button.button.primary"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-flow-chat",
+      "dialog": {
+        "id": "flow-chat-dialog",
+        "rect": {
+          "x": 10,
+          "y": 12,
+          "width": 355,
+          "height": 788,
+          "top": 12,
+          "right": 365,
+          "bottom": 800,
+          "left": 10
+        },
+        "scrollHeight": 1114,
+        "clientHeight": 786
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 11,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "46px",
+          "sample": "对话创建工作流",
+          "selector": "h2#flow-chat-title"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "×",
+          "selector": "button.icon-button"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "对话 Agent",
+          "selector": "label."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "离线设计：按 Agent 名称和先后顺序组织流程，可继续要求改名或调整顺序。",
+          "selector": "p#flow-chat-runtime"
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "32px",
+          "sample": "选择 Agent，说明执行顺序",
+          "selector": "h3."
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "26px",
+          "sample": "离线设计按当前空间的 Agent 名称识别节点，支持“先…再…”顺序、改名和倒序。分支条件可在可视化画布中设置。",
+          "selector": "p.field-help"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "关闭",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "发送给 Agent",
+          "selector": "button#flow-chat-send"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-skill",
+      "dialog": {
+        "id": "skill-editor-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 1143,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 16,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "40px",
+          "sample": "创建 Skill",
+          "selector": "h2#skill-editor-title"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "×",
+          "selector": "button.icon-button"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "Skill 目录名称",
+          "selector": "label."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "未保存",
+          "selector": "span#skill-editor-status"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "SKILL.md 包含 YAML name、description 与 Markdown 正文。references/、scripts/、assets/ 按需保留；脚本不会因导入而执行。",
+          "selector": "p.field-help"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "包内文件",
+          "selector": "h3."
+        },
+        {
+          "ratio": 5.561466063123614,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            229,
+            241,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "SKILL.md",
+          "selector": "span."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "新文件相对路径",
+          "selector": "label."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "保存草稿",
+          "selector": "button#skill-save"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-asset",
+      "dialog": {
+        "id": "asset-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 794,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 14,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "40px",
+          "sample": "新增知识资料",
+          "selector": "h2#asset-title"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "×",
+          "selector": "button.icon-button"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "资料先保存为草稿，经审核发布后才供任务检索。偏好仅对当前用户可见。",
+          "selector": "p.field-help"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "资料类型",
+          "selector": "label."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "保存草稿",
+          "selector": "button#asset-save"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-schedule",
+      "dialog": {
+        "id": "operations-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 794,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 24,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "40px",
+          "sample": "每日计划设置",
+          "selector": "h2#operations-dialog-title"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "每天汇总当前空间待办，并将以下任务派发给指定版本的 Agent。",
+          "selector": "p.muted"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "每日执行时间",
+          "selector": "label."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "本地服务需保持运行；关闭后停止未来派发。",
+          "selector": "small."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "每日任务模板",
+          "selector": "h3."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "任务 1",
+          "selector": "legend."
+        },
+        {
+          "ratio": 7.498428441854854,
+          "color": "oklch(0.47 0.178 25)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "删除",
+          "selector": "button.text-button.danger-text"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "保存计划设置",
+          "selector": "button.button.primary"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-policy",
+      "dialog": {
+        "id": "operations-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 794,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 8,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "40px",
+          "sample": "评测设置",
+          "selector": "h2#operations-dialog-title"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "修改后的规则用于后续自动评测与手动补评。历史报告和提醒保留原评测依据。",
+          "selector": "p.muted"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "基础分数阈值",
+          "selector": "label."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "基础验收失败始终提醒，即使总分高于阈值。",
+          "selector": "small."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "保存评测设置",
+          "selector": "button.button.primary"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-role-contract",
+      "dialog": {
+        "id": "operations-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 794,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 33,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "40px",
+          "sample": "岗位评测契约",
+          "selector": "h2#operations-dialog-title"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "界面验收助手 · Agent v2",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "保存会生成新的 Agent 版本，后续任务冻结此契约。已提交任务继续使用原版本；每日模板需重新选择岗位版本。",
+          "selector": "p.field-help"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "岗位身份",
+          "selector": "dt."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "变更评估专家",
+          "selector": "dd."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "32px",
+          "sample": "评分维度 · 合计 分",
+          "selector": "h3."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "评估变更风险",
+          "selector": "legend."
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "28px",
+          "sample": "保存岗位新版本",
+          "selector": "button.button.primary"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "dialog-learning",
+      "dialog": {
+        "id": "learning-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 794,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 15,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "44px",
+          "sample": "运行复盘",
+          "selector": "h2#learning-title"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "选择 Agent 与来源",
+          "selector": "li."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "已有复盘记录 · 2",
+          "selector": "summary."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "评估本次变更风险并生成评估草稿",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "复盘不会恢复、授权或重新执行原任务。",
+          "selector": "p.field-help"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "关闭",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "调用 Agent 生成建议",
+          "selector": "button.button.primary"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "task-execution",
+      "dialog": {
+        "id": "create-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 796,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 15,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "46px",
+          "sample": "新建评估任务",
+          "selector": "h2#create-title"
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "1 · 任务",
+          "selector": "button.complete"
+        },
+        {
+          "ratio": 5.561466063123614,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            229,
+            241,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "2 · 执行",
+          "selector": "button.active"
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "3 · 审查",
+          "selector": "button."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "第 2 / 3 步 · 执行方式",
+          "selector": "p#task-step-status"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "确认执行方式",
+          "selector": "h3."
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "30px",
+          "sample": "由“界面验收助手”执行",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "26px",
+          "sample": "使用内置规划器模拟运行，无需连接模型。 配置已随智能体固定。",
+          "selector": "p."
+        },
+        {
+          "ratio": 6.020971764157388,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "28px",
+          "sample": "查看或调整智能体配置",
+          "selector": "button.text-button"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "模拟场景与恢复演示（可选）",
+          "selector": "summary."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "演示场景",
+          "selector": "label."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "完整执行变更评估、草稿创建与回读验收",
+          "selector": "p#scenario-description"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "取消",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 8.256706201197511,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            69,
+            184
+          ],
+          "fontSize": "26px",
+          "sample": "下一步：审查许可",
+          "selector": "button#task-next"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    },
+    {
+      "name": "task-review",
+      "dialog": {
+        "id": "create-dialog",
+        "rect": {
+          "x": 8,
+          "y": 8,
+          "width": 359,
+          "height": 796,
+          "top": 8,
+          "right": 367,
+          "bottom": 804,
+          "left": 8
+        },
+        "scrollHeight": 796,
+        "clientHeight": 794
+      },
+      "viewport": 375,
+      "rootWidth": 375,
+      "clipping": [],
+      "smallTargets": [],
+      "nameIssues": [],
+      "tiny": [],
+      "textCount": 31,
+      "contrastPairs": [
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "46px",
+          "sample": "新建评估任务",
+          "selector": "h2#create-title"
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "1 · 任务",
+          "selector": "button.complete"
+        },
+        {
+          "ratio": 5.561466063123614,
+          "color": "oklch(0.49 0.197 257)",
+          "background": [
+            229,
+            241,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "3 · 审查",
+          "selector": "button.active"
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "24px",
+          "sample": "第 3 / 3 步 · 审查与许可",
+          "selector": "p#task-step-status"
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "30px",
+          "sample": "审查与许可",
+          "selector": "h3."
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "30px",
+          "sample": "核对任务",
+          "selector": "strong."
+        },
+        {
+          "ratio": 6.3134488845143455,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            244,
+            247,
+            250
+          ],
+          "fontSize": "24px",
+          "sample": "尚未提交",
+          "selector": "span.pill"
+        },
+        {
+          "ratio": 6.424368866538714,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "24px",
+          "sample": "任务类型",
+          "selector": "dt."
+        },
+        {
+          "ratio": 15.510313244993323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            246,
+            249,
+            252
+          ],
+          "fontSize": "26px",
+          "sample": "变更评估并创建草稿",
+          "selector": "dd."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "28px",
+          "sample": "授予本次任务创建草稿的权限",
+          "selector": "span."
+        },
+        {
+          "ratio": 6.788185292643313,
+          "color": "oklch(0.47 0.025 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "执行预算",
+          "selector": "summary."
+        },
+        {
+          "ratio": 16.388672948457323,
+          "color": "oklch(0.24 0.022 258)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "fontSize": "26px",
+          "sample": "取消",
+          "selector": "button.button.secondary"
+        },
+        {
+          "ratio": 6.361943534991064,
+          "color": "oklch(1 0 0)",
+          "background": [
+            0,
+            89,
+            204
+          ],
+          "fontSize": "26px",
+          "sample": "创建并运行",
+          "selector": "button.button.primary"
+        }
+      ],
+      "lowContrast": [],
+      "unreachable": []
+    }
+  ],
+  "errors": []
+}

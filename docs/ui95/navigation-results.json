@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-10-24T10:05:34.933Z",
+  "checks": [
+    {
+      "id": "workspace-edit",
+      "detail": "创建后保留当前空间，编辑保存新版本并展示进入入口",
+      "passed": true
+    },
+    {
+      "id": "workspace-duplicate",
+      "detail": "服务端重名错误关联名称字段，保留输入并可修正",
+      "passed": true
+    },
+    {
+      "id": "workspace-isolation",
+      "detail": "显式进入第二空间后目录隔离，返回原空间恢复原智能体",
+      "passed": true
+    },
+    {
+      "id": "workspace-restore",
+      "detail": "删除前可审查影响，恢复保留原空间信息与版本",
+      "passed": true
+    },
+    {
+      "id": "mobile-navigation",
+      "detail": "11个模块可达，手机导航限制焦点并在Escape后返回菜单按钮",
+      "passed": true
+    },
+    {
+      "id": "command-history",
+      "detail": "命令搜索覆盖所有模块，键盘进入后前进/返回仍处于正确页面",
+      "passed": true
+    },
+    {
+      "id": "missing-record",
+      "detail": "不存在的记录与断线分开说明，可返回当前空间列表恢复使用",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "workspaceId": "workspace-977043d877ad4963",
+  "otherWorkspace": "workspace-dc0f1c2fd94f44ca"
+}

@@ -1,0 +1,23 @@
+{
+  "version": "1.2.0",
+  "package_files_matched_to_source": 63,
+  "outer_and_inner_checksums_verified": true,
+  "runtime_data_included": false,
+  "bundle_members": [
+    "README.md",
+    "RELEASE_NOTES.md",
+    "SHA256SUMS",
+    "bounded_agent_mvp-1.2.0-py3-none-any.whl",
+    "release.json",
+    "requirements.txt",
+    "scripts/install.sh",
+    "scripts/start.sh"
+  ],
+  "sha256": "73f6c5f15aa5546418810f1404a49a91ba87fcad5a43f01aa27d0c38556af7be",
+  "wheel_sha256": "43cf6789ab121b46500648b222daf637187033db2fbb1148dcad53a3dc71259a",
+  "artifact": "dist/agent-framework-1.2.0.tar.gz",
+  "wheel": "dist/bounded_agent_mvp-1.2.0-py3-none-any.whl",
+  "previous_release_sha256": "78fda0c93a5ce6b091183a0e47c6120f1a3f18cbeec1251cd2d33b54326894bc",
+  "same_version_overwrite_rejected": true,
+  "previous_release_unchanged": true
+}

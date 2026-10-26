@@ -1,0 +1,21 @@
+{
+  "expected": "workspace-417a32ea20074e8a",
+  "run": "run-a66940ba2b7343d1",
+  "urlA": "http://127.0.0.1:8799/?workspace_id=workspace-417a32ea20074e8a#/workbench/run-a66940ba2b7343d1",
+  "urlB": "http://127.0.0.1:8799/?workspace_id=workspace-1bc1d669c37e474f#/workbench",
+  "back": {
+    "workspace": "workspace-417a32ea20074e8a",
+    "selected": "run-a66940ba2b7343d1",
+    "connected": true,
+    "errorVisible": false
+  },
+  "errors": [],
+  "reopened": {
+    "workspace": "workspace-417a32ea20074e8a",
+    "selected": "run-a66940ba2b7343d1"
+  },
+  "forward": {
+    "workspace": "workspace-1bc1d669c37e474f",
+    "selected": null
+  }
+}

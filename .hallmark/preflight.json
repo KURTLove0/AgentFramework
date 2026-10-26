@@ -1,13 +1,25 @@
 {
-  "date": "2026-10-22",
-  "framework": "Python standard library backend; new buildless HTML/CSS/JavaScript UI",
-  "existing_frontend": false,
-  "existing_tokens": false,
-  "motion": "purposeful button press and dialog entry only; reduced-motion supported",
-  "audience": "developers",
-  "use_case": "create, observe, verify and recover Agent runs",
+  "date": "2026-10-25",
+  "framework": "Python backend; existing buildless HTML/CSS/JavaScript UI",
+  "existing_frontend": true,
+  "existing_tokens": true,
+  "audience": "developers and business operators",
+  "use_case": "configure agents, skills and workflows; run, authorize, verify and recover tasks",
   "genre": "modern-minimal",
-  "macrostructure": "Workbench",
-  "theme": "Cobalt",
-  "preserve": ["existing Runtime", "authorization gateway", "SQLite facts", "CLI compatibility"]
+  "macrostructure": "Index-First",
+  "theme": "System Blue",
+  "motion": "short feedback only; reduced-motion supported",
+  "preserve": [
+    "runtime contracts",
+    "authorization",
+    "verification",
+    "idempotent recovery",
+    "existing tasks",
+    "all eleven routes"
+  ],
+  "design_source": "design.md",
+  "verification": "docs/ui-review-20261025/reviewer/final-score.json (independent 97/100; no unresolved P0/P1/P2)",
+  "routes": 11,
+  "scan_source": "docs/ui95/baseline-inventory.json",
+  "evidence": "docs/ui-review-20261025/completion-audit.json"
 }

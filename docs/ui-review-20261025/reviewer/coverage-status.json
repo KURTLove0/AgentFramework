@@ -1,0 +1,429 @@
+{
+  "at": "2026-10-25T05:40:05.640265+00:00",
+  "rubric_sha256": "7cd7cfae976a663d3a5f906ca2e653271659ea9f44a6ba69d6da5e6bfd01f13f",
+  "items": [
+    {
+      "id": "route-workbench",
+      "area": "任务工作台",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/task-stage1.png",
+        "screenshots/round-1/task-stage3.png",
+        "screenshots/round-1/review-qa-result.png",
+        "screenshots/round-1/task-config-roundtrip-preserved.png",
+        "../implementation/recovery/recovery-results.json"
+      ],
+      "detail": "创建任务三步→保存或模拟运行→结果、来源、验收与恢复"
+    },
+    {
+      "id": "route-runs",
+      "area": "运行记录",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/final/runs-no-results.png",
+        "screenshots/round-1/review-qa-result.png",
+        "../implementation/recovery/recovery-results.json"
+      ],
+      "detail": "搜索/筛选→历史详情→报告/证据→续跑或恢复"
+    },
+    {
+      "id": "route-daily",
+      "area": "每日任务",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/daily-recovered-dispatched-mobile.png",
+        "screenshots/final/daily-add-remove-template.png",
+        "screenshots/round-2/blocked-final-320-light.png",
+        "round-2-blocked-visual.json"
+      ],
+      "detail": "计划设置→动态模板→生成→审查派发→跳转任务→同日复用"
+    },
+    {
+      "id": "route-evaluations",
+      "area": "岗位评测",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/evaluation-return-fixed.png",
+        "screenshots/round-1/pending-policy-failure-recover.png",
+        "screenshots/round-2/evaluation-contract-375-light.png"
+      ],
+      "detail": "历史补评→提醒→冻结评测详情→确认→空间/岗位契约"
+    },
+    {
+      "id": "route-workspaces",
+      "area": "工作空间管理",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/workspace-discard.png",
+        "screenshots/round-1/workspace-deleted-recovery.png",
+        "screenshots/round-1/workspace-restored.png"
+      ],
+      "detail": "创建→明确进入→编辑→切换→删除/恢复"
+    },
+    {
+      "id": "route-agents",
+      "area": "智能体 Agent",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/agent-domain-created.png",
+        "screenshots/round-1/agent-mcp-args-error.png",
+        "screenshots/round-1/task-controlled-read-consent.png",
+        "screenshots/round-1/domain-picker-no-results.png"
+      ],
+      "detail": "用途预设→三步创建/编辑→角色职责交付标准/领域/技能/MCP→保存→开始使用"
+    },
+    {
+      "id": "route-workflows",
+      "area": "工作流",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/review-workflow-proposal.png",
+        "screenshots/round-1/review-workflow-proposal-review.png",
+        "screenshots/round-1/workflow-keyboard-connect-move.png",
+        "screenshots/round-2/flow-inspector-375-light.png"
+      ],
+      "detail": "对话提案→采用审查或手动画布→节点/连线/分支→保存→授权运行→节点结果"
+    },
+    {
+      "id": "route-skills",
+      "area": "技能 Skills",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/review-skill-published.png",
+        "screenshots/round-1/review-skill-withdrawn.png",
+        "screenshots/round-1/skill-zip-import-preview.png",
+        "screenshots/round-1/cross-space-back-position-restored.png"
+      ],
+      "detail": "新建/ZIP导入→资源文件编辑→校验→保存→发布→固定版本/导出/撤回"
+    },
+    {
+      "id": "route-library",
+      "area": "知识库",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/review-knowledge-published.png",
+        "screenshots/round-1/review-knowledge-revision.png",
+        "screenshots/round-1/memory-created-published.png",
+        "screenshots/round-1/capability-created-published-export.png",
+        "screenshots/round-1/experience-offline-evaluated.png",
+        "screenshots/round-1/experience-published.png",
+        "screenshots/round-1/experience-withdrawn.png",
+        "screenshots/final/ontology-mincount-320-light.png",
+        "final-ontology-recheck.json"
+      ],
+      "detail": "知识/记忆/经验/能力/本体→创建/修订→审核发布/撤回→搜索→复盘与本体探索"
+    },
+    {
+      "id": "route-registry",
+      "area": "能力与标准",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-2/registry-1440-light.png",
+        "screenshots/round-2/registry-375-dark.png"
+      ],
+      "detail": "可读职责→能力/领域/标准检索或详情→边界/规则披露"
+    },
+    {
+      "id": "route-runtimes",
+      "area": "运行时配置",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/runtime-mock-saved.png",
+        "screenshots/round-1/runtime-create-agent-next-step.png",
+        "screenshots/round-1/runtime-detect-models-complete.png"
+      ],
+      "detail": "运行时切换→配置/检测/模型读取→保存→基于配置创建Agent"
+    },
+    {
+      "id": "all-themes",
+      "area": "11模块浅深/桌面手机",
+      "status": "directly_observed",
+      "evidence": [
+        "round-2-observations.json",
+        "screenshots/round-2/contact-1440-light.jpg",
+        "screenshots/round-2/contact-1440-dark.jpg",
+        "screenshots/round-2/contact-375-light.jpg",
+        "screenshots/round-2/contact-375-dark.jpg"
+      ],
+      "detail": "44截图逐组目视；首屏无页面横向溢出。"
+    },
+    {
+      "id": "boundary",
+      "area": "320/414/768/1024/1440与横屏",
+      "status": "directly_observed",
+      "evidence": [
+        "round-2-observations.json",
+        "round-2-blocked-visual.json",
+        "final-ontology-recheck.json",
+        "../implementation/integration/layout-results.json"
+      ],
+      "detail": "独立边界截图与本体真实字段；540组合只作几何补充，不作视觉打分替代。"
+    },
+    {
+      "id": "text-motion",
+      "area": "200%文字/reduced-motion",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-2/contact-text200.jpg",
+        "round-2-observations.json"
+      ],
+      "detail": "双倍已计算文字尺寸/行高；375横屏；所有采集启用reduced-motion。不是实体iOS Dynamic Type测试。"
+    },
+    {
+      "id": "contrast",
+      "area": "主题对比度",
+      "status": "directly_observed",
+      "evidence": [
+        "round-2-contrast.json"
+      ],
+      "detail": "1880可见文字样本，经浏览器canvas将OKLCH转sRGB并组合背景，无低于目标的样本；目视主题/焦点/状态。"
+    },
+    {
+      "id": "task-stages",
+      "area": "任务三步/许可/配置往返",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/task-config-roundtrip-preserved.png",
+        "screenshots/round-1/task-controlled-read-consent.png",
+        "screenshots/round-2/dynamic-0-light.jpg",
+        "round-1-interaction-log.json"
+      ],
+      "detail": "独立QA成功，目标保留、返回后许可清空；受控READ仅检查配置与许可，未启动外部MCP。"
+    },
+    {
+      "id": "task-recovery",
+      "area": "八类Mock运行状态与恢复",
+      "status": "reviewed_live_evidence",
+      "evidence": [
+        "../implementation/recovery/recovery-results.json",
+        "../implementation/recovery/screenshots/recovery-authorization.png",
+        "../implementation/recovery/screenshots/recovery-missing-materials.png",
+        "../implementation/recovery/screenshots/recovery-interrupted.png",
+        "../implementation/recovery/screenshots/recovery-unverifiable.png",
+        "../implementation/recovery/screenshots/recovery-tampered-draft.png",
+        "../implementation/recovery/screenshots/recovery-failed.png",
+        "../implementation/recovery/screenshots/recovery-cancelled.png",
+        "../implementation/recovery/screenshots/recovery-expired.png"
+      ],
+      "detail": "父Agent实际执行，评审逐张独立目视；授权后完成、中断后不重复写入，以及保留进度/人工核对语义。"
+    },
+    {
+      "id": "agent-domain-mcp",
+      "area": "新领域、岗位、Skill与MCP动态配置",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/agent-domain-created.png",
+        "screenshots/round-1/agent-dynamic-role.png",
+        "screenshots/round-1/agent-mcp-http-fields.png",
+        "screenshots/round-1/agent-mcp-args-error.png",
+        "screenshots/round-1/task-controlled-read-consent.png",
+        "../journeys/config-learning-results.json"
+      ],
+      "detail": "新建领域成功、职责增删、stdio/http切换、无效参数错误、受控READ绑定；多层Skills保存返回由专项实机补充复核。"
+    },
+    {
+      "id": "pickers",
+      "area": "搜索选择无结果/键盘/输入法",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/domain-picker-no-results.png",
+        "screenshots/round-1/mobile-command-keyboard.png",
+        "round-1-interaction-log.json",
+        "../journeys/results.json"
+      ],
+      "detail": "Escape回触发器，过滤知识后方向键/Enter选中；组合输入节点保持证据由动线Agent补充。"
+    },
+    {
+      "id": "workspace-crud",
+      "area": "空间完整生命周期与退出保护",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/workspace-discard.png",
+        "screenshots/round-1/workspace-deleted-recovery.png",
+        "screenshots/round-1/workspace-restored.png",
+        "round-1-interaction-log.json"
+      ],
+      "detail": "创建后显式进入；编辑取消回名称和光标；删除可恢复；创建后保持原空间。"
+    },
+    {
+      "id": "knowledge",
+      "area": "知识创建/修订/审查/发布",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/review-knowledge-published.png",
+        "screenshots/round-1/review-knowledge-revision.png"
+      ],
+      "detail": "新版本保留已发布旧版，下一步明确；筛选无结果有清除。"
+    },
+    {
+      "id": "memory",
+      "area": "私有偏好与工作记忆",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/asset-json-error.png",
+        "screenshots/round-1/memory-created-published.png",
+        "../journeys/results.json"
+      ],
+      "detail": "偏好JSON错误独立操作，私有偏好发布/撤回专项补充；工作记忆独立创建→审核→发布。"
+    },
+    {
+      "id": "capability",
+      "area": "能力方法与标准Skill导出",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/capability-created-published-export.png",
+        "review-capability-skill.md"
+      ],
+      "detail": "手动方法创建→审核→发布→导出标准Skill完成；不扩大工具能力。"
+    },
+    {
+      "id": "experience",
+      "area": "经验离线评测/发布/撤回",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/experience-offline-evaluated.png",
+        "screenshots/round-1/experience-published.png",
+        "screenshots/round-1/experience-withdrawn.png"
+      ],
+      "detail": "独立复盘所得候选 learned-c1bba4037caf6c153df00f22@1 完成离线评测→明确发布→撤回。"
+    },
+    {
+      "id": "retrospective",
+      "area": "复盘建议/审阅/沉淀/回跳",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/review-retrospective-review.png",
+        "screenshots/round-1/review-retrospective-receipt.png",
+        "screenshots/round-1/review-retrospective-return.png"
+      ],
+      "detail": "Mock生成零模型调用，四类条目沉淀回执，查看资料关闭原弹窗。"
+    },
+    {
+      "id": "ontology",
+      "area": "本体概念/属性/关系/对象/来源/导出",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/ontology-relation-fields.png",
+        "screenshots/round-1/ontology-published-object.png",
+        "screenshots/round-1/ontology-graph-source.png",
+        "review-ontology.jsonld",
+        "final-ontology-recheck.json",
+        "../ontology-form/results.json"
+      ],
+      "detail": "生成→概念属性增删→模型缺主键/修正→保存v2审核发布→对象与来源→JSON-LD下载；复杂关系/动作配置8组合由定向实机补充。"
+    },
+    {
+      "id": "skill-package",
+      "area": "Skill包全链路",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/review-skill-published.png",
+        "screenshots/round-1/review-skill-withdrawn.png",
+        "screenshots/round-1/skill-zip-import-preview.png",
+        "screenshots/round-1/cross-space-back-position-restored.png",
+        "review-skill.zip"
+      ],
+      "detail": "文件编辑/增删、路径错误、校验、保存发布导出撤回；同名导入错误明确，另一个隔离空间导入草稿成功。"
+    },
+    {
+      "id": "workflow",
+      "area": "对话、画布、分支、连线、运行",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/review-workflow-proposal.png",
+        "screenshots/round-1/review-workflow-proposal-review.png",
+        "screenshots/round-1/workflow-keyboard-connect-move.png",
+        "screenshots/round-2/flow-inspector-375-light.png",
+        "screenshots/round-1/workflow-branch-inspector.png",
+        "../implementation/integration/module-results.json"
+      ],
+      "detail": "Mock具名Agent提案→采用进画布；节点新增、互斥分支、键盘微移8px、端口Enter连接、End选末节点；QA流程保存运行成功。"
+    },
+    {
+      "id": "daily",
+      "area": "每日模板增删/派发/受阻恢复",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/daily-recovered-dispatched-mobile.png",
+        "screenshots/final/daily-add-remove-template.png",
+        "screenshots/round-2/blocked-final-320-light.png",
+        "round-2-blocked-visual.json",
+        "../journeys/daily-recovery-results.json"
+      ],
+      "detail": "2→3→2模板且原目标保留；独立生成后归档Agent触发BLOCKED，恢复v3并重新选用清许可，再审查派发成功。"
+    },
+    {
+      "id": "evaluation",
+      "area": "岗位/空间契约与提醒回跳",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/evaluation-return-fixed.png",
+        "screenshots/round-1/pending-policy-failure-recover.png",
+        "screenshots/round-2/evaluation-contract-375-light.png",
+        "../implementation/integration/module-results.json"
+      ],
+      "detail": "当前契约表单浅深手机已看；空间评测503恢复独立操作；岗位契约保存/确认提醒由12条模块实机补充。"
+    },
+    {
+      "id": "runtimes",
+      "area": "运行时配置/CLI检测/模型读取",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/runtime-mock-saved.png",
+        "screenshots/round-1/runtime-create-agent-next-step.png",
+        "screenshots/round-1/runtime-detect-models-complete.png"
+      ],
+      "detail": "保存模拟默认配置；基于配置创建Agent带入mock；Codex版本探测与7模型读取完成，未进行推理。"
+    },
+    {
+      "id": "keyboard",
+      "area": "全局键盘/弹层/导航/画布",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/mobile-navigation-focus.png",
+        "screenshots/round-1/mobile-command-keyboard.png",
+        "screenshots/round-1/skip-link-route-preserved.png",
+        "screenshots/round-1/workflow-keyboard-connect-move.png",
+        "final-ontology-recheck.json"
+      ],
+      "detail": "Tab反向循环、背景inert、Escape与焦点恢复、Cmd+K、标签方向键、选择器/画布/错误摘要均操作。"
+    },
+    {
+      "id": "pending-failure",
+      "area": "提交中/503/防重复/焦点恢复",
+      "status": "directly_observed",
+      "evidence": [
+        "screenshots/round-1/pending-policy-locked.png",
+        "screenshots/round-1/pending-policy-failure-recover.png",
+        "../implementation/async-form-results.json"
+      ],
+      "detail": "评测设置独立延迟503：可编辑控件0，Escape不关，原值91保留且恢复编辑；其他5类表单由当前专项实机补充。"
+    },
+    {
+      "id": "registry-na",
+      "area": "能力与标准的搜索/编辑",
+      "status": "not_applicable",
+      "evidence": [
+        "screenshots/round-2/registry-1440-light.png",
+        "screenshots/round-2/registry-375-dark.png"
+      ],
+      "detail": "此模块本无搜索/编辑表单；检查只读职责、能力效果/边界及规则披露，不虚构不存在功能。"
+    },
+    {
+      "id": "external-model",
+      "area": "真实模型/MCP执行",
+      "status": "out_of_scope_authorized_limit",
+      "evidence": [
+        "round-1-interaction-log.json"
+      ],
+      "detail": "用户/父任务明确禁止真实模型；MCP仅查配置和许可、不启动外部进程。无外部写入。"
+    },
+    {
+      "id": "physical-device",
+      "area": "实体手机/Safari/屏幕阅读器",
+      "status": "limitation",
+      "evidence": [],
+      "detail": "Chrome桌面引擎和CSS视口模拟，非实体软键盘/VoiceOver/NVDA兼容性认证；已验证键盘、语义和可达状态。"
+    }
+  ]
+}

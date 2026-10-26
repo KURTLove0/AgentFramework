@@ -1,0 +1,258 @@
+{
+  "process_restarted": true,
+  "same_deposition_receipts": true,
+  "duplicate_confirmation_after_restart_created_zero_assets": true,
+  "asset_versions_before": 10,
+  "asset_versions_after": 10,
+  "source_run_drafts_and_write_calls_unchanged": true,
+  "ontology": {
+    "ref": "learned-d149fbcdfde84fb8ca7cb93e@1",
+    "concepts": 7,
+    "attributes": 15,
+    "relations": 7,
+    "status": "PUBLISHED",
+    "alias_query": "模拟验收知识联结",
+    "matched_concepts": 6,
+    "linked_sources": [
+      "asset-1b37a6ecaee6422d@1",
+      "asset-705a39d9ef5a469e@1",
+      "learned-f895b052a2237e72b945c035@1"
+    ]
+  },
+  "before": {
+    "proposals": [
+      {
+        "id": "learning-26006307ee4c4712",
+        "purpose": "ontology",
+        "status": "DEPOSITED",
+        "revision": 4,
+        "error": null,
+        "request_id": "request-78f1ec54-8177-43d1-ade7-8b4ee12ae03b",
+        "runtime": "codex",
+        "agent_revision": 1,
+        "generation": {
+          "model_calls": 1,
+          "skill_selection": null,
+          "usage": [
+            {
+              "cli_diagnostic_count": 1,
+              "mcp_calls": [],
+              "model": "gpt-6.1-sol",
+              "phase": "ontology",
+              "usage": {
+                "cache_write_input_tokens": 0,
+                "cached_input_tokens": 0,
+                "input_tokens": 18056,
+                "output_tokens": 2011,
+                "reasoning_output_tokens": 0
+              }
+            }
+          ]
+        },
+        "receipt": {
+          "assets": [
+            {
+              "kind": "ONTOLOGY",
+              "ref": "learned-d149fbcdfde84fb8ca7cb93e@1",
+              "title": "模拟变更与复盘本体（已审阅）"
+            }
+          ],
+          "deposited_at": 1792736583.212924,
+          "item_ids": [
+            "ontology"
+          ]
+        }
+      },
+      {
+        "id": "learning-97ab72e0184a4c00",
+        "purpose": "retrospective",
+        "status": "DEPOSITED",
+        "revision": 4,
+        "error": null,
+        "request_id": "request-a0448a50-3bb5-4513-8628-09022c72b855",
+        "runtime": "codex",
+        "agent_revision": 1,
+        "generation": {
+          "model_calls": 1,
+          "skill_selection": null,
+          "usage": [
+            {
+              "cli_diagnostic_count": 1,
+              "mcp_calls": [],
+              "model": "gpt-6.1-sol",
+              "phase": "retrospective",
+              "usage": {
+                "cache_write_input_tokens": 0,
+                "cached_input_tokens": 0,
+                "input_tokens": 19614,
+                "output_tokens": 813,
+                "reasoning_output_tokens": 0
+              }
+            }
+          ]
+        },
+        "receipt": {
+          "assets": [
+            {
+              "kind": "KNOWLEDGE",
+              "ref": "learned-f895b052a2237e72b945c035@1",
+              "title": "失败测试对应高风险（已审阅）"
+            },
+            {
+              "kind": "MEMORY",
+              "ref": "learned-b20cc8a624f0d315022a018c@1",
+              "title": "本次评估与草稿结果"
+            },
+            {
+              "kind": "EXPERIENCE",
+              "ref": "learned-7d8330f942e8bd15abeade33@1",
+              "title": "修复失败测试后复核"
+            },
+            {
+              "kind": "CAPABILITY",
+              "ref": "learned-ef1f6f4b2145ec4337e8ceed@1",
+              "title": "证据关联与草稿回读方法"
+            }
+          ],
+          "deposited_at": 1792736289.674475,
+          "item_ids": [
+            "evidence-review-method",
+            "repair-and-review",
+            "review-result",
+            "risk-rule"
+          ]
+        }
+      },
+      {
+        "id": "learning-343e6a5abfca447e",
+        "purpose": "retrospective",
+        "status": "FAILED",
+        "revision": 2,
+        "error": "复盘引用了未知或重复的来源",
+        "request_id": "request-35be6492-61e5-4ed1-9171-1708dfe83cc7",
+        "runtime": "codex",
+        "agent_revision": 1,
+        "generation": {
+          "model_calls": 1,
+          "skill_selection": null,
+          "usage": [
+            {
+              "cli_diagnostic_count": 1,
+              "mcp_calls": [],
+              "model": "gpt-6.1-sol",
+              "phase": "retrospective",
+              "usage": {
+                "cache_write_input_tokens": 0,
+                "cached_input_tokens": 0,
+                "input_tokens": 19465,
+                "output_tokens": 968,
+                "reasoning_output_tokens": 35
+              }
+            }
+          ]
+        },
+        "receipt": null
+      },
+      {
+        "id": "learning-42987f980beb4a2a",
+        "purpose": "retrospective",
+        "status": "FAILED",
+        "revision": 2,
+        "error": "复盘结果和验收计数必须与原运行事实一致",
+        "request_id": "request-873270b9-8092-4f8b-b599-f648f5358dff",
+        "runtime": "codex",
+        "agent_revision": 1,
+        "generation": null,
+        "receipt": null
+      }
+    ],
+    "asset_versions": [
+      {
+        "ref": "learned-d149fbcdfde84fb8ca7cb93e@1",
+        "kind": "ONTOLOGY",
+        "content_hash": "27a803ec342f7d37e7651ed990c00b937804954f599f5951e6013f2c214a9d66",
+        "visibility": "PRIVATE",
+        "status": "PUBLISHED"
+      },
+      {
+        "ref": "learned-ef1f6f4b2145ec4337e8ceed@1",
+        "kind": "CAPABILITY",
+        "content_hash": "d744ec1849a9acd9cacf8fea2d1167845215f251ee837feb909c1c9df0450202",
+        "visibility": "PRIVATE",
+        "status": "DRAFT"
+      },
+      {
+        "ref": "learned-7d8330f942e8bd15abeade33@1",
+        "kind": "EXPERIENCE",
+        "content_hash": "944be25e9327e9e6c56f4a434d0d7bd4a66d71a57d96962486321421b3679d00",
+        "visibility": "PRIVATE",
+        "status": "CANDIDATE"
+      },
+      {
+        "ref": "learned-b20cc8a624f0d315022a018c@1",
+        "kind": "MEMORY",
+        "content_hash": "20c399633665027b9cc2b36d792ff6beb1dc62fb9115d4ac1b6e4a5ea6e791a2",
+        "visibility": "PRIVATE",
+        "status": "DRAFT"
+      },
+      {
+        "ref": "learned-f895b052a2237e72b945c035@1",
+        "kind": "KNOWLEDGE",
+        "content_hash": "2878d1fbfc75ed51959404742559676da46890c4cd66164f391a5799dde538d7",
+        "visibility": "PRIVATE",
+        "status": "PUBLISHED"
+      },
+      {
+        "ref": "experience-run-681ff511f4764001@1",
+        "kind": "EXPERIENCE",
+        "content_hash": "c0ec15c6d4ea7fae5efce77d85d4f18418a0c122385dde5f806f08b9722f0026",
+        "visibility": "PRIVATE",
+        "status": "CANDIDATE"
+      },
+      {
+        "ref": "experience-run-a34b8af818a54ad4@1",
+        "kind": "EXPERIENCE",
+        "content_hash": "fb00a02751c481a4081c72a4557feba088d8be67907a0b0d7084c2607a8d6fa3",
+        "visibility": "PRIVATE",
+        "status": "CANDIDATE"
+      },
+      {
+        "ref": "builtin-risk-rubric-fe7bff9bf573@1",
+        "kind": "KNOWLEDGE",
+        "content_hash": "c8c1dd5b75943b53adb02df35ec144e642b20adeadb3001ab77fc8f997c67cea",
+        "visibility": "PROJECT",
+        "status": "PUBLISHED"
+      },
+      {
+        "ref": "asset-705a39d9ef5a469e@1",
+        "kind": "KNOWLEDGE",
+        "content_hash": "f90d5b83b39b4b37558e282c3d5f387d137d08dd5e32c3d384d03c75201bf545",
+        "visibility": "PROJECT",
+        "status": "PUBLISHED"
+      },
+      {
+        "ref": "asset-1b37a6ecaee6422d@1",
+        "kind": "KNOWLEDGE",
+        "content_hash": "143c1e293e6d14d598eee40cc2d50886e2cb42c7548d2dd7c5648bd0119f2f46",
+        "visibility": "PROJECT",
+        "status": "PUBLISHED"
+      }
+    ],
+    "runs": [
+      {
+        "id": "run-681ff511f4764001",
+        "status": "NEEDS_REVIEW",
+        "snapshot_hash": "8f7a48b5a8bf5c052123171a40edf0b4c8e15c8dbf2c93cd30213794abfe14db",
+        "drafts": 1,
+        "writes": 1
+      },
+      {
+        "id": "run-a34b8af818a54ad4",
+        "status": "SUCCEEDED",
+        "snapshot_hash": "8f7a48b5a8bf5c052123171a40edf0b4c8e15c8dbf2c93cd30213794abfe14db",
+        "drafts": 1,
+        "writes": 1
+      }
+    ]
+  }
+}

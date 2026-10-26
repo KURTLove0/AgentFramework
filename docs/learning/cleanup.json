@@ -1,0 +1,18 @@
+{
+  "backup": ".backups/learning-review-20261023-151426",
+  "temporary_data_removed": true,
+  "files": 5,
+  "sha256": {
+    "fixture.json": "a4734efb2e4601967ceff0aca368824f91fc6eea75b3637c3256452c17de4acf",
+    "before-restart.json": "7c48d9bdfd30e1119090e259f67898bf0ed3b481abfeb9c7b5d4bee1e9e85e64",
+    "prepare.py": "7c4a91528ff726d9798cfc347b7fcd774143badad87dbd2324f387877ad1d58b",
+    "data/mock-business.sqlite3": "772de4c249ed6901e858baebc34a183203e40420c333dd397c3b29412fbbb59c",
+    "data/runtime.sqlite3": "8250de323e764dd1db5bfefda7eb9a150b80021eba675ce7645887ac938b7b36"
+  },
+  "hashes_verified": true,
+  "sqlite_quick_check": {
+    "mock-business.sqlite3": "ok",
+    "runtime.sqlite3": "ok"
+  },
+  "cleaned_at": "2026-10-23T07:14:26.794369+00:00"
+}

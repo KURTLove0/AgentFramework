@@ -51,7 +51,7 @@ def build(store, state, phase, base):
         base['state']={**state,'plan':[]}
     pinned={a['id']:a for a in required}
     candidates=required+[a for a in result['items'] if a['id'] not in pinned]
-    selected=[];excluded=list(result['excluded'])+policy_excluded;seen=set();used=0;knowledge=[];preferences=[];experience=[]
+    selected=[];excluded=list(result['excluded'])+policy_excluded;seen=set();used=0;knowledge=[];preferences=[];experience=[];notes=[];methods=[]
     required_refs={a['ref'] for a in required}
     for asset in candidates:
         if asset['kind']=='EXPERIENCE' and asset['content']['conditions']['domain_pack_ref'] != state['snapshot']['compiled_agent']['domain_pack']['ref']:
@@ -70,7 +70,7 @@ def build(store, state, phase, base):
         if asset['ref'] not in required_refs:used+=size
         selected.append(record)
         item={key:asset[key] for key in ('ref','title','content','content_hash','source_uri','source_version','observed_at')}
-        {'KNOWLEDGE':knowledge,'PREFERENCE':preferences,'EXPERIENCE':experience}[asset['kind']].append(item)
+        {'KNOWLEDGE':knowledge,'PREFERENCE':preferences,'EXPERIENCE':experience,'MEMORY':notes,'CAPABILITY':methods}[asset['kind']].append(item)
     # A private episode is historical evidence of one run, never a general rule.
     recalled=[]
     for episode in episodes(store,access,state['task']['goal'],limit=3):
@@ -90,13 +90,16 @@ def build(store, state, phase, base):
     preferences.sort(key=lambda item:item['observed_at'])
     presentation={}
     for item in preferences:presentation.update(item['content'])
-    bundle={**base,'knowledge':knowledge,'memory':{'preferences':preferences,'presentation':presentation,'episodes':recalled},'experience':experience,
+    bundle={**base,'knowledge':knowledge,'memory':{'preferences':preferences,'presentation':presentation,'episodes':recalled,'notes':notes},'experience':experience,
+            'capability_guidance':methods,
             'context_manifest':{k:manifest[k] for k in ('id','hash','policy_ref','selected','budget')}}
     return bundle,manifest
 
 
 def enrich_mock(result, context, phase):
     """Deterministic cognition fixture that actually consumes the compiled context."""
+    if phase=='plan' and context.get('activated_skills'):
+        result=[{'id':'agent-skills','description':'按需加载已绑定 Skill：'+', '.join(s['name'] for s in context['activated_skills']),'tool_ref':None}]+result
     if not context.get('context_manifest'):return result
     if phase=='plan':
         refs=[a['ref'] for a in context['knowledge']+context['experience']]

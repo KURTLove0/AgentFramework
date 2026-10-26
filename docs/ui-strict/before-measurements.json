@@ -1,0 +1,58 @@
+[
+  {
+    "text": "创建第一个 Agent",
+    "button": {
+      "x": 748.34375,
+      "y": 450.46875,
+      "width": 183.296875,
+      "height": 62,
+      "top": 450.46875,
+      "right": 931.640625,
+      "bottom": 512.46875,
+      "left": 748.34375
+    },
+    "icon": {
+      "x": 765.34375,
+      "y": 461.46875,
+      "width": 28,
+      "height": 28,
+      "top": 461.46875,
+      "right": 793.34375,
+      "bottom": 489.46875,
+      "left": 765.34375
+    },
+    "font": "14px",
+    "lineHeight": "22.4px",
+    "color": "oklch(1 0 0)",
+    "iconColor": "oklch(0.47 0.025 258)",
+    "iconMarginBottom": "12px"
+  },
+  {
+    "text": "创建 Agent",
+    "button": {
+      "x": 1272.703125,
+      "y": 122,
+      "width": 131.296875,
+      "height": 44.390625,
+      "top": 122,
+      "right": 1404,
+      "bottom": 166.390625,
+      "left": 1272.703125
+    },
+    "icon": {
+      "x": 1289.703125,
+      "y": 135.1875,
+      "width": 18,
+      "height": 18,
+      "top": 135.1875,
+      "right": 1307.703125,
+      "bottom": 153.1875,
+      "left": 1289.703125
+    },
+    "font": "14px",
+    "lineHeight": "22.4px",
+    "color": "oklch(1 0 0)",
+    "iconColor": "oklch(1 0 0)",
+    "iconMarginBottom": "0px"
+  }
+]

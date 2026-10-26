@@ -1,0 +1,116 @@
+{
+  "generatedAt": "2026-10-24T10:08:19.980Z",
+  "base": "http://127.0.0.1:8787",
+  "browser": "155.0.8059.85",
+  "assets": [
+    {
+      "file": "agent_domains.js",
+      "SHA256": "b186a9ddea2347490414acbbacf11b2b81bccf39517c935987ab79b5a8b650d9",
+      "status": 200
+    },
+    {
+      "file": "agent_experience.js",
+      "SHA256": "b7b9318a27196e7888ad49ef9dc5449c28987574c79d60acef6ecd327a9e5bd7",
+      "status": 200
+    },
+    {
+      "file": "agents.js",
+      "SHA256": "a49f84b7d3e5cff3013b354a9973fe58b5e73268536636b3bc1727c396a3b999",
+      "status": 200
+    },
+    {
+      "file": "app.js",
+      "SHA256": "577af230a872931e4c99a3074cb09e6dc43c5ea5db096e9cc32e967b5cfca115",
+      "status": 200
+    },
+    {
+      "file": "appearance.js",
+      "SHA256": "cc0b279176e545da5701b33d44f83ccc4a89829e4c763c8cf23f016507df4ba3",
+      "status": 200
+    },
+    {
+      "file": "form_controls.css",
+      "SHA256": "43a471ae1a08f636eae24f4fadcb709d24a39180a1c484591f98ef75512e01fb",
+      "status": 200
+    },
+    {
+      "file": "form_controls.js",
+      "SHA256": "bcfaa39fc6a248bcfc7e8258ac3a7eb4a1bf4277d4a9538d209b236b1abe24ce",
+      "status": 200
+    },
+    {
+      "file": "hig.css",
+      "SHA256": "5bdd6a38b839400bac7245cd5a9d1e3cda223142d50e616d0b134678d9f21869",
+      "status": 200
+    },
+    {
+      "file": "index.html",
+      "SHA256": "4721381b8e3487241a59d6df0ab3fb6cb5e5e223ddb8b61eb406fc63a51aebe9",
+      "status": 200
+    },
+    {
+      "file": "journeys.js",
+      "SHA256": "ec6830f76aef48f5c62a8ea101934ad36890b5207645dcbdda5e55edf1fa839c",
+      "status": 200
+    },
+    {
+      "file": "learning.js",
+      "SHA256": "96f8ea3df08bb635ef9334c70a957bd336f85de45e5fcbd82bb68ee2fff92f99",
+      "status": 200
+    },
+    {
+      "file": "library.js",
+      "SHA256": "c01545e6aab53792827f726db1fdde855a47c743b70adfd5460c038c1cd28efa",
+      "status": 200
+    },
+    {
+      "file": "ontology_model.js",
+      "SHA256": "48afe1af811a616e2e239c8424d048b9f4e9e4e574a4bcf54af4fc4b322ce890",
+      "status": 200
+    },
+    {
+      "file": "operations.css",
+      "SHA256": "26c2a973652b89462228e8633245ebfe9399438cc1d676551d2a5a1c64f04a48",
+      "status": 200
+    },
+    {
+      "file": "operations.js",
+      "SHA256": "78455d5e5b1e5c1373bbaa7e626326a4329d2444e08bf8d14f7cdd0cf7a8c2a9",
+      "status": 200
+    },
+    {
+      "file": "roles.js",
+      "SHA256": "9f79dbb0e6c6976cd5c5b473d091d815d533d23401a62f3e5a286c8b0f845a83",
+      "status": 200
+    },
+    {
+      "file": "skills.js",
+      "SHA256": "6d63338c22b716384256a5be211d3916b183b3d5dae94e15a501b1a993f92f41",
+      "status": 200
+    },
+    {
+      "file": "styles.css",
+      "SHA256": "2832a732930dec5cf1c8d149f612815d83f5fd1e61d8e95d404b0c43b783c7c3",
+      "status": 200
+    },
+    {
+      "file": "workflow_designer.js",
+      "SHA256": "feb5161fd622a20ef90d2b891d145203784dd8c9fa15a15845391fb00483bded",
+      "status": 200
+    },
+    {
+      "file": "workflows.js",
+      "SHA256": "c13b435927975577f597898c297d8b4cc93ac8f7f638f5b28c6daf20850e85bd",
+      "status": 200
+    },
+    {
+      "file": "workspaces.js",
+      "SHA256": "c37e187f8229c8c5fe2d10f22aae239c16e047c9ca07918cc04842e3ac8c3a06",
+      "status": 200
+    }
+  ],
+  "routeCount": 11,
+  "errors": [],
+  "writes": [],
+  "connected": true
+}

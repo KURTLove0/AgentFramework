@@ -1,0 +1,222 @@
+[
+  {
+    "dialog": "ontology",
+    "bodyScrollWidth": 302,
+    "bodyWidth": 302,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 740,
+    "pageOverflow": false,
+    "theme": "dark",
+    "width": 320
+  },
+  {
+    "dialog": "ontology",
+    "bodyScrollWidth": 357,
+    "bodyWidth": 357,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 812,
+    "pageOverflow": false,
+    "theme": "dark",
+    "width": 375
+  },
+  {
+    "dialog": "ontology",
+    "bodyScrollWidth": 718,
+    "bodyWidth": 718,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 1024,
+    "pageOverflow": false,
+    "theme": "dark",
+    "width": 768
+  },
+  {
+    "dialog": "ontology",
+    "bodyScrollWidth": 1118,
+    "bodyWidth": 1118,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 720,
+    "pageOverflow": false,
+    "theme": "dark",
+    "width": 1280
+  },
+  {
+    "dialog": "ontology",
+    "bodyScrollWidth": 762,
+    "bodyWidth": 762,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 375,
+    "pageOverflow": false,
+    "theme": "dark",
+    "width": 812
+  },
+  {
+    "dialog": "ontology",
+    "bodyScrollWidth": 302,
+    "bodyWidth": 302,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 740,
+    "pageOverflow": false,
+    "theme": "light",
+    "width": 320
+  },
+  {
+    "dialog": "ontology",
+    "bodyScrollWidth": 357,
+    "bodyWidth": 357,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 812,
+    "pageOverflow": false,
+    "theme": "light",
+    "width": 375
+  },
+  {
+    "dialog": "ontology",
+    "bodyScrollWidth": 718,
+    "bodyWidth": 718,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 1024,
+    "pageOverflow": false,
+    "theme": "light",
+    "width": 768
+  },
+  {
+    "dialog": "ontology",
+    "bodyScrollWidth": 1118,
+    "bodyWidth": 1118,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 720,
+    "pageOverflow": false,
+    "theme": "light",
+    "width": 1280
+  },
+  {
+    "dialog": "ontology",
+    "bodyScrollWidth": 762,
+    "bodyWidth": 762,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 375,
+    "pageOverflow": false,
+    "theme": "light",
+    "width": 812
+  },
+  {
+    "dialog": "retrospective",
+    "bodyScrollWidth": 302,
+    "bodyWidth": 302,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 740,
+    "pageOverflow": false,
+    "theme": "light",
+    "width": 320
+  },
+  {
+    "dialog": "retrospective",
+    "bodyScrollWidth": 357,
+    "bodyWidth": 357,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 812,
+    "pageOverflow": false,
+    "theme": "light",
+    "width": 375
+  },
+  {
+    "dialog": "retrospective",
+    "bodyScrollWidth": 718,
+    "bodyWidth": 718,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 1024,
+    "pageOverflow": false,
+    "theme": "light",
+    "width": 768
+  },
+  {
+    "dialog": "retrospective",
+    "bodyScrollWidth": 1118,
+    "bodyWidth": 1118,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 720,
+    "pageOverflow": false,
+    "theme": "light",
+    "width": 1280
+  },
+  {
+    "dialog": "retrospective",
+    "bodyScrollWidth": 762,
+    "bodyWidth": 762,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 375,
+    "pageOverflow": false,
+    "theme": "light",
+    "width": 812
+  },
+  {
+    "dialog": "retrospective",
+    "bodyScrollWidth": 302,
+    "bodyWidth": 302,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 740,
+    "pageOverflow": false,
+    "theme": "dark",
+    "width": 320
+  },
+  {
+    "dialog": "retrospective",
+    "bodyScrollWidth": 357,
+    "bodyWidth": 357,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 812,
+    "pageOverflow": false,
+    "theme": "dark",
+    "width": 375
+  },
+  {
+    "dialog": "retrospective",
+    "bodyScrollWidth": 718,
+    "bodyWidth": 718,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 1024,
+    "pageOverflow": false,
+    "theme": "dark",
+    "width": 768
+  },
+  {
+    "dialog": "retrospective",
+    "bodyScrollWidth": 1118,
+    "bodyWidth": 1118,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 720,
+    "pageOverflow": false,
+    "theme": "dark",
+    "width": 1280
+  },
+  {
+    "dialog": "retrospective",
+    "bodyScrollWidth": 762,
+    "bodyWidth": 762,
+    "clippedControls": 0,
+    "footerVisible": true,
+    "height": 375,
+    "pageOverflow": false,
+    "theme": "dark",
+    "width": 812
+  }
+]

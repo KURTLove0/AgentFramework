@@ -1,0 +1,21 @@
+PASS missing identity is shown in progress and blocks Next at the actual field
+PASS correcting a reported field clears stale error without focus then permits Next
+PASS standards and responsibility coverage remain required
+PASS all role errors are assigned to their own sections
+PASS serialized adapter bindings and verifier references are preserved
+PASS model loading is visibly busy and cannot advance
+PASS invalid model selection links the runtime error to its input
+PASS optional empty Skills can be skipped to review without adding a binding
+PASS withdrawn enabled binding is blocked while disabled frozen version is preserved
+PASS Skills context shows pinned version without upgrading to newer release
+PASS empty Skill directory offers management instead of creating an empty binding
+PASS MCP arguments must remain a JSON array
+PASS IME composition defers progress and prevents accidental advancement
+PASS review points back to incomplete sections and does not imply task authorization
+PASS dirty dismissal keeps the form until discard is explicitly chosen
+PASS Skills management preserves dirty editor through its shared return flow
+PASS Agent card CTA forwards the chosen identity into task creation
+PASS switching a read-only task back to writing never grants permission automatically
+PASS saved Agent remains visible and focused when the follow-up list read fails
+PASS post-save list refresh cannot overwrite another workspace
+Agent interaction scenarios: 20/20 passed (isolated synthetic APIs, no network/model/business writes).

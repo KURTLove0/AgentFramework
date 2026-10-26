@@ -1,0 +1,125 @@
+{
+  "checks": [
+    {
+      "id": "agent-skill-config-return",
+      "passed": true,
+      "detail": {
+        "name": "尚未保存的智能体名称",
+        "bindings": [
+          {
+            "skill_id": "skill-builtin-source-grounded-answer",
+            "version": 1,
+            "enabled": true
+          }
+        ],
+        "form": {
+          "goal": "多层配置往返仍保留的任务目标",
+          "revision": 2,
+          "step": 1,
+          "grant": false
+        }
+      }
+    },
+    {
+      "id": "runtime-config-return",
+      "passed": true,
+      "detail": {
+        "goal": "修改运行时后返回任务",
+        "step": 1
+      }
+    },
+    {
+      "id": "learning-deposit-library-return",
+      "passed": true,
+      "detail": {
+        "run": "run-51abf5bd2d2c4251",
+        "target": "learned-90fc7cab188fa5da9248ffe0@1",
+        "learningClosed": true,
+        "auditLinks": 0
+      }
+    },
+    {
+      "id": "ontology-no-agent-config-link",
+      "passed": true,
+      "detail": {
+        "learningClosed": true,
+        "view": "agents"
+      }
+    }
+  ],
+  "errors": [],
+  "startedAt": "2026-10-25T05:04:56.544Z",
+  "workspace": {
+    "business": "UI95 界面验收",
+    "description": "界面验收隔离数据",
+    "name": "配置与复盘独立探索 mvnd5y4b",
+    "scenario": "独立模拟",
+    "id": "workspace-c419fdfa047143ee",
+    "revision": 1,
+    "project_id": "project-465ea49f45854ad0",
+    "deleted": false,
+    "created_at": 1792904697.0856352,
+    "updated_at": 1792904697.0856352
+  },
+  "agent": {
+    "definition": {
+      "adapter_bindings": {},
+      "capability_refs": [
+        "change.read@1.0.0",
+        "standards.read@1.0.0",
+        "report.draft.create@1.0.0",
+        "report.read@1.0.0"
+      ],
+      "domain_pack_ref": "change-assessment@2.0.0",
+      "identity": {
+        "name": "界面验收助手",
+        "role": "变更评估专家"
+      },
+      "knowledge_spaces": [
+        "simulated-change-context@1.0.0"
+      ],
+      "native_read_refs": [],
+      "policy_ref": "release-reviewer-policy@1.0.0",
+      "prompt_template_ref": "profile-prompt@1",
+      "responsibilities": [
+        {
+          "check_refs": [
+            "report-sections",
+            "critical-claims-evidence"
+          ],
+          "deliverable_ref": "release-report@1.0.0",
+          "description": "评估变更风险"
+        },
+        {
+          "check_refs": [
+            "draft-readback"
+          ],
+          "deliverable_ref": "release-draft@1.0.0",
+          "description": "创建并回读草稿"
+        }
+      ],
+      "runtime_profile_ref": "profile-runtime@1",
+      "skill_refs": [
+        "release-risk-analysis@1.0.0"
+      ],
+      "standard_refs": [
+        "report-evidence@1.0.0",
+        "release-review-rubric@1.0.0"
+      ]
+    },
+    "description": "",
+    "mcp_servers": [],
+    "model": "builtin",
+    "name": "界面验收助手",
+    "options": {},
+    "prompt": "你是一名变更评估助手。根据模拟工具证据识别风险，使用清晰的中文输出可核对的评估结论。",
+    "runtime": "mock",
+    "skills": [],
+    "id": "agent-9ac1f3cc7d264ff6",
+    "revision": 1,
+    "created_at": 1792904697.944653,
+    "updated_at": 1792904697.944653,
+    "archived": false
+  },
+  "finishedAt": "2026-10-25T05:05:04.902Z"
+}

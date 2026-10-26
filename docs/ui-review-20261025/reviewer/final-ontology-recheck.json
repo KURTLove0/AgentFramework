@@ -1,0 +1,106 @@
+{
+  "at": "2026-10-25T05:35:39.617Z",
+  "source": "aa5dee52814e4b0978cfae2816040677d8b8637a09ea6699e8d29ed9d57b5f32",
+  "rows": [
+    {
+      "width": 320,
+      "theme": "light",
+      "focus": true,
+      "invalid": "true",
+      "describedby": "ontology-model-error-0",
+      "rect": {
+        "x": 57,
+        "y": 353.203125,
+        "width": 206,
+        "height": 46,
+        "top": 353.203125,
+        "right": 263,
+        "bottom": 399.203125,
+        "left": 57
+      },
+      "viewport": 320,
+      "bodyWidth": 302,
+      "bodyScrollWidth": 302,
+      "sectionOpen": true,
+      "summaryFocus": true,
+      "valid": "模型与实例校验通过",
+      "retained": "REVIEW-001",
+      "invalidAfter": null
+    },
+    {
+      "width": 320,
+      "theme": "dark",
+      "focus": true,
+      "invalid": "true",
+      "describedby": "ontology-model-error-0",
+      "rect": {
+        "x": 57,
+        "y": 353.203125,
+        "width": 206,
+        "height": 46,
+        "top": 353.203125,
+        "right": 263,
+        "bottom": 399.203125,
+        "left": 57
+      },
+      "viewport": 320,
+      "bodyWidth": 302,
+      "bodyScrollWidth": 302,
+      "sectionOpen": true,
+      "summaryFocus": true,
+      "valid": "模型与实例校验通过",
+      "retained": "REVIEW-001",
+      "invalidAfter": null
+    },
+    {
+      "width": 375,
+      "theme": "light",
+      "focus": true,
+      "invalid": "true",
+      "describedby": "ontology-model-error-0",
+      "rect": {
+        "x": 57,
+        "y": 353.421875,
+        "width": 261,
+        "height": 46,
+        "top": 353.421875,
+        "right": 318,
+        "bottom": 399.421875,
+        "left": 57
+      },
+      "viewport": 375,
+      "bodyWidth": 357,
+      "bodyScrollWidth": 357,
+      "sectionOpen": true,
+      "summaryFocus": true,
+      "valid": "模型与实例校验通过",
+      "retained": "REVIEW-001",
+      "invalidAfter": null
+    },
+    {
+      "width": 375,
+      "theme": "dark",
+      "focus": true,
+      "invalid": "true",
+      "describedby": "ontology-model-error-0",
+      "rect": {
+        "x": 57,
+        "y": 353.421875,
+        "width": 261,
+        "height": 46,
+        "top": 353.421875,
+        "right": 318,
+        "bottom": 399.421875,
+        "left": 57
+      },
+      "viewport": 375,
+      "bodyWidth": 357,
+      "bodyScrollWidth": 357,
+      "sectionOpen": true,
+      "summaryFocus": true,
+      "valid": "模型与实例校验通过",
+      "retained": "REVIEW-001",
+      "invalidAfter": null
+    }
+  ]
+}

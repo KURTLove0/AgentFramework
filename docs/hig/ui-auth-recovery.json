@@ -1,0 +1,13 @@
+{
+  "before": {
+    "id": "run-955bbaa331d34dc8",
+    "proof": "运行信息\nAgent\n变更评估助手\nAgent 版本\n内置\n运行时\nMock\n模型\n—\n变更 ID\nchange-demo-001\n项目\nproject-demo\n环境\ntest\n执行身份\nreviewer\n创建时间\n10/23 10:56\n步骤预算\n4 / 24\n重规划\n0 / 2\n模型调用\n0\n模型 tokens\n0\n业务写权限\n未授权 / 已失效\n验收通过\n2 / 3\n模拟业务系统\n0份草稿\n\n创建工具调用 0 次 · 数据来自外部模拟库\n\n恢复时先核对幂等键，避免重复创建。\n\n导出记录\n评估报告 .md\n运行结果 .json\n审计事件 .jsonl"
+  },
+  "after": {
+    "checks": "上下文来源\n7 份来源清单\nplan · 1 项资料\ndecide · 1 项资料\ndecide · 1 项资料\ndecide · 1 项资料\ncompose · 1 项资料\ndecide · 1 项资料\ndecide · 1 项资料\n独立验收\n运行时判定\n报告章节与风险规则\nreport-sections\n已通过\n验收依据\n关键事实与证据引用\ncritical-claims-evidence\n已通过\n验收依据\n草稿独立回读核对\ndraft-readback\n已通过\n验收依据\n证据快照\n3 RECORDS\nevidence-30da514118218c511f0b\nevidence-4522e94fda777020b1e0\nevidence-87440a749302e784edc8",
+    "id": "run-955bbaa331d34dc8",
+    "overflow": false,
+    "proof": "运行信息\nAgent\n变更评估助手\nAgent 版本\n内置\n运行时\nMock\n模型\n—\n变更 ID\nchange-demo-001\n项目\nproject-demo\n环境\ntest\n执行身份\nreviewer\n创建时间\n10/23 10:56\n步骤预算\n7 / 24\n重规划\n0 / 2\n模型调用\n0\n模型 tokens\n0\n业务写权限\n有效\n验收通过\n3 / 3\n模拟业务系统\n1份草稿\n\n创建工具调用 1 次 · 数据来自外部模拟库\n\ndraft-6e8b43aa1484c0a4\nDRAFT · v1\n\n恢复时先核对幂等键，避免重复创建。\n\n导出记录\n评估报告 .md\n运行结果 .json\n审计事件 .jsonl",
+    "status": "已完成"
+  }
+}

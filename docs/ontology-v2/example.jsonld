@@ -1,0 +1,422 @@
+{
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "sh": "http://www.w3.org/ns/shacl#",
+    "prov": "http://www.w3.org/ns/prov#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "dct": "http://purl.org/dc/terms/",
+    "af": "urn:agent-framework:ontology:"
+  },
+  "@graph": [
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:scheme",
+      "@type": "skos:ConceptScheme",
+      "skos:prefLabel": "发布质量本体",
+      "owl:versionInfo": "1",
+      "prov:wasDerivedFrom": [
+        {
+          "@id": "urn:agent-framework:source:source@1"
+        }
+      ]
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:change",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "urn:agent-framework:ontology:conformance-example:scheme"
+      },
+      "skos:prefLabel": "变更",
+      "skos:definition": "需要审核的变更",
+      "skos:altLabel": [
+        "唯一变更别名"
+      ],
+      "dct:source": [
+        "source@1"
+      ],
+      "af:properties": [],
+      "af:produces": [
+        {
+          "@id": "urn:agent-framework:ontology:conformance-example:report"
+        }
+      ]
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:report",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "urn:agent-framework:ontology:conformance-example:scheme"
+      },
+      "skos:prefLabel": "报告",
+      "skos:definition": "审核结果",
+      "skos:altLabel": [],
+      "dct:source": [
+        "source@1"
+      ],
+      "af:properties": [],
+      "af:requires": [
+        {
+          "@id": "urn:agent-framework:ontology:conformance-example:evidence"
+        }
+      ]
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:evidence",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "urn:agent-framework:ontology:conformance-example:scheme"
+      },
+      "skos:prefLabel": "证据",
+      "skos:definition": "支持结果的依据",
+      "skos:altLabel": [],
+      "dct:source": [
+        "source@1"
+      ],
+      "af:properties": []
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:property:change:id",
+      "@type": "rdf:Property",
+      "rdfs:label": "id",
+      "rdfs:domain": {
+        "@id": "urn:agent-framework:ontology:conformance-example:type:change"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:property:change:risk",
+      "@type": "rdf:Property",
+      "rdfs:label": "risk",
+      "rdfs:domain": {
+        "@id": "urn:agent-framework:ontology:conformance-example:type:change"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:property:change:score",
+      "@type": "rdf:Property",
+      "rdfs:label": "score",
+      "rdfs:domain": {
+        "@id": "urn:agent-framework:ontology:conformance-example:type:change"
+      },
+      "rdfs:range": {
+        "@id": "xsd:decimal"
+      }
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:property:change:day",
+      "@type": "rdf:Property",
+      "rdfs:label": "day",
+      "rdfs:domain": {
+        "@id": "urn:agent-framework:ontology:conformance-example:type:change"
+      },
+      "rdfs:range": {
+        "@id": "xsd:date"
+      }
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:property:change:verified",
+      "@type": "rdf:Property",
+      "rdfs:label": "verified",
+      "rdfs:domain": {
+        "@id": "urn:agent-framework:ontology:conformance-example:type:change"
+      },
+      "rdfs:range": {
+        "@id": "xsd:boolean"
+      }
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:type:change",
+      "@type": "owl:Class",
+      "rdfs:label": "变更",
+      "af:concept": {
+        "@id": "urn:agent-framework:ontology:conformance-example:change"
+      },
+      "prov:wasDerivedFrom": [
+        {
+          "@id": "urn:agent-framework:source:source%401"
+        }
+      ],
+      "af:primaryKey": {
+        "@id": "urn:agent-framework:ontology:conformance-example:property:change:id"
+      }
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:shape:change",
+      "@type": "sh:NodeShape",
+      "sh:targetClass": {
+        "@id": "urn:agent-framework:ontology:conformance-example:type:change"
+      },
+      "sh:closed": true,
+      "sh:ignoredProperties": {
+        "@list": [
+          {
+            "@id": "rdf:type"
+          },
+          {
+            "@id": "prov:wasDerivedFrom"
+          }
+        ]
+      },
+      "sh:property": [
+        {
+          "sh:path": {
+            "@id": "urn:agent-framework:ontology:conformance-example:property:change:id"
+          },
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:minLength": 1,
+          "sh:pattern": "\\S"
+        },
+        {
+          "sh:path": {
+            "@id": "urn:agent-framework:ontology:conformance-example:property:change:risk"
+          },
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:in": {
+            "@list": [
+              {
+                "@value": "HIGH",
+                "@type": "xsd:string"
+              },
+              {
+                "@value": "LOW",
+                "@type": "xsd:string"
+              }
+            ]
+          }
+        },
+        {
+          "sh:path": {
+            "@id": "urn:agent-framework:ontology:conformance-example:property:change:score"
+          },
+          "sh:datatype": {
+            "@id": "xsd:decimal"
+          },
+          "sh:minCount": 0,
+          "sh:maxCount": 1,
+          "sh:minInclusive": 0,
+          "sh:maxInclusive": 100
+        },
+        {
+          "sh:path": {
+            "@id": "urn:agent-framework:ontology:conformance-example:property:change:day"
+          },
+          "sh:datatype": {
+            "@id": "xsd:date"
+          },
+          "sh:minCount": 0,
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": {
+            "@id": "urn:agent-framework:ontology:conformance-example:property:change:verified"
+          },
+          "sh:datatype": {
+            "@id": "xsd:boolean"
+          },
+          "sh:minCount": 0,
+          "sh:maxCount": 1
+        },
+        {
+          "sh:path": {
+            "@id": "urn:agent-framework:ontology:conformance-example:link:produces"
+          },
+          "sh:class": {
+            "@id": "urn:agent-framework:ontology:conformance-example:type:report"
+          },
+          "sh:maxCount": 1
+        }
+      ]
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:property:report:id",
+      "@type": "rdf:Property",
+      "rdfs:label": "id",
+      "rdfs:domain": {
+        "@id": "urn:agent-framework:ontology:conformance-example:type:report"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:type:report",
+      "@type": "owl:Class",
+      "rdfs:label": "报告",
+      "af:concept": {
+        "@id": "urn:agent-framework:ontology:conformance-example:report"
+      },
+      "prov:wasDerivedFrom": [
+        {
+          "@id": "urn:agent-framework:source:source%401"
+        }
+      ],
+      "af:primaryKey": {
+        "@id": "urn:agent-framework:ontology:conformance-example:property:report:id"
+      }
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:shape:report",
+      "@type": "sh:NodeShape",
+      "sh:targetClass": {
+        "@id": "urn:agent-framework:ontology:conformance-example:type:report"
+      },
+      "sh:closed": true,
+      "sh:ignoredProperties": {
+        "@list": [
+          {
+            "@id": "rdf:type"
+          },
+          {
+            "@id": "prov:wasDerivedFrom"
+          }
+        ]
+      },
+      "sh:property": [
+        {
+          "sh:path": {
+            "@id": "urn:agent-framework:ontology:conformance-example:property:report:id"
+          },
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:minCount": 1,
+          "sh:maxCount": 1,
+          "sh:minLength": 1,
+          "sh:pattern": "\\S"
+        },
+        {
+          "sh:path": {
+            "sh:inversePath": {
+              "@id": "urn:agent-framework:ontology:conformance-example:link:produces"
+            }
+          },
+          "sh:maxCount": 1
+        }
+      ]
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:link:produces",
+      "@type": "owl:ObjectProperty",
+      "rdfs:label": "产出",
+      "rdfs:domain": {
+        "@id": "urn:agent-framework:ontology:conformance-example:type:change"
+      },
+      "rdfs:range": {
+        "@id": "urn:agent-framework:ontology:conformance-example:type:report"
+      },
+      "af:cardinality": "ONE_TO_ONE",
+      "prov:wasDerivedFrom": [
+        {
+          "@id": "urn:agent-framework:source:source%401"
+        }
+      ]
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:object:change-1",
+      "@type": "urn:agent-framework:ontology:conformance-example:type:change",
+      "prov:wasDerivedFrom": [
+        {
+          "@id": "urn:agent-framework:source:source%401"
+        }
+      ],
+      "urn:agent-framework:ontology:conformance-example:property:change:id": [
+        {
+          "@value": "C001",
+          "@type": "xsd:string"
+        }
+      ],
+      "urn:agent-framework:ontology:conformance-example:property:change:risk": [
+        {
+          "@value": "HIGH",
+          "@type": "xsd:string"
+        }
+      ],
+      "urn:agent-framework:ontology:conformance-example:property:change:score": [
+        {
+          "@value": "90",
+          "@type": "xsd:decimal"
+        }
+      ],
+      "urn:agent-framework:ontology:conformance-example:property:change:day": [
+        {
+          "@value": "2026-10-23",
+          "@type": "xsd:date"
+        }
+      ],
+      "urn:agent-framework:ontology:conformance-example:property:change:verified": [
+        {
+          "@value": true,
+          "@type": "xsd:boolean"
+        }
+      ],
+      "urn:agent-framework:ontology:conformance-example:link:produces": [
+        {
+          "@id": "urn:agent-framework:ontology:conformance-example:object:report-1"
+        }
+      ]
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:object:report-1",
+      "@type": "urn:agent-framework:ontology:conformance-example:type:report",
+      "prov:wasDerivedFrom": [
+        {
+          "@id": "urn:agent-framework:source:source%401"
+        }
+      ],
+      "urn:agent-framework:ontology:conformance-example:property:report:id": [
+        {
+          "@value": "R001",
+          "@type": "xsd:string"
+        }
+      ]
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:action:draft",
+      "@type": "af:ActionMapping",
+      "rdfs:label": "创建模拟草稿",
+      "af:targetType": {
+        "@id": "urn:agent-framework:ontology:conformance-example:type:change"
+      },
+      "af:capabilityRef": "report.draft.create@1.0.0",
+      "af:effect": "WRITE",
+      "prov:wasDerivedFrom": [
+        {
+          "@id": "urn:agent-framework:source:source%401"
+        }
+      ]
+    },
+    {
+      "@id": "urn:agent-framework:ontology:conformance-example:assertion:0",
+      "@type": "rdf:Statement",
+      "rdf:subject": {
+        "@id": "urn:agent-framework:ontology:conformance-example:object:change-1"
+      },
+      "rdf:predicate": {
+        "@id": "urn:agent-framework:ontology:conformance-example:link:produces"
+      },
+      "rdf:object": {
+        "@id": "urn:agent-framework:ontology:conformance-example:object:report-1"
+      },
+      "prov:wasDerivedFrom": [
+        {
+          "@id": "urn:agent-framework:source:source%401"
+        }
+      ]
+    }
+  ]
+}

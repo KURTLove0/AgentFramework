@@ -161,6 +161,10 @@ class Runtime:
                 context,manifest = build(self.store,state,method,self.context(state))
                 if manifest:
                     with self._state_lock:self.store.save_context(state,lease,manifest)
+                if state['snapshot'].get('agent_profile',{}).get('skill_packages'):
+                    from .skill_context import prepare
+                    context=prepare(self.planner,context,state['snapshot']['agent_profile'],
+                                    lambda kind,data:self.checkpoint(state,lease,kind,data),isinstance(self.planner,LLMPlanner))
                 result = getattr(self.planner, method)(context)
                 if not isinstance(self.planner,LLMPlanner):result = enrich_mock(result,context,method)
             if failures:

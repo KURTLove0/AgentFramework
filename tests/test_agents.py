@@ -58,6 +58,36 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(restored['revision'],4)
         with self.assertRaises(KeyError):self.app.agents.save(definition(),'agent-0000000000000000')
 
+    def test_agent_identity_needs_no_team_and_legacy_team_survives_edits(self):
+        for domain in ('change-assessment@2.0.0', 'knowledge-answer@1.0.0'):
+            with self.subTest(domain=domain):
+                data=definition('mock');data['definition']=default_definition(data['name'],domain)
+                saved=self.app.agents.save(data)
+                self.assertNotIn('owner_team',saved['definition']['identity'])
+                compiled=self.app.agents.compile(saved['id'])
+                self.assertEqual(compiled['definition']['identity'],saved['definition']['identity'])
+                data['revision']=1;data['name']='更新岗位'
+                edited=self.app.agents.save(data,saved['id'])
+                self.assertEqual(edited['definition']['identity']['name'],'更新岗位')
+                self.assertNotIn('owner_team',edited['definition']['identity'])
+        legacy=definition('mock');legacy['definition']=default_definition(legacy['name'])
+        legacy['definition']['identity']['owner_team']='历史团队'
+        saved=self.app.agents.save(legacy)
+        legacy.pop('definition');legacy['revision']=1
+        edited=self.app.agents.save(legacy,saved['id'])
+        self.assertEqual(edited['definition']['identity']['owner_team'],'历史团队')
+
+    def test_unpublished_domain_is_rejected_before_saving_or_updating(self):
+        data=definition('mock');data['definition']=default_definition(data['name'])
+        saved=self.app.agents.save(data)
+        data['definition']['domain_pack_ref']='custom-domain@1.0.0'
+        with self.assertRaisesRegex(ValueError,'工作方式'):
+            self.app.agents.save(data)
+        data['revision']=1
+        with self.assertRaisesRegex(ValueError,'工作方式'):
+            self.app.agents.save(data,saved['id'])
+        self.assertEqual(self.app.agents.list(),[saved])
+
     def test_models_must_be_from_cli_and_mcp_definitions_are_validated(self):
         bad=definition();bad['model']='made-up-model'
         with self.assertRaises(ValueError):self.app.agents.save(bad)
@@ -92,10 +122,13 @@ class AgentTests(unittest.TestCase):
         run=self.app.create(task|{'mcp_consent':True})['run']
         self.assertEqual(run['task']['agent_ref'],agent_ref(agent))
         self.assertEqual(run['snapshot']['agent_profile'],agent)
+        summary=self.app.summary(run)
+        self.assertEqual((summary['agent_id'],summary['agent_revision']),(agent['id'],1))
         edited=definition();edited['revision']=1;edited['prompt']='新 Prompt'
         self.app.agents.save(edited,agent['id'])
         with self.assertRaises(ConfigConflict):self.app.create(task|{'mcp_consent':True})
         self.assertEqual(self.app.detail(run['run_id'])['run']['snapshot']['agent_profile']['prompt'],data['prompt'])
+        self.assertEqual(self.app.summary(run)['agent_revision'],1)
 
     def test_prompt_skills_and_mcp_metadata_reach_planning_without_secrets(self):
         data=definition();data['definition']=default_definition(data['name']);data['definition']['native_read_refs']=[TOOLS[0]]

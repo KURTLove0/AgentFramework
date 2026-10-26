@@ -1,0 +1,127 @@
+{
+  "generatedAt": "2026-10-25T05:01:45.988Z",
+  "workspaceId": "workspace-71a2f5ba884c491b",
+  "records": [
+    {
+      "name": "daily-settings",
+      "enabled": [
+        "",
+        "schedule-time",
+        "schedule-zone",
+        "schedule-enabled",
+        "schedule-autostart",
+        "daily-task-add",
+        "取消"
+      ],
+      "editable": true,
+      "request": {
+        "revision": 0,
+        "enabled": false,
+        "daily_time": "09:00",
+        "timezone": "Asia/Shanghai",
+        "auto_start": false,
+        "tasks": []
+      },
+      "receipt": {
+        "revision": 1,
+        "enabled": false,
+        "daily_time": "09:00",
+        "timezone": "Asia/Shanghai",
+        "auto_start": false,
+        "tasks": []
+      },
+      "lateInputDiscarded": true
+    },
+    {
+      "name": "workspace",
+      "enabled": [
+        "×",
+        "workspace-name",
+        "workspace-business",
+        "workspace-scenario",
+        "workspace-description",
+        "取消"
+      ],
+      "editable": true,
+      "request": {
+        "revision": 0,
+        "name": "提交时的空间 1792904505414",
+        "business": "提交保护验收",
+        "scenario": "模拟等待保存",
+        "description": ""
+      },
+      "receipt": {
+        "business": "提交保护验收",
+        "description": "",
+        "name": "提交时的空间 1792904505414",
+        "scenario": "模拟等待保存",
+        "id": "workspace-cdc428d44b9e4511",
+        "revision": 1,
+        "project_id": "project-39e935af798d41e2",
+        "deleted": false,
+        "created_at": 1792904505.8425758,
+        "updated_at": 1792904505.8425758
+      },
+      "lateInputDiscarded": true
+    },
+    {
+      "name": "knowledge",
+      "enabled": [
+        "×",
+        "asset-kind",
+        "asset-name",
+        "asset-content",
+        "asset-source-version",
+        "asset-visibility",
+        "asset-start",
+        "asset-end",
+        "asset-source",
+        "取消"
+      ],
+      "editable": true,
+      "request": {
+        "kind": "KNOWLEDGE",
+        "title": "提交时的资料",
+        "content": {
+          "text": "核对保存中的输入保护。"
+        },
+        "source_uri": "local:curated",
+        "source_version": "1",
+        "visibility": "PROJECT",
+        "effective_at": 1792904460,
+        "effective_until": 1824440460
+      },
+      "receipt": {
+        "ref": "asset-3522207c0d184d0e@1",
+        "id": "asset-3522207c0d184d0e",
+        "version": 1,
+        "kind": "KNOWLEDGE",
+        "status": "DRAFT",
+        "owner": "review-user",
+        "tenant_id": "review-ui",
+        "project_id": "project-fff8990859644ecf",
+        "environment": "test",
+        "visibility": "PROJECT",
+        "content_hash": "7bc1418b44059cca2e5f3e190c080c5e55b8093ab4c899cf3c002f2a03efd62e",
+        "access_policy_ref": "task-scope-owner@1.0.0",
+        "conflict_key": "",
+        "content": {
+          "text": "核对保存中的输入保护。"
+        },
+        "critical": false,
+        "effective_at": 1792904460,
+        "effective_until": 1824440460,
+        "observed_at": 1792904505.980082,
+        "sensitivity": "project",
+        "source_uri": "local:curated",
+        "source_version": "1",
+        "space_ref": "simulated-change-context@1.0.0",
+        "standard_ref": null,
+        "supersedes": null,
+        "title": "提交时的资料"
+      },
+      "lateInputDiscarded": true
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,410 @@
+PASS missing identity is shown in progress and blocks Next at the actual field
+PASS correcting a reported field clears stale error without focus then permits Next
+PASS standards and responsibility coverage remain required
+PASS all role errors are assigned to their own sections
+PASS serialized adapter bindings and verifier references are preserved
+PASS teamless identity advances and never invents team metadata
+PASS editing a legacy identity retains its existing team without an input
+PASS unpublished or mismatched domain blocks saving at the domain select
+PASS an unfinished inline domain cannot be skipped and cancelling clears errors
+PASS custom business domains are selectable independently of their execution method
+PASS submitting an early step advances without prematurely creating an Agent
+PASS model loading is visibly busy and cannot advance
+PASS invalid model selection links the runtime error to its input
+PASS three-step flow goes from model configuration directly to review
+PASS withdrawn enabled binding is blocked while disabled frozen version is preserved
+PASS Skills context shows pinned version without upgrading to newer release
+PASS empty Skill directory offers management instead of creating an empty binding
+PASS MCP arguments must remain a JSON array
+PASS IME composition defers progress and prevents accidental advancement
+PASS review points back to incomplete sections and does not imply task authorization
+PASS dirty dismissal keeps the form until discard is explicitly chosen
+PASS Skills management preserves dirty editor through its shared return flow
+PASS Agent card CTA forwards the chosen identity into task creation
+PASS switching a read-only task back to writing never grants permission automatically
+PASS saved Agent remains visible and focused when the follow-up list read fails
+PASS post-save list refresh cannot overwrite another workspace
+Agent interaction scenarios: 26/26 passed (isolated synthetic APIs, no network/model/business writes).
+PASS new task starts at purpose with all permissions unchecked
+PASS QA Agent card preset uses the knowledge default with no write grant
+PASS submission freeze preserves QA disabled fields after success
+PASS submission freeze preserves QA disabled fields after failure
+PASS hidden earlier required fields prevent jumping directly to review
+PASS corrected task field clears its stale error summary including IME completion
+PASS QA ignores hidden invalid change ID and writing restores its validation
+PASS read-only submission omits the hidden invalid change ID
+PASS only system task goals follow domain defaults
+PASS runtime change invalidates old target permissions
+PASS edited task scope clears prior permission including IME completion
+PASS IME submit cannot advance or create a task
+PASS Enter before review advances a step without POST
+PASS configuration return preserves goal and budget while resetting all permissions
+PASS removed selected Agent returns to purpose without losing user goal
+PASS duplicate submit and close while submitting do not duplicate task POST
+PASS failed submission retains input for review and releases the busy guard
+PASS run and workflow routes request only their own detail endpoints
+PASS stale in-flight refresh cannot render a different route and queued route completes
+PASS reduced motion skips both route and tab animations
+PASS normal polling does not replay route entry animation
+Journey interaction scenarios: 21/21 passed (synthetic DOM/API only).
+TAP version 13
+# Subtest: a real Agent requires fresh model context consent before any request
+ok 1 - a real Agent requires fresh model context consent before any request
+  ---
+  duration_ms: 1.494291
+  type: 'test'
+  ...
+# Subtest: unknown generation response is not retried and can be reconciled by request id
+ok 2 - unknown generation response is not retried and can be reconciled by request id
+  ---
+  duration_ms: 1.6335
+  type: 'test'
+  ...
+# Subtest: lost deposition receipt locks further writes until a read resolves it
+ok 3 - lost deposition receipt locks further writes until a read resolves it
+  ---
+  duration_ms: 0.538167
+  type: 'test'
+  ...
+# Subtest: saving edited advice precedes deposition and uses returned revision
+ok 4 - saving edited advice precedes deposition and uses returned revision
+  ---
+  duration_ms: 0.569417
+  type: 'test'
+  ...
+# Subtest: a pending request disables editing and prevents duplicate dispatch
+ok 5 - a pending request disables editing and prevents duplicate dispatch
+  ---
+  duration_ms: 2.480916
+  type: 'test'
+  ...
+# Subtest: changing instruction resets previous model consent
+ok 6 - changing instruction resets previous model consent
+  ---
+  duration_ms: 0.433208
+  type: 'test'
+  ...
+# Subtest: ontology graph escapes user supplied labels and has graph-scoped marker ids
+ok 7 - ontology graph escapes user supplied labels and has graph-scoped marker ids
+  ---
+  duration_ms: 0.470459
+  type: 'test'
+  ...
+# Subtest: empty selection cannot deposit any asset
+ok 8 - empty selection cannot deposit any asset
+  ---
+  duration_ms: 0.359458
+  type: 'test'
+  ...
+# Subtest: unknown ontology revision is resolved by reading latest versions without a second write
+ok 9 - unknown ontology revision is resolved by reading latest versions without a second write
+  ---
+  duration_ms: 0.703417
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12.957375
+PASS type, instance and constraint editor escapes labels and exposes validation
+PASS input and change during property rename preserve values and primary key
+PASS removing a type cascades its own objects, links and action mappings
+PASS typed fields preserve false and retain invalid boolean text for validation
+PASS zero is retained while blank values become missing required fields
+PASS a delayed validation cannot approve content edited during the request
+PASS any document edit invalidates a previous validation report
+PASS an explorer response cannot open private objects in another workspace
+8 operational ontology interaction checks passed.
+PASS daily plan escapes user content and shows blocked reasons
+PASS a frozen plan with stale permissions offers no dispatch action
+PASS editing the daily goal or object clears old execution permissions
+PASS a delayed daily fetch cannot populate another route
+PASS a delayed fetch cannot populate another workspace
+PASS double submit and delayed completion cannot mutate another workspace view
+PASS saving blocks dialog dismissal before the shared close handler
+PASS evaluation shows frozen role, revision and escaped failure evidence
+8 workspace operations interaction checks passed.
+TAP version 13
+# Subtest: saving KNOWLEDGE reveals the draft in its correct module without publishing
+ok 1 - saving KNOWLEDGE reveals the draft in its correct module without publishing
+  ---
+  duration_ms: 3.57975
+  type: 'test'
+  ...
+# Subtest: saving PREFERENCE reveals the draft in its correct module without publishing
+ok 2 - saving PREFERENCE reveals the draft in its correct module without publishing
+  ---
+  duration_ms: 1.395459
+  type: 'test'
+  ...
+# Subtest: a confirmed asset write remains saved when the following list refresh fails
+ok 3 - a confirmed asset write remains saved when the following list refresh fails
+  ---
+  duration_ms: 0.863917
+  type: 'test'
+  ...
+# Subtest: filtered memory and experience empty states offer a working clear action
+ok 4 - filtered memory and experience empty states offer a working clear action
+  ---
+  duration_ms: 1.039583
+  type: 'test'
+  ...
+# Subtest: out-of-order knowledge responses cannot overwrite the newest search
+ok 5 - out-of-order knowledge responses cannot overwrite the newest search
+  ---
+  duration_ms: 0.759208
+  type: 'test'
+  ...
+# Subtest: a knowledge response from the previous workspace is discarded
+ok 6 - a knowledge response from the previous workspace is discarded
+  ---
+  duration_ms: 0.677291
+  type: 'test'
+  ...
+# Subtest: Skills management preserves the unsaved Agent and returns without resetting it
+ok 7 - Skills management preserves the unsaved Agent and returns without resetting it
+  ---
+  duration_ms: 1.127875
+  type: 'test'
+  ...
+# Subtest: returning from Skills binds only the explicitly chosen published version
+ok 8 - returning from Skills binds only the explicitly chosen published version
+  ---
+  duration_ms: 1.214459
+  type: 'test'
+  ...
+# Subtest: a WITHDRAWN Skill cannot be bound during the return journey
+ok 9 - a WITHDRAWN Skill cannot be bound during the return journey
+  ---
+  duration_ms: 1.090291
+  type: 'test'
+  ...
+# Subtest: a ARCHIVED Skill cannot be bound during the return journey
+ok 10 - a ARCHIVED Skill cannot be bound during the return journey
+  ---
+  duration_ms: 1.092708
+  type: 'test'
+  ...
+# Subtest: a changed workspace invalidates the Agent return before any request
+ok 11 - a changed workspace invalidates the Agent return before any request
+  ---
+  duration_ms: 1.004
+  type: 'test'
+  ...
+# Subtest: a changed revision invalidates the Agent return before any request
+ok 12 - a changed revision invalidates the Agent return before any request
+  ---
+  duration_ms: 0.673042
+  type: 'test'
+  ...
+# Subtest: the Skill return preserves the eight-binding budget
+ok 13 - the Skill return preserves the eight-binding budget
+  ---
+  duration_ms: 0.75425
+  type: 'test'
+  ...
+# Subtest: opening a different Agent explicitly invalidates the previous Skills return
+ok 14 - opening a different Agent explicitly invalidates the previous Skills return
+  ---
+  duration_ms: 0.678541
+  type: 'test'
+  ...
+# Subtest: a Skill card offers published version selection rather than the latest draft
+ok 15 - a Skill card offers published version selection rather than the latest draft
+  ---
+  duration_ms: 0.739333
+  type: 'test'
+  ...
+# Subtest: an unchanged saved Skill does not create another immutable version
+ok 16 - an unchanged saved Skill does not create another immutable version
+  ---
+  duration_ms: 0.809625
+  type: 'test'
+  ...
+# Subtest: publishing a Skill shows the next step without changing any Agent binding
+ok 17 - publishing a Skill shows the next step without changing any Agent binding
+  ---
+  duration_ms: 1.087916
+  type: 'test'
+  ...
+# Subtest: double-clicking the same Skill lifecycle action dispatches one mutation
+ok 18 - double-clicking the same Skill lifecycle action dispatches one mutation
+  ---
+  duration_ms: 0.662666
+  type: 'test'
+  ...
+# Subtest: Skill search waits for IME composition before rerendering
+ok 19 - Skill search waits for IME composition before rerendering
+  ---
+  duration_ms: 0.608667
+  type: 'test'
+  ...
+# Subtest: creating a workspace offers entry without silently changing the current scope
+ok 20 - creating a workspace offers entry without silently changing the current scope
+  ---
+  duration_ms: 0.906042
+  type: 'test'
+  ...
+# Subtest: failed workspace preflight retains the original scope and its open editor
+ok 21 - failed workspace preflight retains the original scope and its open editor
+  ---
+  duration_ms: 0.716875
+  type: 'test'
+  ...
+# Subtest: workspace handoff commits only after scoped session and run reads succeed
+ok 22 - workspace handoff commits only after scoped session and run reads succeed
+  ---
+  duration_ms: 0.683917
+  type: 'test'
+  ...
+# Subtest: a preserved Agent editing session blocks cross-workspace navigation
+ok 23 - a preserved Agent editing session blocks cross-workspace navigation
+  ---
+  duration_ms: 0.807125
+  type: 'test'
+  ...
+# Subtest: task returnToTask blocks cross-workspace navigation without data loss
+ok 24 - task returnToTask blocks cross-workspace navigation without data loss
+  ---
+  duration_ms: 0.606958
+  type: 'test'
+  ...
+# Subtest: task saving blocks cross-workspace navigation without data loss
+ok 25 - task saving blocks cross-workspace navigation without data loss
+  ---
+  duration_ms: 0.557709
+  type: 'test'
+  ...
+# Subtest: task opening blocks cross-workspace navigation without data loss
+ok 26 - task opening blocks cross-workspace navigation without data loss
+  ---
+  duration_ms: 0.574625
+  type: 'test'
+  ...
+# Subtest: asset defaults, return, Escape, and discard guards remain intact
+ok 27 - asset defaults, return, Escape, and discard guards remain intact
+  ---
+  duration_ms: 0.726834
+  type: 'test'
+  ...
+# Subtest: workspace defaults, return, Escape, and discard guards remain intact
+ok 28 - workspace defaults, return, Escape, and discard guards remain intact
+  ---
+  duration_ms: 0.573709
+  type: 'test'
+  ...
+# Subtest: native clearing of knowledge search removes the applied query
+ok 29 - native clearing of knowledge search removes the applied query
+  ---
+  duration_ms: 0.870292
+  type: 'test'
+  ...
+# Subtest: a Skills response cannot replace the catalogue after a workspace change
+ok 30 - a Skills response cannot replace the catalogue after a workspace change
+  ---
+  duration_ms: 0.601583
+  type: 'test'
+  ...
+# Subtest: a confirmed workspace write remains saved if refreshing the directory fails
+ok 31 - a confirmed workspace write remains saved if refreshing the directory fails
+  ---
+  duration_ms: 0.644333
+  type: 'test'
+  ...
+# Subtest: two visible review controls for one asset still dispatch one mutation
+ok 32 - two visible review controls for one asset still dispatch one mutation
+  ---
+  duration_ms: 0.687917
+  type: 'test'
+  ...
+# Subtest: imported Skill contents remain available even when refreshing the catalogue fails
+ok 33 - imported Skill contents remain available even when refreshing the catalogue fails
+  ---
+  duration_ms: 0.631416
+  type: 'test'
+  ...
+# Subtest: Skill save remains locked until its post-save directory refresh finishes
+ok 34 - Skill save remains locked until its post-save directory refresh finishes
+  ---
+  duration_ms: 5.878792
+  type: 'test'
+  ...
+# Subtest: saving a Skill reveals its draft even when the directory was filtered to archived items
+ok 35 - saving a Skill reveals its draft even when the directory was filtered to archived items
+  ---
+  duration_ms: 0.991625
+  type: 'test'
+  ...
+# Subtest: deleting the current workspace is blocked before mutation when task settings are retained
+ok 36 - deleting the current workspace is blocked before mutation when task settings are retained
+  ---
+  duration_ms: 0.679042
+  type: 'test'
+  ...
+1..36
+# tests 36
+# suites 0
+# pass 36
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 42.325625
+PASS explicit stale POST refreshes once and returns the retried result
+PASS a second stale response stops after one retry
+PASS ordinary authorization 403 never refreshes or replays
+PASS a stale GET never triggers mutation recovery
+PASS network failure never replays
+PASS request timeout never replays
+PASS unknown write outcome never replays
+PASS an unreadable success response never replays
+PASS session refresh 403 stops without another POST
+PASS session refresh timeout stops without another POST
+PASS an uncertain retry response is never replayed again
+PASS callers can explicitly disable session recovery
+PASS workspace switching stops replay and preserves the original session scope
+PASS a tenant change stops replay and retains the original token
+PASS retry payload remains frozen if the caller mutates its object
+
+15 isolated UI session checks passed. No network requests were made.
+PASS navigation is added once and selected node has a move handle
+PASS pointer press and tiny jitter do not alter a draft
+PASS node dragging updates snapped coordinates and keeps business nodes unchanged
+PASS dragging accounts for the current canvas zoom
+PASS Escape cancels a drag and restores the clean draft
+PASS pointer cancellation restores layout without affecting the graph
+PASS blank canvas panning changes only viewport scroll
+PASS keyboard handle movement supports Shift acceleration and coordinate bounds
+PASS IME keys and text-field arrows never move nodes
+PASS zoom is bounded and does not mark a draft as changed
+PASS zoom preserves the logical point under its anchor
+PASS fit considers both viewport dimensions and remains a view-only change
+PASS fit keeps readable size when actual nodes already fit, ignoring blank canvas extent
+PASS ordinary wheel scrolling remains native and modified wheel zooms
+PASS selection updates inspector, dependencies and the visible canvas area
+PASS layout cache is scoped and contains only coordinates
+PASS invalid layout data degrades to automatic layout
+PASS automatic arrange restores the original clean layout and routing
+PASS node deletion undo restores manual layout and the complete branch definition
+PASS validation selects, marks and reveals the node with a missing goal
+PASS tap direction controls move a node without a drag and preserve its API definition
+PASS mobile editor opens on canvas and selects properties only on an explicit node click
+PASS mobile dragging stays on canvas while zoom and locate return from properties
+PASS mobile pane tabs support arrows and desktop always restores both panes
+PASS layout data never enters the workflow node API contract
+PASS saving disables canvas movement and user cancellation cannot discard the request
+PASS dragging is included in the existing unsaved-close protection
+PASS successful save keeps the original API contract and stores layout separately
+PASS save success followed by GET failure retains its receipt without reporting a failed save
+PASS saving an adopted chat proposal survives a later partial refresh failure without duplicate creation
+PASS a failed or unknown POST keeps the editor open and never triggers a replay or follow-up refresh
+PASS start success preserves the single created run and stable request identity when refresh fails
+PASS granted run receipt remains successful when the subsequent GET fails
+PASS archive receipt stays authoritative when the following list refresh fails
+
+34 isolated workflow interaction checks passed.

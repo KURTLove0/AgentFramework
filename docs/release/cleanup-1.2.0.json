@@ -1,0 +1,41 @@
+{
+  "version": "1.2.0",
+  "cleaned_at": "2026-10-23T04:43:12.730908+00:00",
+  "backup": ".backups/release-1.2.0-20261023-124312",
+  "datasets": [
+    {
+      "source": "/Users/kurt/Desktop/CodeSpace/AgentFramework/.agent-data",
+      "backup_subdir": "active-data",
+      "files": 2,
+      "bytes": 299008,
+      "sha256": {
+        "mock-business.sqlite3": "462946c0569a81e1da915d128b3281fa46291ffb2bb7816a2e424e451a4f6a20",
+        "runtime.sqlite3": "ca85f71be16d7c04c3abee27b2c69aa73d22a9b0281b57749882accb5ba1bba9"
+      },
+      "hashes_verified": true,
+      "sqlite_quick_check": {
+        "mock-business.sqlite3": "ok",
+        "runtime.sqlite3": "ok"
+      }
+    },
+    {
+      "source": "/tmp/agent-interaction-review",
+      "backup_subdir": "interaction-review",
+      "files": 4,
+      "bytes": 548864,
+      "sha256": {
+        "data/mock-business.sqlite3": "dec6b53448b8ec53cfd71f9ca69971461a3ed6d41d9f46a3717261ed3b3f557c",
+        "data/runtime.sqlite3-wal": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "data/runtime.sqlite3-shm": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+        "data/runtime.sqlite3": "03a618fb61a3c22887836839ac02fe4e0ecbfcf34a1e65d68e1f1e7e6948009b"
+      },
+      "hashes_verified": true,
+      "sqlite_quick_check": {
+        "data/mock-business.sqlite3": "ok",
+        "data/runtime.sqlite3": "ok"
+      }
+    }
+  ],
+  "historical_backups_preserved": true,
+  "runtime_data_in_release": false
+}

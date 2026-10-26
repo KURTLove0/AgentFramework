@@ -1,0 +1,232 @@
+{
+  "checks": [
+    {
+      "id": "C1-C2",
+      "passed": true,
+      "detail": "用途起点预填名称与岗位，创建保持三步"
+    },
+    {
+      "id": "C3",
+      "passed": true,
+      "detail": "搜索空结果可直接新建并选用业务领域"
+    },
+    {
+      "id": "F2-A1",
+      "passed": true,
+      "detail": "键盘搜索、空结果清除、选择与 Escape 取消保留焦点"
+    },
+    {
+      "id": "F2-Tab",
+      "passed": true,
+      "detail": "Tab关闭弹层并在当前对话框内继续，不形成键盘陷阱"
+    },
+    {
+      "id": "F1",
+      "passed": true,
+      "detail": "长模型目录与领域均可搜索，保留原生表单值"
+    },
+    {
+      "id": "F3",
+      "passed": true,
+      "detail": "长文本自动增高且计数准确，不溢出表单"
+    },
+    {
+      "id": "R2-domain",
+      "passed": true,
+      "detail": "切换领域再返回时，手工填写的工作指令保持原样"
+    },
+    {
+      "id": "C4",
+      "passed": true,
+      "detail": "确认页可审查完整工作指令与业务领域"
+    },
+    {
+      "id": "R1",
+      "passed": true,
+      "detail": "双击保存只发送一次，失败保留所有输入"
+    },
+    {
+      "id": "C5-R3",
+      "passed": true,
+      "detail": "保存回执展示持久的开始使用入口"
+    },
+    {
+      "id": "U1-U3",
+      "passed": true,
+      "detail": "开始使用准确预选智能体，并隐藏重复的锁定选项"
+    },
+    {
+      "id": "F1-agent",
+      "passed": true,
+      "detail": "智能体选择支持按名称搜索，选择后保留正确身份"
+    },
+    {
+      "id": "F4",
+      "passed": true,
+      "detail": "错误与字段关联，修正后清除"
+    },
+    {
+      "id": "U2",
+      "passed": true,
+      "detail": "可编辑任务示例不会授予业务权限"
+    },
+    {
+      "id": "U4",
+      "passed": true,
+      "detail": "提交前展示所选智能体、任务范围与许可"
+    },
+    {
+      "id": "R1-task",
+      "passed": true,
+      "detail": "任务提交失败后可原样重试"
+    },
+    {
+      "id": "R2-R4",
+      "passed": true,
+      "detail": "从任务直达智能体配置，返回时保留目标和预算，并采用新版本重新审查许可"
+    },
+    {
+      "id": "U5",
+      "passed": true,
+      "detail": "完成后优先展示结果与来源，手动切页不会被刷新覆盖"
+    },
+    {
+      "id": "R2-search",
+      "passed": true,
+      "detail": "搜索和取消选择不会把未修改的表单标记为已更改"
+    },
+    {
+      "id": "A2",
+      "passed": true,
+      "detail": "六种视口与手机搜索弹层没有水平溢出或页脚遮挡"
+    },
+    {
+      "id": "A3-A5",
+      "passed": true,
+      "detail": "浅深色文本与边界对比达到约定阈值，支持减少动态效果"
+    },
+    {
+      "id": "A4",
+      "passed": true,
+      "detail": "主要触控目标至少44px，放大文字后仍可到达字段和操作"
+    }
+  ],
+  "errors": [],
+  "layouts": [
+    {
+      "width": 320,
+      "height": 812,
+      "pass": true
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "pass": true
+    },
+    {
+      "width": 414,
+      "height": 896,
+      "pass": true
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "pass": true
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "pass": true
+    },
+    {
+      "width": 812,
+      "height": 375,
+      "pass": true
+    }
+  ],
+  "contrast": [
+    {
+      "theme": "light",
+      "text": 16.388672948457323,
+      "border": 3.7842355141366197,
+      "help": 6.788185292643313
+    },
+    {
+      "theme": "dark",
+      "text": 15.302378274611886,
+      "border": 5.661454586719715,
+      "help": 7.956260716908802
+    }
+  ],
+  "touch": [
+    {
+      "text": "×",
+      "height": 44
+    },
+    {
+      "text": "1. 基本信息已就绪名称、角色与业务领域",
+      "height": 54
+    },
+    {
+      "text": "2. 模型与指令已就绪选择模型与工作要求",
+      "height": 54
+    },
+    {
+      "text": "3. 确认创建已就绪预览与可选调整",
+      "height": 54
+    },
+    {
+      "text": "查资料、回答问题依据知识库作答，并核对来源。",
+      "height": 46.796875
+    },
+    {
+      "text": "评估变更、生成草稿核对风险证据，按授权创建草稿。",
+      "height": 46.796875
+    },
+    {
+      "text": "＋ 新建领域",
+      "height": 44
+    },
+    {
+      "text": "变更评估",
+      "height": 48
+    },
+    {
+      "text": "补充用途与岗位 选填，已提供默认岗位",
+      "height": 48
+    },
+    {
+      "text": "下一步",
+      "height": 44
+    },
+    {
+      "text": "取消",
+      "height": 44
+    }
+  ],
+  "largeText": {
+    "pageOverflow": false,
+    "field": {
+      "x": 31,
+      "y": 468.90625,
+      "width": 313,
+      "height": 70,
+      "top": 468.90625,
+      "right": 344,
+      "bottom": 538.90625,
+      "left": 31
+    },
+    "footer": {
+      "x": 27,
+      "y": 713.609375,
+      "width": 321,
+      "height": 71.390625,
+      "top": 713.609375,
+      "right": 348,
+      "bottom": 785,
+      "left": 27
+    }
+  },
+  "agentId": "agent-f488f51e115443f2",
+  "runId": "run-e0a174966a6d4aa2"
+}

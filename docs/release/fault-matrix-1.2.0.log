@@ -1,0 +1,52 @@
+cwd=/tmp
+executable=/private/tmp/agent-release-1.2.0-verify-aa7s1w2m/agent-framework-1.2.0/.venv/bin/python
+import_path=/private/tmp/agent-release-1.2.0-verify-aa7s1w2m/agent-framework-1.2.0/.venv/lib/python3.14/site-packages/agent_framework/__init__.py
+version=1.2.0
+scope=synthetic context; deterministic cognition; no model invocation
+PASS legacy/mock-worker@1.0.0/normal: SUCCEEDED drafts=1 writes=1
+PASS legacy/mock-worker@1.0.0/read-transient: SUCCEEDED drafts=1 writes=1
+PASS legacy/mock-worker@1.0.0/read-fails: FAILED drafts=0 writes=0
+PASS legacy/mock-worker@1.0.0/response-lost: SUCCEEDED drafts=1 writes=1
+PASS legacy/mock-worker@1.0.0/crash-after-write: SUCCEEDED drafts=1 writes=1
+PASS legacy/mock-worker@1.0.0/unverifiable: NEEDS_REVIEW drafts=1 writes=1
+PASS legacy/mock-worker@1.0.0/tampered-draft: NEEDS_REVIEW drafts=1 writes=1
+PASS legacy/mock-worker@1.0.0/invalid-report: SUCCEEDED drafts=1 writes=1
+PASS legacy/mock-worker@1.0.0/denied: WAITING_AUTH drafts=0 writes=0
+PASS legacy/mock-worker@1.0.0/source-changed: SUCCEEDED drafts=1 writes=2
+PASS legacy/mock-worker@1.0.0/missing-evidence: WAITING_INPUT drafts=0 writes=0
+PASS compiled/mock-worker@1.0.0/normal: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-worker@1.0.0/read-transient: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-worker@1.0.0/read-fails: FAILED drafts=0 writes=0
+PASS compiled/mock-worker@1.0.0/response-lost: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-worker@1.0.0/crash-after-write: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-worker@1.0.0/unverifiable: NEEDS_REVIEW drafts=1 writes=1
+PASS compiled/mock-worker@1.0.0/tampered-draft: NEEDS_REVIEW drafts=1 writes=1
+PASS compiled/mock-worker@1.0.0/invalid-report: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-worker@1.0.0/denied: WAITING_AUTH drafts=0 writes=0
+PASS compiled/mock-worker@1.0.0/source-changed: SUCCEEDED drafts=1 writes=2
+PASS compiled/mock-worker@1.0.0/missing-evidence: WAITING_INPUT drafts=0 writes=0
+PASS compiled/mock-cli@1.0.0/normal: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-cli@1.0.0/read-transient: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-cli@1.0.0/read-fails: FAILED drafts=0 writes=0
+PASS compiled/mock-cli@1.0.0/response-lost: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-cli@1.0.0/crash-after-write: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-cli@1.0.0/unverifiable: NEEDS_REVIEW drafts=1 writes=1
+PASS compiled/mock-cli@1.0.0/tampered-draft: NEEDS_REVIEW drafts=1 writes=1
+PASS compiled/mock-cli@1.0.0/invalid-report: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-cli@1.0.0/denied: WAITING_AUTH drafts=0 writes=0
+PASS compiled/mock-cli@1.0.0/source-changed: SUCCEEDED drafts=1 writes=2
+PASS compiled/mock-cli@1.0.0/missing-evidence: WAITING_INPUT drafts=0 writes=0
+PASS compiled/mock-mcp@1.0.0/normal: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-mcp@1.0.0/read-transient: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-mcp@1.0.0/read-fails: FAILED drafts=0 writes=0
+PASS compiled/mock-mcp@1.0.0/response-lost: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-mcp@1.0.0/crash-after-write: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-mcp@1.0.0/unverifiable: NEEDS_REVIEW drafts=1 writes=1
+PASS compiled/mock-mcp@1.0.0/tampered-draft: NEEDS_REVIEW drafts=1 writes=1
+PASS compiled/mock-mcp@1.0.0/invalid-report: SUCCEEDED drafts=1 writes=1
+PASS compiled/mock-mcp@1.0.0/denied: WAITING_AUTH drafts=0 writes=0
+PASS compiled/mock-mcp@1.0.0/source-changed: SUCCEEDED drafts=1 writes=2
+PASS compiled/mock-mcp@1.0.0/missing-evidence: WAITING_INPUT drafts=0 writes=0
+summary=/private/tmp/agent-release-1.2.0-verify-aa7s1w2m/fault-matrix/p0-c048ba38f4/summary.json
+exit_code=0
+verification=44/44; normal,response-lost,crash-after-write: each adapter 1 draft / 1 create; denied: 0 draft / 0 create; tampered: NEEDS_REVIEW; all snapshots/intents unchanged; all 44 model_calls=0

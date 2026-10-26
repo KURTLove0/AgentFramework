@@ -1,0 +1,317 @@
+[
+  {
+    "route": "任务工作台",
+    "clipped": [],
+    "height": 740,
+    "overflow": false,
+    "width": 320
+  },
+  {
+    "route": "运行记录",
+    "clipped": [],
+    "height": 740,
+    "overflow": false,
+    "width": 320
+  },
+  {
+    "route": "工作空间管理",
+    "clipped": [],
+    "height": 740,
+    "overflow": false,
+    "width": 320
+  },
+  {
+    "route": "智能体 Agent",
+    "clipped": [],
+    "height": 740,
+    "overflow": false,
+    "width": 320
+  },
+  {
+    "route": "工作流",
+    "clipped": [],
+    "height": 740,
+    "overflow": false,
+    "width": 320
+  },
+  {
+    "route": "技能 Skills",
+    "clipped": [],
+    "height": 740,
+    "overflow": false,
+    "width": 320
+  },
+  {
+    "route": "知识库",
+    "clipped": [],
+    "height": 740,
+    "overflow": false,
+    "width": 320
+  },
+  {
+    "route": "能力与标准",
+    "clipped": [],
+    "height": 740,
+    "overflow": false,
+    "width": 320
+  },
+  {
+    "route": "运行时配置",
+    "clipped": [],
+    "height": 740,
+    "overflow": false,
+    "width": 320
+  },
+  {
+    "route": "任务工作台",
+    "clipped": [],
+    "height": 812,
+    "overflow": false,
+    "width": 375
+  },
+  {
+    "route": "运行记录",
+    "clipped": [],
+    "height": 812,
+    "overflow": false,
+    "width": 375
+  },
+  {
+    "route": "工作空间管理",
+    "clipped": [],
+    "height": 812,
+    "overflow": false,
+    "width": 375
+  },
+  {
+    "route": "智能体 Agent",
+    "clipped": [],
+    "height": 812,
+    "overflow": false,
+    "width": 375
+  },
+  {
+    "route": "工作流",
+    "clipped": [],
+    "height": 812,
+    "overflow": false,
+    "width": 375
+  },
+  {
+    "route": "技能 Skills",
+    "clipped": [],
+    "height": 812,
+    "overflow": false,
+    "width": 375
+  },
+  {
+    "route": "知识库",
+    "clipped": [],
+    "height": 812,
+    "overflow": false,
+    "width": 375
+  },
+  {
+    "route": "能力与标准",
+    "clipped": [],
+    "height": 812,
+    "overflow": false,
+    "width": 375
+  },
+  {
+    "route": "运行时配置",
+    "clipped": [],
+    "height": 812,
+    "overflow": false,
+    "width": 375
+  },
+  {
+    "route": "任务工作台",
+    "clipped": [],
+    "height": 1024,
+    "overflow": false,
+    "width": 768
+  },
+  {
+    "route": "运行记录",
+    "clipped": [],
+    "height": 1024,
+    "overflow": false,
+    "width": 768
+  },
+  {
+    "route": "工作空间管理",
+    "clipped": [],
+    "height": 1024,
+    "overflow": false,
+    "width": 768
+  },
+  {
+    "route": "智能体 Agent",
+    "clipped": [],
+    "height": 1024,
+    "overflow": false,
+    "width": 768
+  },
+  {
+    "route": "工作流",
+    "clipped": [],
+    "height": 1024,
+    "overflow": false,
+    "width": 768
+  },
+  {
+    "route": "技能 Skills",
+    "clipped": [],
+    "height": 1024,
+    "overflow": false,
+    "width": 768
+  },
+  {
+    "route": "知识库",
+    "clipped": [],
+    "height": 1024,
+    "overflow": false,
+    "width": 768
+  },
+  {
+    "route": "能力与标准",
+    "clipped": [],
+    "height": 1024,
+    "overflow": false,
+    "width": 768
+  },
+  {
+    "route": "运行时配置",
+    "clipped": [],
+    "height": 1024,
+    "overflow": false,
+    "width": 768
+  },
+  {
+    "route": "任务工作台",
+    "clipped": [],
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "route": "运行记录",
+    "clipped": [],
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "route": "工作空间管理",
+    "clipped": [],
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "route": "智能体 Agent",
+    "clipped": [],
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "route": "工作流",
+    "clipped": [],
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "route": "技能 Skills",
+    "clipped": [],
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "route": "知识库",
+    "clipped": [],
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "route": "能力与标准",
+    "clipped": [],
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "route": "运行时配置",
+    "clipped": [],
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "route": "任务工作台",
+    "clipped": [],
+    "height": 375,
+    "overflow": false,
+    "width": 812
+  },
+  {
+    "route": "运行记录",
+    "clipped": [],
+    "height": 375,
+    "overflow": false,
+    "width": 812
+  },
+  {
+    "route": "工作空间管理",
+    "clipped": [],
+    "height": 375,
+    "overflow": false,
+    "width": 812
+  },
+  {
+    "route": "智能体 Agent",
+    "clipped": [],
+    "height": 375,
+    "overflow": false,
+    "width": 812
+  },
+  {
+    "route": "工作流",
+    "clipped": [],
+    "height": 375,
+    "overflow": false,
+    "width": 812
+  },
+  {
+    "route": "技能 Skills",
+    "clipped": [],
+    "height": 375,
+    "overflow": false,
+    "width": 812
+  },
+  {
+    "route": "知识库",
+    "clipped": [],
+    "height": 375,
+    "overflow": false,
+    "width": 812
+  },
+  {
+    "route": "能力与标准",
+    "clipped": [],
+    "height": 375,
+    "overflow": false,
+    "width": 812
+  },
+  {
+    "route": "运行时配置",
+    "clipped": [],
+    "height": 375,
+    "overflow": false,
+    "width": 812
+  }
+]

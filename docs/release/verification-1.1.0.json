@@ -1,0 +1,258 @@
+{
+  "version": "1.1.0",
+  "verified_at": "2026-10-23T03:38:50.973482+00:00",
+  "status": "generated-and-verified",
+  "deployed_to_remote": false,
+  "business_tools": "simulated",
+  "access": "single-user-loopback",
+  "cleanup": {
+    "version": "1.1.0",
+    "cleaned_at": "2026-10-23T03:30:59.151898+00:00",
+    "backup": ".backups/release-1.1.0-20261023-113059",
+    "datasets": [
+      {
+        "source": ".agent-data",
+        "backup_subdir": "active-data",
+        "files": 2,
+        "bytes": 286720,
+        "hashes_verified": true,
+        "sqlite_quick_check": {
+          "mock-business.sqlite3": "ok",
+          "runtime.sqlite3": "ok"
+        }
+      },
+      {
+        "source": "/tmp/agent-hig-review/data",
+        "backup_subdir": "hig-review-data",
+        "files": 2,
+        "bytes": 577536,
+        "hashes_verified": true,
+        "sqlite_quick_check": {
+          "mock-business.sqlite3": "ok",
+          "runtime.sqlite3": "ok"
+        }
+      }
+    ],
+    "active_directory_reinitialized": true,
+    "builtin_resources_preserved": true,
+    "test_source_and_documentation_preserved": true
+  },
+  "active_data_counts": {
+    "mock-business.sqlite3": {
+      "changes": 0,
+      "drafts": 0,
+      "calls": 0
+    },
+    "runtime.sqlite3": {
+      "compiled_agents": 0,
+      "capability_blocks": 0,
+      "native_reads": 0,
+      "runs": 0,
+      "events": 0,
+      "actions": 0,
+      "outbox": 0,
+      "evidence": 0,
+      "verifications": 0,
+      "grants": 0,
+      "experience_candidates": 0,
+      "asset_versions": 0,
+      "asset_events": 0,
+      "context_manifests": 0,
+      "episodic_memories": 0,
+      "experience_evaluations": 0,
+      "runtime_configuration": 0,
+      "model_catalog": 0,
+      "agent_profiles": 0,
+      "workspaces": 1,
+      "workflows": 0,
+      "workflow_runs": 0,
+      "workflow_events": 0,
+      "skill_heads": 2,
+      "skill_versions": 2,
+      "skill_events": 2,
+      "workflow_chats": 0
+    }
+  },
+  "package": {
+    "version": "1.1.0",
+    "bundle": "/var/folders/qr/yjth0g2s3435y29150j7m07h0000gn/T/agent-release-1.1.0-verify-on728w_9/agent-framework-1.1.0",
+    "package_files_matched_to_source": 62,
+    "external_and_internal_checksums_verified": true,
+    "runtime_data_included": false,
+    "artifact": "dist/agent-framework-1.1.0.tar.gz",
+    "wheel": "dist/bounded_agent_mvp-1.1.0-py3-none-any.whl",
+    "sha256": "78fda0c93a5ce6b091183a0e47c6120f1a3f18cbeec1251cd2d33b54326894bc"
+  },
+  "tests": {
+    "unit": {
+      "passed": 184,
+      "total": 184,
+      "log": "tests-1.1.0.log"
+    },
+    "installed_package_fault_matrix": {
+      "passed": 44,
+      "total": 44,
+      "report": "fault-matrix-1.1.0.json",
+      "normal_response_lost_restart_each_create_exactly_one_draft": true,
+      "denied_creates_zero_drafts": true,
+      "tampered_draft_requires_review": true
+    },
+    "ui_session": {
+      "passed": 15,
+      "total": 15,
+      "command": "node tests/test_ui_session.js"
+    },
+    "javascript_syntax": {
+      "passed": 9,
+      "total": 9
+    },
+    "shell_syntax": true,
+    "git_diff_check": true
+  },
+  "startup_verification": {
+    "version": "1.1.0",
+    "servers": {
+      "8787": {
+        "version": "1.1.0",
+        "business_tools": "simulated",
+        "static_resource_statuses": {
+          "/": 200,
+          "/agents.js": 200,
+          "/app.js": 200,
+          "/appearance.js": 200,
+          "/hig.css": 200,
+          "/library.js": 200,
+          "/roles.js": 200,
+          "/skills.js": 200,
+          "/space-grotesk.ttf": 200,
+          "/styles.css": 200,
+          "/workflow_designer.js": 200,
+          "/workflows.js": 200,
+          "/workspaces.js": 200
+        },
+        "static_hashes_match_source": true,
+        "counts": {
+          "mock-business.sqlite3": {
+            "changes": 0,
+            "drafts": 0,
+            "calls": 0
+          },
+          "runtime.sqlite3": {
+            "compiled_agents": 0,
+            "capability_blocks": 0,
+            "native_reads": 0,
+            "runs": 0,
+            "events": 0,
+            "actions": 0,
+            "outbox": 0,
+            "evidence": 0,
+            "verifications": 0,
+            "grants": 0,
+            "experience_candidates": 0,
+            "asset_versions": 0,
+            "asset_events": 0,
+            "context_manifests": 0,
+            "episodic_memories": 0,
+            "experience_evaluations": 0,
+            "runtime_configuration": 0,
+            "model_catalog": 0,
+            "agent_profiles": 0,
+            "workspaces": 1,
+            "workflows": 0,
+            "workflow_runs": 0,
+            "workflow_events": 0,
+            "skill_heads": 2,
+            "skill_versions": 2,
+            "skill_events": 2,
+            "workflow_chats": 0
+          }
+        },
+        "sqlite_quick_check": "ok",
+        "model_calls": 0
+      },
+      "54575": {
+        "version": "1.1.0",
+        "business_tools": "simulated",
+        "static_resource_statuses": {
+          "/": 200,
+          "/agents.js": 200,
+          "/app.js": 200,
+          "/appearance.js": 200,
+          "/hig.css": 200,
+          "/library.js": 200,
+          "/roles.js": 200,
+          "/skills.js": 200,
+          "/space-grotesk.ttf": 200,
+          "/styles.css": 200,
+          "/workflow_designer.js": 200,
+          "/workflows.js": 200,
+          "/workspaces.js": 200
+        },
+        "static_hashes_match_source": true,
+        "counts": {
+          "mock-business.sqlite3": {
+            "changes": 0,
+            "drafts": 0,
+            "calls": 0
+          },
+          "runtime.sqlite3": {
+            "compiled_agents": 0,
+            "capability_blocks": 0,
+            "native_reads": 0,
+            "runs": 0,
+            "events": 0,
+            "actions": 0,
+            "outbox": 0,
+            "evidence": 0,
+            "verifications": 0,
+            "grants": 0,
+            "experience_candidates": 0,
+            "asset_versions": 0,
+            "asset_events": 0,
+            "context_manifests": 0,
+            "episodic_memories": 0,
+            "experience_evaluations": 0,
+            "runtime_configuration": 0,
+            "model_catalog": 0,
+            "agent_profiles": 0,
+            "workspaces": 1,
+            "workflows": 0,
+            "workflow_runs": 0,
+            "workflow_events": 0,
+            "skill_heads": 2,
+            "skill_versions": 2,
+            "skill_events": 2,
+            "workflow_chats": 0
+          }
+        },
+        "sqlite_quick_check": "ok",
+        "model_calls": 0
+      }
+    }
+  },
+  "installation": {
+    "new_venv": true,
+    "install_script_exit": 0,
+    "import_from_installed_site_packages": true,
+    "data_directory_isolated": true,
+    "verification_service_stopped": true,
+    "temporary_test_data_removed": true
+  },
+  "previous_release_archived": [
+    {
+      "name": "agent-framework-1.0.0.tar.gz",
+      "sha256": "65d1b174d2850c4b8237168613d74b42e829e3c3352cbbe0a561bd1b8e2baf6c"
+    },
+    {
+      "name": "bounded_agent_mvp-1.0.0-py3-none-any.whl",
+      "sha256": "09a0e1bc253f4074f2a4a030939b02f9836cddd49ddfe367781494c1aaeb874f"
+    }
+  ],
+  "model_calls_during_release": 0,
+  "known_limits": [
+    "业务工具仍为模拟实现，仅支持 test 范围",
+    "单用户本机回环服务，不包含多人认证或公网部署",
+    "首次安装需获取固定 PyYAML 6.0.3 依赖",
+    "发行验证未调用真实模型服务"
+  ]
+}

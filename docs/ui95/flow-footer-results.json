@@ -1,0 +1,46 @@
+[
+  {
+    "width": 375,
+    "height": 812,
+    "x": 259,
+    "y": 747,
+    "right": 350,
+    "bottom": 791,
+    "viewport": 812,
+    "dialogBottom": 804,
+    "hit": true
+  },
+  {
+    "width": 320,
+    "height": 812,
+    "x": 204,
+    "y": 747,
+    "right": 295,
+    "bottom": 791,
+    "viewport": 812,
+    "dialogBottom": 804,
+    "hit": true
+  },
+  {
+    "width": 375,
+    "height": 375,
+    "x": 259,
+    "y": 310,
+    "right": 350,
+    "bottom": 354,
+    "viewport": 375,
+    "dialogBottom": 367,
+    "hit": true
+  },
+  {
+    "width": 812,
+    "height": 375,
+    "x": 667,
+    "y": 302,
+    "right": 771,
+    "bottom": 346,
+    "viewport": 375,
+    "dialogBottom": 359,
+    "hit": true
+  }
+]

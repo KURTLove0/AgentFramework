@@ -1,0 +1,35 @@
+{
+  "verified_at": "2026-10-23T03:41:37.406887+00:00",
+  "release_version": "1.1.0",
+  "routes": 9,
+  "browser_layout_checks": {
+    "responsive_routes": 45,
+    "widths": [
+      320,
+      414,
+      768,
+      1024,
+      1440
+    ],
+    "mobile_375_routes": 9,
+    "horizontal_overflow": false
+  },
+  "opaque_core_token_contrast": {
+    "passed": 28,
+    "total": 28,
+    "method": "WCAG relative luminance, OKLCH to linear sRGB, clamp to display gamut; palette read from rendered page",
+    "text_minimum_ratio": 4.5,
+    "focus_and_control_boundary_minimum_ratio": 3,
+    "scope": "核心不透明色对；不代表全部透明叠加层已穷举验证"
+  },
+  "task_authorization_response_lost": "ui-auth-recovery.json",
+  "process_restart": "restart-after.json",
+  "skill_unsaved_guard": "skills-guard.json",
+  "release_verification": "../release/verification.json",
+  "model_calls_during_ui_review": 0,
+  "data_scope": "synthetic context, isolated database; review data backed up and removed for release",
+  "limitations": [
+    "HIG 原则用于 Web 适配，不代表原生应用认证",
+    "业务工具仍为模拟实现"
+  ]
+}

@@ -1,0 +1,16 @@
+PASS first-use 首次空白有用途说明和创建入口
+PASS create-detail 三步创建保存后直达同一智能体详情，职责和版本来自保存记录
+PASS find 搜索、领域、执行方式组合筛选，名称排序，刷新及中文输入焦点保持
+PASS detail-history 详情直接链接/刷新正确；页签支持方向键；浏览器返回保留筛选排序与项目焦点
+PASS empty-filters 无结果与无归档状态有分别提示和清除恢复入口
+PASS archive 归档详情只读可查看，任务入口移除，恢复后才可创建任务
+PASS save-retry 编辑指令直达对应分区；保存失败保留输入，重试成功版本递增且回到详情
+PASS execution 详情准确预选岗位v2，任务审查不自动授权，模拟问答完成且记录链接到真实结果
+PASS scope-missing 不存在记录可返回；其他工作空间无法显示原智能体
+PASS pinned-skill 从详情配置并绑定已发布v1，已有v2时仍显示v1技能说明与职责
+PASS keyboard-detail 纯键盘搜索→详情→页签首尾/方向键→配置披露Escape→指定Agent任务→关闭→返回原搜索
+PASS mobile-semantics 手机视觉行保留table/row/cell及可读列头，智能体详情链接有准确名称
+PASS responsive 24布局组合：6视口×2主题×目录详情；长名称无页面横向溢出，主要操作高度>=44px
+PASS accessibility 浅深代表性文字/状态对比>=4.5:1；实际搜索边界与焦点>=3:1且图标不重叠；目录和详情200%文字可达
+PASS console 浏览器无未处理脚本错误
+{"checks":15,"layouts":24,"errors":[]}

@@ -1,0 +1,16 @@
+{
+  "run_id": "run-90dc45a7d0164eab",
+  "status": "SUCCEEDED",
+  "snapshot_hash": "c110ac4dc833ac9cb99d62b216bbe58389db305c10766cad79a5b14e91e7a35e",
+  "snapshot_unchanged": true,
+  "checks": {
+    "critical-claims-evidence": true,
+    "draft-readback": true,
+    "report-sections": true
+  },
+  "draft_count": 1,
+  "create_calls": 1,
+  "browser_reloaded_after_restart": false,
+  "stale_csrf_renewed": true,
+  "model_calls": 0
+}

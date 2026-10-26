@@ -1,5 +1,57 @@
 [
   {
+    "date": "2026-10-25",
+    "scope": "app",
+    "macrostructure": "Index-First",
+    "theme": "System Blue (design.md)",
+    "enrichment": "none",
+    "brief": "11模块与动态动线独立评审迭代，修复提交保护、导航恢复、每日受阻与本体移动表单，最终97/100",
+    "reviewer": "independent ui_review Agent",
+    "score": 97,
+    "review_status": "independent_review_pass",
+    "rubric_sha256": "7cd7cfae976a663d3a5f906ca2e653271659ea9f44a6ba69d6da5e6bfd01f13f",
+    "evidence": "docs/ui-review-20261025/reviewer/final-report.md",
+    "limits": "5项P3已扣分；无未解决P0/P1/P2；范围与证据归属见coverage-status。"
+  },
+  {
+    "date": "2026-10-24",
+    "scope": "app",
+    "macrostructure": "Index-First",
+    "theme": "System Blue (design.md)",
+    "enrichment": "none",
+    "brief": "11模块全量界面与操作动线升级；固定量表95/100，硬门槛全部通过",
+    "critique": "P4 H5 E4 S5 R5 V4",
+    "evidence": "docs/ui95/README.md",
+    "score": 95,
+    "review_status": "fixed_rubric_pass",
+    "limits": "5项非关键证据范围扣分，详见final-score.json；工程自评不代替独立用户研究。"
+  },
+  {
+    "date": "2026-10-24",
+    "scope": "app",
+    "macrostructure": "Index-First",
+    "theme": "System Blue (design.md)",
+    "enrichment": "none",
+    "brief": "智能体创建、使用与结果动线；可搜索选择器、渐进填写、状态保持和固定量表复评至96分",
+    "critique": "P4 H5 E4 S5 R4 V4",
+    "evidence": "docs/ux90/README.md",
+    "review_status": "score_withdrawn",
+    "review_note": "2026-10-24 用户指出空状态主按钮异常；遗漏SVG继承的视觉回归，96分结论已撤回。见 docs/ui-strict/README.md。"
+  },
+  {
+    "date": "2026-10-23",
+    "macrostructure": "Index-First",
+    "theme": "custom",
+    "theme_axes": "silver and slate / platform system / system blue",
+    "vibe": "原生效率工具，清晰可追踪",
+    "enrichment": "none",
+    "brief": "HIG 原则适配九模块 Agent 工作台，统一浅深外观、移动导航和表单反馈",
+    "nav": "grouped sidebar + N13 command search; mobile sheet",
+    "footer": "live connection status line",
+    "critique": "P4 H5 E4 S5 R5 V4",
+    "review_notes": "应用保留业务分组与真实计数；用户 HIG 目标优先采用平台系统字体；未引入营销版式或虚构指标。"
+  },
+  {
     "date": "2026-10-22",
     "macrostructure": "Workbench",
     "theme": "Cobalt",

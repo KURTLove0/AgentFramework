@@ -1,0 +1,9 @@
+PASS daily plan escapes user content and shows blocked reasons
+PASS a frozen plan with stale permissions offers no dispatch action
+PASS editing the daily goal or object clears old execution permissions
+PASS a delayed daily fetch cannot populate another route
+PASS a delayed fetch cannot populate another workspace
+PASS double submit and delayed completion cannot mutate another workspace view
+PASS saving blocks dialog dismissal before the shared close handler
+PASS evaluation shows frozen role, revision and escaped failure evidence
+8 workspace operations interaction checks passed.

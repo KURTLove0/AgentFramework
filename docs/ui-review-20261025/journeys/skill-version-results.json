@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "id": "copy-save-preserves-package",
+      "passed": true,
+      "name": "journey-copy-mvnd9poz",
+      "version": 1,
+      "files": [
+        "SKILL.md",
+        "references/grounding.md",
+        "references/journey.md"
+      ]
+    },
+    {
+      "id": "version-switch-cancel-retains-draft",
+      "passed": true,
+      "retained": "尚未保存的第三版修改",
+      "version": "2"
+    },
+    {
+      "id": "version-switch-discard-reads-frozen-v1",
+      "passed": true,
+      "firstContent": "独立版本验证：第一版内容"
+    },
+    {
+      "id": "copy-archive-restore-keeps-versions",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "workspace": {
+    "business": "UI95 界面验收",
+    "description": "界面验收隔离数据",
+    "name": "Skill版本独立探索 mvnd9pba",
+    "scenario": "独立模拟",
+    "id": "workspace-16ec6603024a4856",
+    "revision": 1,
+    "project_id": "project-1e28ba2bae704fdf",
+    "deleted": false,
+    "created_at": 1792904872.2969658,
+    "updated_at": 1792904872.2969658
+  }
+}

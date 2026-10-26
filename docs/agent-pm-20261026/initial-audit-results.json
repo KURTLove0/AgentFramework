@@ -1,0 +1,23 @@
+{
+  "space": "workspace-e082ecf45de14b87",
+  "agent": "agent-16f0f37074094f86",
+  "results": [
+    {
+      "id": "row-arrow-return-focus",
+      "expected": "原智能体详情链接或右侧箭头",
+      "actual": "content",
+      "pass": false
+    },
+    {
+      "id": "archive-authoritative-success",
+      "storedArchived": true,
+      "actual": {
+        "archived": false,
+        "action": "归档",
+        "startButtons": 1,
+        "text": "智能体\n资料核对助理\n可用\n\n尚未添加用途描述\n\n编辑配置\n开始任务\n配置 v1 已保存。新任务将使用此版本。\n概览\n工作指令\n技能\n任务记录\n它能帮你做什么\n\n知识问答岗位助理\n\n01\n依据有来源的知识回答问题\n\n交付：带原文引用的知识回答\n\n验收：回答与原文一致、来源属于任务范围、来源当前有效\n执行标准\n\n结果按岗位标准检查，业务写入在任务中单独授权。\n\n知识来源与引用\n查看完整工作指令\n配置摘要\n处理领域\n知识问答\n岗位角色\n知识问答助手\n执行方式\n模拟运行\n模型\n内置规划器\n当前版本\nv1\n更新于\n2026/10/26 11:03:41\n\n新任务会固定当前配置版本。修改配置不会改变历史任务。\n\n检查配置\n查看岗位评测\n复制智能体\n更多配置\n归档"
+      },
+      "pass": false
+    }
+  ]
+}

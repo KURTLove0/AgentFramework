@@ -1,16 +1,37 @@
-# Agent Framework MVP
+# Agent Framework
+
+当前发行版本 **1.2.0**。独立安装包及启动方式见 [发行版安装说明](docs/release/INSTALL.md)，功能范围见 [发布说明](docs/release/RELEASE_NOTES.md)。业务工具仍为模拟实现；初始工作台不附带演示数据。
+
+从当前源码生成不含本机数据的发行包（在已安装项目依赖的虚拟环境中执行）：
+
+```sh
+python -m pip install 'setuptools>=68' wheel
+python scripts/build_release.py
+```
+
+输出 `dist/agent-framework-1.2.0.tar.gz`、独立 wheel 和 SHA256 校验文件。构建会逐文件核对代码和资源，包含三步任务创建、配置往返、可直接操作的工作流画布及浅色/深色界面。解压后执行 `sh scripts/install.sh`、`sh scripts/start.sh` 即可启动干净工作台；原有源码和开发测试命令继续可用。
 
 基于「设计可落地的 Agent 框架」会话的技术方案，实现一个可恢复的 **规划 → 执行 → 验证 → 恢复** 闭环。样板任务：读取变更与规范、评估风险、生成报告、创建评估草稿、外部回读验收。
 
-Python **3.11+**，运行时仅使用标准库。默认模式无需 API Key、网络或额外服务，使用确定性规划器；可选真实模型模式复用本机 Codex CLI 的 ChatGPT 登录态。业务工具始终为模拟实现；状态机、持久化、子进程、授权检查、幂等、回读与故障恢复是真实代码。
+Python **3.11+**，核心执行器使用标准库；标准 Skill YAML 解析使用 PyYAML。默认模式无需 API Key、网络或额外服务，使用确定性规划器；可选真实模型模式复用本机 Codex CLI 的 ChatGPT 登录态。业务工具始终为模拟实现；状态机、持久化、子进程、授权检查、幂等、回读与故障恢复是真实代码。
 
 基于“知识、记忆、经验、能力 → 岗位 Agent → 感知、执行、验证”的下一轮优化，见 [Agent 框架优化方案](docs/optimization/proposal.md)，附目标架构与可运行设计契约样例。
 
 ## 助理闭环已接通
 
+新增**岗位评测契约与业务本体模型**：按 Agent 的冻结身份、职责交付物、标准及可配置权重评分，核对证据完整性和能力边界；本体支持 Agent 抽取、对象类型/实例、关系基数、约束报告、能力映射核对、来源路径检索及带 SHACL/PROV 的 JSON-LD 导出。详见 [岗位评测与 Ontology 优化](docs/ontology-v2/implementation.md)。
+
+新增**每日任务与岗位评测**：工作空间可按时区和每日时间汇总待办、按模板派发指定版本的 Agent 任务，支持待启动或自动运行、同日去重和中断恢复。任务终态按冻结身份、职责及标准自动评分，低分或基础验收失败时产生站内提醒；支持历史补评、阈值配置与确认追溯。详见 [每日任务与岗位评测](docs/operations/implementation.md)。此轮为源码更新，现有发行包需另行升级构建。
+
+当前源码新增**运行复盘与本体 Ontology**：调用所选 Agent 总结运行，经审阅沉淀为知识、工作记忆、经验和能力方法；本体支持概念/属性/关系编辑、来源校验、审核发布、检索扩展及 JSON-LD 导出。详见 [复盘与领域本体](docs/learning/implementation.md)。此轮源码更新尚未重建 1.2.0 发行包。
+
 新增**四模块知识库和 Agent 工作流**：知识修订与审计、私有记忆、经验评测发布、能力使用岗位统一管理；工作流节点全部由 Agent 实现，支持对话生成提案、审查保存、依赖执行、上游产物传递、节点授权及持久化恢复。见 [知识库与工作流使用及验收](docs/workflows/implementation.md)。
 
 工作流现支持**可视化画布、端口连线、条件分支与汇合、RAG 检索模板**。查询词和 Top K 会实际约束检索，未选分支不创建任务，保留旧任务恢复兼容。见 [画布、分支与 RAG 使用及验收](docs/workflow-designer/implementation.md)。
+
+任务创建现分为目标、执行配置和授权确认三步；跳转配置后可保留草稿返回。Agent、Skills、资料与工作空间提供明确的保存后入口，工作流支持拖动、平移、缩放和手机属性面板。使用边界与验收证据见 [交互与操作动线](docs/interactions/implementation.md)。
+
+新增独立 **Skills 管理模块**：支持标准 `SKILL.md`、资源文件、ZIP 导入导出、版本发布与撤回、Agent 固定版本选择，以及目录 → 正文 → 资源的逐级加载。旧内联方法可迁移为标准包，历史任务继续使用冻结版本。见 [Agent Skills 使用与验收](docs/skills/implementation.md)。
 
 工作台现已支持**工作空间创建、编辑、删除/恢复与切换**，按业务和场景分别管理 Agent、任务、知识与记忆。Agent 的**身份、职责、交付物和执行标准**可直接在表单中编辑，任务继续冻结岗位版本并独立授权、验收和恢复。使用说明与本次验证见 [岗位与工作空间](docs/workspaces/implementation.md)。
 
@@ -24,12 +45,15 @@ python3 -m agent_framework --domain knowledge-answer@1.0.0 --goal '变更评估�
 
 完整说明、资料 CLI、兼容策略和验证证据见 [助理框架实施与验收](docs/assistant/implementation.md)。
 
-## 立即运行
+## 开发演示与回归
 
-在项目根目录执行：
+正式工作台请使用上方安装包。以下为开发演示，会主动创建模拟任务；在项目根目录创建并启用虚拟环境：
 
 ```bash
-python3 -m agent_framework demo --export .agent-data/demo-export
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -e .
+python3 -m agent_framework --data-dir /tmp/agent-framework-demo demo --export /tmp/agent-framework-demo/export
 ```
 
 正常结果为 `SUCCEEDED`，报告风险 `HIGH`，三个验收项全部通过。模拟变更有 1 项失败测试，因此生成的草稿建议修复并复核；任务成功代表**完成评估并创建草稿**，不代表变更可以发布。
@@ -47,7 +71,7 @@ python3 -m unittest discover -s tests -v
 python3 -m agent_framework.evaluate
 ```
 
-也可用 `python3 -m pip install -e .` 安装 `agent-mvp` 命令；源码直接运行不需要安装。构建安装需要 setuptools，业务运行不需要第三方依赖。
+`pip install -e .` 同时安装 PyYAML 和 `agent-mvp` 入口；构建安装使用 setuptools。离线业务执行不需要模型服务。
 
 ## 真实大模型规划器
 

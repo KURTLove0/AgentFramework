@@ -1,0 +1,23 @@
+{
+  "verifiedAt": "2026-10-24T06:50:41.274Z",
+  "url": "http://127.0.0.1:8787/#/agents",
+  "context": "empty-agent-directory",
+  "label": "创建智能体",
+  "height": 44,
+  "iconWidth": 18,
+  "iconHeight": 18,
+  "iconColor": "oklch(1 0 0)",
+  "textColor": "oklch(1 0 0)",
+  "margin": "0px",
+  "centerOffset": 0,
+  "servedFiles": {
+    "styles.css": "748342089281265b2d15e04faa6c39c0073d09177f2d835af3c59d6b7743bd1e",
+    "hig.css": "457dfba85ce750267e32a722a405bf541c540a736319d77a92d6748b71e5c094",
+    "form_controls.css": "121cc5fd39de7b5e97f31e69213fe6f8e26952c9ab1aadedef2e515a0214546d",
+    "app.js": "65268a57af1359462ed9c8d96995f6d76d6ff8dbc6e087688983eebfad481070",
+    "agents.js": "a49f84b7d3e5cff3013b354a9973fe58b5e73268536636b3bc1727c396a3b999",
+    "agent_experience.js": "b7b9318a27196e7888ad49ef9dc5449c28987574c79d60acef6ecd327a9e5bd7"
+  },
+  "errors": [],
+  "mutations": 0
+}

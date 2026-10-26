@@ -1,0 +1,48 @@
+{
+  "dailyPlanId": "daily-e1ab3b9af4878db0256d573e",
+  "dailyRunId": "run-daily-a7dc8e4ca1c6fdc4bf433290",
+  "failedRunId": "run-6032ee843f83443f",
+  "passingScore": 100,
+  "failingScore": 50.83,
+  "alertsBefore": 1,
+  "alertsAfter": 0,
+  "layouts": [
+    {
+      "width": 375,
+      "route": "#/daily",
+      "scroll": 375,
+      "overflow": []
+    },
+    {
+      "width": 375,
+      "route": "#/evaluations",
+      "scroll": 375,
+      "overflow": []
+    },
+    {
+      "width": 768,
+      "route": "#/daily",
+      "scroll": 768,
+      "overflow": []
+    },
+    {
+      "width": 768,
+      "route": "#/evaluations",
+      "scroll": 768,
+      "overflow": []
+    },
+    {
+      "width": 1440,
+      "route": "#/daily",
+      "scroll": 1440,
+      "overflow": []
+    },
+    {
+      "width": 1440,
+      "route": "#/evaluations",
+      "scroll": 1440,
+      "overflow": []
+    }
+  ],
+  "errors": []
+}

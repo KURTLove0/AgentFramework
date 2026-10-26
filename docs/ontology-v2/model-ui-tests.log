@@ -1,0 +1,9 @@
+PASS type, instance and constraint editor escapes labels and exposes validation
+PASS input and change during property rename preserve values and primary key
+PASS removing a type cascades its own objects, links and action mappings
+PASS typed fields preserve false and retain invalid boolean text for validation
+PASS zero is retained while blank values become missing required fields
+PASS a delayed validation cannot approve content edited during the request
+PASS any document edit invalidates a previous validation report
+PASS an explorer response cannot open private objects in another workspace
+8 operational ontology interaction checks passed.

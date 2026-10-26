@@ -1,0 +1,32 @@
+{
+  "version": "1.1.0",
+  "cleaned_at": "2026-10-23T03:30:59.151898+00:00",
+  "backup": ".backups/release-1.1.0-20261023-113059",
+  "datasets": [
+    {
+      "source": ".agent-data",
+      "backup_subdir": "active-data",
+      "files": 2,
+      "bytes": 286720,
+      "hashes_verified": true,
+      "sqlite_quick_check": {
+        "mock-business.sqlite3": "ok",
+        "runtime.sqlite3": "ok"
+      }
+    },
+    {
+      "source": "/tmp/agent-hig-review/data",
+      "backup_subdir": "hig-review-data",
+      "files": 2,
+      "bytes": 577536,
+      "hashes_verified": true,
+      "sqlite_quick_check": {
+        "mock-business.sqlite3": "ok",
+        "runtime.sqlite3": "ok"
+      }
+    }
+  ],
+  "active_directory_reinitialized": true,
+  "builtin_resources_preserved": true,
+  "test_source_and_documentation_preserved": true
+}

@@ -1,0 +1,2326 @@
+{
+  "generatedAt": "2026-10-25T05:18:29.894Z",
+  "records": [
+    {
+      "theme": "light",
+      "width": 320,
+      "copy": {
+        "box": {
+          "x": 37,
+          "y": 599.421875,
+          "width": 246,
+          "height": 174.28125,
+          "top": 599.421875,
+          "right": 283,
+          "bottom": 773.703125,
+          "left": 37
+        },
+        "text": {
+          "x": 37,
+          "y": 602.421875,
+          "width": 234,
+          "height": 60.1875,
+          "top": 602.421875,
+          "right": 271,
+          "bottom": 662.609375,
+          "left": 37
+        }
+      },
+      "audit": {
+        "name": "blocked-daily-recovery",
+        "dialog": null,
+        "viewport": 320,
+        "rootWidth": 320,
+        "clipping": [],
+        "smallTargets": [],
+        "nameIssues": [],
+        "tiny": [],
+        "textCount": 21,
+        "contrastPairs": [
+          {
+            "ratio": 15.242519831808771,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "26px",
+            "sample": "每日任务",
+            "selector": "h1."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "14px",
+            "sample": "汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。",
+            "selector": "p."
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "14px",
+            "sample": "计划设置",
+            "selector": "button.button.secondary"
+          },
+          {
+            "ratio": 6.361943534991064,
+            "color": "oklch(1 0 0)",
+            "background": [
+              0,
+              89,
+              204
+            ],
+            "fontSize": "14px",
+            "sample": "生成今日计划",
+            "selector": "button.button.primary"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "20px",
+            "sample": "每日计划尚未开启",
+            "selector": "h2."
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "每天 09:00 · Asia/Shanghai · 1 项任务模板",
+            "selector": "p.muted"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "派发为待启动任务，可在工作台逐项启动",
+            "selector": "p."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "12px",
+            "sample": "手动使用",
+            "selector": "span.pill."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "13px",
+            "sample": "定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。",
+            "selector": "p.field-help.operations-note"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "17px",
+            "sample": "2026-10-25",
+            "selector": "h2."
+          },
+          {
+            "ratio": 6.424368866538714,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              246,
+              249,
+              252
+            ],
+            "fontSize": "12px",
+            "sample": "Asia/Shanghai",
+            "selector": "small."
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "12px",
+            "sample": "待派发 0 项 · 已派发 0 项 · 受阻 1 项 · 复用待办 0 项",
+            "selector": "p."
+          },
+          {
+            "ratio": 7.643894524688,
+            "color": "oklch(0.43 0.105 64)",
+            "background": [
+              255,
+              243,
+              223
+            ],
+            "fontSize": "12px",
+            "sample": "部分阻塞",
+            "selector": "span.pill.warn"
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "13px",
+            "sample": "动线评估助手 · 固定 v1 · 业务写入需逐项授权",
+            "selector": "p.field-help"
+          },
+          {
+            "ratio": 8.387691233778044,
+            "color": "oklch(0.43 0.105 64)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "每日任务的 Agent 已归档",
+            "selector": "p.operations-reason"
+          },
+          {
+            "ratio": 6.424368866538714,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              246,
+              249,
+              252
+            ],
+            "fontSize": "13px",
+            "sample": "配置 v1 · 10/25 13:14",
+            "selector": "small.field-help"
+          }
+        ],
+        "lowContrast": []
+      }
+    },
+    {
+      "theme": "light",
+      "width": 375,
+      "copy": {
+        "box": {
+          "x": 37,
+          "y": 621.140625,
+          "width": 301,
+          "height": 152.1875,
+          "top": 621.140625,
+          "right": 338,
+          "bottom": 773.328125,
+          "left": 37
+        },
+        "text": {
+          "x": 37,
+          "y": 624.140625,
+          "width": 299,
+          "height": 38.09375,
+          "top": 624.140625,
+          "right": 336,
+          "bottom": 662.234375,
+          "left": 37
+        }
+      },
+      "audit": {
+        "name": "blocked-daily-recovery",
+        "dialog": null,
+        "viewport": 375,
+        "rootWidth": 375,
+        "clipping": [],
+        "smallTargets": [],
+        "nameIssues": [],
+        "tiny": [],
+        "textCount": 21,
+        "contrastPairs": [
+          {
+            "ratio": 15.242519831808771,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "26px",
+            "sample": "每日任务",
+            "selector": "h1."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "14px",
+            "sample": "汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。",
+            "selector": "p."
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "14px",
+            "sample": "计划设置",
+            "selector": "button.button.secondary"
+          },
+          {
+            "ratio": 6.361943534991064,
+            "color": "oklch(1 0 0)",
+            "background": [
+              0,
+              89,
+              204
+            ],
+            "fontSize": "14px",
+            "sample": "生成今日计划",
+            "selector": "button.button.primary"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "20px",
+            "sample": "每日计划尚未开启",
+            "selector": "h2."
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "每天 09:00 · Asia/Shanghai · 1 项任务模板",
+            "selector": "p.muted"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "派发为待启动任务，可在工作台逐项启动",
+            "selector": "p."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "12px",
+            "sample": "手动使用",
+            "selector": "span.pill."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "13px",
+            "sample": "定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。",
+            "selector": "p.field-help.operations-note"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "17px",
+            "sample": "2026-10-25",
+            "selector": "h2."
+          },
+          {
+            "ratio": 6.424368866538714,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              246,
+              249,
+              252
+            ],
+            "fontSize": "12px",
+            "sample": "Asia/Shanghai",
+            "selector": "small."
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "12px",
+            "sample": "待派发 0 项 · 已派发 0 项 · 受阻 1 项 · 复用待办 0 项",
+            "selector": "p."
+          },
+          {
+            "ratio": 7.643894524688,
+            "color": "oklch(0.43 0.105 64)",
+            "background": [
+              255,
+              243,
+              223
+            ],
+            "fontSize": "12px",
+            "sample": "部分阻塞",
+            "selector": "span.pill.warn"
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "13px",
+            "sample": "动线评估助手 · 固定 v1 · 业务写入需逐项授权",
+            "selector": "p.field-help"
+          },
+          {
+            "ratio": 8.387691233778044,
+            "color": "oklch(0.43 0.105 64)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "每日任务的 Agent 已归档",
+            "selector": "p.operations-reason"
+          },
+          {
+            "ratio": 6.424368866538714,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              246,
+              249,
+              252
+            ],
+            "fontSize": "13px",
+            "sample": "配置 v1 · 10/25 13:14",
+            "selector": "small.field-help"
+          }
+        ],
+        "lowContrast": []
+      }
+    },
+    {
+      "theme": "light",
+      "width": 414,
+      "copy": {
+        "box": {
+          "x": 37,
+          "y": 674.046875,
+          "width": 340,
+          "height": 100.1875,
+          "top": 674.046875,
+          "right": 377,
+          "bottom": 774.234375,
+          "left": 37
+        },
+        "text": {
+          "x": 37,
+          "y": 677.046875,
+          "width": 338,
+          "height": 38.09375,
+          "top": 677.046875,
+          "right": 375,
+          "bottom": 715.140625,
+          "left": 37
+        }
+      },
+      "audit": {
+        "name": "blocked-daily-recovery",
+        "dialog": null,
+        "viewport": 414,
+        "rootWidth": 414,
+        "clipping": [],
+        "smallTargets": [],
+        "nameIssues": [],
+        "tiny": [],
+        "textCount": 21,
+        "contrastPairs": [
+          {
+            "ratio": 15.242519831808771,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "26px",
+            "sample": "每日任务",
+            "selector": "h1."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "14px",
+            "sample": "汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。",
+            "selector": "p."
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "14px",
+            "sample": "计划设置",
+            "selector": "button.button.secondary"
+          },
+          {
+            "ratio": 6.361943534991064,
+            "color": "oklch(1 0 0)",
+            "background": [
+              0,
+              89,
+              204
+            ],
+            "fontSize": "14px",
+            "sample": "生成今日计划",
+            "selector": "button.button.primary"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "20px",
+            "sample": "每日计划尚未开启",
+            "selector": "h2."
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "每天 09:00 · Asia/Shanghai · 1 项任务模板",
+            "selector": "p.muted"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "派发为待启动任务，可在工作台逐项启动",
+            "selector": "p."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "12px",
+            "sample": "手动使用",
+            "selector": "span.pill."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "13px",
+            "sample": "定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。",
+            "selector": "p.field-help.operations-note"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "17px",
+            "sample": "2026-10-25",
+            "selector": "h2."
+          },
+          {
+            "ratio": 6.424368866538714,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              246,
+              249,
+              252
+            ],
+            "fontSize": "12px",
+            "sample": "Asia/Shanghai",
+            "selector": "small."
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "12px",
+            "sample": "待派发 0 项 · 已派发 0 项 · 受阻 1 项 · 复用待办 0 项",
+            "selector": "p."
+          },
+          {
+            "ratio": 7.643894524688,
+            "color": "oklch(0.43 0.105 64)",
+            "background": [
+              255,
+              243,
+              223
+            ],
+            "fontSize": "12px",
+            "sample": "部分阻塞",
+            "selector": "span.pill.warn"
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "13px",
+            "sample": "动线评估助手 · 固定 v1 · 业务写入需逐项授权",
+            "selector": "p.field-help"
+          },
+          {
+            "ratio": 8.387691233778044,
+            "color": "oklch(0.43 0.105 64)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "每日任务的 Agent 已归档",
+            "selector": "p.operations-reason"
+          },
+          {
+            "ratio": 6.424368866538714,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              246,
+              249,
+              252
+            ],
+            "fontSize": "13px",
+            "sample": "配置 v1 · 10/25 13:14",
+            "selector": "small.field-help"
+          }
+        ],
+        "lowContrast": []
+      }
+    },
+    {
+      "theme": "light",
+      "width": 768,
+      "copy": {
+        "box": {
+          "x": 57,
+          "y": 691.953125,
+          "width": 654,
+          "height": 78.09375,
+          "top": 691.953125,
+          "right": 711,
+          "bottom": 770.046875,
+          "left": 57
+        },
+        "text": {
+          "x": 57,
+          "y": 694.953125,
+          "width": 520,
+          "height": 16,
+          "top": 694.953125,
+          "right": 577,
+          "bottom": 710.953125,
+          "left": 57
+        }
+      },
+      "audit": {
+        "name": "blocked-daily-recovery",
+        "dialog": null,
+        "viewport": 768,
+        "rootWidth": 768,
+        "clipping": [],
+        "smallTargets": [],
+        "nameIssues": [],
+        "tiny": [],
+        "textCount": 21,
+        "contrastPairs": [
+          {
+            "ratio": 15.242519831808771,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "28px",
+            "sample": "每日任务",
+            "selector": "h1."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "14px",
+            "sample": "汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。",
+            "selector": "p."
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "14px",
+            "sample": "计划设置",
+            "selector": "button.button.secondary"
+          },
+          {
+            "ratio": 6.361943534991064,
+            "color": "oklch(1 0 0)",
+            "background": [
+              0,
+              89,
+              204
+            ],
+            "fontSize": "14px",
+            "sample": "生成今日计划",
+            "selector": "button.button.primary"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "20px",
+            "sample": "每日计划尚未开启",
+            "selector": "h2."
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "每天 09:00 · Asia/Shanghai · 1 项任务模板",
+            "selector": "p.muted"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "派发为待启动任务，可在工作台逐项启动",
+            "selector": "p."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "12px",
+            "sample": "手动使用",
+            "selector": "span.pill."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "13px",
+            "sample": "定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。",
+            "selector": "p.field-help.operations-note"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "17px",
+            "sample": "2026-10-25",
+            "selector": "h2."
+          },
+          {
+            "ratio": 6.424368866538714,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              246,
+              249,
+              252
+            ],
+            "fontSize": "12px",
+            "sample": "Asia/Shanghai",
+            "selector": "small."
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "12px",
+            "sample": "待派发 0 项 · 已派发 0 项 · 受阻 1 项 · 复用待办 0 项",
+            "selector": "p."
+          },
+          {
+            "ratio": 7.643894524688,
+            "color": "oklch(0.43 0.105 64)",
+            "background": [
+              255,
+              243,
+              223
+            ],
+            "fontSize": "12px",
+            "sample": "部分阻塞",
+            "selector": "span.pill.warn"
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "13px",
+            "sample": "动线评估助手 · 固定 v1 · 业务写入需逐项授权",
+            "selector": "p.field-help"
+          },
+          {
+            "ratio": 8.387691233778044,
+            "color": "oklch(0.43 0.105 64)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "每日任务的 Agent 已归档",
+            "selector": "p.operations-reason"
+          },
+          {
+            "ratio": 6.424368866538714,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              246,
+              249,
+              252
+            ],
+            "fontSize": "13px",
+            "sample": "配置 v1 · 10/25 13:14",
+            "selector": "small.field-help"
+          }
+        ],
+        "lowContrast": []
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "copy": {
+        "box": {
+          "x": 297,
+          "y": 691.859375,
+          "width": 1086,
+          "height": 78.09375,
+          "top": 691.859375,
+          "right": 1383,
+          "bottom": 769.953125,
+          "left": 297
+        },
+        "text": {
+          "x": 297,
+          "y": 694.859375,
+          "width": 520,
+          "height": 16,
+          "top": 694.859375,
+          "right": 817,
+          "bottom": 710.859375,
+          "left": 297
+        }
+      },
+      "audit": {
+        "name": "blocked-daily-recovery",
+        "dialog": null,
+        "viewport": 1440,
+        "rootWidth": 1440,
+        "clipping": [],
+        "smallTargets": [],
+        "nameIssues": [],
+        "tiny": [],
+        "textCount": 21,
+        "contrastPairs": [
+          {
+            "ratio": 15.242519831808771,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "28px",
+            "sample": "每日任务",
+            "selector": "h1."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "14px",
+            "sample": "汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。",
+            "selector": "p."
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "14px",
+            "sample": "计划设置",
+            "selector": "button.button.secondary"
+          },
+          {
+            "ratio": 6.361943534991064,
+            "color": "oklch(1 0 0)",
+            "background": [
+              0,
+              89,
+              204
+            ],
+            "fontSize": "14px",
+            "sample": "生成今日计划",
+            "selector": "button.button.primary"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "20px",
+            "sample": "每日计划尚未开启",
+            "selector": "h2."
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "每天 09:00 · Asia/Shanghai · 1 项任务模板",
+            "selector": "p.muted"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "派发为待启动任务，可在工作台逐项启动",
+            "selector": "p."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "12px",
+            "sample": "手动使用",
+            "selector": "span.pill."
+          },
+          {
+            "ratio": 6.3134488845143455,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              244,
+              247,
+              250
+            ],
+            "fontSize": "13px",
+            "sample": "定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。",
+            "selector": "p.field-help.operations-note"
+          },
+          {
+            "ratio": 16.388672948457323,
+            "color": "oklch(0.24 0.022 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "17px",
+            "sample": "2026-10-25",
+            "selector": "h2."
+          },
+          {
+            "ratio": 6.424368866538714,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              246,
+              249,
+              252
+            ],
+            "fontSize": "12px",
+            "sample": "Asia/Shanghai",
+            "selector": "small."
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "12px",
+            "sample": "待派发 0 项 · 已派发 0 项 · 受阻 1 项 · 复用待办 0 项",
+            "selector": "p."
+          },
+          {
+            "ratio": 7.643894524688,
+            "color": "oklch(0.43 0.105 64)",
+            "background": [
+              255,
+              243,
+              223
+            ],
+            "fontSize": "12px",
+            "sample": "部分阻塞",
+            "selector": "span.pill.warn"
+          },
+          {
+            "ratio": 6.788185292643313,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "13px",
+            "sample": "动线评估助手 · 固定 v1 · 业务写入需逐项授权",
+            "selector": "p.field-help"
+          },
+          {
+            "ratio": 8.387691233778044,
+            "color": "oklch(0.43 0.105 64)",
+            "background": [
+              255,
+              255,
+              255
+            ],
+            "fontSize": "15px",
+            "sample": "每日任务的 Agent 已归档",
+            "selector": "p.operations-reason"
+          },
+          {
+            "ratio": 6.424368866538714,
+            "color": "oklch(0.47 0.025 258)",
+            "background": [
+              246,
+              249,
+              252
+            ],
+            "fontSize": "13px",
+            "sample": "配置 v1 · 10/25 13:14",
+            "selector": "small.field-help"
+          }
+        ],
+        "lowContrast": []
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "copy": {
+        "box": {
+          "x": 37,
+          "y": 599.421875,
+          "width": 246,
+          "height": 174.28125,
+          "top": 599.421875,
+          "right": 283,
+          "bottom": 773.703125,
+          "left": 37
+        },
+        "text": {
+          "x": 37,
+          "y": 602.421875,
+          "width": 234,
+          "height": 60.1875,
+          "top": 602.421875,
+          "right": 271,
+          "bottom": 662.609375,
+          "left": 37
+        }
+      },
+      "audit": {
+        "name": "blocked-daily-recovery",
+        "dialog": null,
+        "viewport": 320,
+        "rootWidth": 320,
+        "clipping": [],
+        "smallTargets": [],
+        "nameIssues": [],
+        "tiny": [],
+        "textCount": 21,
+        "contrastPairs": [
+          {
+            "ratio": 16.660905231010148,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "26px",
+            "sample": "每日任务",
+            "selector": "h1."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "14px",
+            "sample": "汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。",
+            "selector": "p."
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "14px",
+            "sample": "计划设置",
+            "selector": "button.button.secondary"
+          },
+          {
+            "ratio": 6.361943534991064,
+            "color": "oklch(1 0 0)",
+            "background": [
+              0,
+              89,
+              204
+            ],
+            "fontSize": "14px",
+            "sample": "生成今日计划",
+            "selector": "button.button.primary"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "20px",
+            "sample": "每日计划尚未开启",
+            "selector": "h2."
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "每天 09:00 · Asia/Shanghai · 1 项任务模板",
+            "selector": "p.muted"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "派发为待启动任务，可在工作台逐项启动",
+            "selector": "p."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "12px",
+            "sample": "手动使用",
+            "selector": "span.pill."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "13px",
+            "sample": "定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。",
+            "selector": "p.field-help.operations-note"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "17px",
+            "sample": "2026-10-25",
+            "selector": "h2."
+          },
+          {
+            "ratio": 7.373029971187428,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              26,
+              32,
+              42
+            ],
+            "fontSize": "12px",
+            "sample": "Asia/Shanghai",
+            "selector": "small."
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "12px",
+            "sample": "待派发 0 项 · 已派发 0 项 · 受阻 1 项 · 复用待办 0 项",
+            "selector": "p."
+          },
+          {
+            "ratio": 8.338501315861713,
+            "color": "oklch(0.83 0.105 80)",
+            "background": [
+              56,
+              40,
+              16
+            ],
+            "fontSize": "12px",
+            "sample": "部分阻塞",
+            "selector": "span.pill.warn"
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "13px",
+            "sample": "动线评估助手 · 固定 v1 · 业务写入需逐项授权",
+            "selector": "p.field-help"
+          },
+          {
+            "ratio": 10.366003674839803,
+            "color": "oklch(0.83 0.105 80)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "每日任务的 Agent 已归档",
+            "selector": "p.operations-reason"
+          },
+          {
+            "ratio": 7.373029971187428,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              26,
+              32,
+              42
+            ],
+            "fontSize": "13px",
+            "sample": "配置 v1 · 10/25 13:14",
+            "selector": "small.field-help"
+          }
+        ],
+        "lowContrast": []
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 375,
+      "copy": {
+        "box": {
+          "x": 37,
+          "y": 621.140625,
+          "width": 301,
+          "height": 152.1875,
+          "top": 621.140625,
+          "right": 338,
+          "bottom": 773.328125,
+          "left": 37
+        },
+        "text": {
+          "x": 37,
+          "y": 624.140625,
+          "width": 299,
+          "height": 38.09375,
+          "top": 624.140625,
+          "right": 336,
+          "bottom": 662.234375,
+          "left": 37
+        }
+      },
+      "audit": {
+        "name": "blocked-daily-recovery",
+        "dialog": null,
+        "viewport": 375,
+        "rootWidth": 375,
+        "clipping": [],
+        "smallTargets": [],
+        "nameIssues": [],
+        "tiny": [],
+        "textCount": 21,
+        "contrastPairs": [
+          {
+            "ratio": 16.660905231010148,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "26px",
+            "sample": "每日任务",
+            "selector": "h1."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "14px",
+            "sample": "汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。",
+            "selector": "p."
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "14px",
+            "sample": "计划设置",
+            "selector": "button.button.secondary"
+          },
+          {
+            "ratio": 6.361943534991064,
+            "color": "oklch(1 0 0)",
+            "background": [
+              0,
+              89,
+              204
+            ],
+            "fontSize": "14px",
+            "sample": "生成今日计划",
+            "selector": "button.button.primary"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "20px",
+            "sample": "每日计划尚未开启",
+            "selector": "h2."
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "每天 09:00 · Asia/Shanghai · 1 项任务模板",
+            "selector": "p.muted"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "派发为待启动任务，可在工作台逐项启动",
+            "selector": "p."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "12px",
+            "sample": "手动使用",
+            "selector": "span.pill."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "13px",
+            "sample": "定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。",
+            "selector": "p.field-help.operations-note"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "17px",
+            "sample": "2026-10-25",
+            "selector": "h2."
+          },
+          {
+            "ratio": 7.373029971187428,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              26,
+              32,
+              42
+            ],
+            "fontSize": "12px",
+            "sample": "Asia/Shanghai",
+            "selector": "small."
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "12px",
+            "sample": "待派发 0 项 · 已派发 0 项 · 受阻 1 项 · 复用待办 0 项",
+            "selector": "p."
+          },
+          {
+            "ratio": 8.338501315861713,
+            "color": "oklch(0.83 0.105 80)",
+            "background": [
+              56,
+              40,
+              16
+            ],
+            "fontSize": "12px",
+            "sample": "部分阻塞",
+            "selector": "span.pill.warn"
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "13px",
+            "sample": "动线评估助手 · 固定 v1 · 业务写入需逐项授权",
+            "selector": "p.field-help"
+          },
+          {
+            "ratio": 10.366003674839803,
+            "color": "oklch(0.83 0.105 80)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "每日任务的 Agent 已归档",
+            "selector": "p.operations-reason"
+          },
+          {
+            "ratio": 7.373029971187428,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              26,
+              32,
+              42
+            ],
+            "fontSize": "13px",
+            "sample": "配置 v1 · 10/25 13:14",
+            "selector": "small.field-help"
+          }
+        ],
+        "lowContrast": []
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 414,
+      "copy": {
+        "box": {
+          "x": 37,
+          "y": 674.046875,
+          "width": 340,
+          "height": 100.1875,
+          "top": 674.046875,
+          "right": 377,
+          "bottom": 774.234375,
+          "left": 37
+        },
+        "text": {
+          "x": 37,
+          "y": 677.046875,
+          "width": 338,
+          "height": 38.09375,
+          "top": 677.046875,
+          "right": 375,
+          "bottom": 715.140625,
+          "left": 37
+        }
+      },
+      "audit": {
+        "name": "blocked-daily-recovery",
+        "dialog": null,
+        "viewport": 414,
+        "rootWidth": 414,
+        "clipping": [],
+        "smallTargets": [],
+        "nameIssues": [],
+        "tiny": [],
+        "textCount": 21,
+        "contrastPairs": [
+          {
+            "ratio": 16.660905231010148,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "26px",
+            "sample": "每日任务",
+            "selector": "h1."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "14px",
+            "sample": "汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。",
+            "selector": "p."
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "14px",
+            "sample": "计划设置",
+            "selector": "button.button.secondary"
+          },
+          {
+            "ratio": 6.361943534991064,
+            "color": "oklch(1 0 0)",
+            "background": [
+              0,
+              89,
+              204
+            ],
+            "fontSize": "14px",
+            "sample": "生成今日计划",
+            "selector": "button.button.primary"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "20px",
+            "sample": "每日计划尚未开启",
+            "selector": "h2."
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "每天 09:00 · Asia/Shanghai · 1 项任务模板",
+            "selector": "p.muted"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "派发为待启动任务，可在工作台逐项启动",
+            "selector": "p."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "12px",
+            "sample": "手动使用",
+            "selector": "span.pill."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "13px",
+            "sample": "定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。",
+            "selector": "p.field-help.operations-note"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "17px",
+            "sample": "2026-10-25",
+            "selector": "h2."
+          },
+          {
+            "ratio": 7.373029971187428,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              26,
+              32,
+              42
+            ],
+            "fontSize": "12px",
+            "sample": "Asia/Shanghai",
+            "selector": "small."
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "12px",
+            "sample": "待派发 0 项 · 已派发 0 项 · 受阻 1 项 · 复用待办 0 项",
+            "selector": "p."
+          },
+          {
+            "ratio": 8.338501315861713,
+            "color": "oklch(0.83 0.105 80)",
+            "background": [
+              56,
+              40,
+              16
+            ],
+            "fontSize": "12px",
+            "sample": "部分阻塞",
+            "selector": "span.pill.warn"
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "13px",
+            "sample": "动线评估助手 · 固定 v1 · 业务写入需逐项授权",
+            "selector": "p.field-help"
+          },
+          {
+            "ratio": 10.366003674839803,
+            "color": "oklch(0.83 0.105 80)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "每日任务的 Agent 已归档",
+            "selector": "p.operations-reason"
+          },
+          {
+            "ratio": 7.373029971187428,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              26,
+              32,
+              42
+            ],
+            "fontSize": "13px",
+            "sample": "配置 v1 · 10/25 13:14",
+            "selector": "small.field-help"
+          }
+        ],
+        "lowContrast": []
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "copy": {
+        "box": {
+          "x": 57,
+          "y": 691.953125,
+          "width": 654,
+          "height": 78.09375,
+          "top": 691.953125,
+          "right": 711,
+          "bottom": 770.046875,
+          "left": 57
+        },
+        "text": {
+          "x": 57,
+          "y": 694.953125,
+          "width": 520,
+          "height": 16,
+          "top": 694.953125,
+          "right": 577,
+          "bottom": 710.953125,
+          "left": 57
+        }
+      },
+      "audit": {
+        "name": "blocked-daily-recovery",
+        "dialog": null,
+        "viewport": 768,
+        "rootWidth": 768,
+        "clipping": [],
+        "smallTargets": [],
+        "nameIssues": [],
+        "tiny": [],
+        "textCount": 21,
+        "contrastPairs": [
+          {
+            "ratio": 16.660905231010148,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "28px",
+            "sample": "每日任务",
+            "selector": "h1."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "14px",
+            "sample": "汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。",
+            "selector": "p."
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "14px",
+            "sample": "计划设置",
+            "selector": "button.button.secondary"
+          },
+          {
+            "ratio": 6.361943534991064,
+            "color": "oklch(1 0 0)",
+            "background": [
+              0,
+              89,
+              204
+            ],
+            "fontSize": "14px",
+            "sample": "生成今日计划",
+            "selector": "button.button.primary"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "20px",
+            "sample": "每日计划尚未开启",
+            "selector": "h2."
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "每天 09:00 · Asia/Shanghai · 1 项任务模板",
+            "selector": "p.muted"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "派发为待启动任务，可在工作台逐项启动",
+            "selector": "p."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "12px",
+            "sample": "手动使用",
+            "selector": "span.pill."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "13px",
+            "sample": "定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。",
+            "selector": "p.field-help.operations-note"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "17px",
+            "sample": "2026-10-25",
+            "selector": "h2."
+          },
+          {
+            "ratio": 7.373029971187428,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              26,
+              32,
+              42
+            ],
+            "fontSize": "12px",
+            "sample": "Asia/Shanghai",
+            "selector": "small."
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "12px",
+            "sample": "待派发 0 项 · 已派发 0 项 · 受阻 1 项 · 复用待办 0 项",
+            "selector": "p."
+          },
+          {
+            "ratio": 8.338501315861713,
+            "color": "oklch(0.83 0.105 80)",
+            "background": [
+              56,
+              40,
+              16
+            ],
+            "fontSize": "12px",
+            "sample": "部分阻塞",
+            "selector": "span.pill.warn"
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "13px",
+            "sample": "动线评估助手 · 固定 v1 · 业务写入需逐项授权",
+            "selector": "p.field-help"
+          },
+          {
+            "ratio": 10.366003674839803,
+            "color": "oklch(0.83 0.105 80)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "每日任务的 Agent 已归档",
+            "selector": "p.operations-reason"
+          },
+          {
+            "ratio": 7.373029971187428,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              26,
+              32,
+              42
+            ],
+            "fontSize": "13px",
+            "sample": "配置 v1 · 10/25 13:14",
+            "selector": "small.field-help"
+          }
+        ],
+        "lowContrast": []
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "copy": {
+        "box": {
+          "x": 297,
+          "y": 691.859375,
+          "width": 1086,
+          "height": 78.09375,
+          "top": 691.859375,
+          "right": 1383,
+          "bottom": 769.953125,
+          "left": 297
+        },
+        "text": {
+          "x": 297,
+          "y": 694.859375,
+          "width": 520,
+          "height": 16,
+          "top": 694.859375,
+          "right": 817,
+          "bottom": 710.859375,
+          "left": 297
+        }
+      },
+      "audit": {
+        "name": "blocked-daily-recovery",
+        "dialog": null,
+        "viewport": 1440,
+        "rootWidth": 1440,
+        "clipping": [],
+        "smallTargets": [],
+        "nameIssues": [],
+        "tiny": [],
+        "textCount": 21,
+        "contrastPairs": [
+          {
+            "ratio": 16.660905231010148,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "28px",
+            "sample": "每日任务",
+            "selector": "h1."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "14px",
+            "sample": "汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。",
+            "selector": "p."
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "14px",
+            "sample": "计划设置",
+            "selector": "button.button.secondary"
+          },
+          {
+            "ratio": 6.361943534991064,
+            "color": "oklch(1 0 0)",
+            "background": [
+              0,
+              89,
+              204
+            ],
+            "fontSize": "14px",
+            "sample": "生成今日计划",
+            "selector": "button.button.primary"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "20px",
+            "sample": "每日计划尚未开启",
+            "selector": "h2."
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "每天 09:00 · Asia/Shanghai · 1 项任务模板",
+            "selector": "p.muted"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "派发为待启动任务，可在工作台逐项启动",
+            "selector": "p."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "12px",
+            "sample": "手动使用",
+            "selector": "span.pill."
+          },
+          {
+            "ratio": 8.662608087368595,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              10,
+              15,
+              22
+            ],
+            "fontSize": "13px",
+            "sample": "定时执行需要本地服务保持运行。服务恢复后仅补当日计划；同日重复触发会复用原任务。等待授权或材料的任务保留原状态。",
+            "selector": "p.field-help.operations-note"
+          },
+          {
+            "ratio": 15.302378274611886,
+            "color": "oklch(0.95 0.007 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "17px",
+            "sample": "2026-10-25",
+            "selector": "h2."
+          },
+          {
+            "ratio": 7.373029971187428,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              26,
+              32,
+              42
+            ],
+            "fontSize": "12px",
+            "sample": "Asia/Shanghai",
+            "selector": "small."
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "12px",
+            "sample": "待派发 0 项 · 已派发 0 项 · 受阻 1 项 · 复用待办 0 项",
+            "selector": "p."
+          },
+          {
+            "ratio": 8.338501315861713,
+            "color": "oklch(0.83 0.105 80)",
+            "background": [
+              56,
+              40,
+              16
+            ],
+            "fontSize": "12px",
+            "sample": "部分阻塞",
+            "selector": "span.pill.warn"
+          },
+          {
+            "ratio": 7.956260716908802,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "13px",
+            "sample": "动线评估助手 · 固定 v1 · 业务写入需逐项授权",
+            "selector": "p.field-help"
+          },
+          {
+            "ratio": 10.366003674839803,
+            "color": "oklch(0.83 0.105 80)",
+            "background": [
+              19,
+              25,
+              34
+            ],
+            "fontSize": "15px",
+            "sample": "每日任务的 Agent 已归档",
+            "selector": "p.operations-reason"
+          },
+          {
+            "ratio": 7.373029971187428,
+            "color": "oklch(0.75 0.023 258)",
+            "background": [
+              26,
+              32,
+              42
+            ],
+            "fontSize": "13px",
+            "sample": "配置 v1 · 10/25 13:14",
+            "selector": "small.field-help"
+          }
+        ],
+        "lowContrast": []
+      }
+    }
+  ],
+  "errors": []
+}

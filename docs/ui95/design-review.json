@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-24",
+  "scope": "app",
+  "genre": "modern-minimal",
+  "design_source": "design.md",
+  "status": "reviewed_with_project_rules",
+  "critique": {
+    "philosophy": 4,
+    "hierarchy": 5,
+    "execution": 4,
+    "specificity": 5,
+    "restraint": 5,
+    "variety": 4
+  },
+  "critique_basis": "以实际任务、证据与下一步为中心；共享版式，工作流画布与资源列表各用合适结构。扣分范围见固定量表，不以审美点评代替运行证据。",
+  "references_reviewed": [
+    "responsive.md",
+    "color.md",
+    "microinteractions.md",
+    "anti-patterns.md",
+    "slop-test.md",
+    "contract.md"
+  ],
+  "project_rules": [
+    "平台系统字体与System Blue按design.md保留；跨页面一致性优先于营销页面多样化（gates 1/8/32）。",
+    "原有功能分组、资源版本与审查面板保留；不把可操作编辑区域当作装饰卡片删除。",
+    "任务标题属于数据预览，允许两行截断；CTA、导航与操作标签保持单行。",
+    "通知采用页内状态区以免遮挡焦点；弹窗消息位于当前操作区。",
+    "既有语义变量留在hig.css顶端，不引入新的字体/颜色体系或替换全局样式。"
+  ],
+  "verified": [
+    "浅深文字对比、主要按钮图标尺寸和44px目标",
+    "320/375/414/768重排、低高度操作区可达",
+    "即时焦点、键盘、减少动态效果",
+    "无虚构统计或装饰性动画，技术细节按需披露"
+  ],
+  "evidence": [
+    "final-score.json",
+    "layout-results.json",
+    "text-resize-results.json",
+    "buttons/visual-results.json"
+  ]
+}

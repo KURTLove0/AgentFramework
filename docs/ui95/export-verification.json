@@ -1,0 +1,9 @@
+{
+  "path": "docs/ui95/exported-skill.zip",
+  "files": [
+    "ui95-evidence-guide/SKILL.md",
+    "ui95-evidence-guide/references/checklist.md"
+  ],
+  "valid_zip": true,
+  "skill_frontmatter_present": true
+}

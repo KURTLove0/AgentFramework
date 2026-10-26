@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bounded-agent-mvp"
-version = "0.1.0"
-description = "Durable plan/execute/verify/recover Agent MVP with mock tools"
+version = "1.2.0"
+description = "Durable Agent workbench with governed workflows and simulated business tools"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = ["PyYAML>=6.0.3,<7"]
 
 [project.scripts]
 agent-mvp = "agent_framework.cli:main"
@@ -16,4 +16,4 @@ agent-mvp = "agent_framework.cli:main"
 include = ["agent_framework*"]
 
 [tool.setuptools.package-data]
-agent_framework = ["resources/*.json", "resources/*.md", "webui/*.html", "webui/*.css", "webui/*.js", "webui/*.ttf", "webui/OFL-*.txt"]
+agent_framework = ["resources/*.json", "resources/*.md", "resources/skills/*/SKILL.md", "resources/skills/*/references/*", "webui/*.html", "webui/*.css", "webui/*.js", "webui/*.ttf", "webui/OFL-*.txt"]

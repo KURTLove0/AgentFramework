@@ -1,0 +1,13 @@
+{
+  "expected": "workspace-8bdcc9bdfc804435",
+  "run": "run-18f885a02646445f",
+  "urlA": "http://127.0.0.1:8799/#/workbench/run-18f885a02646445f",
+  "urlB": "http://127.0.0.1:8799/#/workbench",
+  "back": {
+    "workspace": "workspace-a666c1a4f05d4d5a",
+    "selected": "run-18f885a02646445f",
+    "connected": false,
+    "errorVisible": true
+  },
+  "errors": []
+}

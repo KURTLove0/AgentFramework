@@ -1,0 +1,144 @@
+{
+  "reviewer": "independent journey reviewer",
+  "date": "2026-10-25",
+  "scope": "真实浏览探索11模块入口及重点连续动线；不生成综合分数，不修改产品代码。",
+  "environment": {
+    "baseURL": "http://127.0.0.1:8800",
+    "browser": "Playwright Chromium channel chrome, headless",
+    "viewport": "1440×1000 CSS px",
+    "data": "独立临时数据服务，按动线新建隔离空间",
+    "models": "只用Mock，不调用真实模型"
+  },
+  "findings": [
+    {
+      "id": "J01",
+      "priority": "P2",
+      "title": "评测记录弹窗中的原执行链接没有关闭弹窗",
+      "steps": [
+        "创建并运行失败的Mock Agent任务",
+        "岗位评测→打开提醒的评测记录",
+        "点击弹窗内“查看原执行记录”"
+      ],
+      "actual": "背景已导航到原运行，operations-dialog仍open并遮挡运行详情，焦点还在旧弹窗。",
+      "expected": "关闭当前评测弹窗，展示所选原执行记录并移交焦点到详情标题。",
+      "suggestedFiles": [
+        "agent_framework/webui/operations.js"
+      ],
+      "evidence": [
+        "baseline-results.json",
+        "evaluation-return-link-baseline.png"
+      ],
+      "owner": "修复完成，已由独立浏览器上下文复核",
+      "repairStatus": "父Agent修复后已独立实机复核通过，最新results.json保存修复后的状态。"
+    },
+    {
+      "id": "J02",
+      "priority": "P2",
+      "title": "跨空间后退丢失长列表位置",
+      "steps": [
+        "创建24个技能包，Skills目录滚到y=5031",
+        "切换到另一空间",
+        "浏览器后退回原空间Skills目录"
+      ],
+      "actual": "空间与route正确恢复，但scrollY=0；同空间跨模块返回能恢复5031。",
+      "expected": "返回原空间长列表时恢复原来的浏览位置。",
+      "suggestedFiles": [
+        "agent_framework/webui/app.js",
+        "agent_framework/webui/workspaces.js",
+        "agent_framework/webui/journeys.js"
+      ],
+      "evidence": [
+        "history-baseline-results.json",
+        "cross-space-list-return-baseline.png",
+        "history-explore.cjs"
+      ],
+      "owner": "修复完成，已由独立浏览器上下文复核",
+      "repairStatus": "history_fix修复后已由独立浏览器上下文复核，同空间与跨空间返回均恢复5031；最新history-results.json。"
+    },
+    {
+      "id": "J03",
+      "priority": "P2",
+      "title": "每日派发受阻后摘要仍显示可派发，恢复入口不足",
+      "steps": [
+        "给Mock Agent配置每日模板并生成今日计划",
+        "归档计划固定的Agent",
+        "派发今日计划"
+      ],
+      "actual": "计划/条目显示部分阻塞与“Agent已归档”，摘要仍显示今日可派发1项、阻塞0项；受阻卡片无调整Agent/计划的入口。",
+      "expected": "当前状态摘要与条目一致，受阻原因旁提供可执行恢复入口。",
+      "suggestedFiles": [
+        "agent_framework/webui/operations.js"
+      ],
+      "evidence": [
+        "baseline-results.json",
+        "daily-blocked-next-step-baseline.png"
+      ],
+      "owner": "修复完成，已由独立浏览器上下文复核",
+      "repairStatus": "完整blocked恢复链路与混合partial冻结边界均实机通过，详见daily-recovery-results.json。"
+    }
+  ],
+  "verifiedJourneys": [
+    {
+      "name": "Skill复制与关闭保护",
+      "evidence": "results.json",
+      "detail": "复制名派生，取消放弃保留文本并回到原textarea，确认放弃不污染原包。"
+    },
+    {
+      "name": "Skill复制保存与版本",
+      "evidence": "skill-version-results.json",
+      "detail": "改名同步frontmatter、保留原references、新增文件可保存，v2脏稿切v1可取消或放弃，v1只读冻结，归档恢复保留两版本。"
+    },
+    {
+      "name": "私有偏好与撤回",
+      "evidence": "results.json",
+      "detail": "JSON格式错误可恢复；visibility锁定PRIVATE；草稿→审核→发布→撤回状态正确；编辑新版本预填原JSON。"
+    },
+    {
+      "name": "目录搜索与原生输入",
+      "evidence": "search-results.json",
+      "detail": "Agent/知识目录组合事件期间保留DOM与焦点，键盘原生清空有效；知识清空保留状态筛选；可搜索原生select空结果可恢复，组合Enter不误选，方向键+Enter可选择。"
+    },
+    {
+      "name": "任务-Agent-Skill多层配置往返",
+      "evidence": "config-learning-results.json",
+      "detail": "任务目标→Agent未保存名称→Skills选发布版→回Agent保留名称与绑定→保存v2→回任务保留目标、刷新v2并清空许可。"
+    },
+    {
+      "name": "运行时配置往返",
+      "evidence": "config-learning-results.json",
+      "detail": "保存运行时设置后返回原任务，目标与执行步骤保留。"
+    },
+    {
+      "name": "复盘资料回跳",
+      "evidence": "config-learning-results.json",
+      "detail": "Mock复盘生成与沉淀后，查看沉淀资料关闭learning弹窗；版本审计没有背景导航链接。"
+    },
+    {
+      "name": "本体无Agent恢复入口",
+      "evidence": "config-learning-results.json",
+      "detail": "空空间生成本体→前往配置Agent先关闭learning弹窗。对象浏览源码没有页面跳转链接。"
+    },
+    {
+      "name": "全部11模块入口",
+      "evidence": "results.json",
+      "detail": "工作台、运行记录、Agent、每日任务、岗位评测、空间管理、工作流、Skills、知识库、能力与标准、运行时配置均由真实导航点击可达。"
+    },
+    {
+      "name": "每日受阻恢复与混合计划冻结边界",
+      "evidence": "daily-recovery-results.json",
+      "detail": "全blocked经恢复Agent新版本、许可清空重审、重新生成后派发且重复核对不新增run；混合partial改设置与重新生成保持旧计划revision/旧run/旧blocked事实，今日补充任务默认grant=false。"
+    }
+  ],
+  "limits": [
+    "IME验证使用标准composition/input/keydown事件和真实浏览器键盘；未调用系统中文输入法或跨浏览器核验。",
+    "主体连续动线使用桌面视口；本评审不替代独立视觉评审的多视口、深浅色与增大字号验收。",
+    "未给综合分数，也未将旧测试通过视为完整交互覆盖。",
+    "早期脚本的严格locator歧义和重复点击已打开details导致的超时属于验证脚本问题；后续config-learning-results与skill-version-results已完整走通对应真实交互。"
+  ],
+  "finalVerification": {
+    "checks": 22,
+    "passed": 22,
+    "pageErrors": [],
+    "summary": "verification-summary.json"
+  }
+}

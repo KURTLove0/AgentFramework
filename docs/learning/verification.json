@@ -1,0 +1,180 @@
+{
+  "verified_at": "2026-10-23T07:15:28.968097+00:00",
+  "status": "implemented-and-verified-in-source",
+  "scope": "single-user loopback; simulated business tools; synthetic live-model context only",
+  "implementation": "implementation.md",
+  "tests": {
+    "python": {
+      "passed": 209,
+      "total": 209,
+      "new_learning_tests": 25,
+      "log": "python-tests.log"
+    },
+    "frontend_node": {
+      "passed": 134,
+      "total": 134,
+      "new_learning_checks": 9,
+      "suites": {
+        "session": 15,
+        "agent": 20,
+        "journeys": 20,
+        "resources": 36,
+        "workflow": 34,
+        "learning": 9
+      }
+    },
+    "javascript_syntax": {
+      "passed": 11,
+      "total": 11
+    },
+    "git_diff_check": true
+  },
+  "live_agent": {
+    "provider": "Codex CLI ChatGPT login",
+    "model": "gpt-6.1-sol",
+    "context": "fixed synthetic run evidence and published synthetic sources",
+    "successful_retrospective_requests": 1,
+    "successful_ontology_requests": 1,
+    "early_rejected_requests": 2,
+    "no_native_mcp_or_business_tool_execution": true,
+    "evidence": "four-module-verification.json"
+  },
+  "behavior": {
+    "four_categories_deposited": true,
+    "human_review_before_publication": true,
+    "memory_private": true,
+    "experience_evaluation_required": true,
+    "capability_method_standard_skill_export_valid": true,
+    "ontology_concepts": 7,
+    "ontology_properties": 15,
+    "ontology_relations": 7,
+    "ontology_revisions_preserved": true,
+    "semantic_retrieval_and_withdrawal": "ontology-rag.json",
+    "restart_and_idempotent_deposition": "runtime-verification.json"
+  },
+  "browser": {
+    "responsive_forms": 20,
+    "sizes": [
+      [
+        320,
+        740
+      ],
+      [
+        375,
+        812
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        1280,
+        720
+      ],
+      [
+        812,
+        375
+      ]
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "knowledge_module_phone_checks": 5,
+    "evidence": [
+      "responsive.json",
+      "library-tabs-mobile.json"
+    ],
+    "mobile_run_list_review_entry_verified": true
+  },
+  "main_runtime_counts": {
+    "mock-business.sqlite3": {
+      "changes": 0,
+      "drafts": 0,
+      "calls": 0
+    },
+    "runtime.sqlite3": {
+      "compiled_agents": 0,
+      "capability_blocks": 0,
+      "native_reads": 0,
+      "runs": 0,
+      "events": 0,
+      "actions": 0,
+      "outbox": 0,
+      "evidence": 0,
+      "verifications": 0,
+      "grants": 0,
+      "experience_candidates": 0,
+      "asset_versions": 0,
+      "asset_events": 0,
+      "context_manifests": 0,
+      "episodic_memories": 0,
+      "experience_evaluations": 0,
+      "runtime_configuration": 0,
+      "model_catalog": 1,
+      "agent_profiles": 0,
+      "workspaces": 1,
+      "workflows": 0,
+      "workflow_runs": 0,
+      "workflow_events": 0,
+      "skill_heads": 2,
+      "skill_versions": 2,
+      "skill_events": 2,
+      "workflow_chats": 0
+    }
+  },
+  "runtime_business_records": 0,
+  "cached_model_metadata_preserved": true,
+  "cleanup": {
+    "backup": ".backups/learning-review-20261023-151426",
+    "temporary_data_removed": true,
+    "files": 5,
+    "sha256": {
+      "fixture.json": "a4734efb2e4601967ceff0aca368824f91fc6eea75b3637c3256452c17de4acf",
+      "before-restart.json": "7c48d9bdfd30e1119090e259f67898bf0ed3b481abfeb9c7b5d4bee1e9e85e64",
+      "prepare.py": "7c4a91528ff726d9798cfc347b7fcd774143badad87dbd2324f387877ad1d58b",
+      "data/mock-business.sqlite3": "772de4c249ed6901e858baebc34a183203e40420c333dd397c3b29412fbbb59c",
+      "data/runtime.sqlite3": "8250de323e764dd1db5bfefda7eb9a150b80021eba675ce7645887ac938b7b36"
+    },
+    "hashes_verified": true,
+    "sqlite_quick_check": {
+      "mock-business.sqlite3": "ok",
+      "runtime.sqlite3": "ok"
+    },
+    "cleaned_at": "2026-10-23T07:14:26.794369+00:00"
+  },
+  "source_hashes": {
+    "agent_framework/learning.py": "6ba37e03b2563ed7c4c4ba3d9dd479acb7a2964ff5ad5fb16c65d32edb78b391",
+    "agent_framework/ontology.py": "c29fcb8a591f16ff4ddcac46b6fa7cf263238d1d585343a343b4d20357810f14",
+    "agent_framework/knowledge.py": "31e7a34b449816a4b36f5366aaae415cf0fbd297aaf99b7a0b4723ae0210aa05",
+    "agent_framework/knowledge_hub.py": "fa21ee0d2cd94b98cc410bc2d47bf15e95b4510e82c563acf3191e7ba0b74538",
+    "agent_framework/context_builder.py": "e6f58c1e8ab57c776bd21e66012a274f4e0124a9d1c6a10f3804c20556ac5846",
+    "agent_framework/llm.py": "3a67ecc21403c6327178ff7fda4666f6992f46bec765ecb87a91ea81e04b7bb5",
+    "agent_framework/web.py": "6f4a216a5e6d7cd35fc1e16e38d3b8eb81a39107cbedf0bdc943f6b24c084a2c",
+    "agent_framework/webui/learning.js": "b08fa9360509d343fff22186d1bc0deee2309c5ee936e2aceb395498c9c4ef33",
+    "agent_framework/webui/app.js": "a6fe7cf058e3631783ab89695cd3a372922a62e7c81f88d310ea452b5e11b545",
+    "agent_framework/webui/library.js": "e067e88db21e2d388f7b0453ed952180d9ee56b59a233096f01da71ba661473d",
+    "agent_framework/webui/index.html": "f4c1c39fa94aa8569ad82acd6d5eae8d96aa9ad8b3c1c5d414e5f19b46336d18",
+    "agent_framework/webui/hig.css": "68b797c2a0913933def2760c0e29054aaa44b1ce284f38d894b0a18dc4b64cf7"
+  },
+  "release": {
+    "existing_1_2_0_bundle_unchanged": true,
+    "new_feature_packaged": false,
+    "remote_deployment": false
+  },
+  "limits": [
+    "Ontology is a bounded source-grounded concept model, not a complete OWL reasoner.",
+    "Natural-language summaries require human review; fixed facts, source membership and structural rules are machine checked.",
+    "Experience replay validates registered simulated rules, not every prose claim.",
+    "Unknown model requests are not automatically replayed; a new generation requires explicit action.",
+    "Unsaved form inputs do not survive reload; saved proposals and deposition receipts do."
+  ],
+  "main_startup": {
+    "url": "http://127.0.0.1:8787/#/library",
+    "runs": 0,
+    "learning_proposals": 0,
+    "library_business_assets": 0,
+    "learning_js_matches_current_source": true,
+    "retained_system_capabilities": 6
+  }
+}

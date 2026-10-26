@@ -1,0 +1,211 @@
+{
+  "startedAt": "2026-10-25T05:02:01.129Z",
+  "checks": [
+    {
+      "id": "skill-copy-close",
+      "passed": true,
+      "detail": {
+        "original": "source-grounded-answer",
+        "copy": "source-grounded-answer-copy",
+        "cancelFocus": "skill-file-content",
+        "originalUnchanged": true
+      }
+    },
+    {
+      "id": "private-preference-json-lifecycle",
+      "passed": true,
+      "detail": {
+        "privateValue": "PRIVATE",
+        "locked": true,
+        "invalidJSON": "偏好格式有误，请填写有效的 JSON 对象。",
+        "ref": "asset-ae04af1ab9e34a48@1",
+        "status": "已撤回",
+        "revisionPrefilled": "{\n  \"language\": \"zh\",\n  \"report_style\": \"concise\"\n}"
+      }
+    },
+    {
+      "id": "skill-search-composition",
+      "passed": true,
+      "detail": {
+        "during": {
+          "sameNode": true,
+          "focus": true,
+          "value": "发布"
+        },
+        "after": {
+          "focus": "skill-search",
+          "value": "发布",
+          "query": "发布",
+          "composing": false
+        }
+      }
+    },
+    {
+      "id": "task-agent-skill-roundtrip",
+      "passed": false,
+      "error": "locator.click: Error: strict mode violation: locator('#agent-dialog [data-manage-skills]') resolved to 2 elements:\n    1) <a href=\"#/skills\" data-manage-skills=\"\">管理 Skill 标准包</a> aka getByText('管理 Skill 标准包')\n    2) <button type=\"button\" data-manage-skills=\"\" class=\"button secondary\">管理 Skill 后返回</button> aka getByText('管理 Skill 后返回')\n\nCall log:\n\u001b[2m  - waiting for locator('#agent-dialog [data-manage-skills]')\u001b[22m\n"
+    },
+    {
+      "id": "evaluation-record-return-link",
+      "passed": false,
+      "error": "原执行记录链接没有关闭评测弹窗"
+    },
+    {
+      "id": "daily-blocked-next-step",
+      "passed": true,
+      "detail": {
+        "copy": "2026-10-25 Asia/Shanghai\n\n工作空间有 0 项未完成任务；今日可派发 1 项，阻塞 0 项，避免重复 0 项。\n\n部分阻塞\n每日派发受阻动线\n\n动线评估助手 · 固定 v1 · 业务写入需逐项授权\n\n每日任务的 Agent 已归档\n\n受阻\n配置 v1 · 10/25 13:02\n核对并重试派发",
+        "links": []
+      }
+    },
+    {
+      "id": "all-eleven-routes",
+      "passed": true,
+      "detail": [
+        {
+          "view": "workbench",
+          "h": "任务工作台"
+        },
+        {
+          "view": "runs",
+          "h": "运行记录"
+        },
+        {
+          "view": "agents",
+          "h": "智能体 Agent"
+        },
+        {
+          "view": "daily",
+          "h": "每日任务"
+        },
+        {
+          "view": "evaluations",
+          "h": "岗位评测"
+        },
+        {
+          "view": "workspaces",
+          "h": "工作空间管理"
+        },
+        {
+          "view": "workflows",
+          "h": "工作流"
+        },
+        {
+          "view": "skills",
+          "h": "技能 Skills"
+        },
+        {
+          "view": "library",
+          "h": "知识库"
+        },
+        {
+          "view": "registry",
+          "h": "能力与标准"
+        },
+        {
+          "view": "runtimes",
+          "h": "运行时配置"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "evaluation-modal-link-stays-open",
+      "impact": "评测记录中的查看原执行记录已更改页面，但模态记录仍遮住运行详情，且焦点保持在旧弹窗。",
+      "steps": [
+        "运行一个失败的 Mock Agent 任务",
+        "进入岗位评测并打开提醒的评测记录",
+        "点击弹窗内“查看原执行记录”"
+      ],
+      "expected": "关闭评测弹窗后展示所选原运行详情，并把焦点移到运行详情标题。",
+      "actual": {
+        "view": "workbench",
+        "selected": "run-f033f10baeb64d68",
+        "openDialogs": [
+          "operations-dialog"
+        ],
+        "body": "提醒时的评测记录\n评估本次变更风险并生成评估草稿\n动线评估助手 · v1 · 10/25 13:02\n10 分 · 未达标\n岗位身份\n变更评估专家\n评测规则\njob-history@2.0.0\n评分阈值\n80 分\n契约版本\njob-contract@1.0.0\n契约来源\n执行时冻结\n身份一致性\n10 / 10\n职责履行\n0 / 35\n标准达成\n0 / 35\n任务交付\n0 / 20\ncritical-claims-evidence：运行证据缺失或哈希/作用域校验失败\ndraft-readback：运行证据缺失或哈希/作用域校验失败\nreport-sections：运行证据缺失或哈希/作用域校验失败\n职责「评估变更风险」达成 0 分，要求 100 分\n职责「创建并回读草稿」达成 0 分，要求 100 分\n标准 report-evidence@1.0.0 达成 0 分，要求 100 分\n标准 release-review-rubric@1.0.0 达成 0 分，要求 100 分\n任务终态为 FAILED，未完成交付\n总分 10 低于有效基础阈值 80\n岗位身份与执行边界\n通过 · 岗位身份与版本\n通过 · 岗位与任务领域一致\n通过 · 冻结快照和评测契约完整\n通过 · 执行能力未超出岗位边界\n职责与交付物\n\n评估变更风险\n\nrelease-report@1.0.0 · 达成 0 分 / 要求 100 分 · 权重 1\n\n未通过 · 关键事实与证据引用：运行证据缺失或哈希/作用域校验失败\n未通过 · 报告章节与风险规则：运行证据缺失或哈希/作用域校验失败\n\n创建并回读草稿\n\nrelease-draft@1.0.0 · 达成 0 分 / 要求 100 分 · 权重 1\n\n未通过 · 草稿独立回读核对：运行证据缺失或哈希/作用域校验失败\n基础标准\n\nreport-evidence@1.0.0 · 0 / 2 通过 · 达成 0 分 / 要求 100 分 · 权重 1\n\nrelease-review-rubric@1.0.0 · 0 / 3 通过 · 达成 0 分 / 要求 100 分 · 权重 1\n\n证据引用 0 条 · 快照 e25a0eaf1fa06481\n\n查看原执行记录\n关闭记录"
+      },
+      "files": [
+        "agent_framework/webui/operations.js:69",
+        "agent_framework/webui/operations.js:26"
+      ]
+    }
+  ],
+  "errors": [],
+  "workspace": {
+    "business": "UI95 界面验收",
+    "description": "界面验收隔离数据",
+    "name": "动线独立探索 mvnd26p1",
+    "scenario": "独立模拟",
+    "id": "workspace-b0c4c2fd1c6248c4",
+    "revision": 1,
+    "project_id": "project-95301b2e436b489b",
+    "deleted": false,
+    "created_at": 1792904521.575742,
+    "updated_at": 1792904521.575742
+  },
+  "agent": {
+    "definition": {
+      "adapter_bindings": {},
+      "capability_refs": [
+        "change.read@1.0.0",
+        "standards.read@1.0.0",
+        "report.draft.create@1.0.0",
+        "report.read@1.0.0"
+      ],
+      "domain_pack_ref": "change-assessment@2.0.0",
+      "identity": {
+        "name": "动线评估助手",
+        "role": "变更评估专家"
+      },
+      "knowledge_spaces": [
+        "simulated-change-context@1.0.0"
+      ],
+      "native_read_refs": [],
+      "policy_ref": "release-reviewer-policy@1.0.0",
+      "prompt_template_ref": "profile-prompt@1",
+      "responsibilities": [
+        {
+          "check_refs": [
+            "report-sections",
+            "critical-claims-evidence"
+          ],
+          "deliverable_ref": "release-report@1.0.0",
+          "description": "评估变更风险"
+        },
+        {
+          "check_refs": [
+            "draft-readback"
+          ],
+          "deliverable_ref": "release-draft@1.0.0",
+          "description": "创建并回读草稿"
+        }
+      ],
+      "runtime_profile_ref": "profile-runtime@1",
+      "skill_refs": [
+        "release-risk-analysis@1.0.0"
+      ],
+      "standard_refs": [
+        "report-evidence@1.0.0",
+        "release-review-rubric@1.0.0"
+      ]
+    },
+    "description": "",
+    "mcp_servers": [],
+    "model": "builtin",
+    "name": "动线评估助手",
+    "options": {},
+    "prompt": "你是一名变更评估助手。根据模拟工具证据识别风险，使用清晰的中文输出可核对的评估结论。",
+    "runtime": "mock",
+    "skills": [],
+    "id": "agent-e363d68dfdd44353",
+    "revision": 1,
+    "created_at": 1792904522.44579,
+    "updated_at": 1792904522.44579,
+    "archived": false
+  },
+  "run": "run-f033f10baeb64d68",
+  "finishedAt": "2026-10-25T05:02:11.761Z"
+}

@@ -1,0 +1,13 @@
+'use strict';
+const {chromium}=require('playwright'),fs=require('node:fs'),H=require('../../../tests/ui95_helpers.cjs');
+(async()=>{const b=await chromium.launch({channel:'chrome',headless:true}),p=await b.newPage({viewport:{width:1440,height:1000}}),out='docs/ui-review-20261025/journeys',r={checks:[],errors:[],startedAt:new Date().toISOString()};p.on('pageerror',e=>r.errors.push(e.message));try{
+ const w=await H.workspace(p,'长列表返回独立探索');r.workspace=w;
+ await p.evaluate(async()=>{for(let i=0;i<24;i++){const name='journey-list-'+String(i).padStart(2,'0');await api('/api/skills',{folder:name,revision:0,files:{'SKILL.md':{encoding:'utf-8',content:'---\nname: '+name+'\ndescription: "长列表返回位置验证资料 '+i+'"\n---\n\n# 步骤\n\n检查与回读。'}}});}});
+ await H.nav(p,'skills');await p.locator('.skill-card').last().scrollIntoViewIfNeeded();await H.settled(p);const before=await p.evaluate(()=>({top:scrollY,url:location.href,height:document.documentElement.scrollHeight,view:state.view}));r.before=before;
+ await p.locator('[data-nav=registry]').click();await p.waitForFunction(()=>state.view==='registry'&&!state.busy);await p.goBack();await p.waitForFunction(()=>state.view==='skills'&&!state.busy);await H.settled(p);const afterSame=await p.evaluate(()=>({top:scrollY,url:location.href}));r.checks.push({id:'same-space-long-list-back',before:before.top,after:afterSame.top,passed:Math.abs(before.top-afterSame.top)<2});
+ const other=await p.evaluate(async()=>{const w=await api('/api/workspaces',{name:'长列表第二空间 '+Date.now().toString(36),business:'验证业务',scenario:'返回验证',description:'',revision:0});await loadWorkspaces();return w;});r.other=other;
+ await Promise.all([p.waitForURL(url=>url.searchParams.get('workspace_id')===other.id,{waitUntil:'domcontentloaded'}),p.locator('#workspace-picker').selectOption(other.id)]);await p.waitForFunction(id=>state.workspaceId===id&&state.connected&&!state.busy,other.id);
+ await p.goBack();await p.waitForFunction(id=>typeof state!=='undefined'&&state.workspaceId===id&&state.view==='skills'&&state.connected&&!state.busy,w.id);await H.settled(p);await p.waitForFunction(()=>!state.routePosition);await H.settled(p);
+ const afterCross=await p.evaluate(()=>({top:scrollY,url:location.href,height:document.documentElement.scrollHeight,view:state.view}));r.checks.push({id:'cross-space-long-list-back',before:before.top,after:afterCross.top,passed:Math.abs(before.top-afterCross.top)<2,actual:afterCross});await p.screenshot({path:out+'/cross-space-list-return.png',fullPage:false,animations:'disabled'});
+ console.log(JSON.stringify(r,null,2));fs.writeFileSync(out+'/history-results.json',JSON.stringify(r,null,2));
+ }finally{await b.close();}})().catch(e=>{console.error(e);process.exitCode=1});

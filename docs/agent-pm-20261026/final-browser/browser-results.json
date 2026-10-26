@@ -1,0 +1,337 @@
+{
+  "base": "http://127.0.0.1:8801",
+  "workspace": "workspace-32972efe23b34257",
+  "checks": [
+    {
+      "id": "first-use",
+      "detail": "首次空白有用途说明和创建入口",
+      "pass": true
+    },
+    {
+      "id": "create-detail",
+      "detail": "三步创建保存后直达同一智能体详情，职责和版本来自保存记录",
+      "pass": true
+    },
+    {
+      "id": "find",
+      "detail": "搜索、领域、执行方式组合筛选，名称排序，刷新及中文输入焦点保持",
+      "pass": true
+    },
+    {
+      "id": "detail-history",
+      "detail": "详情直接链接/刷新正确；页签支持方向键；浏览器返回保留筛选排序与项目焦点",
+      "pass": true
+    },
+    {
+      "id": "empty-filters",
+      "detail": "无结果与无归档状态有分别提示和清除恢复入口",
+      "pass": true
+    },
+    {
+      "id": "archive",
+      "detail": "归档详情只读可查看，任务入口移除，恢复后才可创建任务",
+      "pass": true
+    },
+    {
+      "id": "save-retry",
+      "detail": "编辑指令直达对应分区；保存失败保留输入，重试成功版本递增且回到详情",
+      "pass": true
+    },
+    {
+      "id": "execution",
+      "detail": "详情准确预选岗位v2，任务审查不自动授权，模拟问答完成且记录链接到真实结果",
+      "pass": true
+    },
+    {
+      "id": "scope-missing",
+      "detail": "不存在记录可返回；其他工作空间无法显示原智能体",
+      "pass": true
+    },
+    {
+      "id": "pinned-skill",
+      "detail": "从详情配置并绑定已发布v1，已有v2时仍显示v1技能说明与职责",
+      "pass": true
+    },
+    {
+      "id": "keyboard-detail",
+      "detail": "纯键盘搜索→详情→页签首尾/方向键→配置披露Escape→指定Agent任务→关闭→返回原搜索",
+      "pass": true
+    },
+    {
+      "id": "mobile-semantics",
+      "detail": "手机视觉行保留table/row/cell及可读列头，智能体详情链接有准确名称",
+      "pass": true
+    },
+    {
+      "id": "responsive",
+      "detail": "24布局组合：6视口×2主题×目录详情；长名称无页面横向溢出，主要操作高度>=44px",
+      "pass": true
+    },
+    {
+      "id": "accessibility",
+      "detail": "浅深代表性文字/状态对比>=4.5:1；实际搜索边界与焦点>=3:1且图标不重叠；目录和详情200%文字可达",
+      "pass": true
+    },
+    {
+      "id": "console",
+      "detail": "浏览器无未处理脚本错误",
+      "pass": true
+    }
+  ],
+  "layouts": [
+    {
+      "theme": "light",
+      "width": 320,
+      "height": 812,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 320,
+      "height": 812,
+      "view": "detail",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 375,
+      "height": 812,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 375,
+      "height": 812,
+      "view": "detail",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 414,
+      "height": 896,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 414,
+      "height": 896,
+      "view": "detail",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 768,
+      "height": 1024,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 768,
+      "height": 1024,
+      "view": "detail",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 1000,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "height": 1000,
+      "view": "detail",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 812,
+      "height": 375,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "light",
+      "width": 812,
+      "height": 375,
+      "view": "detail",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "height": 812,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "height": 812,
+      "view": "detail",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 375,
+      "height": 812,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 375,
+      "height": 812,
+      "view": "detail",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 414,
+      "height": 896,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 414,
+      "height": 896,
+      "view": "detail",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "height": 1024,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "height": 1024,
+      "view": "detail",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000,
+      "view": "detail",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 812,
+      "height": 375,
+      "view": "directory",
+      "pass": true
+    },
+    {
+      "theme": "dark",
+      "width": 812,
+      "height": 375,
+      "view": "detail",
+      "pass": true
+    }
+  ],
+  "contrasts": [
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "token": "--ink",
+          "onSurface": 16.388672948457323,
+          "onCanvas": 15.242519831808771
+        },
+        {
+          "token": "--muted",
+          "onSurface": 6.788185292643313,
+          "onCanvas": 6.3134488845143455
+        },
+        {
+          "token": "--green",
+          "onSurface": 9.06762065734054,
+          "onCanvas": 8.433470368925885
+        },
+        {
+          "token": "--blue",
+          "onSurface": 6.361943534991064,
+          "onCanvas": 5.917016637401196
+        },
+        {
+          "token": "focus",
+          "onSurface": 6.361943534991064,
+          "onCanvas": 5.917016637401196
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "fieldContrast": {
+        "text": 15.510313244993323,
+        "boundary": 3.009180188019578,
+        "focus": 6.020971764157388,
+        "outlineStyle": "solid",
+        "iconRight": 319.703125,
+        "inputLeft": 319.703125
+      }
+    },
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "token": "--ink",
+          "onSurface": 15.302378274611886,
+          "onCanvas": 16.660905231010148
+        },
+        {
+          "token": "--muted",
+          "onSurface": 7.956260716908802,
+          "onCanvas": 8.662608087368595
+        },
+        {
+          "token": "--green",
+          "onSurface": 9.520995604861907,
+          "onCanvas": 10.366258278992365
+        },
+        {
+          "token": "--blue",
+          "onSurface": 8.545661119418174,
+          "onCanvas": 9.30433475711248
+        },
+        {
+          "token": "focus",
+          "onSurface": 8.545661119418174,
+          "onCanvas": 9.30433475711248
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "fieldContrast": {
+        "text": 14.1806431015242,
+        "boundary": 3.6531013395111054,
+        "focus": 7.919224595440506,
+        "outlineStyle": "solid",
+        "iconRight": 319.703125,
+        "inputLeft": 319.703125
+      }
+    }
+  ],
+  "errors": [],
+  "recordedAt": "2026-10-26T03:08:39.779Z"
+}

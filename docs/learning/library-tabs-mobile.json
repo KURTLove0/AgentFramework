@@ -1,0 +1,80 @@
+[
+  {
+    "clippedControls": [],
+    "contentScroll": 375,
+    "contentWidth": 375,
+    "headings": [
+      "知识资料 4",
+      "失败测试对应高风险（已审阅）",
+      "模拟变更评估与草稿验收标准",
+      "模拟草稿与复盘规范",
+      "模拟变更验收规范"
+    ],
+    "pageOverflow": false,
+    "tab": "knowledge",
+    "width": 375
+  },
+  {
+    "clippedControls": [],
+    "contentScroll": 375,
+    "contentWidth": 375,
+    "headings": [
+      "工作记忆 1",
+      "本次评估与草稿结果",
+      "私有偏好 0",
+      "让 Agent 了解你的偏好",
+      "情节记忆 3"
+    ],
+    "pageOverflow": false,
+    "tab": "memory",
+    "width": 375
+  },
+  {
+    "clippedControls": [],
+    "contentScroll": 375,
+    "contentWidth": 375,
+    "headings": [
+      "经验与评测 4",
+      "运行经验候选 · evidence-first",
+      "修复失败测试后复核",
+      "运行经验候选 · readback-integrity",
+      "运行经验候选 · uncertain-write"
+    ],
+    "pageOverflow": false,
+    "tab": "experience",
+    "width": 375
+  },
+  {
+    "clippedControls": [],
+    "contentScroll": 375,
+    "contentWidth": 375,
+    "headings": [
+      "能力方法 1",
+      "证据关联与草稿回读方法",
+      "能力契约 6",
+      "change.read@1.0.0",
+      "standards.read@1.0.0",
+      "report.draft.create@1.0.0",
+      "report.read@1.0.0",
+      "knowledge.search@1.0.0",
+      "knowledge.read@1.0.0",
+      "领域内置方法"
+    ],
+    "pageOverflow": false,
+    "tab": "capabilities",
+    "width": 375
+  },
+  {
+    "clippedControls": [],
+    "contentScroll": 375,
+    "contentWidth": 375,
+    "headings": [
+      "领域本体 Ontology 2",
+      "模拟变更与复盘本体（已审阅）",
+      "模拟变更与复盘本体（已审阅）"
+    ],
+    "pageOverflow": false,
+    "tab": "ontology",
+    "width": 375
+  }
+]

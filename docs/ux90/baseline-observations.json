@@ -1,0 +1,81 @@
+{
+  "creation": {
+    "steps": 3,
+    "templates": 0,
+    "searchableSelects": 0,
+    "fieldMeters": 0,
+    "saveInitiallyHidden": true,
+    "formNoValidate": true
+  },
+  "saved": {
+    "successPanel": 0,
+    "cardButtons": 6
+  },
+  "task": {
+    "selected": "agent-fbffe63f7f5449b3",
+    "goal": "变更评估的风险规则是什么？",
+    "examples": 0,
+    "lockedTypeVisible": true,
+    "agentSummary": false,
+    "goalMeter": false
+  },
+  "layouts": [
+    {
+      "width": 320,
+      "body": 320,
+      "dialog": {
+        "x": 8,
+        "y": 8,
+        "width": 304,
+        "height": 796,
+        "top": 8,
+        "right": 312,
+        "bottom": 804,
+        "left": 8
+      }
+    },
+    {
+      "width": 375,
+      "body": 375,
+      "dialog": {
+        "x": 8,
+        "y": 8,
+        "width": 359,
+        "height": 796,
+        "top": 8,
+        "right": 367,
+        "bottom": 804,
+        "left": 8
+      }
+    },
+    {
+      "width": 768,
+      "body": 768,
+      "dialog": {
+        "x": 74,
+        "y": 114.03125,
+        "width": 620,
+        "height": 795.921875,
+        "top": 114.03125,
+        "right": 694,
+        "bottom": 909.953125,
+        "left": 74
+      }
+    },
+    {
+      "width": 812,
+      "body": 812,
+      "dialog": {
+        "x": 96,
+        "y": 16,
+        "width": 620,
+        "height": 343,
+        "top": 16,
+        "right": 716,
+        "bottom": 359,
+        "left": 96
+      }
+    }
+  ],
+  "errors": []
+}

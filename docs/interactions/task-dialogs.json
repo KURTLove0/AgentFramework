@@ -1,0 +1,110 @@
+[
+  {
+    "bottom": 721,
+    "focused": "",
+    "height": 740,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 320,
+    "stage": 1
+  },
+  {
+    "bottom": 721,
+    "focused": "task-permissions",
+    "height": 740,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 320,
+    "stage": 3
+  },
+  {
+    "bottom": 793,
+    "focused": "task-purpose",
+    "height": 812,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 375,
+    "stage": 1
+  },
+  {
+    "bottom": 793,
+    "focused": "task-permissions",
+    "height": 812,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 375,
+    "stage": 3
+  },
+  {
+    "bottom": 781,
+    "focused": "task-purpose",
+    "height": 812,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 640,
+    "stage": 1
+  },
+  {
+    "bottom": 781,
+    "focused": "task-permissions",
+    "height": 812,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 640,
+    "stage": 3
+  },
+  {
+    "bottom": 892.984375,
+    "focused": "task-purpose",
+    "height": 1024,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 768,
+    "stage": 1
+  },
+  {
+    "bottom": 920.875,
+    "focused": "task-permissions",
+    "height": 1024,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 768,
+    "stage": 3
+  },
+  {
+    "bottom": 689,
+    "focused": "task-purpose",
+    "height": 720,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 1280,
+    "stage": 1
+  },
+  {
+    "bottom": 689,
+    "focused": "task-permissions",
+    "height": 720,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 1280,
+    "stage": 3
+  },
+  {
+    "bottom": 342,
+    "focused": "task-purpose",
+    "height": 375,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 812,
+    "stage": 1
+  },
+  {
+    "bottom": 342,
+    "focused": "task-permissions",
+    "height": 375,
+    "overflow": false,
+    "primaryInViewport": true,
+    "width": 812,
+    "stage": 3
+  }
+]

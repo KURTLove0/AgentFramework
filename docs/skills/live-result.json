@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "data_dir": "/Users/kurt/Desktop/CodeSpace/AgentFramework/.agent-data/skills-live-4cc7e95210/data",
+  "run_id": "run-d7d2c3fb2028421f",
+  "agent_id": "agent-62bf4f97d50240f8",
+  "skill_id": "skill-0af899e97872426a",
+  "model": "gpt-6.1-sol",
+  "elapsed_seconds": 222.79,
+  "pre_grant_status": "WAITING_AUTH",
+  "pre_grant_drafts": 0,
+  "final_status": "SUCCEEDED",
+  "title": "【技能复核】支付服务增加超时重试模拟变更评估",
+  "checks": {
+    "critical-claims-evidence": {
+      "detail": "关键事实、来源哈希、版本与风险规则一致",
+      "evidence_refs": [
+        "evidence-904226a3e1bd7a393edf",
+        "evidence-87440a749302e784edc8"
+      ],
+      "passed": true,
+      "verifier_ref": "release-verifier@1.0.0"
+    },
+    "draft-readback": {
+      "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+      "evidence_refs": [
+        "evidence-0e2a653406a43c936808"
+      ],
+      "passed": true,
+      "verifier_ref": "release-verifier@1.0.0"
+    },
+    "report-sections": {
+      "detail": "所有必选章节非空",
+      "evidence_refs": [
+        "evidence-904226a3e1bd7a393edf",
+        "evidence-87440a749302e784edc8"
+      ],
+      "passed": true,
+      "verifier_ref": "release-verifier@1.0.0"
+    }
+  },
+  "selection": {
+    "activated_refs": [
+      "skill-0af899e97872426a@1"
+    ],
+    "ready": true,
+    "resource_reads": [
+      {
+        "path": "references/report.md",
+        "ref": "skill-0af899e97872426a@1"
+      }
+    ]
+  },
+  "model_calls": 9,
+  "model_tokens": 190989,
+  "model_phases": [
+    "skill_activate",
+    "skill_resources",
+    "plan",
+    "decide",
+    "decide",
+    "decide",
+    "compose",
+    "decide",
+    "decide"
+  ],
+  "drafts": 1,
+  "create_calls": 1,
+  "snapshot_hash": "462c551b33811883c227ed81e59fe868cbba33495e72eaeb1bc11249592c0b1a"
+}

@@ -1,0 +1,76 @@
+{
+  "generatedAt": "2026-10-25T05:36:57.002712+00:00",
+  "sourceManifest": "candidate-source.json",
+  "sourceUnchanged": true,
+  "scores": "Implementation verification only; final scoring belongs to independent ui_review Agent.",
+  "checks": [
+    {
+      "name": "complete-module-journeys",
+      "passed": 12,
+      "evidence": "integration/module-results.json"
+    },
+    {
+      "name": "layout-contexts",
+      "passed": 540,
+      "violations": 0,
+      "evidence": "integration/layout-results.json"
+    },
+    {
+      "name": "button-visual-contexts",
+      "passed": 52,
+      "negativeControlDetected": true,
+      "evidence": "buttons/visual-results.json"
+    },
+    {
+      "name": "pending-success-forms",
+      "passed": 3,
+      "evidence": "pending-results.json"
+    },
+    {
+      "name": "async-failure-forms",
+      "passed": 5,
+      "evidence": "async-form-results.json"
+    },
+    {
+      "name": "history-and-skip-link",
+      "passed": 23,
+      "evidence": "../history-fix/results.json"
+    },
+    {
+      "name": "independent-journey-checks",
+      "passed": 22,
+      "evidence": "../journeys/verification-summary.json"
+    },
+    {
+      "name": "node-interactions",
+      "passed": 51,
+      "evidence": "ui-tests.log"
+    },
+    {
+      "name": "live-user-app",
+      "assetsMatched": 21,
+      "writes": 0,
+      "pageErrors": 0,
+      "evidence": "live/live-results.json"
+    },
+    {
+      "name": "blocked-recovery-layout-contexts",
+      "passed": 10,
+      "evidence": "blocked-layout-results.json"
+    },
+    {
+      "name": "current-task-recovery-states",
+      "passed": 8,
+      "evidence": "recovery/recovery-results.json"
+    },
+    {
+      "name": "ontology-validation-and-populated-layout",
+      "passed": 10,
+      "layoutContexts": 8,
+      "evidence": "../ontology-form/results.json"
+    }
+  ],
+  "sourceBundleSHA256": "529f3e4885da58883bb403592f7c306dc0aa4bb154038ec4ef575a1636a27038",
+  "finalIndependentScore": 97,
+  "independentScoreEvidence": "../reviewer/final-score.json"
+}

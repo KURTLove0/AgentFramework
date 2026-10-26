@@ -1,0 +1,860 @@
+{
+  "started": "2026-10-25T05:19:35.611Z",
+  "url": "http://127.0.0.1:8799",
+  "fixture": {
+    "workspaceId": "workspace-fa7a3aad24654815",
+    "agentId": "agent-e75be6204d5b4577",
+    "runId": "run-318f724f5f7c441c",
+    "knowledge": "asset-6b9db89d25e74b77@1",
+    "qaRun": "run-56ed8ca417994958",
+    "skillId": "skill-81810557fd544967",
+    "workflowId": "workflow-20d02e3becbc427c",
+    "flowRunId": "flowrun-4e30fa5dc079269285af46a8",
+    "failedRun": "run-e535fc248e5949c9",
+    "ontologyRef": "learned-377381f22a318066ea8c0e60@1"
+  },
+  "sourceSha256": "36f92858b6c09a63674b53160b3088c27f3684bc8ef2a344d68577deab48b699",
+  "rubricSha256": "7cd7cfae976a663d3a5f906ca2e653271659ea9f44a6ba69d6da5e6bfd01f13f",
+  "routes": [
+    {
+      "route": "workbench",
+      "width": 1440,
+      "theme": "light",
+      "screenshot": "workbench-1440-light.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "workbench",
+        "width": 1440,
+        "theme": "light",
+        "count": 85,
+        "min": 5.56,
+        "bad": []
+      }
+    },
+    {
+      "route": "runs",
+      "width": 1440,
+      "theme": "light",
+      "screenshot": "runs-1440-light.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "runs",
+        "width": 1440,
+        "theme": "light",
+        "count": 85,
+        "min": 5.56,
+        "bad": []
+      }
+    },
+    {
+      "route": "daily",
+      "width": 1440,
+      "theme": "light",
+      "screenshot": "daily-1440-light.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "daily",
+        "width": 1440,
+        "theme": "light",
+        "count": 48,
+        "min": 5.56,
+        "bad": []
+      }
+    },
+    {
+      "route": "evaluations",
+      "width": 1440,
+      "theme": "light",
+      "screenshot": "evaluations-1440-light.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "evaluations",
+        "width": 1440,
+        "theme": "light",
+        "count": 61,
+        "min": 5.56,
+        "bad": []
+      }
+    },
+    {
+      "route": "workspaces",
+      "width": 1440,
+      "theme": "light",
+      "screenshot": "workspaces-1440-light.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "workspaces",
+        "width": 1440,
+        "theme": "light",
+        "count": 70,
+        "min": 5.56,
+        "bad": []
+      }
+    },
+    {
+      "route": "agents",
+      "width": 1440,
+      "theme": "light",
+      "screenshot": "agents-1440-light.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "agents",
+        "width": 1440,
+        "theme": "light",
+        "count": 71,
+        "min": 5.56,
+        "bad": []
+      }
+    },
+    {
+      "route": "workflows",
+      "width": 1440,
+      "theme": "light",
+      "screenshot": "workflows-1440-light.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "workflows",
+        "width": 1440,
+        "theme": "light",
+        "count": 52,
+        "min": 5.56,
+        "bad": []
+      }
+    },
+    {
+      "route": "skills",
+      "width": 1440,
+      "theme": "light",
+      "screenshot": "skills-1440-light.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "skills",
+        "width": 1440,
+        "theme": "light",
+        "count": 81,
+        "min": 5.56,
+        "bad": []
+      }
+    },
+    {
+      "route": "library",
+      "width": 1440,
+      "theme": "light",
+      "screenshot": "library-1440-light.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "library",
+        "width": 1440,
+        "theme": "light",
+        "count": 69,
+        "min": 5.56,
+        "bad": []
+      }
+    },
+    {
+      "route": "registry",
+      "width": 1440,
+      "theme": "light",
+      "screenshot": "registry-1440-light.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "registry",
+        "width": 1440,
+        "theme": "light",
+        "count": 59,
+        "min": 5.56,
+        "bad": []
+      }
+    },
+    {
+      "route": "runtimes",
+      "width": 1440,
+      "theme": "light",
+      "screenshot": "runtimes-1440-light.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "runtimes",
+        "width": 1440,
+        "theme": "light",
+        "count": 58,
+        "min": 5.56,
+        "bad": []
+      }
+    },
+    {
+      "route": "workbench",
+      "width": 1440,
+      "theme": "dark",
+      "screenshot": "workbench-1440-dark.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "workbench",
+        "width": 1440,
+        "theme": "dark",
+        "count": 85,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "runs",
+      "width": 1440,
+      "theme": "dark",
+      "screenshot": "runs-1440-dark.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "runs",
+        "width": 1440,
+        "theme": "dark",
+        "count": 85,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "daily",
+      "width": 1440,
+      "theme": "dark",
+      "screenshot": "daily-1440-dark.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "daily",
+        "width": 1440,
+        "theme": "dark",
+        "count": 48,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "evaluations",
+      "width": 1440,
+      "theme": "dark",
+      "screenshot": "evaluations-1440-dark.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "evaluations",
+        "width": 1440,
+        "theme": "dark",
+        "count": 61,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "workspaces",
+      "width": 1440,
+      "theme": "dark",
+      "screenshot": "workspaces-1440-dark.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "workspaces",
+        "width": 1440,
+        "theme": "dark",
+        "count": 70,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "agents",
+      "width": 1440,
+      "theme": "dark",
+      "screenshot": "agents-1440-dark.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "agents",
+        "width": 1440,
+        "theme": "dark",
+        "count": 71,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "workflows",
+      "width": 1440,
+      "theme": "dark",
+      "screenshot": "workflows-1440-dark.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "workflows",
+        "width": 1440,
+        "theme": "dark",
+        "count": 52,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "skills",
+      "width": 1440,
+      "theme": "dark",
+      "screenshot": "skills-1440-dark.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "skills",
+        "width": 1440,
+        "theme": "dark",
+        "count": 81,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "library",
+      "width": 1440,
+      "theme": "dark",
+      "screenshot": "library-1440-dark.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "library",
+        "width": 1440,
+        "theme": "dark",
+        "count": 69,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "registry",
+      "width": 1440,
+      "theme": "dark",
+      "screenshot": "registry-1440-dark.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "registry",
+        "width": 1440,
+        "theme": "dark",
+        "count": 59,
+        "min": 7.07,
+        "bad": []
+      }
+    },
+    {
+      "route": "runtimes",
+      "width": 1440,
+      "theme": "dark",
+      "screenshot": "runtimes-1440-dark.png",
+      "layout": {
+        "root": 1440,
+        "viewport": 1440
+      },
+      "contrast": {
+        "route": "runtimes",
+        "width": 1440,
+        "theme": "dark",
+        "count": 58,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "workbench",
+      "width": 375,
+      "theme": "light",
+      "screenshot": "workbench-375-light.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "workbench",
+        "width": 375,
+        "theme": "light",
+        "count": 20,
+        "min": 6.31,
+        "bad": []
+      }
+    },
+    {
+      "route": "runs",
+      "width": 375,
+      "theme": "light",
+      "screenshot": "runs-375-light.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "runs",
+        "width": 375,
+        "theme": "light",
+        "count": 14,
+        "min": 6.31,
+        "bad": []
+      }
+    },
+    {
+      "route": "daily",
+      "width": 375,
+      "theme": "light",
+      "screenshot": "daily-375-light.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "daily",
+        "width": 375,
+        "theme": "light",
+        "count": 16,
+        "min": 6.31,
+        "bad": []
+      }
+    },
+    {
+      "route": "evaluations",
+      "width": 375,
+      "theme": "light",
+      "screenshot": "evaluations-375-light.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "evaluations",
+        "width": 375,
+        "theme": "light",
+        "count": 14,
+        "min": 6.31,
+        "bad": []
+      }
+    },
+    {
+      "route": "workspaces",
+      "width": 375,
+      "theme": "light",
+      "screenshot": "workspaces-375-light.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "workspaces",
+        "width": 375,
+        "theme": "light",
+        "count": 19,
+        "min": 6.31,
+        "bad": []
+      }
+    },
+    {
+      "route": "agents",
+      "width": 375,
+      "theme": "light",
+      "screenshot": "agents-375-light.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "agents",
+        "width": 375,
+        "theme": "light",
+        "count": 18,
+        "min": 6.31,
+        "bad": []
+      }
+    },
+    {
+      "route": "workflows",
+      "width": 375,
+      "theme": "light",
+      "screenshot": "workflows-375-light.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "workflows",
+        "width": 375,
+        "theme": "light",
+        "count": 20,
+        "min": 6.31,
+        "bad": []
+      }
+    },
+    {
+      "route": "skills",
+      "width": 375,
+      "theme": "light",
+      "screenshot": "skills-375-light.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "skills",
+        "width": 375,
+        "theme": "light",
+        "count": 21,
+        "min": 6.31,
+        "bad": []
+      }
+    },
+    {
+      "route": "library",
+      "width": 375,
+      "theme": "light",
+      "screenshot": "library-375-light.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "library",
+        "width": 375,
+        "theme": "light",
+        "count": 29,
+        "min": 5.92,
+        "bad": []
+      }
+    },
+    {
+      "route": "registry",
+      "width": 375,
+      "theme": "light",
+      "screenshot": "registry-375-light.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "registry",
+        "width": 375,
+        "theme": "light",
+        "count": 15,
+        "min": 6.31,
+        "bad": []
+      }
+    },
+    {
+      "route": "runtimes",
+      "width": 375,
+      "theme": "light",
+      "screenshot": "runtimes-375-light.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "runtimes",
+        "width": 375,
+        "theme": "light",
+        "count": 15,
+        "min": 5.93,
+        "bad": []
+      }
+    },
+    {
+      "route": "workbench",
+      "width": 375,
+      "theme": "dark",
+      "screenshot": "workbench-375-dark.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "workbench",
+        "width": 375,
+        "theme": "dark",
+        "count": 20,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "runs",
+      "width": 375,
+      "theme": "dark",
+      "screenshot": "runs-375-dark.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "runs",
+        "width": 375,
+        "theme": "dark",
+        "count": 14,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "daily",
+      "width": 375,
+      "theme": "dark",
+      "screenshot": "daily-375-dark.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "daily",
+        "width": 375,
+        "theme": "dark",
+        "count": 16,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "evaluations",
+      "width": 375,
+      "theme": "dark",
+      "screenshot": "evaluations-375-dark.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "evaluations",
+        "width": 375,
+        "theme": "dark",
+        "count": 14,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "workspaces",
+      "width": 375,
+      "theme": "dark",
+      "screenshot": "workspaces-375-dark.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "workspaces",
+        "width": 375,
+        "theme": "dark",
+        "count": 19,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "agents",
+      "width": 375,
+      "theme": "dark",
+      "screenshot": "agents-375-dark.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "agents",
+        "width": 375,
+        "theme": "dark",
+        "count": 18,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "workflows",
+      "width": 375,
+      "theme": "dark",
+      "screenshot": "workflows-375-dark.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "workflows",
+        "width": 375,
+        "theme": "dark",
+        "count": 20,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "skills",
+      "width": 375,
+      "theme": "dark",
+      "screenshot": "skills-375-dark.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "skills",
+        "width": 375,
+        "theme": "dark",
+        "count": 21,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "library",
+      "width": 375,
+      "theme": "dark",
+      "screenshot": "library-375-dark.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "library",
+        "width": 375,
+        "theme": "dark",
+        "count": 29,
+        "min": 6.36,
+        "bad": []
+      }
+    },
+    {
+      "route": "registry",
+      "width": 375,
+      "theme": "dark",
+      "screenshot": "registry-375-dark.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "registry",
+        "width": 375,
+        "theme": "dark",
+        "count": 15,
+        "min": 7.96,
+        "bad": []
+      }
+    },
+    {
+      "route": "runtimes",
+      "width": 375,
+      "theme": "dark",
+      "screenshot": "runtimes-375-dark.png",
+      "layout": {
+        "root": 375,
+        "viewport": 375
+      },
+      "contrast": {
+        "route": "runtimes",
+        "width": 375,
+        "theme": "dark",
+        "count": 15,
+        "min": 6.58,
+        "bad": []
+      }
+    }
+  ],
+  "dynamic": [
+    "agent-step1-375-light.png",
+    "agent-step2-375-light.png",
+    "agent-step3-375-light.png",
+    "task-step1-375-light.png",
+    "task-step2-375-light.png",
+    "task-step3-375-light.png",
+    "asset-editor-375-light.png",
+    "asset-errors-375-light.png",
+    "skill-editor-375-light.png",
+    "flow-editor-375-light.png",
+    "flow-inspector-375-light.png",
+    "daily-settings-375-light.png",
+    "daily-template-375-light.png",
+    "evaluation-policy-375-light.png",
+    "evaluation-contract-375-light.png",
+    "retrospective-setup-375-light.png",
+    "agent-step1-375-dark.png",
+    "agent-step2-375-dark.png",
+    "agent-step3-375-dark.png",
+    "task-step1-375-dark.png",
+    "task-step2-375-dark.png",
+    "task-step3-375-dark.png",
+    "asset-editor-375-dark.png",
+    "asset-errors-375-dark.png",
+    "skill-editor-375-dark.png",
+    "flow-editor-375-dark.png",
+    "flow-inspector-375-dark.png",
+    "daily-settings-375-dark.png",
+    "daily-template-375-dark.png",
+    "evaluation-policy-375-dark.png",
+    "evaluation-contract-375-dark.png",
+    "retrospective-setup-375-dark.png",
+    "boundary-library-320x812.png",
+    "boundary-agents-414x896.png",
+    "boundary-workflows-768x1024.png",
+    "boundary-runtimes-1024x768.png",
+    "boundary-workbench-812x375.png",
+    "text200-workbench.png",
+    "text200-agents.png",
+    "text200-library.png",
+    "text200-daily.png",
+    "text200-skills.png",
+    "text200-runtimes.png"
+  ],
+  "errors": [],
+  "ended": "2026-10-25T05:19:50.870Z",
+  "sourceAfter": "36f92858b6c09a63674b53160b3088c27f3684bc8ef2a344d68577deab48b699"
+}

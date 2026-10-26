@@ -1,0 +1,167 @@
+{
+  "version": 1,
+  "scale": {
+    "pass": 4,
+    "partial": 2,
+    "fail": 0
+  },
+  "target": 90,
+  "critical_gates": [
+    "创建与使用流程可完成",
+    "无键盘陷阱",
+    "无未提交内容丢失",
+    "没有越空间覆盖"
+  ],
+  "items": [
+    {
+      "id": "C1",
+      "category": "创建动线",
+      "criterion": "可按用途选择起点，展示当前选择",
+      "maximum": 4
+    },
+    {
+      "id": "C2",
+      "category": "创建动线",
+      "criterion": "主路径不超过三步，必填项使用业务语言",
+      "maximum": 4
+    },
+    {
+      "id": "C3",
+      "category": "创建动线",
+      "criterion": "可内联创建并复用领域，切换不丢内容",
+      "maximum": 4
+    },
+    {
+      "id": "C4",
+      "category": "创建动线",
+      "criterion": "确认页可读、可修改且能核对工作指令",
+      "maximum": 4
+    },
+    {
+      "id": "C5",
+      "category": "创建动线",
+      "criterion": "保存成功后提供直接使用的下一步",
+      "maximum": 4
+    },
+    {
+      "id": "U1",
+      "category": "使用动线",
+      "criterion": "从智能体发起任务时准确预选身份和版本",
+      "maximum": 4
+    },
+    {
+      "id": "U2",
+      "category": "使用动线",
+      "criterion": "任务目标有匹配工作方式的可编辑示例",
+      "maximum": 4
+    },
+    {
+      "id": "U3",
+      "category": "使用动线",
+      "criterion": "展示执行摘要，隐藏无关或重复的锁定字段",
+      "maximum": 4
+    },
+    {
+      "id": "U4",
+      "category": "使用动线",
+      "criterion": "提交前可审查范围和必要许可",
+      "maximum": 4
+    },
+    {
+      "id": "U5",
+      "category": "使用动线",
+      "criterion": "完成后易于看到回答或报告，并能找到来源",
+      "maximum": 4
+    },
+    {
+      "id": "F1",
+      "category": "表单控件",
+      "criterion": "领域、智能体和长模型目录支持搜索筛选",
+      "maximum": 4
+    },
+    {
+      "id": "F2",
+      "category": "表单控件",
+      "criterion": "搜索选择器支持完整键盘选择、取消和空结果处理",
+      "maximum": 4
+    },
+    {
+      "id": "F3",
+      "category": "表单控件",
+      "criterion": "长文本自适应高度并提供长度提示",
+      "maximum": 4
+    },
+    {
+      "id": "F4",
+      "category": "表单控件",
+      "criterion": "错误与具体字段关联，修正后清除",
+      "maximum": 4
+    },
+    {
+      "id": "F5",
+      "category": "表单控件",
+      "criterion": "输入和选择控件具备清晰焦点、禁用和加载状态",
+      "maximum": 4
+    },
+    {
+      "id": "R1",
+      "category": "反馈与状态保持",
+      "criterion": "保存防重入，失败后保留输入",
+      "maximum": 4
+    },
+    {
+      "id": "R2",
+      "category": "反馈与状态保持",
+      "criterion": "域切换和配置往返保留未提交内容",
+      "maximum": 4
+    },
+    {
+      "id": "R3",
+      "category": "反馈与状态保持",
+      "criterion": "保存回执不被列表读取失败覆盖",
+      "maximum": 4
+    },
+    {
+      "id": "R4",
+      "category": "反馈与状态保持",
+      "criterion": "配置后返回任务保留目标并重新确认许可",
+      "maximum": 4
+    },
+    {
+      "id": "R5",
+      "category": "反馈与状态保持",
+      "criterion": "异步响应不越空间覆盖，输入法输入不被中断",
+      "maximum": 4
+    },
+    {
+      "id": "A1",
+      "category": "可访问性与布局",
+      "criterion": "主要流程可用键盘完成，焦点归还可预测",
+      "maximum": 4
+    },
+    {
+      "id": "A2",
+      "category": "可访问性与布局",
+      "criterion": "320/375/414/768/1440及横屏无页面横向溢出",
+      "maximum": 4
+    },
+    {
+      "id": "A3",
+      "category": "可访问性与布局",
+      "criterion": "浅深色正文和关键控件边界对比可辨",
+      "maximum": 4
+    },
+    {
+      "id": "A4",
+      "category": "可访问性与布局",
+      "criterion": "200%文本和固定页脚下字段不被遮挡，触控目标至少44px",
+      "maximum": 4
+    },
+    {
+      "id": "A5",
+      "category": "可访问性与布局",
+      "criterion": "语义标签完整，减少动态效果偏好得到尊重",
+      "maximum": 4
+    }
+  ]
+}

@@ -18,7 +18,7 @@ class WorkspaceRegistry:
                 deleted INTEGER, created REAL, updated REAL, PRIMARY KEY(tenant,id), UNIQUE(tenant,project))''')
             now=time.time()
             db.execute('INSERT OR IGNORE INTO workspaces VALUES(?,?,?,?,?,0,?,?)',
-                       (tenant,DEFAULT_WORKSPACE,1,canonical({'name':'本地工作空间','business':'模拟业务','scenario':'变更评估与知识问答','description':'原有 Agent、任务与资料所在的默认空间。'}),'project-demo',now,now))
+                       (tenant,DEFAULT_WORKSPACE,1,canonical({'name':'默认工作空间','business':'待配置','scenario':'待配置','description':'请编辑业务与场景，或创建新的工作空间。'}),'project-demo',now,now))
             # Historical CLI projects remain reachable without mutating their frozen tasks.
             for row in db.execute('SELECT state FROM runs WHERE tenant_id=?',(tenant,)).fetchall():
                 task=json.loads(row[0])['task'];project=task['project_id']

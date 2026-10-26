@@ -1,0 +1,57 @@
+{
+  "query": "ontolink742",
+  "literal_knowledge_matches": 0,
+  "semantic_concepts": 3,
+  "linked_sources": [
+    "asset-1b37a6ecaee6422d@1",
+    "learned-f895b052a2237e72b945c035@1"
+  ],
+  "retrieved_refs": [
+    "asset-1b37a6ecaee6422d@1",
+    "learned-f895b052a2237e72b945c035@1"
+  ],
+  "run_id": "run-c935c8af57a14435",
+  "run_status": "SUCCEEDED",
+  "checks": {
+    "answer-current": {
+      "detail": "独立重新检查引用来源的发布、范围、有效期和摘要",
+      "evidence_refs": [
+        "asset-1b37a6ecaee6422d@1",
+        "learned-f895b052a2237e72b945c035@1"
+      ],
+      "passed": true,
+      "verifier_ref": "knowledge-answer-verifier@1.0.0"
+    },
+    "answer-grounded": {
+      "detail": "回答由逐字引用组成，引用绑定来源版本、证据与摘要",
+      "evidence_refs": [
+        "evidence-18c6b5e35cbf1052c5ea"
+      ],
+      "passed": true,
+      "verifier_ref": "knowledge-answer-verifier@1.0.0"
+    },
+    "answer-scope": {
+      "detail": "读取证据属于当前租户、项目和任务范围",
+      "evidence_refs": [
+        "evidence-18c6b5e35cbf1052c5ea"
+      ],
+      "passed": true,
+      "verifier_ref": "knowledge-answer-verifier@1.0.0"
+    }
+  },
+  "drafts": 0,
+  "write_calls": 0,
+  "planner": "mock",
+  "model_calls": 0,
+  "after_source_withdrawal": {
+    "source_ref": "asset-1b37a6ecaee6422d@1",
+    "semantic_matches": 0,
+    "knowledge_matches": 0,
+    "ontology_versions_retained": 2,
+    "ontology_sources_current": false,
+    "run_id": "run-281d31e567ca4019",
+    "run_status": "WAITING_INPUT",
+    "drafts": 0,
+    "model_calls": 0
+  }
+}

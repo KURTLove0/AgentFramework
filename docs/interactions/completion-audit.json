@@ -1,0 +1,16 @@
+{
+  "objective": "增加更强的交互效果，用户动线更合理",
+  "status": "complete",
+  "evidence": [
+    "verification.json",
+    "ui-journeys.json",
+    "responsive.json",
+    "dark-routes.json",
+    "workflow-dialogs.json",
+    "task-dialogs.json",
+    "runtime-verification.json",
+    "../release/verification-1.2.0.json"
+  ],
+  "included_in_release": "1.2.0",
+  "business_runtime_semantics_unchanged": true
+}

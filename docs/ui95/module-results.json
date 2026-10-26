@@ -1,0 +1,78 @@
+{
+  "generatedAt": "2026-10-24T10:05:21.552Z",
+  "checks": [
+    {
+      "id": "agent-task",
+      "detail": "三步创建智能体、开始使用、审查授权并完成模拟任务",
+      "passed": true
+    },
+    {
+      "id": "knowledge-publish",
+      "detail": "资料从草稿提交审核并发布，显示版本、来源和状态",
+      "passed": true
+    },
+    {
+      "id": "knowledge-revise",
+      "detail": "编辑产生新草稿版本，原已发布资料继续保留",
+      "passed": true
+    },
+    {
+      "id": "grounded-result",
+      "detail": "只读问答无需写入授权，结果和引用原文可展开查看",
+      "passed": true
+    },
+    {
+      "id": "skill-lifecycle",
+      "detail": "技能添加资源、校验、保存、发布与导出完整闭环",
+      "passed": true
+    },
+    {
+      "id": "skill-import-withdraw",
+      "detail": "撤回需审查影响，ZIP 导入为草稿并可审阅资源",
+      "passed": true
+    },
+    {
+      "id": "workflow-run",
+      "detail": "工作流在画布保存后审查权限运行，节点完成结果可回读",
+      "passed": true
+    },
+    {
+      "id": "workflow-chat",
+      "detail": "模拟智能体给出提案，采用后进入画布审查，未自动运行或授权",
+      "passed": true
+    },
+    {
+      "id": "daily-plan",
+      "detail": "计划配置、生成、派发和任务回跳可完成，重复派发未重复创建任务",
+      "passed": true
+    },
+    {
+      "id": "evaluation-loop",
+      "detail": "失败历史产生低分提醒，可查看冻结评测、确认已阅并保存空间/岗位阈值",
+      "passed": true
+    },
+    {
+      "id": "retrospective",
+      "detail": "模拟总结、人工审阅入口、沉淀回执与资料回跳完整，不调用真实模型",
+      "passed": true
+    },
+    {
+      "id": "ontology-loop",
+      "detail": "本体从资料生成、审阅保存、审核发布到浏览业务对象形成闭环",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "artifacts": {
+    "workspaceId": "workspace-c246da34aa134220",
+    "agentId": "agent-446ef89914864f62",
+    "runId": "run-201dac77d9ce4136",
+    "knowledge": "asset-7273c9ff39194613@1",
+    "qaRun": "run-1445b5fd98e24c9d",
+    "skillId": "skill-2d312af00b674534",
+    "workflowId": "workflow-86baa3881d014a67",
+    "flowRunId": "flowrun-38e396c53ede8f0d328ab5c7",
+    "failedRun": "run-c6e658c4332e4dba",
+    "ontologyRef": "learned-a7d2ca61c1252b03dd937419@1"
+  }
+}

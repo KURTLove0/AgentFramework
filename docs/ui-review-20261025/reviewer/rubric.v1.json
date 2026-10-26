@@ -1,0 +1,491 @@
+{
+  "id": "AF-UI-REVIEW-20261025-v1",
+  "frozen_at": "2026-10-25",
+  "total": 100,
+  "threshold": 95,
+  "authority": "本轮独立评审；以本轮真实渲染、操作、截图为准；不继承 docs/ui95 旧分数或以自动测试通过代替视觉判断。",
+  "design_source": "design.md",
+  "scoring": {
+    "rule": "每个criterion按0/0.25/0.5/0.75/1的完成比例乘权重；有明确细小局部缺陷可按实际影响给0.9或0.95。只扣有本轮证据的缺陷；同一缺陷可影响不同独立质量维度，必须说明。未经观察的项标未验证，不计为满分。",
+    "pass": "总分≥95，所有11模块与覆盖计划必测状态均已观察，且阻断项为0才可通过。",
+    "blockers": [
+      "P0：权限/范围/外部模型许可表达误导，或跨空间/冻结身份导致不可预期动作；立即阻断。",
+      "P1：任一主要路径无可用入口/无法完成、保存丢失且无恢复、核心内容或操作在手机/键盘不可达、弹层/导航焦点陷阱、失败后无恢复路径；即使总分≥95也不得通过。"
+    ],
+    "severity": {
+      "P0": "造成错误授权/范围或严重数据安全后果",
+      "P1": "主要工作流/可达性阻断或明确数据丢失",
+      "P2": "可绕行但明显增加操作负担/认知负担或显著视觉缺陷",
+      "P3": "局部可读性/细节不一致"
+    }
+  },
+  "modules": [
+    {
+      "route": "workbench",
+      "name": "任务工作台",
+      "points": 4,
+      "journey": "创建任务三步→保存或模拟运行→结果、来源、验收与恢复",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。"
+        }
+      ]
+    },
+    {
+      "route": "runs",
+      "name": "运行记录",
+      "points": 4,
+      "journey": "搜索/筛选→历史详情→报告/证据→续跑或恢复",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。"
+        }
+      ]
+    },
+    {
+      "route": "daily",
+      "name": "每日任务",
+      "points": 4,
+      "journey": "计划设置→动态模板→生成→审查派发→跳转任务→同日复用",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。"
+        }
+      ]
+    },
+    {
+      "route": "evaluations",
+      "name": "岗位评测",
+      "points": 4,
+      "journey": "历史补评→提醒→冻结评测详情→确认→空间/岗位契约",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。"
+        }
+      ]
+    },
+    {
+      "route": "workspaces",
+      "name": "工作空间管理",
+      "points": 4,
+      "journey": "创建→明确进入→编辑→切换→删除/恢复",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。"
+        }
+      ]
+    },
+    {
+      "route": "agents",
+      "name": "智能体 Agent",
+      "points": 4,
+      "journey": "用途预设→三步创建/编辑→角色职责交付标准/领域/技能/MCP→保存→开始使用",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。"
+        }
+      ]
+    },
+    {
+      "route": "workflows",
+      "name": "工作流",
+      "points": 4,
+      "journey": "对话提案→采用审查或手动画布→节点/连线/分支→保存→授权运行→节点结果",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。"
+        }
+      ]
+    },
+    {
+      "route": "skills",
+      "name": "技能 Skills",
+      "points": 4,
+      "journey": "新建/ZIP导入→资源文件编辑→校验→保存→发布→固定版本/导出/撤回",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。"
+        }
+      ]
+    },
+    {
+      "route": "library",
+      "name": "知识库",
+      "points": 4,
+      "journey": "知识/记忆/经验/能力/本体→创建/修订→审核发布/撤回→搜索→复盘与本体探索",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。"
+        }
+      ]
+    },
+    {
+      "route": "registry",
+      "name": "能力与标准",
+      "points": 4,
+      "journey": "可读职责→能力/领域/标准检索或详情→边界/规则披露",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。"
+        }
+      ]
+    },
+    {
+      "route": "runtimes",
+      "name": "运行时配置",
+      "points": 4,
+      "journey": "运行时切换→配置/检测/模型读取→保存→基于配置创建Agent",
+      "criteria": [
+        {
+          "id": "orientation",
+          "points": 1,
+          "standard": "实际渲染能辨认当前位置、资源状态、范围与主要动作；选中和返回路径准确。"
+        },
+        {
+          "id": "primary",
+          "points": 1,
+          "standard": "清单中的主动作可以通过可见入口完成，步骤/文案/结果形成可理解闭环。"
+        },
+        {
+          "id": "secondary",
+          "points": 1,
+          "standard": "本模块主要次级动作与空/错误/已完成状态可操作且有下一步；无死路或静默失败。"
+        },
+        {
+          "id": "information",
+          "points": 1,
+          "standard": "本模块特有数据、状态、详情披露密度恰当，名称可读，关键证据与许可可审查。"
+        }
+      ]
+    }
+  ],
+  "cross_cutting": [
+    {
+      "id": "visual",
+      "name": "视觉质量与设计一致性",
+      "points": 14,
+      "criteria": [
+        {
+          "id": "hierarchy",
+          "points": 4,
+          "standard": "层级、正文/辅助文字、行长与任务密度清楚；无竞争主按钮、无无意义空洞或重复空态。"
+        },
+        {
+          "id": "system",
+          "points": 4,
+          "standard": "11模块沿用 design.md 的 System Blue、系统字、间距、表面与组件语言；无突兀风格或错误图标语义。"
+        },
+        {
+          "id": "themes",
+          "points": 4,
+          "standard": "浅色和深色均逐项目视，正常文字≥4.5:1、重要边界/焦点≥3:1；弹层、选中、禁用状态可辨。"
+        },
+        {
+          "id": "craft",
+          "points": 2,
+          "standard": "对齐、截断、换行、图标与滚动固定区精细稳定，真实内容与长文本均无视觉破碎。"
+        }
+      ]
+    },
+    {
+      "id": "forms",
+      "name": "动态表单与编辑",
+      "points": 12,
+      "criteria": [
+        {
+          "id": "validation",
+          "points": 3,
+          "standard": "各动态表单标签/说明关联、字段名错误、首错定位、修正和重开清错一致。"
+        },
+        {
+          "id": "disclosure",
+          "points": 3,
+          "standard": "Agent三步、任务三步、每日模板、岗位职责/标准、工作流节点/分支、资源类型和技能文件切换均能理解并保留正确值。"
+        },
+        {
+          "id": "editing",
+          "points": 3,
+          "standard": "增加/删除/重排/类型切换及搜索选择控件可用，输入法、长文本和已编辑焦点不受刷新破坏。"
+        },
+        {
+          "id": "drafts",
+          "points": 3,
+          "standard": "编辑取消/Escape/切换上下文和配置往返有明确草稿保存或放弃机制，保存后可见结果与下一步。"
+        }
+      ]
+    },
+    {
+      "id": "journeys",
+      "name": "跨模块完整动线",
+      "points": 10,
+      "criteria": [
+        {
+          "id": "agent_task",
+          "points": 3,
+          "standard": "空间→Agent→开始使用→目标→执行→许可→模拟运行→报告/引用/验收→恢复完整。"
+        },
+        {
+          "id": "reuse",
+          "points": 3,
+          "standard": "资料/技能保存发布→Agent可用版本→任务冻结上下文；运行复盘→审阅→沉淀→资源回跳可见。"
+        },
+        {
+          "id": "orchestration",
+          "points": 2,
+          "standard": "工作流提案/画布→保存→运行许可→节点结果；每日设置→派发→任务；评测提醒→证据可追溯。"
+        },
+        {
+          "id": "scope",
+          "points": 2,
+          "standard": "工作空间和运行时变更的影响可理解，冻结配置和授权范围审查清楚，用户能安全退回继续。"
+        }
+      ]
+    },
+    {
+      "id": "responsive",
+      "name": "手机与适配",
+      "points": 10,
+      "criteria": [
+        {
+          "id": "phone",
+          "points": 4,
+          "standard": "320/375/414宽度无页面横溢、遮挡或不可达动作；主要路由和长表单真实操作。"
+        },
+        {
+          "id": "tablet",
+          "points": 2,
+          "standard": "768/1024/1440宽度密度合理，无断点错位；画布只在标记区域平移。"
+        },
+        {
+          "id": "overlays",
+          "points": 2,
+          "standard": "手机导航、弹层、键盘假定占用与固定头尾部留白合理；滚动后动作可达。"
+        },
+        {
+          "id": "text",
+          "points": 2,
+          "standard": "200%文字/放大及375横屏可读，reduced-motion下内容/焦点无遗漏。"
+        }
+      ]
+    },
+    {
+      "id": "keyboard",
+      "name": "键盘与辅助语义",
+      "points": 8,
+      "criteria": [
+        {
+          "id": "navigation",
+          "points": 2,
+          "standard": "Tab顺序/可见焦点/跳转主内容、Cmd/Ctrl+K、Escape和命令搜索完整。"
+        },
+        {
+          "id": "dialogs",
+          "points": 2,
+          "standard": "弹层和手机导航焦点捕获、关闭恢复、背景inert与连续打开行为可靠。"
+        },
+        {
+          "id": "widgets",
+          "points": 2,
+          "standard": "搜索选择、标签页、画布节点移动/连接替代、动态行增删均有明确键盘路径。"
+        },
+        {
+          "id": "semantics",
+          "points": 2,
+          "standard": "控件有名称，标签页/展开/选中/忙碌/错误状态语义正确，颜色以外仍可读。"
+        }
+      ]
+    },
+    {
+      "id": "feedback",
+      "name": "反馈稳定性",
+      "points": 2,
+      "criteria": [
+        {
+          "id": "pending",
+          "points": 1,
+          "standard": "保存/载入/生成有及时忙碌反馈，防止重复提交；无意外跳动。"
+        },
+        {
+          "id": "recovery",
+          "points": 1,
+          "standard": "断网/服务错误/失败运行可理解且可恢复，刷新不重建当前表单或改变路由。"
+        }
+      ]
+    }
+  ],
+  "required_evidence": {
+    "source": "每轮记录应用源码内容摘要SHA256（稳定排序路径+各文件SHA256）和清单；记录rubric原文件SHA256、预览URL、隔离fixture身份、时间、视口/主题。",
+    "visual": "11路由均要有本轮1440浅/深与375浅/深截图；320/414/768/1024及关键弹层取补充证据；截图必须由评审Agent实际查看。",
+    "interaction": "记录可复现步骤、实际结果、预期结果和对应截图；主要动态表单、键盘/手机与失败恢复需实际操作。"
+  }
+}

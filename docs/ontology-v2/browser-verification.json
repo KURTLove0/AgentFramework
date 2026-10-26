@@ -1,0 +1,47 @@
+{
+  "newAgentRevision": 2,
+  "newRunId": "run-f9c1b83ca6ee4d85",
+  "newScore": 100,
+  "effectiveThreshold": 95,
+  "contractWeights": {
+    "delivery": 10,
+    "identity": 15,
+    "responsibilities": 45,
+    "standards": 30
+  },
+  "ontologyRef": "learned-3f59bb5d44f6e2f2c19d5346@2",
+  "renamedValuePreserved": true,
+  "previewText": "所选岗位已登记此能力 · WRITE · 写入需通过任务授权。本次只核对映射，未执行动作。",
+  "pathHops": [
+    0,
+    1,
+    2
+  ],
+  "layouts": [
+    {
+      "width": 375,
+      "documentWidth": 375,
+      "dialogWidth": 341,
+      "dialogScroll": 341
+    },
+    {
+      "width": 768,
+      "documentWidth": 768,
+      "dialogWidth": 618,
+      "dialogScroll": 618
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440,
+      "dialogWidth": 618,
+      "dialogScroll": 618
+    },
+    {
+      "page": "job-contract",
+      "width": 375,
+      "dialogWidth": 341,
+      "dialogScroll": 341
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,76 @@
+{
+  "verified_at": "2026-10-23T04:42:14.379596+00:00",
+  "scope": "isolated synthetic data; no real model calls",
+  "cases": [
+    {
+      "run_id": "run-e7c67e8b4afd4709",
+      "status": "SUCCEEDED",
+      "model_calls": 0,
+      "verifications": {
+        "critical-claims-evidence": {
+          "detail": "关键事实、来源哈希、版本与风险规则一致",
+          "evidence_refs": [
+            "evidence-bf1bf5de951d384b6d32",
+            "evidence-87440a749302e784edc8"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "draft-readback": {
+          "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+          "evidence_refs": [
+            "evidence-c78a52994d4ef2d117b7"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "report-sections": {
+          "detail": "所有必选章节非空",
+          "evidence_refs": [
+            "evidence-bf1bf5de951d384b6d32",
+            "evidence-87440a749302e784edc8"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        }
+      },
+      "draft_count": 1,
+      "write_calls": 1
+    },
+    {
+      "run_id": "run-3ecbc54dc1be473e",
+      "status": "SUCCEEDED",
+      "model_calls": 0,
+      "verifications": {
+        "critical-claims-evidence": {
+          "detail": "关键事实、来源哈希、版本与风险规则一致",
+          "evidence_refs": [
+            "evidence-bf1bf5de951d384b6d32",
+            "evidence-87440a749302e784edc8"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "draft-readback": {
+          "detail": "草稿对象、状态、版本、内容及哈希回读一致",
+          "evidence_refs": [
+            "evidence-f8a72e7081141152926c"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        },
+        "report-sections": {
+          "detail": "所有必选章节非空",
+          "evidence_refs": [
+            "evidence-bf1bf5de951d384b6d32",
+            "evidence-87440a749302e784edc8"
+          ],
+          "passed": true,
+          "verifier_ref": "release-verifier@1.0.0"
+        }
+      },
+      "draft_count": 1,
+      "write_calls": 1
+    }
+  ]
+}

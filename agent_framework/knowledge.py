@@ -14,7 +14,7 @@ from .store import Store
 
 SPACE = 'simulated-change-context@1.0.0'
 CONTEXT_REF = 'governed-context@1.0.0'
-KINDS = {'KNOWLEDGE', 'PREFERENCE', 'EXPERIENCE'}
+KINDS = {'KNOWLEDGE', 'PREFERENCE', 'MEMORY', 'EXPERIENCE', 'CAPABILITY', 'ONTOLOGY'}
 
 
 @dataclass(frozen=True)
@@ -127,14 +127,14 @@ class Library:
         if not isinstance(data,dict) or set(data)-fields:
             raise ValueError('unknown asset fields')
         kind=data.get('kind','KNOWLEDGE')
-        if kind not in {'KNOWLEDGE','PREFERENCE'}:
+        if kind not in {'KNOWLEDGE','PREFERENCE','MEMORY','CAPABILITY'}:
             raise ValueError('experiences must originate from archived runs')
-        if kind=='KNOWLEDGE' and 'curator' not in access.roles:
+        if kind in {'KNOWLEDGE','CAPABILITY'} and 'curator' not in access.roles:
             raise PolicyDenied('knowledge editing requires curator role')
         identity=identifier(data.get('id') or 'asset-'+uuid4().hex[:16])
         if identity.startswith(('builtin-','experience-')):raise PolicyDenied('reserved asset identity')
-        visibility=data.get('visibility','PRIVATE' if kind=='PREFERENCE' else 'PROJECT')
-        if visibility not in {'PROJECT','PRIVATE'} or (kind=='PREFERENCE' and visibility!='PRIVATE'):
+        visibility=data.get('visibility','PRIVATE' if kind in {'PREFERENCE','MEMORY'} else 'PROJECT')
+        if visibility not in {'PROJECT','PRIVATE'} or (kind in {'PREFERENCE','MEMORY'} and visibility!='PRIVATE'):
             raise ValueError('preferences are private; knowledge visibility must be explicit')
         title=data.get('title');content=data.get('content')
         if not isinstance(title,str) or not 1<=len(title)<=200 or not isinstance(content,dict):
@@ -145,8 +145,10 @@ class Library:
                 raise ValueError('preferences only describe bounded presentation choices')
             if content.get('language','zh') not in {'zh','en'} or content.get('report_style','concise') not in {'concise','detailed'}:
                 raise ValueError('unsupported presentation preference')
-        elif set(content)!={'text'} or not isinstance(content['text'],str) or not 1<=len(content['text'])<=20000:
+        elif not {'text'}<=set(content)<= {'text','limitations'} or not isinstance(content['text'],str) or not 1<=len(content['text'])<=20000:
             raise ValueError('knowledge requires bounded text')
+        if 'limitations' in content and (not isinstance(content['limitations'],list) or len(content['limitations'])>12 or any(not isinstance(v,str) or len(v)>2000 for v in content['limitations'])):
+            raise ValueError('invalid content limitations')
         now=time.time();start=data.get('effective_at',now);end=data.get('effective_until',now+365*86400)
         if type(start) not in (int,float) or type(end) not in (int,float) or not 0<=start<end:
             raise ValueError('invalid asset validity interval')
@@ -169,6 +171,9 @@ class Library:
                              (access.tenant,identity)).fetchone()
             if prior and (prior['project']!=access.project or prior['environment']!=access.environment or prior['owner']!=access.principal):
                 raise PolicyDenied('asset revision belongs to another owner/scope')
+            if prior and prior['kind']!=kind:raise ValueError('asset revision cannot change kind')
+            if prior and json.loads(prior['data']).get('provenance'):
+                body['provenance']=json.loads(prior['data'])['provenance']
             version=prior['version']+1 if prior else 1
             if body['supersedes']:
                 if not prior or body['supersedes']!=f"{identity}@{prior['version']}":raise ValueError('supersedes must identify preceding version')
@@ -181,13 +186,17 @@ class Library:
         asset=self.get(access,ref,review=True)
         if target not in {'REVIEW','PUBLISHED','WITHDRAWN'}:raise ValueError('invalid lifecycle transition')
         role='reviewer' if asset['kind']=='EXPERIENCE' else 'curator'
-        if asset['kind']=='PREFERENCE':
+        if asset['kind'] in {'PREFERENCE','MEMORY'}:
             if asset['owner']!=access.principal:raise PolicyDenied('preference owner required')
         elif role not in access.roles:raise PolicyDenied(role+' role required')
         allowed={'DRAFT':{'REVIEW'},'REVIEW':{'PUBLISHED','WITHDRAWN'},'EVALUATED':{'PUBLISHED','WITHDRAWN'},
                  'PUBLISHED':{'WITHDRAWN'},'CANDIDATE':{'WITHDRAWN'}}
         if target not in allowed.get(asset['status'],set()):raise ValueError('invalid current asset state')
         with self.store.transaction() as db:
+            if asset['kind']=='ONTOLOGY' and target=='PUBLISHED':
+                from .ontology import sources_current,validate_ontology
+                if not sources_current(self,access,asset):raise PolicyDenied('本体来源已撤回、过期或变化，不能发布')
+                validate_ontology(asset['content'],{s['ref'] for s in asset['provenance']['sources']})
             if asset['kind']=='EXPERIENCE' and target=='PUBLISHED':
                 evaluation=db.execute('SELECT * FROM experience_evaluations WHERE tenant=? AND evaluation_id=? AND id=? AND version=?',
                                       (access.tenant,evaluation_id,asset['id'],asset['version'])).fetchone()
@@ -252,6 +261,8 @@ class Library:
         if not spaces:return {'items':[],'excluded':[]}
         scope,params=self._scope(access)
         terms=tokens(query)
+        from .ontology import expand
+        semantic_sources=set(expand(self,access,query)['source_refs']) if terms else set()
         with self.store.connect() as db:
             # No content/identities from unauthorized rows reach the ranker or manifest.
             rows=db.execute('SELECT * FROM asset_versions WHERE '+scope+' AND space=? ORDER BY id,version DESC',(*params,SPACE)).fetchall()
@@ -266,6 +277,7 @@ class Library:
                 matched={(r['id'],int(r['version'])) for r in hits}
         chosen=[];excluded=[];seen=set();now=time.time()
         for row in rows:
+            if row['kind']=='ONTOLOGY':continue
             if row['id'] in seen:continue
             asset=self._record(row)
             reason=None
@@ -276,7 +288,7 @@ class Library:
                 excluded.append({'ref':asset['ref'],'reason':reason,'critical':asset['critical']})
                 continue
             seen.add(row['id'])
-            if terms and (row['id'],row['version']) not in matched and asset['kind']!='PREFERENCE' and not (for_context and asset['critical']):
+            if terms and (row['id'],row['version']) not in matched and asset['ref'] not in semantic_sources and asset['kind']!='PREFERENCE' and not (for_context and asset['critical']):
                 continue
             chosen.append(asset)
         # Equal published claims require explicit supersession, not model arbitration.

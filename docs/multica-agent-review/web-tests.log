@@ -1,0 +1,20 @@
+test_agent_crud_model_selector_and_task_binding (test_web.HTTPTests.test_agent_crud_model_selector_and_task_binding) ... ok
+test_cross_site_mutation_and_bad_input_rejected (test_web.HTTPTests.test_cross_site_mutation_and_bad_input_rejected) ... ok
+test_knowledge_lifecycle_context_manifests_and_private_identity (test_web.HTTPTests.test_knowledge_lifecycle_context_manifests_and_private_identity) ... ok
+test_private_context_cannot_leak_through_run_detail_export_or_controls (test_web.HTTPTests.test_private_context_cannot_leak_through_run_detail_export_or_controls) ... ok
+test_read_only_question_domain_routes_and_export (test_web.HTTPTests.test_read_only_question_domain_routes_and_export) ... ok
+test_runtime_configuration_routes_and_task_selection (test_web.HTTPTests.test_runtime_configuration_routes_and_task_selection) ... ok
+test_static_session_and_download (test_web.HTTPTests.test_static_session_and_download) ... ok
+test_active_cancel_and_duplicate_schedule (test_web.WebTests.test_active_cancel_and_duplicate_schedule) ... ok
+test_cancel_created_and_resume_rejected (test_web.WebTests.test_cancel_created_and_resume_rejected) ... ok
+test_concrete_grant (test_web.WebTests.test_concrete_grant) ... ok
+test_crash_restart_recovery (test_web.WebTests.test_crash_restart_recovery) ... ok
+test_normal_and_real_counts (test_web.WebTests.test_normal_and_real_counts) ... ok
+test_response_lost_reconciles (test_web.WebTests.test_response_lost_reconciles) ... ok
+test_scope_consent_validation_and_no_model_call (test_web.WebTests.test_scope_consent_validation_and_no_model_call) ... ok
+test_tamper_and_unverifiable_stay_review (test_web.WebTests.test_tamper_and_unverifiable_stay_review) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 4.918s
+
+OK

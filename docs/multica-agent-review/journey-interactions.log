@@ -1,0 +1,22 @@
+PASS new task starts at purpose with all permissions unchecked
+PASS QA Agent card preset uses the knowledge default with no write grant
+PASS submission freeze preserves QA disabled fields after success
+PASS submission freeze preserves QA disabled fields after failure
+PASS hidden earlier required fields prevent jumping directly to review
+PASS corrected task field clears its stale error summary including IME completion
+PASS QA ignores hidden invalid change ID and writing restores its validation
+PASS read-only submission omits the hidden invalid change ID
+PASS only system task goals follow domain defaults
+PASS runtime change invalidates old target permissions
+PASS edited task scope clears prior permission including IME completion
+PASS IME submit cannot advance or create a task
+PASS Enter before review advances a step without POST
+PASS configuration return preserves goal and budget while resetting all permissions
+PASS removed selected Agent returns to purpose without losing user goal
+PASS duplicate submit and close while submitting do not duplicate task POST
+PASS failed submission retains input for review and releases the busy guard
+PASS run and workflow routes request only their own detail endpoints
+PASS stale in-flight refresh cannot render a different route and queued route completes
+PASS reduced motion skips both route and tab animations
+PASS normal polling does not replay route entry animation
+Journey interaction scenarios: 21/21 passed (synthetic DOM/API only).

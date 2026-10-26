@@ -1,0 +1,699 @@
+{
+  "generatedAt": "2026-10-24T10:10:55.854960+00:00",
+  "score": 95,
+  "maximum": 100,
+  "target": 95,
+  "verdict": "pass",
+  "assessment": "固定量表下的工程自评，不是独立用户研究、跨浏览器认证或生产执行成功率",
+  "rubricSHA256": "ee03604ffa8cfb15e7744b08cc7a84077a4de0ca7e0915eddcfa70d6ac51bfda",
+  "sourceManifest": "final-run.json",
+  "browser": "155.0.8059.85",
+  "hardGates": [
+    {
+      "gate": "无崩溃、数据丢失、越权或模拟/真实执行混淆",
+      "passed": true,
+      "evidence": [
+        "final-run.json",
+        "recovery-results.json",
+        "ui-tests.log",
+        "backend-boundaries.log"
+      ],
+      "scope": "覆盖的模拟任务及现有访问边界回归；不声称安全认证"
+    },
+    {
+      "gate": "主要操作可达且无遮挡，主要点击区域不小于44px",
+      "passed": true,
+      "evidence": [
+        "layout-results.json",
+        "buttons/visual-results.json",
+        "text-resize-results.json"
+      ]
+    },
+    {
+      "gate": "320/375/414/768页面和弹窗无关键内容裁切",
+      "passed": true,
+      "evidence": [
+        "layout-results.json",
+        "text-resize-results.json"
+      ]
+    },
+    {
+      "gate": "失败保留输入，写入回执正确，授权不被简化绕过",
+      "passed": true,
+      "evidence": [
+        "runtime-results.json",
+        "navigation-results.json",
+        "recovery-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "gate": "旧按钮样式负例仍可检出，既有流程回归通过",
+      "passed": true,
+      "evidence": [
+        "buttons/visual-results.json",
+        "final-run.json",
+        "ui-tests.log"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "V01",
+      "category": "视觉与信息层级",
+      "criterion": "每页标题、用途与一个主操作清楚；次要动作不争抢视觉优先级",
+      "max_score": 2,
+      "score": 2,
+      "finding": "页头明确用途和主动作；次要操作使用轻量样式，同一创建动作可在空状态重复提供。",
+      "evidence": [
+        "screenshots/matrix/empty-workbench-light-1440.png",
+        "screenshots/matrix/empty-registry-light-1440.png",
+        "layout-results.json"
+      ]
+    },
+    {
+      "id": "V02",
+      "category": "视觉与信息层级",
+      "criterion": "系统字体和字号层级一致；普通正文至少14px、次要信息至少12px",
+      "max_score": 2,
+      "score": 2,
+      "finding": "保留平台系统字体，消除9–11px规则；正文与辅助信息层级经实际渲染检查。",
+      "evidence": [
+        "layout-results.json",
+        "text-resize-results.json"
+      ]
+    },
+    {
+      "id": "V03",
+      "category": "视觉与信息层级",
+      "criterion": "工作台首屏优先呈现可执行下一步，空列表不重复堆叠介绍区",
+      "max_score": 2,
+      "score": 2,
+      "finding": "空工作台只显示一个任务引导，移除重复空列表和零值统计。",
+      "evidence": [
+        "behavior-results.json",
+        "screenshots/matrix/empty-workbench-light-1440.png"
+      ]
+    },
+    {
+      "id": "V04",
+      "category": "视觉与信息层级",
+      "criterion": "数量、状态、空值来自真实数据；模拟执行和真实模型范围清楚",
+      "max_score": 2,
+      "score": 2,
+      "finding": "数量来自服务数据；MOCK、模拟业务、真实模型发送许可都有明确说明。",
+      "evidence": [
+        "module-results.json",
+        "recovery-results.json",
+        "screenshots/matrix/populated-workbench-light-1440.png"
+      ]
+    },
+    {
+      "id": "V05",
+      "category": "视觉与信息层级",
+      "criterion": "浅色与深色的文字、状态、控件边界可辨；不只靠颜色传达状态",
+      "max_score": 2,
+      "score": 2,
+      "finding": "浅深主题都检查文字和状态，成功/警告含文字及图标。",
+      "evidence": [
+        "layout-results.json",
+        "screenshots/matrix/populated-daily-dark-375.png"
+      ]
+    },
+    {
+      "id": "V06",
+      "category": "视觉与信息层级",
+      "criterion": "表单有持久标签、必要帮助与约束说明；高级选项按需展开",
+      "max_score": 2,
+      "score": 2,
+      "finding": "持久标签、必填说明、错误关联与高级选项披露；任务演示场景移入高级选项。",
+      "evidence": [
+        "behavior-results.json",
+        "agent-flow/browser-results.json"
+      ]
+    },
+    {
+      "id": "V07",
+      "category": "视觉与信息层级",
+      "criterion": "所有弹窗头部、内容、操作区有稳定边界；长内容可滚动且不遮挡操作",
+      "max_score": 2,
+      "score": 2,
+      "finding": "长表单独立滚动，工作流头尾固定；所有可见底部按钮逐项滚动并实测命中。",
+      "evidence": [
+        "layout-results.json",
+        "text-resize-results.json"
+      ]
+    },
+    {
+      "id": "V08",
+      "category": "视觉与信息层级",
+      "criterion": "11个路由及弹窗在320/375/414/768宽度可用；无页面级水平滚动和关键控件裁切",
+      "max_score": 2,
+      "score": 2,
+      "finding": "11路由及静态/生成后弹窗在6尺寸、浅深主题中无关键裁切。",
+      "evidence": [
+        "layout-results.json"
+      ]
+    },
+    {
+      "id": "V09",
+      "category": "视觉与信息层级",
+      "criterion": "长中文、长名称与标识可读；200%文字时内容和操作仍可到达",
+      "max_score": 2,
+      "score": 2,
+      "finding": "长中文与标识可换行或按用途披露；25状态下HTML文字和行高放大200%仍可到达操作。",
+      "evidence": [
+        "text-resize-results.json",
+        "agent-flow/browser-results.json"
+      ]
+    },
+    {
+      "id": "V10",
+      "category": "视觉与信息层级",
+      "criterion": "按钮图标和文字对齐；主要操作至少44px；单行动作不意外换行或增高",
+      "max_score": 2,
+      "score": 2,
+      "finding": "主要按钮44px，图标18px且继承文字色；文字按钮对齐回归已修正，旧样式负例可检出。",
+      "evidence": [
+        "buttons/visual-results.json",
+        "layout-results.json"
+      ]
+    },
+    {
+      "id": "V11",
+      "category": "视觉与信息层级",
+      "criterion": "面板、列表、徽标、空状态、工具栏使用统一样式与语义颜色",
+      "max_score": 2,
+      "score": 2,
+      "finding": "复用System Blue变量、语义状态、面板与工具栏，浅深页面一致。",
+      "evidence": [
+        "layout-results.json",
+        "screenshots/matrix/empty-skills-light-1440.png"
+      ]
+    },
+    {
+      "id": "V12",
+      "category": "视觉与信息层级",
+      "criterion": "数据密集页面可扫描；详情、技术标识和原始JSON不抢占主要阅读路径",
+      "max_score": 2,
+      "score": 2,
+      "finding": "知识库轻量页签；能力目录先读职责与工具名，原始规则/版本/JSON按需展开。",
+      "evidence": [
+        "screenshots/matrix/populated-library-knowledge-light-375.png",
+        "screenshots/matrix/empty-registry-light-1440.png"
+      ]
+    },
+    {
+      "id": "N01",
+      "category": "导航与发现",
+      "criterion": "11个模块分组和当前页状态清楚；侧栏键盘可达",
+      "max_score": 2,
+      "score": 2,
+      "finding": "11模块导航、当前页语义及手机焦点约束均通过。",
+      "evidence": [
+        "navigation-results.json",
+        "layout-results.json"
+      ]
+    },
+    {
+      "id": "N02",
+      "category": "导航与发现",
+      "criterion": "命令面板可搜索并到达全部模块；空结果可恢复，方向键与Escape正确",
+      "max_score": 2,
+      "score": 2,
+      "finding": "命令搜索可发现所有模块，键盘进入、Escape关闭与前后退通过。",
+      "evidence": [
+        "navigation-results.json",
+        "agent-flow/keyboard-results.json"
+      ]
+    },
+    {
+      "id": "N03",
+      "category": "导航与发现",
+      "criterion": "当前空间始终明确；切换后内容隔离，旧请求不会覆盖新空间",
+      "max_score": 2,
+      "score": 2,
+      "finding": "空间切换预检查后打开明确空间URL，内容隔离并恢复正确目录。",
+      "evidence": [
+        "navigation-results.json",
+        "workspace-history-results.json"
+      ]
+    },
+    {
+      "id": "N04",
+      "category": "导航与发现",
+      "criterion": "深链接、浏览器前后退和详情返回保持正确上下文与页面位置",
+      "max_score": 2,
+      "score": 1,
+      "finding": "任务深链接、跨空间Back/Forward和新页重开均通过；未逐一实机验证超长列表跨空间返回的精确滚动位置。",
+      "evidence": [
+        "workspace-history-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "N05",
+      "category": "导航与发现",
+      "criterion": "保存、关闭、切页后焦点落在有意义且可见的位置",
+      "max_score": 2,
+      "score": 2,
+      "finding": "通知关闭返回有效焦点，配置保存及编辑返回保持有意义的操作上下文。",
+      "evidence": [
+        "behavior-results.json",
+        "agent-flow/browser-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "N06",
+      "category": "导航与发现",
+      "criterion": "首次使用帮助围绕创建空间、智能体、任务及查看结果；缺前置条件时有直达入口",
+      "max_score": 2,
+      "score": 2,
+      "finding": "帮助包含真实创建入口；无Agent时工作流直达前置配置。",
+      "evidence": [
+        "behavior-results.json"
+      ]
+    },
+    {
+      "id": "J01",
+      "category": "完整操作动线",
+      "criterion": "空间创建、编辑、进入、删除和恢复有明确回执及后续入口",
+      "max_score": 2,
+      "score": 2,
+      "finding": "创建、编辑、明确进入、隔离、删除恢复及服务端重名定位完整通过。",
+      "evidence": [
+        "navigation-results.json"
+      ]
+    },
+    {
+      "id": "J02",
+      "category": "完整操作动线",
+      "criterion": "智能体用途选择、自建领域、三步配置、保存与开始使用衔接完整",
+      "max_score": 2,
+      "score": 2,
+      "finding": "用途预设、自建领域、三步配置、保存与使用的真实浏览器闭环通过。",
+      "evidence": [
+        "agent-flow/browser-results.json",
+        "module-results.json"
+      ]
+    },
+    {
+      "id": "J03",
+      "category": "完整操作动线",
+      "criterion": "任务草稿、配置往返、字段校验、失败重试与双击防重入有效",
+      "max_score": 2,
+      "score": 2,
+      "finding": "任务字段错误、提交失败重试、配置往返及重复提交保护通过。",
+      "evidence": [
+        "agent-flow/browser-results.json",
+        "ui-tests.log",
+        "buttons/visual-results.json"
+      ]
+    },
+    {
+      "id": "J04",
+      "category": "完整操作动线",
+      "criterion": "待授权、待材料、失败、中断、取消均展示合适的下一步，保留原执行事实",
+      "max_score": 2,
+      "score": 2,
+      "finding": "待授权、缺材料、失败、取消、写后中断恢复均在独立空间实际执行；中断恢复保留一个原草稿。",
+      "evidence": [
+        "recovery-results.json"
+      ]
+    },
+    {
+      "id": "J05",
+      "category": "完整操作动线",
+      "criterion": "运行列表可筛选；结果、来源、验收、轨迹之间切换不会被刷新覆盖",
+      "max_score": 2,
+      "score": 2,
+      "finding": "运行筛选可恢复，完成后优先显示报告与来源；手动页签不被轮询覆盖。",
+      "evidence": [
+        "agent-flow/browser-results.json",
+        "buttons/visual-results.json",
+        "recovery-results.json"
+      ]
+    },
+    {
+      "id": "J06",
+      "category": "完整操作动线",
+      "criterion": "工作流画布添加、配置、连接、分支与缩放可操作，手机上有可达的配置入口",
+      "max_score": 2,
+      "score": 2,
+      "finding": "真实拖动、键盘微调、端口连线、分支、汇合、缩放与手机配置入口通过。",
+      "evidence": [
+        "canvas-learning-results.json",
+        "layout-results.json"
+      ]
+    },
+    {
+      "id": "J07",
+      "category": "完整操作动线",
+      "criterion": "工作流对话、提案审阅、保存、启动与运行详情衔接；明确模型许可",
+      "max_score": 2,
+      "score": 2,
+      "finding": "对话澄清→提案→画布审查→保存→启动→结果可完成；提案未自动运行或授权。",
+      "evidence": [
+        "module-results.json",
+        "canvas-learning-results.json"
+      ]
+    },
+    {
+      "id": "J08",
+      "category": "完整操作动线",
+      "criterion": "Skill草稿、资源文件、校验、发布、撤回、复制、导入导出与未保存处理可完成",
+      "max_score": 2,
+      "score": 1,
+      "finding": "草稿、资源、校验、发布、撤回、导入导出均实际完成；复制及部分未保存分支由交互测试覆盖，本轮未逐一实机覆盖。",
+      "evidence": [
+        "module-results.json",
+        "export-verification.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "J09",
+      "category": "完整操作动线",
+      "criterion": "资料草稿、修订、审核发布、撤回与来源检索形成闭环；私有偏好范围清楚",
+      "max_score": 2,
+      "score": 1,
+      "finding": "资料草稿、修订、审核发布与引用来源闭环通过；撤回和私有偏好组合主要由当前交互测试覆盖，实机覆盖仍有限。",
+      "evidence": [
+        "module-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "J10",
+      "category": "完整操作动线",
+      "criterion": "复盘与本体的来源选择、生成、审阅、保存、沉淀和发布入口可达",
+      "max_score": 2,
+      "score": 2,
+      "finding": "复盘与本体生成、人工审阅、保存沉淀、审核发布及浏览入口通过。",
+      "evidence": [
+        "module-results.json",
+        "canvas-learning-results.json",
+        "layout-results.json"
+      ]
+    },
+    {
+      "id": "J11",
+      "category": "完整操作动线",
+      "criterion": "每日计划配置、预览、派发、受阻处理与任务回跳清楚；不产生重复派发",
+      "max_score": 2,
+      "score": 2,
+      "finding": "计划配置、生成、派发、重复派发去重及待启动任务回跳实际通过，演示定时开关保持关闭。",
+      "evidence": [
+        "module-results.json",
+        "layout-results.json"
+      ]
+    },
+    {
+      "id": "J12",
+      "category": "完整操作动线",
+      "criterion": "评测设置、岗位契约、执行明细、低分提醒、确认与证据回跳完整",
+      "max_score": 2,
+      "score": 2,
+      "finding": "失败历史评分、提醒明细、确认已阅、空间阈值与岗位契约保存通过；旧流程明确要求重选岗位版本。",
+      "evidence": [
+        "module-results.json",
+        "canvas-learning-results.json"
+      ]
+    },
+    {
+      "id": "J13",
+      "category": "完整操作动线",
+      "criterion": "运行时配置可选择提供方、调整模型参数、保存并返回任务；故障说明可操作",
+      "max_score": 2,
+      "score": 2,
+      "finding": "运行时提供方和参数校验、等待冻结、保存回执、失败保留与重试通过，任务配置往返完整。",
+      "evidence": [
+        "runtime-results.json",
+        "agent-flow/browser-results.json"
+      ]
+    },
+    {
+      "id": "J14",
+      "category": "完整操作动线",
+      "criterion": "能力与标准可按领域与版本理解，先读业务说明，再按需查看技术结构",
+      "max_score": 2,
+      "score": 2,
+      "finding": "职责、工具读写边界与业务说明优先；版本和技术规则保留披露入口。",
+      "evidence": [
+        "screenshots/matrix/empty-registry-light-1440.png",
+        "layout-results.json"
+      ]
+    },
+    {
+      "id": "J15",
+      "category": "完整操作动线",
+      "criterion": "目录搜索、筛选和空结果有清除入口；刷新不抢走输入焦点或打断输入法",
+      "max_score": 2,
+      "score": 1,
+      "finding": "运行与Agent筛选、无结果恢复和轮询保护通过；所有目录的原生中文输入法组合未逐项实机复核。",
+      "evidence": [
+        "agent-flow/browser-results.json",
+        "buttons/visual-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "J16",
+      "category": "完整操作动线",
+      "criterion": "资料、Skill、配置等跨模块往返保留原任务或智能体编辑上下文",
+      "max_score": 2,
+      "score": 2,
+      "finding": "任务直达配置再返回保留目标和预算，重新采用版本并审查许可；跨模块返回有交互回归。",
+      "evidence": [
+        "agent-flow/browser-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "S01",
+      "category": "状态与恢复",
+      "criterion": "成功反馈持久且有下一步；浮动提示不遮挡焦点和主要操作",
+      "max_score": 2,
+      "score": 2,
+      "finding": "保存后持久下一步、页内顶部提示与弹窗内提示可见，不遮挡主要操作。",
+      "evidence": [
+        "behavior-results.json",
+        "buttons/visual-results.json"
+      ]
+    },
+    {
+      "id": "S02",
+      "category": "状态与恢复",
+      "criterion": "提交期间有文字反馈、防重复提交；禁用和加载视觉一致",
+      "max_score": 2,
+      "score": 2,
+      "finding": "Agent保存尺寸稳定；运行时保存冻结字段，双次提交只发一次，切页仍正确接收回执。",
+      "evidence": [
+        "buttons/visual-results.json",
+        "runtime-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "S03",
+      "category": "状态与恢复",
+      "criterion": "错误就近展示、关联字段并可聚焦；失败保留输入，修正后错误清除",
+      "max_score": 2,
+      "score": 2,
+      "finding": "首个无效字段自动聚焦，中文错误与字段关联；原生约束和服务端重名错误都保留输入并可修正。",
+      "evidence": [
+        "behavior-results.json",
+        "navigation-results.json",
+        "runtime-results.json"
+      ]
+    },
+    {
+      "id": "S04",
+      "category": "状态与恢复",
+      "criterion": "写入成功后刷新失败仍保留权威回执，不误报保存失败或重复写入",
+      "max_score": 2,
+      "score": 2,
+      "finding": "保存成功与列表刷新分开处理；资源回执失败分支有当前交互测试，运行时切页后的权威回执实际验证。",
+      "evidence": [
+        "ui-tests.log",
+        "runtime-results.json",
+        "agent-flow/browser-results.json"
+      ]
+    },
+    {
+      "id": "S05",
+      "category": "状态与恢复",
+      "criterion": "所有可编辑对话框关闭/切换有未保存处理，提交中不能意外退出",
+      "max_score": 2,
+      "score": 2,
+      "finding": "任务、Agent、资源与配置有编辑保护；设置、画布和复盘使用统一继续编辑/放弃确认。",
+      "evidence": [
+        "behavior-results.json",
+        "canvas-learning-results.json",
+        "agent-flow/browser-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "S06",
+      "category": "状态与恢复",
+      "criterion": "初次读取与切页加载有可理解反馈，旧页面内容不伪装成当前页",
+      "max_score": 2,
+      "score": 2,
+      "finding": "切页清除旧内容，显示目标模块和读取状态；等待请求的真实场景通过。",
+      "evidence": [
+        "behavior-results.json"
+      ]
+    },
+    {
+      "id": "S07",
+      "category": "状态与恢复",
+      "criterion": "首次空白、筛选无结果、无权限、无前置配置有不同的文案和恢复动作",
+      "max_score": 2,
+      "score": 2,
+      "finding": "首次空白、筛选无结果、缺少Agent和当前空间找不到记录均提供相应恢复动作。",
+      "evidence": [
+        "behavior-results.json",
+        "navigation-results.json",
+        "buttons/visual-results.json"
+      ]
+    },
+    {
+      "id": "S08",
+      "category": "状态与恢复",
+      "criterion": "服务断开、超时和读取失败提供重试入口，恢复后提示正确清除",
+      "max_score": 2,
+      "score": 2,
+      "finding": "读取503可重试，恢复后清除错误；配置保存503保留输入；有效HTTP记录错误不会误报离线。",
+      "evidence": [
+        "behavior-results.json",
+        "runtime-results.json",
+        "navigation-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "S09",
+      "category": "状态与恢复",
+      "criterion": "配置许可和业务授权保持独立；变更执行上下文后重新审查",
+      "max_score": 2,
+      "score": 2,
+      "finding": "模型发送许可、MCP许可与业务写入授权保持独立；变更配置后重新审查，不自动继承授权。",
+      "evidence": [
+        "agent-flow/browser-results.json",
+        "recovery-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "S10",
+      "category": "状态与恢复",
+      "criterion": "无效、冲突、未知结果和部分失败不会静默丢失；给出安全后续动作",
+      "max_score": 2,
+      "score": 2,
+      "finding": "保存冲突、刷新失败和未知写入结果保留事实；岗位旧版本明确提示，恢复核对不重写。",
+      "evidence": [
+        "canvas-learning-results.json",
+        "recovery-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "A01",
+      "category": "可访问性与输入方式",
+      "criterion": "主要动线全程键盘可完成；弹窗焦点约束、Escape和关闭后恢复正确",
+      "max_score": 2,
+      "score": 2,
+      "finding": "纯键盘创建与使用、手机导航焦点24次循环、Escape、配置返回与画布微调通过。",
+      "evidence": [
+        "agent-flow/keyboard-results.json",
+        "navigation-results.json",
+        "canvas-learning-results.json"
+      ]
+    },
+    {
+      "id": "A02",
+      "category": "可访问性与输入方式",
+      "criterion": "控件名称、表单标签、错误关联、状态播报和当前页语义完整",
+      "max_score": 2,
+      "score": 2,
+      "finding": "布局扫描未发现可见控件缺名称；字段错误aria关联、当前页和运行状态播报有实际及交互证据。",
+      "evidence": [
+        "layout-results.json",
+        "behavior-results.json",
+        "buttons/visual-results.json",
+        "ui-tests.log"
+      ]
+    },
+    {
+      "id": "A03",
+      "category": "可访问性与输入方式",
+      "criterion": "实际渲染文本对比至少4.5:1，必要控件边界/焦点至少3:1，覆盖浅深主题",
+      "max_score": 2,
+      "score": 1,
+      "finding": "540状态有效背景合成后的文本对比均通过；代表控件的边界/焦点通过，但未穷举所有浮层和原生控件边界。",
+      "evidence": [
+        "layout-results.json",
+        "agent-flow/browser-results.json",
+        "buttons/visual-results.json"
+      ]
+    },
+    {
+      "id": "A04",
+      "category": "可访问性与输入方式",
+      "criterion": "200%文字、减少动态效果及小屏低高度下仍可到达字段与操作",
+      "max_score": 2,
+      "score": 2,
+      "finding": "200%文字25状态、320宽、375低高度和减少动态效果可达性通过；文字放大方法与浏览器缩放明确区分。",
+      "evidence": [
+        "text-resize-results.json",
+        "layout-results.json",
+        "behavior-results.json"
+      ]
+    },
+    {
+      "id": "A05",
+      "category": "可访问性与输入方式",
+      "criterion": "授权与删除等操作有可审查范围；模拟与真实能力的描述准确",
+      "max_score": 2,
+      "score": 2,
+      "finding": "授权审查具体任务范围、参数与环境；删除可审查影响并恢复；模拟描述与真实发送许可准确。",
+      "evidence": [
+        "recovery-results.json",
+        "navigation-results.json",
+        "agent-flow/browser-results.json"
+      ]
+    },
+    {
+      "id": "A06",
+      "category": "可访问性与输入方式",
+      "criterion": "画布拖动等指针操作有键盘或点击替代；图标动作有可见或可访问名称",
+      "max_score": 2,
+      "score": 2,
+      "finding": "画布指针拖动有键盘与配置操作替代；图标动作有名称，移动与连线实际完成。",
+      "evidence": [
+        "canvas-learning-results.json",
+        "layout-results.json"
+      ]
+    }
+  ],
+  "deductions": [
+    "N04",
+    "J08",
+    "J09",
+    "J15",
+    "A03"
+  ],
+  "limits": [
+    "实机范围为本机 Chrome；未声称已验证 Safari、Firefox、移动操作系统或辅助阅读器。",
+    "200%为一次性翻倍HTML计算字号与行高，视口375×812；不冒称浏览器缩放或所有尺寸交叉覆盖。",
+    "业务工具与生成流程使用模拟运行时，定时功能的验收配置未开启真实周期执行；用户数据与8787配置未被验收脚本写入。",
+    "五项非关键证据范围限制已逐项扣分，未把未覆盖分支算作完整满足。"
+  ],
+  "backendBoundaryRegression": {
+    "tests": 24,
+    "result": "passed",
+    "evidence": "backend-boundaries.log"
+  }
+}

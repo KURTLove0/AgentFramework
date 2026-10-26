@@ -1,0 +1,128 @@
+{
+  "version": "1.2.0",
+  "servers": {
+    "8787": {
+      "version": "1.2.0",
+      "business_tools": "simulated",
+      "static_resource_statuses": {
+        "/": 200,
+        "/journeys.js": 200,
+        "/agents.js": 200,
+        "/styles.css": 200,
+        "/space-grotesk.ttf": 200,
+        "/roles.js": 200,
+        "/skills.js": 200,
+        "/library.js": 200,
+        "/appearance.js": 200,
+        "/workspaces.js": 200,
+        "/workflow_designer.js": 200,
+        "/workflows.js": 200,
+        "/hig.css": 200,
+        "/app.js": 200
+      },
+      "static_hashes_match_source": true,
+      "counts": {
+        "runtime.sqlite3": {
+          "compiled_agents": 0,
+          "capability_blocks": 0,
+          "native_reads": 0,
+          "runs": 0,
+          "events": 0,
+          "actions": 0,
+          "outbox": 0,
+          "evidence": 0,
+          "verifications": 0,
+          "grants": 0,
+          "experience_candidates": 0,
+          "asset_versions": 0,
+          "asset_events": 0,
+          "context_manifests": 0,
+          "episodic_memories": 0,
+          "experience_evaluations": 0,
+          "runtime_configuration": 0,
+          "model_catalog": 0,
+          "agent_profiles": 0,
+          "workspaces": 1,
+          "workflows": 0,
+          "workflow_runs": 0,
+          "workflow_events": 0,
+          "skill_heads": 2,
+          "skill_versions": 2,
+          "skill_events": 2
+        },
+        "mock-business.sqlite3": {
+          "changes": 0,
+          "drafts": 0,
+          "calls": 0
+        }
+      },
+      "sqlite_quick_check": {
+        "runtime.sqlite3": "ok",
+        "mock-business.sqlite3": "ok"
+      },
+      "model_calls": 0
+    },
+    "54680": {
+      "version": "1.2.0",
+      "business_tools": "simulated",
+      "static_resource_statuses": {
+        "/": 200,
+        "/journeys.js": 200,
+        "/agents.js": 200,
+        "/styles.css": 200,
+        "/space-grotesk.ttf": 200,
+        "/roles.js": 200,
+        "/skills.js": 200,
+        "/library.js": 200,
+        "/appearance.js": 200,
+        "/workspaces.js": 200,
+        "/workflow_designer.js": 200,
+        "/workflows.js": 200,
+        "/hig.css": 200,
+        "/app.js": 200
+      },
+      "static_hashes_match_source": true,
+      "counts": {
+        "runtime.sqlite3": {
+          "compiled_agents": 0,
+          "capability_blocks": 0,
+          "native_reads": 0,
+          "runs": 0,
+          "events": 0,
+          "actions": 0,
+          "outbox": 0,
+          "evidence": 0,
+          "verifications": 0,
+          "grants": 0,
+          "experience_candidates": 0,
+          "asset_versions": 0,
+          "asset_events": 0,
+          "context_manifests": 0,
+          "episodic_memories": 0,
+          "experience_evaluations": 0,
+          "runtime_configuration": 0,
+          "model_catalog": 0,
+          "agent_profiles": 0,
+          "workspaces": 1,
+          "workflows": 0,
+          "workflow_runs": 0,
+          "workflow_events": 0,
+          "skill_heads": 2,
+          "skill_versions": 2,
+          "skill_events": 2
+        },
+        "mock-business.sqlite3": {
+          "changes": 0,
+          "drafts": 0,
+          "calls": 0
+        }
+      },
+      "sqlite_quick_check": {
+        "runtime.sqlite3": "ok",
+        "mock-business.sqlite3": "ok"
+      },
+      "model_calls": 0
+    }
+  },
+  "real_model_calls": 0
+}

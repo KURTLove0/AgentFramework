@@ -1,0 +1,86 @@
+{
+  "space": "workspace-332a64fda61f4589",
+  "agent": "agent-7a2948d83fd749aa",
+  "results": [
+    {
+      "id": "row-arrow-return-focus",
+      "expected": "原智能体详情链接或右侧箭头",
+      "actual": "agent-inspect-agent-7a2948d83fd749aa",
+      "pass": true
+    },
+    {
+      "id": "archive-render-pending",
+      "pendingSurvivedRender": true,
+      "posts": 1,
+      "pass": true
+    },
+    {
+      "id": "archive-authoritative-success",
+      "storedArchived": true,
+      "actual": {
+        "archived": true,
+        "action": "恢复使用",
+        "startButtons": 0,
+        "text": "智能体\n资料核对助理\n已归档\n\n尚未添加用途描述\n\n恢复使用\n此智能体已归档。历史任务与配置仍可查看，恢复后可创建新任务。\n概览\n工作指令\n技能\n任务记录\n它能帮你做什么\n\n知识问答岗位助理\n\n01\n依据有来源的知识回答问题\n\n交付：带原文引用的知识回答\n\n验收：回答与原文一致、来源属于任务范围、来源当前有效\n执行标准\n\n结果按岗位标准检查，业务写入在任务中单独授权。\n\n知识来源与引用\n查看完整工作指令\n配置摘要\n处理领域\n知识问答\n岗位角色\n知识问答助手\n执行方式\n模拟运行\n模型\n内置规划器\n当前版本\nv2\n更新于\n2026/10/26 11:08:40\n\n新任务会固定当前配置版本。修改配置不会改变历史任务。\n\n检查配置\n查看岗位评测\n复制智能体\n更多配置"
+      },
+      "pass": true
+    },
+    {
+      "id": "restore-authoritative-success",
+      "storedArchived": false,
+      "actual": {
+        "archived": false,
+        "action": "归档智能体",
+        "startButtons": 1,
+        "focus": "agent-archive-agent-7a2948d83fd749aa"
+      },
+      "pass": true
+    },
+    {
+      "id": "archive-submit-failure",
+      "actual": {
+        "archived": false,
+        "action": "归档智能体",
+        "disabled": false,
+        "feedback": "归档失败：PM定向复验：归档提交失败，可重试"
+      },
+      "pass": true
+    },
+    {
+      "id": "archive-submit-retry",
+      "actual": {
+        "archived": true,
+        "startButtons": 0
+      },
+      "pass": true
+    },
+    {
+      "id": "stale-list-cannot-revert-restore",
+      "mutation": {
+        "archived": false,
+        "revision": 5
+      },
+      "actual": {
+        "archived": false,
+        "revision": 5,
+        "action": "归档智能体"
+      },
+      "followupGets": 1,
+      "pass": true
+    },
+    {
+      "id": "stale-list-cannot-revert-archive",
+      "mutation": {
+        "archived": true,
+        "revision": 6
+      },
+      "actual": {
+        "archived": true,
+        "revision": 6,
+        "action": "恢复使用"
+      },
+      "followupGets": 1,
+      "pass": true
+    }
+  ]
+}

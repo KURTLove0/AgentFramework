@@ -1,0 +1,71 @@
+.operations-overview {display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding:24px;margin-bottom:16px}
+.operations-overview label {min-width:200px;max-width:100%}
+.operations-overview p {margin:8px 0 0;max-width:80ch}
+.operations-note {margin:0 0 24px;max-width:95ch}
+.daily-plan,.operations-alerts {margin-bottom:24px}
+.operations-items {padding:0 24px}
+.operations-item {display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding:20px 0;border-bottom:1px solid var(--border);min-width:0}
+.operations-item:last-child {border-bottom:0}
+.operations-item>div:first-child {min-width:0;flex:1}
+.operations-item strong,.operations-item p,.operations-item a {overflow-wrap:anywhere}
+.operations-item p {margin:6px 0}
+.operations-item-end {display:flex;gap:12px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.operations-reason {color:var(--amber)}
+.operations-pending {padding:0 24px 16px}
+.operations-footer {display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;padding:16px 24px;background:var(--subtle);border-top:1px solid var(--border);border-radius:0 0 var(--radius-panel) var(--radius-panel)}
+.operations-recovery {flex:1 0 100%;min-width:0}
+.operations-recovery>.field-help {max-width:75ch;margin:0 0 12px;white-space:normal;overflow-wrap:anywhere}
+.operations-recovery>.toolbar {justify-content:flex-start}
+.operations-alerts>.operations-item {margin:0 24px}
+.operations-warning {border-left:3px solid var(--amber);padding-left:16px}
+.evaluation-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;margin:24px 0}
+.evaluation-score {padding:24px}
+.evaluation-number {font:650 44px/1.3 var(--font);margin:16px 0;letter-spacing:-1px}
+.evaluation-number small {font-size:14px;letter-spacing:0;margin-left:8px;color:var(--muted)}
+.evaluation-detail {margin:0 24px;border-bottom:1px solid var(--border)}
+.evaluation-detail:last-child {border-bottom:0}
+.evaluation-detail summary {display:flex;justify-content:space-between;gap:16px;align-items:center;padding:20px 0;list-style:revert}
+.evaluation-detail summary>span:first-child {min-width:0}
+.evaluation-detail small {display:block;color:var(--muted);margin-top:4px}
+.evaluation-body {padding-bottom:24px;overflow-wrap:anywhere}
+.evaluation-body h3 {margin:20px 0 12px}
+.evaluation-body ul {padding-left:24px;margin:12px 0}
+.evaluation-dimensions {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0}
+.evaluation-dimensions span {padding:12px;background:var(--subtle);border-radius:var(--radius)}
+.evaluation-dimensions strong {display:block}
+#operations-dialog {width:min(780px,calc(100vw - 32px))}
+#operations-dialog .dialog-head {position:sticky;top:-24px;background:var(--surface);z-index:1;padding-top:16px}
+#operations-dialog label {display:block;margin-top:12px}
+#operations-dialog .check-label {display:flex;align-items:flex-start}
+#operations-dialog .check-label input {flex-shrink:0}
+#operations-dialog .check-label small {display:block;color:var(--muted);margin-top:4px}
+#operations-dialog .mini-heading {gap:16px}
+#operations-dialog .mini-heading label {flex:1;min-width:0}
+#operations-dialog .mini-heading h3 {margin:0}
+.daily-task-field {padding:16px;margin:20px 0;border:1px solid var(--border);border-radius:var(--radius);min-width:0}
+.daily-task-field legend {padding:0 8px;font-weight:600}
+@media(max-width:700px){
+ .operations-overview,.operations-item {flex-direction:column;gap:12px}
+ .operations-overview {padding:20px}
+ .operations-overview label {width:100%}
+ .operations-items {padding:0 20px}
+ .operations-item-end {justify-content:flex-start;width:100%}
+ .evaluation-detail {margin:0 20px}
+ .evaluation-detail summary {align-items:flex-start;flex-direction:column;gap:8px}
+ .evaluation-dimensions {grid-template-columns:repeat(2,minmax(0,1fr))}
+ .operations-footer {padding:16px 20px}
+ #operations-dialog .mini-heading {flex-wrap:wrap}
+ #operations-dialog .mini-heading label {min-width:180px}
+}
+.ontology-model-section {margin-top:20px;border-top:1px solid var(--border);padding-top:12px}
+.ontology-model-section>summary {font-weight:650}
+.ontology-shape-property {padding:16px;margin:12px 0;background:var(--subtle);border-radius:var(--radius);border:1px solid var(--border)}
+.ontology-operational .daily-task-field {overflow-wrap:anywhere}
+.ontology-operational label {display:block;margin:12px 0}
+.ontology-operational .form-grid {align-items:start}
+.ontology-operational .daily-task-field legend {max-width:100%;overflow-wrap:anywhere}
+#ontology-explorer {width:min(900px,calc(100vw - 32px))}
+#ontology-explorer .facts {margin:12px 0}
+#ontology-explorer .toolbar {flex-wrap:wrap;margin-top:12px}
+#operations-dialog h3 {margin:20px 0 8px}
+@media(max-width:600px){.ontology-operational .mini-heading {flex-wrap:wrap}.ontology-shape-property {padding:12px}}

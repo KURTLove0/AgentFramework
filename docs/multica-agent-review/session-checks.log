@@ -1,0 +1,17 @@
+PASS explicit stale POST refreshes once and returns the retried result
+PASS a second stale response stops after one retry
+PASS ordinary authorization 403 never refreshes or replays
+PASS a stale GET never triggers mutation recovery
+PASS network failure never replays
+PASS request timeout never replays
+PASS unknown write outcome never replays
+PASS an unreadable success response never replays
+PASS session refresh 403 stops without another POST
+PASS session refresh timeout stops without another POST
+PASS an uncertain retry response is never replayed again
+PASS callers can explicitly disable session recovery
+PASS workspace switching stops replay and preserves the original session scope
+PASS a tenant change stops replay and retains the original token
+PASS retry payload remains frozen if the caller mutates its object
+
+15 isolated UI session checks passed. No network requests were made.

@@ -47,6 +47,7 @@ class Workflows:
             p=self.app.agents.get(n['agent_id'])
             if type(n['agent_revision']) is not int or p['revision']!=n['agent_revision']:raise ConfigConflict('节点 Agent 已更新，请重新选择当前版本')
             if p['archived']:raise ValueError('节点 Agent 已归档')
+            self.app.agents.assert_skills_available(p)
             AgentCompiler().compile(p)
             if not isinstance(n['depends_on'],list) or len(n['depends_on'])>11 or len(n['depends_on'])!=len(set(n['depends_on'])):raise ValueError('节点依赖无效')
             validate_options(n)

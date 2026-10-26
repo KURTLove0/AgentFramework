@@ -1,0 +1,501 @@
+{
+  "startedAt": "2026-10-25T05:15:06.745Z",
+  "checks": [
+    {
+      "id": "blocked-plan-restores-through-real-settings",
+      "passed": true,
+      "blocked": {
+        "auto_start": false,
+        "created_at": 1792905308.88342,
+        "day": "2026-10-25",
+        "error": null,
+        "history_counts": {
+          "pending": 0,
+          "succeeded": 0,
+          "total": 0
+        },
+        "id": "daily-3b781d62c6ec1c448e9c49c0",
+        "items": [
+          {
+            "agent_name": "待恢复岗位",
+            "id": "daily-task-1",
+            "reason": "每日任务的 Agent 已归档",
+            "responsibilities": [
+              {
+                "check_refs": [
+                  "report-sections",
+                  "critical-claims-evidence"
+                ],
+                "deliverable_ref": "release-report@1.0.0",
+                "description": "评估变更风险"
+              },
+              {
+                "check_refs": [
+                  "draft-readback"
+                ],
+                "deliverable_ref": "release-draft@1.0.0",
+                "description": "创建并回读草稿"
+              }
+            ],
+            "run_id": null,
+            "status": "BLOCKED",
+            "task": {
+              "agent_id": "agent-ba0d42f260734a78",
+              "agent_revision": 1,
+              "change_id": "change-demo-001",
+              "consent": true,
+              "goal": "恢复受阻后的唯一任务",
+              "grant": true,
+              "mcp_consent": true
+            }
+          }
+        ],
+        "pending_runs": [],
+        "schedule_revision": 1,
+        "status": "PARTIAL",
+        "summary": "工作空间有 0 项未完成任务；今日可派发 1 项，阻塞 0 项，避免重复 0 项。",
+        "timezone": "Asia/Shanghai"
+      },
+      "permissionsAfterAgentSelection": [
+        {
+          "key": "grant",
+          "checked": false
+        },
+        {
+          "key": "consent",
+          "checked": false
+        },
+        {
+          "key": "mcp_consent",
+          "checked": false
+        }
+      ],
+      "oldAfterEdit": {
+        "auto_start": false,
+        "created_at": 1792905308.88342,
+        "day": "2026-10-25",
+        "error": null,
+        "history_counts": {
+          "pending": 0,
+          "succeeded": 0,
+          "total": 0
+        },
+        "id": "daily-3b781d62c6ec1c448e9c49c0",
+        "items": [
+          {
+            "agent_name": "待恢复岗位",
+            "id": "daily-task-1",
+            "reason": "每日任务的 Agent 已归档",
+            "responsibilities": [
+              {
+                "check_refs": [
+                  "report-sections",
+                  "critical-claims-evidence"
+                ],
+                "deliverable_ref": "release-report@1.0.0",
+                "description": "评估变更风险"
+              },
+              {
+                "check_refs": [
+                  "draft-readback"
+                ],
+                "deliverable_ref": "release-draft@1.0.0",
+                "description": "创建并回读草稿"
+              }
+            ],
+            "run_id": null,
+            "status": "BLOCKED",
+            "task": {
+              "agent_id": "agent-ba0d42f260734a78",
+              "agent_revision": 1,
+              "change_id": "change-demo-001",
+              "consent": true,
+              "goal": "恢复受阻后的唯一任务",
+              "grant": true,
+              "mcp_consent": true
+            }
+          }
+        ],
+        "pending_runs": [],
+        "schedule_revision": 1,
+        "status": "PARTIAL",
+        "summary": "工作空间有 0 项未完成任务；今日可派发 1 项，阻塞 0 项，避免重复 0 项。",
+        "timezone": "Asia/Shanghai"
+      },
+      "regenerated": {
+        "auto_start": false,
+        "created_at": 1792905310.1831439,
+        "day": "2026-10-25",
+        "error": null,
+        "history_counts": {
+          "pending": 0,
+          "succeeded": 0,
+          "total": 0
+        },
+        "id": "daily-3b781d62c6ec1c448e9c49c0",
+        "items": [
+          {
+            "agent_name": "待恢复岗位",
+            "id": "daily-task-1",
+            "reason": null,
+            "responsibilities": [
+              {
+                "check_refs": [
+                  "report-sections",
+                  "critical-claims-evidence"
+                ],
+                "deliverable_ref": "release-report@1.0.0",
+                "description": "评估变更风险"
+              },
+              {
+                "check_refs": [
+                  "draft-readback"
+                ],
+                "deliverable_ref": "release-draft@1.0.0",
+                "description": "创建并回读草稿"
+              }
+            ],
+            "run_id": null,
+            "status": "READY",
+            "task": {
+              "agent_id": "agent-ba0d42f260734a78",
+              "agent_revision": 3,
+              "change_id": "change-demo-001",
+              "consent": false,
+              "goal": "恢复受阻后的唯一任务",
+              "grant": true,
+              "mcp_consent": false
+            }
+          }
+        ],
+        "pending_runs": [],
+        "schedule_revision": 2,
+        "status": "PLANNED",
+        "summary": "工作空间有 0 项未完成任务；今日可派发 1 项，阻塞 0 项，避免重复 0 项。",
+        "timezone": "Asia/Shanghai"
+      },
+      "restored": {
+        "auto_start": false,
+        "created_at": 1792905310.1831439,
+        "day": "2026-10-25",
+        "error": null,
+        "history_counts": {
+          "pending": 0,
+          "succeeded": 0,
+          "total": 0
+        },
+        "id": "daily-3b781d62c6ec1c448e9c49c0",
+        "items": [
+          {
+            "agent_name": "待恢复岗位",
+            "id": "daily-task-1",
+            "reason": null,
+            "responsibilities": [
+              {
+                "check_refs": [
+                  "report-sections",
+                  "critical-claims-evidence"
+                ],
+                "deliverable_ref": "release-report@1.0.0",
+                "description": "评估变更风险"
+              },
+              {
+                "check_refs": [
+                  "draft-readback"
+                ],
+                "deliverable_ref": "release-draft@1.0.0",
+                "description": "创建并回读草稿"
+              }
+            ],
+            "run_id": "run-daily-55009a36fd61dde1de1dd69e",
+            "status": "DISPATCHED",
+            "task": {
+              "agent_id": "agent-ba0d42f260734a78",
+              "agent_revision": 3,
+              "change_id": "change-demo-001",
+              "consent": false,
+              "goal": "恢复受阻后的唯一任务",
+              "grant": true,
+              "mcp_consent": false
+            },
+            "run_status": "CREATED"
+          }
+        ],
+        "pending_runs": [],
+        "schedule_revision": 2,
+        "status": "DISPATCHED",
+        "summary": "工作空间有 0 项未完成任务；今日可派发 1 项，阻塞 0 项，避免重复 0 项。",
+        "timezone": "Asia/Shanghai"
+      },
+      "repeatedRunId": "run-daily-55009a36fd61dde1de1dd69e",
+      "runCount": 1
+    },
+    {
+      "id": "mixed-partial-keeps-frozen-facts-and-creates-manual-task",
+      "passed": true,
+      "mixed": {
+        "auto_start": false,
+        "created_at": 1792905312.6837592,
+        "day": "2026-10-25",
+        "error": null,
+        "history_counts": {
+          "pending": 0,
+          "succeeded": 0,
+          "total": 0
+        },
+        "id": "daily-8849fdf00e34c0f98d4ae04d",
+        "items": [
+          {
+            "agent_name": "今日可用岗位",
+            "id": "daily-task-1",
+            "reason": null,
+            "responsibilities": [
+              {
+                "check_refs": [
+                  "report-sections",
+                  "critical-claims-evidence"
+                ],
+                "deliverable_ref": "release-report@1.0.0",
+                "description": "评估变更风险"
+              },
+              {
+                "check_refs": [
+                  "draft-readback"
+                ],
+                "deliverable_ref": "release-draft@1.0.0",
+                "description": "创建并回读草稿"
+              }
+            ],
+            "run_id": "run-daily-296785411535030a59b00007",
+            "status": "DISPATCHED",
+            "task": {
+              "agent_id": "agent-a7477d2e60c94710",
+              "agent_revision": 1,
+              "change_id": "change-demo-001",
+              "consent": false,
+              "goal": "混合计划已派发条目",
+              "grant": true,
+              "mcp_consent": false
+            },
+            "run_status": "CREATED"
+          },
+          {
+            "agent_name": "今日阻塞岗位",
+            "id": "daily-task-2",
+            "reason": "每日任务的 Agent 已归档",
+            "responsibilities": [
+              {
+                "check_refs": [
+                  "report-sections",
+                  "critical-claims-evidence"
+                ],
+                "deliverable_ref": "release-report@1.0.0",
+                "description": "评估变更风险"
+              },
+              {
+                "check_refs": [
+                  "draft-readback"
+                ],
+                "deliverable_ref": "release-draft@1.0.0",
+                "description": "创建并回读草稿"
+              }
+            ],
+            "run_id": null,
+            "status": "BLOCKED",
+            "task": {
+              "agent_id": "agent-7f8c9d7400b84242",
+              "agent_revision": 1,
+              "change_id": "change-demo-001",
+              "consent": false,
+              "goal": "混合计划受阻条目",
+              "grant": true,
+              "mcp_consent": false
+            }
+          }
+        ],
+        "pending_runs": [],
+        "schedule_revision": 1,
+        "status": "PARTIAL",
+        "summary": "工作空间有 0 项未完成任务；今日可派发 2 项，阻塞 0 项，避免重复 0 项。",
+        "timezone": "Asia/Shanghai"
+      },
+      "recovery": "已派发部分保留原版本。调整设置用于后续计划；今日需更换岗位时，请新建任务并重新审查许可。\n\n调整计划设置\n检查 Agent\n新建今日任务",
+      "stillFrozen": {
+        "auto_start": false,
+        "created_at": 1792905312.6837592,
+        "day": "2026-10-25",
+        "error": null,
+        "history_counts": {
+          "pending": 0,
+          "succeeded": 0,
+          "total": 0
+        },
+        "id": "daily-8849fdf00e34c0f98d4ae04d",
+        "items": [
+          {
+            "agent_name": "今日可用岗位",
+            "id": "daily-task-1",
+            "reason": null,
+            "responsibilities": [
+              {
+                "check_refs": [
+                  "report-sections",
+                  "critical-claims-evidence"
+                ],
+                "deliverable_ref": "release-report@1.0.0",
+                "description": "评估变更风险"
+              },
+              {
+                "check_refs": [
+                  "draft-readback"
+                ],
+                "deliverable_ref": "release-draft@1.0.0",
+                "description": "创建并回读草稿"
+              }
+            ],
+            "run_id": "run-daily-296785411535030a59b00007",
+            "status": "DISPATCHED",
+            "task": {
+              "agent_id": "agent-a7477d2e60c94710",
+              "agent_revision": 1,
+              "change_id": "change-demo-001",
+              "consent": false,
+              "goal": "混合计划已派发条目",
+              "grant": true,
+              "mcp_consent": false
+            },
+            "run_status": "CREATED"
+          },
+          {
+            "agent_name": "今日阻塞岗位",
+            "id": "daily-task-2",
+            "reason": "每日任务的 Agent 已归档",
+            "responsibilities": [
+              {
+                "check_refs": [
+                  "report-sections",
+                  "critical-claims-evidence"
+                ],
+                "deliverable_ref": "release-report@1.0.0",
+                "description": "评估变更风险"
+              },
+              {
+                "check_refs": [
+                  "draft-readback"
+                ],
+                "deliverable_ref": "release-draft@1.0.0",
+                "description": "创建并回读草稿"
+              }
+            ],
+            "run_id": null,
+            "status": "BLOCKED",
+            "task": {
+              "agent_id": "agent-7f8c9d7400b84242",
+              "agent_revision": 1,
+              "change_id": "change-demo-001",
+              "consent": false,
+              "goal": "混合计划受阻条目",
+              "grant": true,
+              "mcp_consent": false
+            }
+          }
+        ],
+        "pending_runs": [],
+        "schedule_revision": 1,
+        "status": "PARTIAL",
+        "summary": "工作空间有 0 项未完成任务；今日可派发 2 项，阻塞 0 项，避免重复 0 项。",
+        "timezone": "Asia/Shanghai"
+      },
+      "manualRunId": "run-5f7a73a7eec24233",
+      "manualWriteGrant": false,
+      "dailyRunId": "run-daily-296785411535030a59b00007",
+      "runCount": 2
+    }
+  ],
+  "errors": [],
+  "workspace": {
+    "business": "UI95 界面验收",
+    "description": "界面验收隔离数据",
+    "name": "每日受阻恢复独立探索 mvndj0vj",
+    "scenario": "独立模拟",
+    "id": "workspace-f944d41920c94bf8",
+    "revision": 1,
+    "project_id": "project-c8754de20c1c4bc4",
+    "deleted": false,
+    "created_at": 1792905307.185247,
+    "updated_at": 1792905307.185247
+  },
+  "agent": {
+    "definition": {
+      "adapter_bindings": {},
+      "capability_refs": [
+        "change.read@1.0.0",
+        "standards.read@1.0.0",
+        "report.draft.create@1.0.0",
+        "report.read@1.0.0"
+      ],
+      "domain_pack_ref": "change-assessment@2.0.0",
+      "identity": {
+        "name": "待恢复岗位",
+        "role": "变更评估专家"
+      },
+      "knowledge_spaces": [
+        "simulated-change-context@1.0.0"
+      ],
+      "native_read_refs": [],
+      "policy_ref": "release-reviewer-policy@1.0.0",
+      "prompt_template_ref": "profile-prompt@1",
+      "responsibilities": [
+        {
+          "check_refs": [
+            "report-sections",
+            "critical-claims-evidence"
+          ],
+          "deliverable_ref": "release-report@1.0.0",
+          "description": "评估变更风险"
+        },
+        {
+          "check_refs": [
+            "draft-readback"
+          ],
+          "deliverable_ref": "release-draft@1.0.0",
+          "description": "创建并回读草稿"
+        }
+      ],
+      "runtime_profile_ref": "profile-runtime@1",
+      "skill_refs": [
+        "release-risk-analysis@1.0.0"
+      ],
+      "standard_refs": [
+        "report-evidence@1.0.0",
+        "release-review-rubric@1.0.0"
+      ]
+    },
+    "description": "",
+    "mcp_servers": [],
+    "model": "builtin",
+    "name": "待恢复岗位",
+    "options": {},
+    "prompt": "你是一名变更评估助手。根据模拟工具证据识别风险，使用清晰的中文输出可核对的评估结论。",
+    "runtime": "mock",
+    "skills": [],
+    "id": "agent-ba0d42f260734a78",
+    "revision": 1,
+    "created_at": 1792905308.086366,
+    "updated_at": 1792905308.086366,
+    "archived": false
+  },
+  "mixedWorkspace": {
+    "business": "UI95 界面验收",
+    "description": "界面验收隔离数据",
+    "name": "每日混合受阻独立探索 mvndj3jn",
+    "scenario": "独立模拟",
+    "id": "workspace-06c055ee4abf4a0e",
+    "revision": 1,
+    "project_id": "project-5079e9c14895433c",
+    "deleted": false,
+    "created_at": 1792905310.644761,
+    "updated_at": 1792905310.644761
+  },
+  "finishedAt": "2026-10-25T05:15:13.866Z"
+}

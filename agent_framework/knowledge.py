@@ -59,6 +59,13 @@ def schema(db):
             tenant UNINDEXED, id UNINDEXED, version UNINDEXED, terms);
         CREATE TABLE IF NOT EXISTS asset_events (
             tenant TEXT, id TEXT, version INTEGER, time REAL, actor TEXT, event TEXT, data TEXT);
+        CREATE INDEX IF NOT EXISTS asset_scope_kind ON asset_versions(tenant,project,environment,kind,id,version DESC);
+        CREATE INDEX IF NOT EXISTS asset_event_version ON asset_events(tenant,id,event,version DESC);
+        CREATE TABLE IF NOT EXISTS ontology_activation (
+            tenant TEXT, id TEXT, version INTEGER, PRIMARY KEY(tenant,id));
+        CREATE TABLE IF NOT EXISTS ontology_evidence (
+            tenant TEXT, id TEXT, version INTEGER, path TEXT, source_ref TEXT,
+            revision INTEGER, data TEXT, PRIMARY KEY(tenant,id,version,path,source_ref));
         CREATE TABLE IF NOT EXISTS context_manifests (
             tenant TEXT, run_id TEXT, id TEXT, data TEXT, PRIMARY KEY(tenant,run_id,id));
         CREATE TABLE IF NOT EXISTS episodic_memories (
@@ -114,12 +121,22 @@ class Library:
             raise KnowledgeUnavailable('asset content hash mismatch')
         return self._record(row)
 
-    def list(self, access, *, include_unpublished=False):
+    def list(self, access, *, include_unpublished=False, kind=None):
         scope, params=self._scope(access)
+        if kind is not None:
+            if kind not in KINDS:raise ValueError('unknown asset kind')
+            scope+=' AND kind=?';params.append(kind)
         if not include_unpublished:scope+=" AND status='PUBLISHED'"
         with self.store.connect() as db:
             rows=db.execute('SELECT * FROM asset_versions WHERE '+scope+' ORDER BY created DESC,id,version DESC',params).fetchall()
         return [self._record(row) for row in rows]
+
+    def active_ontology_ref(self, access, identity):
+        """A withdrawal never silently reactivates a previous publication."""
+        scope,params=self._scope(access)
+        with self.store.connect() as db:
+            row=db.execute('SELECT v.version FROM asset_versions v WHERE '+scope+" AND id=? AND kind='ONTOLOGY' AND version=COALESCE((SELECT version FROM ontology_activation WHERE tenant=v.tenant AND id=v.id),(SELECT MAX(p.version) FROM asset_versions p WHERE p.tenant=v.tenant AND p.id=v.id AND (p.status='PUBLISHED' OR EXISTS(SELECT 1 FROM asset_events e WHERE e.tenant=p.tenant AND e.id=p.id AND e.version=p.version AND e.event='PUBLISHED'))))",(*params,identifier(identity))).fetchone()
+        return identity+'@'+str(row['version']) if row else None
 
     def create(self, access, data):
         fields={'id','kind','title','content','visibility','space_ref','source_uri','source_version',
@@ -195,8 +212,10 @@ class Library:
         with self.store.transaction() as db:
             if asset['kind']=='ONTOLOGY' and target=='PUBLISHED':
                 from .ontology import sources_current,validate_ontology
+                if not asset['effective_at']<=time.time()<asset['effective_until']:raise PolicyDenied('本体尚未生效或已过期，不能发布')
                 if not sources_current(self,access,asset):raise PolicyDenied('本体来源已撤回、过期或变化，不能发布')
                 validate_ontology(asset['content'],{s['ref'] for s in asset['provenance']['sources']})
+                db.execute('INSERT OR REPLACE INTO ontology_activation VALUES(?,?,?)',(access.tenant,asset['id'],asset['version']))
             if asset['kind']=='EXPERIENCE' and target=='PUBLISHED':
                 evaluation=db.execute('SELECT * FROM experience_evaluations WHERE tenant=? AND evaluation_id=? AND id=? AND version=?',
                                       (access.tenant,evaluation_id,asset['id'],asset['version'])).fetchone()
@@ -261,13 +280,14 @@ class Library:
         if not isinstance(spaces,(list,tuple)) or any(space!=SPACE for space in spaces):raise ValueError('unknown knowledge space')
         if not spaces:return {'items':[],'excluded':[]}
         scope,params=self._scope(access)
-        terms=tokens(query)
+        terms=tokens(query);has_query=bool(query.strip())
         from .ontology import expand
-        semantic_sources=set(expand(self,access,query)['source_refs']) if terms else set()
+        semantic_sources=set(expand(self,access,query)['source_refs']) if has_query else set()
+        semantic_ids={ref.rsplit('@',1)[0] for ref in semantic_sources}
         with self.store.connect() as db:
             # No content/identities from unauthorized rows reach the ranker or manifest.
-            rows=db.execute('SELECT * FROM asset_versions WHERE '+scope+' AND space=? ORDER BY id,version DESC',(*params,SPACE)).fetchall()
             matched=set()
+            expression=None
             if terms:
                 expression=' OR '.join('"'+term+'"' for term in terms)
                 hits=db.execute('''SELECT a.id,a.version FROM asset_search s JOIN asset_versions a
@@ -276,10 +296,34 @@ class Library:
                     AND (a.visibility='PROJECT' OR a.owner=?)''',
                     (expression,access.tenant,access.project,access.environment,access.principal)).fetchall()
                 matched={(r['id'],int(r['version'])) for r in hits}
+            row_scope=scope+' AND space=?';row_params=[*params,SPACE]
+            if has_query:
+                candidates=["kind='PREFERENCE'"]
+                if for_context:candidates.append("json_extract(data,'$.critical')=1")
+                if expression:
+                    candidates.append('id IN (SELECT id FROM asset_search WHERE terms MATCH ? AND tenant=?)')
+                    row_params.extend([expression,access.tenant])
+                    # A corrupt body may no longer agree with its FTS row.
+                    # Include literal matches for integrity diagnostics, then
+                    # verify their hashes before allowing any retrieval hit.
+                    candidates.append('instr(lower(data),?)>0')
+                    row_params.append(query.strip().lower())
+                if semantic_ids:
+                    candidates.append('id IN ('+','.join('?' for _ in semantic_ids)+')')
+                    row_params.extend(sorted(semantic_ids))
+                # Required context assets are few; inspect their flag without
+                # decoding every unrelated historical content body in Python.
+                row_scope+=' AND ('+' OR '.join(candidates)+')'
+            rows=db.execute('SELECT * FROM asset_versions WHERE '+row_scope+' ORDER BY id,version DESC',row_params).fetchall()
         chosen=[];excluded=[];seen=set();now=time.time()
         for row in rows:
             if row['kind']=='ONTOLOGY':continue
-            if row['id'] in seen:continue
+            ref=f"{row['id']}@{row['version']}"
+            # Ontology paths bind exact evidence versions. Never silently swap
+            # these for the newest version or discard them during id deduping.
+            if row['id'] in semantic_ids:
+                if ref not in semantic_sources:continue
+            elif row['id'] in seen:continue
             asset=self._record(row)
             reason=None
             if digest(json.loads(row['data']))!=row['hash']:reason='content-hash-mismatch'
@@ -289,7 +333,7 @@ class Library:
                 excluded.append({'ref':asset['ref'],'reason':reason,'critical':asset['critical']})
                 continue
             seen.add(row['id'])
-            if terms and (row['id'],row['version']) not in matched and asset['ref'] not in semantic_sources and asset['kind']!='PREFERENCE' and not (for_context and asset['critical']):
+            if has_query and (row['id'],row['version']) not in matched and asset['ref'] not in semantic_sources and asset['kind']!='PREFERENCE' and not (for_context and asset['critical']):
                 continue
             chosen.append(asset)
         # Equal published claims require explicit supersession, not model arbitration.

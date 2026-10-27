@@ -108,8 +108,16 @@ def validate_ontology(value,refs,*,validate_data=True):
 
 
 def mock_ontology(context,operational=False):
-    nodes=[{'id':'concept-'+str(i+1),'label':s['title'],'definition':str(s['content'].get('text',s['content'].get('lesson','来源资料中的业务概念')))[:1200],
-            'aliases':[],'properties':[{'id':'source-version','label':'来源版本','type':'string','description':'该概念依据的资料版本引用'}],'source_refs':[s['ref']]} for i,s in enumerate(context['sources'])]
+    nodes=[];labels=set()
+    for i,s in enumerate(context['sources']):
+        # Equal titles do not establish concept equivalence. Keep each source's
+        # facts separate and disambiguate under the validator's label rules.
+        base=s['title'].strip() or s['ref'];label=base;suffix=0
+        while label.casefold() in labels:
+            suffix+=1;label=base+' ('+s['ref']+(' #'+str(suffix) if suffix>1 else '')+')'
+        labels.add(label.casefold())
+        nodes.append({'id':'concept-'+str(i+1),'label':label,'definition':str(s['content'].get('text',s['content'].get('lesson','来源资料中的业务概念')))[:1200],
+                      'aliases':[],'properties':[{'id':'source-version','label':'来源版本','type':'string','description':'该概念依据的资料版本引用'}],'source_refs':[s['ref']]})
     # Do not invent semantic relationships from mere co-occurrence.
     result={'name':'资料领域本体','description':'离线模式按选定资料建立概念；请编辑概念、属性和关系，或选择真实模型进一步抽取。','concepts':nodes,'relations':[]}
     if operational:
@@ -119,12 +127,52 @@ def mock_ontology(context,operational=False):
 
 
 def sources_current(library,access,asset):
+    """Check the frozen source versions; later versions do not replace evidence."""
     try:
         sources=asset['provenance']['sources']
         context=source_context(library,access,[s['ref'] for s in sources])
         expected={s['ref']:s['content_hash'] for s in sources}
         return all(expected[s['ref']]==s['content_hash'] for s in context['sources'])
     except (KeyError,ValueError,PolicyDenied):return False
+
+
+def ontology_current(library,access,asset):
+    """One eligibility gate for concept retrieval, objects and action previews."""
+    if asset['kind']!='ONTOLOGY' or asset['status']!='PUBLISHED' or not asset['effective_at']<=time.time()<asset['effective_until']:return False
+    if library.active_ontology_ref(access,asset['id'])!=asset['ref']:return False
+    return _intact(asset) and sources_current(library,access,asset)
+
+
+def _intact(asset):
+    body={k:v for k,v in asset.items() if k not in {'ref','id','version','kind','status','owner','tenant_id','project_id','environment','visibility','content_hash'}}
+    return digest(body)==asset['content_hash']
+
+
+def ontology_state(library,access,asset):
+    now=time.time();effective=asset['effective_at']<=now<asset['effective_until']
+    current=sources_current(library,access,asset);active=library.active_ontology_ref(access,asset['id'])
+    integrity=_intact(asset)
+    reason=('本体已撤回' if asset['status']=='WITHDRAWN' else '本体尚未发布' if asset['status']!='PUBLISHED' else
+            '本体尚未生效' if now<asset['effective_at'] else '本体已过期' if not effective else
+            '本体内容哈希不一致，请核对资产完整性' if not integrity else
+            '来源已撤回、过期、变化或不可访问，请基于当前资料重新生成' if not current else
+            '此版本未生效；撤回新版不会自动恢复旧版，可明确启用此版本' if active!=asset['ref'] else '')
+    return {'sources_current':current,'effective':effective,'active_ref':active,'usable':not reason,'unavailable_reason':reason}
+
+
+def activate(library,access,ref,data):
+    if not isinstance(data,dict) or set(data)!={'expected_active_ref'}:raise ValueError('启用版本需要当前生效版本引用')
+    asset=library.get(access,ref)
+    if asset['kind']!='ONTOLOGY' or asset['owner']!=access.principal or 'curator' not in access.roles:raise PolicyDenied('只能启用本人管理的本体版本')
+    with library.store.transaction() as db:
+        asset=library.get(access,ref)
+        state=ontology_state(library,access,asset)
+        if state['active_ref']!=data['expected_active_ref']:raise ConfigConflict('生效版本已变化，请刷新后重试')
+        if asset['status']!='PUBLISHED' or not state['effective'] or not state['sources_current']:raise PolicyDenied('仅有效、来源可访问的已发布版本可明确启用')
+        validate_ontology(asset['content'],{s['ref'] for s in asset['provenance']['sources']})
+        db.execute('INSERT OR REPLACE INTO ontology_activation VALUES(?,?,?)',(access.tenant,asset['id'],asset['version']))
+        db.execute('INSERT INTO asset_events VALUES(?,?,?,?,?,?,?)',(access.tenant,asset['id'],asset['version'],time.time(),access.principal,'ontology.activated',canonical(data)))
+    return {**asset,**ontology_state(library,access,asset)}
 
 
 def revise(library,access,ref,data):
@@ -151,11 +199,9 @@ def expand(library,access,query,limit=12,max_hops=2,predicates=None):
     predicates=allowed if predicates is None else predicates
     if not isinstance(predicates,(set,list,tuple)) or any(not isinstance(p,str) or p not in allowed for p in predicates):raise ValueError('本体检索关系类型无效')
     if not query.strip():return {'concepts':[],'source_refs':[],'paths':[]}
-    terms=set(tokens(query));ranked=[];seen=set();now=time.time()
-    for asset in library.list(access,include_unpublished=True):
-        if asset['kind']!='ONTOLOGY' or asset['status']!='PUBLISHED' or asset['id'] in seen or not asset['effective_at']<=now<asset['effective_until']:continue
-        if digest({k:v for k,v in asset.items() if k not in {'ref','id','version','kind','status','owner','tenant_id','project_id','environment','visibility','content_hash'}})!=asset['content_hash']:continue
-        if not sources_current(library,access,asset):continue
+    terms=set(tokens(query));normalized=query.strip().casefold();ranked=[];seen=set()
+    for asset in library.list(access,include_unpublished=True,kind='ONTOLOGY'):
+        if asset['kind']!='ONTOLOGY' or asset['id'] in seen or not ontology_current(library,access,asset):continue
         seen.add(asset['id']);content=asset['content'];nodes={n['id']:n for n in content['concepts']};adjacency={key:[] for key in nodes}
         for relation in content['relations']:
             if relation['predicate'] not in predicates:continue
@@ -165,8 +211,8 @@ def expand(library,access,query,limit=12,max_hops=2,predicates=None):
         for node in nodes.values():
             labels=[node['label'],*node['aliases']]
             overlap=terms.intersection(tokens(' '.join(labels)))
-            if overlap:
-                exact=query.strip().casefold() in {label.strip().casefold() for label in labels}
+            exact=normalized in {label.strip().casefold() for label in labels}
+            if exact or overlap:
                 matches[node['id']]={'score':1.0 if exact else .8+min(.15,len(overlap)*.03),'path':[],'matched':node['id']}
         frontier=list(matches)
         for _ in range(max_hops):

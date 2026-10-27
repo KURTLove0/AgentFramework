@@ -1,6 +1,6 @@
 # Agent Framework
 
-当前发行版本 **1.2.0**。独立安装包及启动方式见 [发行版安装说明](docs/release/INSTALL.md)，功能范围见 [发布说明](docs/release/RELEASE_NOTES.md)。业务工具仍为模拟实现；初始工作台不附带演示数据。
+当前发行版本 **1.3.0**。独立安装包及启动方式见 [发行版安装说明](docs/release/INSTALL.md)，功能范围见 [发布说明](docs/release/RELEASE_NOTES.md)。业务工具仍为模拟实现；初始工作台不附带演示数据。
 
 从当前源码生成不含本机数据的发行包（在已安装项目依赖的虚拟环境中执行）：
 
@@ -9,7 +9,7 @@ python -m pip install 'setuptools>=68' wheel
 python scripts/build_release.py
 ```
 
-输出 `dist/agent-framework-1.2.0.tar.gz`、独立 wheel 和 SHA256 校验文件。构建会逐文件核对代码和资源，包含目标与智能体任务创建、持续对话、工作流画布及浅色/深色界面。解压后执行 `sh scripts/install.sh`、`sh scripts/start.sh` 即可启动干净工作台；原有源码和开发测试命令继续可用。
+输出 `dist/agent-framework-1.3.0.tar.gz`、独立 wheel 和 SHA256 校验文件。构建会逐文件核对代码和资源，包含目标与智能体任务创建、持续对话、工作流画布及浅色/深色界面。解压后执行 `sh scripts/install.sh`、`sh scripts/start.sh` 即可启动干净工作台；原有源码和开发测试命令继续可用。
 
 当前源码面向按目标执行的智能体任务：选择已保存的智能体、输入目标，即可开始。运行页按实际事件展示公开思考摘要、资料读取与结果，支持同一任务内继续提问、修改和停止。普通任务没有固定的“计划 → 检索 → 回答 → 验收”模型调用链路。
 
@@ -27,15 +27,15 @@ Python **3.11+**，核心执行器使用标准库；标准 Skill YAML 解析使�
 
 运行摘要仅来自运行时明确公开的内容，不展示隐藏推理。旧业务流程的授权、回读与故障恢复继续兼容；下方 CLI `demo` 章节说明的是这些业务模拟场景。
 
-当前源码更新尚未重新生成已发布安装包；从源码运行或按上方命令重新构建。此次核查与验证见 [任务及跨模块动线核查](docs/project-review-20261027/README.md)。
+当前源码与 1.3.0 发行包同步；历史版本产物保留。此次核查与验证见 [任务及跨模块动线核查](docs/project-review-20261027/README.md)。
 
 ## 助理闭环已接通
 
 新增**岗位评测契约与业务本体模型**：按 Agent 的冻结身份、职责交付物、标准及可配置权重评分，核对证据完整性和能力边界；本体支持 Agent 抽取、对象类型/实例、关系基数、约束报告、能力映射核对、来源路径检索及带 SHACL/PROV 的 JSON-LD 导出。详见 [岗位评测与 Ontology 优化](docs/ontology-v2/implementation.md)。
 
-新增**每日任务与岗位评测**：工作空间可按时区和每日时间汇总待办、按模板派发指定版本的 Agent 任务，支持待启动或自动运行、同日去重和中断恢复。任务终态按冻结身份、职责及标准自动评分，低分或基础验收失败时产生站内提醒；支持历史补评、阈值配置与确认追溯。详见 [每日任务与岗位评测](docs/operations/implementation.md)。此轮为源码更新，现有发行包需另行升级构建。
+新增**每日任务与岗位评测**：工作空间可按时区和每日时间汇总待办、按模板派发指定版本的 Agent 任务，支持待启动或自动运行、同日去重和中断恢复。任务终态按冻结身份、职责及标准自动评分，低分或基础验收失败时产生站内提醒；支持历史补评、阈值配置与确认追溯。详见 [每日任务与岗位评测](docs/operations/implementation.md)。此功能已纳入 1.3.0。
 
-当前源码新增**运行复盘与本体 Ontology**：调用所选 Agent 总结运行，经审阅沉淀为知识、工作记忆、经验和能力方法；本体支持概念/属性/关系编辑、来源校验、审核发布、检索扩展及 JSON-LD 导出。详见 [复盘与领域本体](docs/learning/implementation.md)。此轮源码更新尚未重建 1.2.0 发行包。
+当前源码新增**运行复盘与本体 Ontology**：调用所选 Agent 总结运行，经审阅沉淀为知识、工作记忆、经验和能力方法；本体支持概念/属性/关系编辑、来源校验、审核发布、检索扩展及 JSON-LD 导出。详见 [复盘与领域本体](docs/learning/implementation.md)。此功能已纳入 1.3.0。
 
 新增**四模块知识库和 Agent 工作流**：知识修订与审计、私有记忆、经验评测发布、能力使用岗位统一管理；工作流节点全部由 Agent 实现，支持对话生成提案、审查保存、依赖执行、上游产物传递、节点授权及持久化恢复。见 [知识库与工作流使用及验收](docs/workflows/implementation.md)。
 
@@ -330,4 +330,27 @@ Web 界面保存的默认值用于 Web 新任务；CLI 新任务继续默认使�
 
 ```bash
 python3 -m agent_framework.p0_evaluate
+```
+
+## 可靠性检查与浏览器回归
+
+普通任务的检查分衡量交付结构、引用和执行边界；目标达成质量需人工或专项验收。离线演示不计入评分。新版本本体发布后成为生效版本，撤回时不会自动启用旧版；旧版可在列表中明确启用。
+
+本体的“断言证据”可为概念、关系、属性约束和实例保存逐字原文、位置及人工核对。失败生成若保留了可编辑结构，可从生成记录创建修复草稿；修复不再次调用模型，保存和沉淀仍执行全部约束检查。
+
+开发环境先安装 Python 项目依赖、Node.js 22+ 和本机 Chrome，再运行：
+
+```sh
+npm ci
+npm test
+python3 scripts/run_browser_tests.py
+python3 scripts/run_browser_tests.py --suite ontology --suite audit-fixes
+```
+
+浏览器脚本自动创建临时数据库、合成模型服务和随机本机端口，并在结束时停止服务。结果路径会打印到终端。兼容历史业务模块的额外测试可使用 `--suite legacy-modules`；这部分夹具经公开 API 建立，不代表当前普通任务存在旧的场景/预授权向导。
+
+构建后可在已安装 PyYAML 的 Python 环境中验证独立 wheel：
+
+```sh
+python3 scripts/verify_release.py dist/bounded_agent_mvp-1.3.0-py3-none-any.whl
 ```

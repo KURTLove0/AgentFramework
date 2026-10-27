@@ -755,6 +755,7 @@ class Handler(BaseHTTPRequestHandler):
                       "/learning.js": ("learning.js", "text/javascript; charset=utf-8"),
                       "/operations.js": ("operations.js", "text/javascript; charset=utf-8"),
                       "/ontology_model.js": ("ontology_model.js", "text/javascript; charset=utf-8"),
+                      "/ontology_evidence.js": ("ontology_evidence.js", "text/javascript; charset=utf-8"),
                       "/operations.css": ("operations.css", "text/css; charset=utf-8"),
                       "/space-grotesk.ttf": ("space-grotesk.ttf", "font/ttf")}
             if not mutation and path in assets:
@@ -835,6 +836,7 @@ class Handler(BaseHTTPRequestHandler):
                 if len(learning_path)==3:
                     return self.reply(200,service.save(identity,data)) if mutation else self.reply(200,service.get(identity))
                 if mutation and learning_path[3]=='deposit':return self.reply(200,service.deposit(identity,data))
+                if mutation and learning_path[3]=='repair':return self.reply(201,service.repair(identity,data))
             if path=='/api/ontology-search' and not mutation:
                 from .ontology import expand
                 return self.reply(200,expand(app.library(),app.library_access(),query.get('query',[''])[0],
@@ -849,13 +851,27 @@ class Handler(BaseHTTPRequestHandler):
                 from .ontology import revise,export_jsonld
                 ref=unquote(learning_path[2]);asset=app.library().get(app.library_access(),ref)
                 if asset['kind']!='ONTOLOGY':raise ValueError('不是本体资料')
+                if mutation and learning_path[3]=='activate':
+                    from .ontology import activate
+                    return self.reply(200,activate(app.library(),app.library_access(),ref,data))
                 if mutation and learning_path[3]=='revise':return self.reply(201,revise(app.library(),app.library_access(),ref,data))
-                if not mutation and learning_path[3]=='export':return self.reply(200,json.dumps(export_jsonld(asset),ensure_ascii=False),'application/ld+json; charset=utf-8','ontology.jsonld')
+                if learning_path[3]=='evidence':
+                    from .ontology_evidence import read,save
+                    return self.reply(200,save(app.library(),app.library_access(),ref,data) if mutation else read(app.library(),app.library_access(),ref))
+                if not mutation and learning_path[3]=='export':
+                    from .ontology_evidence import records,jsonld
+                    document=export_jsonld(asset)
+                    document['@graph'].extend(jsonld(asset,records(app.library(),app.library_access(),asset)))
+                    return self.reply(200,json.dumps(document,ensure_ascii=False),'application/ld+json; charset=utf-8','ontology.jsonld')
                 if not mutation and learning_path[3]=='validate':
                     from .ontology_model import validation_report
                     from .ontology import sources_current
                     report=validation_report(asset['content'],{s['ref'] for s in asset['provenance']['sources']})
                     report['sources_current']=sources_current(app.library(),app.library_access(),asset)
+                    report['effective']=asset['effective_at']<=time.time()<asset['effective_until']
+                    if not report['effective']:
+                        report['conforms']=False
+                        report['results'].append({'focus_node':asset['ref'],'path':'effective_at/effective_until','constraint':'AssetEffectiveConstraint','severity':'Violation','message':'本体尚未生效或已过期','value':None})
                     if not report['sources_current']:
                         report['conforms']=False
                         report['results'].append({'focus_node':asset['ref'],'path':'source_refs','constraint':'SourceCurrentConstraint','severity':'Violation','message':'来源已撤回、过期、变化或不再可访问','value':None})

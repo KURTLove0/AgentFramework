@@ -69,3 +69,6 @@
 #ontology-explorer .toolbar {flex-wrap:wrap;margin-top:12px}
 #operations-dialog h3 {margin:20px 0 8px}
 @media(max-width:600px){.ontology-operational .mini-heading {flex-wrap:wrap}.ontology-shape-property {padding:12px}}
+#ontology-evidence-form {min-width:0}
+#ontology-evidence-form :is(select,textarea) {width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+#ontology-evidence-dialog :is(pre,blockquote) {max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere}

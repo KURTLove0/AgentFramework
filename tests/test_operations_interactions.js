@@ -49,5 +49,11 @@ function fixture(){
  {
  const f=fixture();const html=f.context.evaluationDetail({id:'eval-a',goal:'<unsafe>',agent_name:'Agent',agent_revision:1,created_at:1,verdict:'FAIL',score:50,identity:{role:'original role',owner_team:'original team'},policy:{threshold:80},rubric:'job-history@1.0.0',dimensions:[],reasons:['failed <check>'],responsibilities:[],standards:[],evidence_refs:[],snapshot_hash:'hash',run_id:'run-a'});assert(html.includes('original role'));assert(html.includes('v1'));assert(html.includes('&lt;unsafe&gt;'));assert(html.includes('failed &lt;check&gt;'));assert(html.includes('50 分 · 未达标'));pass('evaluation shows frozen role, revision and escaped failure evidence');
  }
+ {
+ const f=fixture();const html=f.context.evaluationDetail({id:'simulation',goal:'实际任务',agent_name:'离线助手',created_at:1,verdict:'SIMULATED',score:null,run_id:'run-simulation'});assert(html.includes('离线演示不计分'));assert(html.includes('目标达成质量未评估'));assert(!html.includes('null 分'));assert(!html.includes('100'));pass('offline simulation has no quality score or success-grade claim');
+ }
+ {
+ const f=fixture();const html=f.context.evaluationDetail({id:'structure',goal:'模型任务',agent_name:'助手',agent_revision:1,created_at:1,verdict:'PASS',score:100,assessment:{scope:'STRUCTURAL'},identity:{role:'任务助手'},policy:{threshold:80},rubric:'job-history@2.1.0',dimensions:[],reasons:[],responsibilities:[],standards:[],evidence_refs:[],snapshot_hash:'hash',run_id:'run-structure'});assert(html.includes('结构检查 100'));assert(html.includes('目标达成质量尚未评估'));assert(!html.includes('岗位职责与标准均已达成'));pass('normal model evaluation clearly labels structural scope and pending quality');
+ }
  console.log(`${count} workspace operations interaction checks passed.`);
 })().catch(error=>{console.error(error);process.exitCode=1;});

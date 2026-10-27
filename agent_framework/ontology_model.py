@@ -221,8 +221,8 @@ def jsonld_model(model, base):
 
 def object_set(library, access, asset, query='', type_id=None, limit=50):
     from .contracts import PolicyDenied
-    from .ontology import sources_current,validate_ontology
-    if asset['status']!='PUBLISHED' or not sources_current(library,access,asset):
+    from .ontology import ontology_current,validate_ontology
+    if not ontology_current(library,access,asset):
         raise PolicyDenied('仅当前有效、来源可访问的已发布本体可用于对象检索')
     if not isinstance(query,str) or len(query)>2000 or type(limit) is not int or not 1<=limit<=100:raise ValueError('对象检索参数无效')
     validate_ontology(asset['content'],{s['ref'] for s in asset['provenance']['sources']})

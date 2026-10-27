@@ -1,4 +1,4 @@
-# Agent Framework 1.2.0 安装与运行
+# Agent Framework 1.3.0 安装与运行
 
 本版本是单用户 Agent 工作台，包含岗位配置、标准 Skills、知识/记忆/经验管理、可视化 Agent 工作流，以及规划、授权、验收与持久化恢复。
 
@@ -9,8 +9,8 @@
 需要 macOS/Linux、Python 3.11+（含 venv/pip）和首次安装时访问 Python 包索引的网络。无需 Node 或独立数据库。安装包依赖固定为 PyYAML 6.0.3。
 
 ```sh
-tar -xzf agent-framework-1.2.0.tar.gz
-cd agent-framework-1.2.0
+tar -xzf agent-framework-1.3.0.tar.gz
+cd agent-framework-1.3.0
 # macOS：shasum -a 256 -c SHA256SUMS
 # Linux：sha256sum -c SHA256SUMS
 sh scripts/install.sh

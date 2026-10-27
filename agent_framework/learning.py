@@ -82,7 +82,32 @@ class Learning:
         with self.store.connect() as db:
             row=db.execute('SELECT * FROM learning_proposals WHERE tenant=? AND workspace=? AND principal=? AND id=?',(*self._scope(),identity)).fetchone()
         if not row:raise KeyError('复盘或生成记录不在当前可访问范围')
-        return {**json.loads(row['data']),'id':row['id'],'revision':row['revision'],'status':row['status'],'purpose':row['purpose']}
+        value={**json.loads(row['data']),'id':row['id'],'revision':row['revision'],'status':row['status'],'purpose':row['purpose']}
+        if value['status']=='FAILED':
+            value['repairable']=False
+            if value['purpose']=='ontology' and value.get('rejected_output'):
+                from .ontology import validate_ontology
+                try:
+                    validate_ontology(value['rejected_output'],{s['ref'] for s in value['source_context']['sources']},validate_data=False)
+                    value['repairable']=True
+                except (ValueError,TypeError,KeyError):pass
+        return value
+
+    def repair(self,identity,data):
+        """Create one editable draft from a failed result, without another model call."""
+        prior=self.get(identity)
+        if not isinstance(data,dict) or set(data)!={'revision'} or type(data['revision']) is not int or data['revision']!=prior['revision']:raise ConfigConflict('生成记录已变化，请重新加载')
+        if not prior.get('repairable'):raise ConfigConflict('此记录没有可在编辑器修复的结构化结果，请重新生成')
+        repaired='learning-repair-'+digest([*self._scope(),identity,prior['revision']])[:16]
+        value={k:deepcopy(v) for k,v in prior.items() if k not in {'id','revision','status','purpose','repairable','rejected_output'}}
+        value.update(request_id='repair-'+identity,request_hash=digest(['repair',identity,prior['revision']]),
+                     repair_of=identity,created_at=time.time(),output=deepcopy(prior['rejected_output']),error=None,receipt=None)
+        with self.store.transaction() as db:
+            existing=db.execute('SELECT id FROM learning_proposals WHERE tenant=? AND workspace=? AND principal=? AND id=?',(*self._scope(),repaired)).fetchone()
+            if not existing:
+                self.assert_sources(db,prior)
+                db.execute('INSERT INTO learning_proposals VALUES(?,?,?,?,?,?,?,?,?,?)',(*self._scope(),repaired,value['request_id'],prior['purpose'],'',1,'DRAFT',canonical(value)))
+        return self.get(repaired)
 
     def list(self,run_id=None,purpose=None):
         if run_id is not None:self.run_context(run_id)
@@ -226,6 +251,7 @@ class Learning:
             if sorted(selected)!=prior['receipt']['item_ids']:raise ConfigConflict('此提案已按其他选项沉淀，请查看回执')
             return prior
         if type(data['revision']) is not int or data['revision']!=prior['revision'] or prior['status']!='DRAFT':raise ConfigConflict('提案已更新或未生成完成')
+        self.validate_output(prior['purpose'],prior['output'],prior['source_context'])
         context=prior['source_context']
         if prior['purpose']=='retrospective':
             current=self.run_context(prior['run_id'])
@@ -266,7 +292,7 @@ class Learning:
                       'source_version':prior['source_hash'],'observed_at':now,'effective_at':now,'effective_until':now+365*86400,
                       'access_policy_ref':'task-scope-owner@1.0.0','sensitivity':'private','critical':False,'conflict_key':'','supersedes':None,'standard_ref':None,
                       'provenance':{'proposal_id':identity,'run_id':prior['run_id'],'source_hash':prior['source_hash'],'sources':[{k:s[k] for k in ('ref','content_hash')} for s in context['sources']],
-                                    'agent_id':prior['agent']['id'],'agent_revision':prior['agent_revision'],'reviewer':self.app.principal,'source_refs':item.get('source_refs',[s['ref'] for s in context['sources']])}}
+                                    'agent_id':prior['agent']['id'],'agent_revision':prior['agent_revision'],'reviewer':self.app.principal,'source_refs':item.get('source_refs',[s['ref'] for s in context['sources']]),'repair_of':prior.get('repair_of')}}
                 insert_asset(db,self.access,asset_id,1,kind,body,'CANDIDATE' if kind=='EXPERIENCE' else 'DRAFT','PRIVATE')
                 db.execute('INSERT INTO asset_events VALUES(?,?,?,?,?,?,?)',(self.app.tenant,asset_id,1,now,self.app.principal,'retrospective.deposited',canonical({'proposal_id':identity,'item_id':item_id})))
                 assets.append({'ref':asset_id+'@1','kind':kind,'title':item['title']})

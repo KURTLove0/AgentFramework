@@ -10,8 +10,8 @@ def hub(app,query=''):
     access=app.library_access();library=app.library();assets=library.list(access,include_unpublished=True)
     terms=set(tokens(query))
     from .ontology import expand
-    semantic=expand(library,access,query);semantic_refs=set(semantic['source_refs'])
-    def matches(value):return not terms or (isinstance(value,dict) and value.get('ref') in semantic_refs) or bool(terms.intersection(tokens(str(value))))
+    semantic=expand(library,access,query);semantic_refs=set(semantic['source_refs'])|{item['ontology_ref'] for item in semantic['concepts']}
+    def matches(value):return not query.strip() or (isinstance(value,dict) and value.get('ref') in semantic_refs) or bool(terms.intersection(tokens(str(value))))
     exp=ExperienceService(app.runtime().store).list(access)
     caps=[];agents=[]
     for a in app.agents.list():
@@ -22,8 +22,8 @@ def hub(app,query=''):
     for cap in capability_definitions().values():
         users=[{'id':a['id'],'name':a['name'],'revision':a['revision'],'adapter_ref':c['capabilities'][cap['ref']]['adapter_ref']} for a,c in agents if cap['ref'] in c['capabilities']]
         caps.append({**cap,'agents':users})
-    from .ontology import sources_current
-    ontologies=[{**a,'sources_current':sources_current(library,access,a)} for a in assets if a['kind']=='ONTOLOGY' and matches(a)]
+    from .ontology import ontology_state
+    ontologies=[{**a,**ontology_state(library,access,a)} for a in assets if a['kind']=='ONTOLOGY' and matches(a)]
     return {'knowledge':[a for a in assets if a['kind']=='KNOWLEDGE' and matches(a)],
             'memory':{'preferences':[a for a in assets if a['kind']=='PREFERENCE' and matches(a)],'notes':[a for a in assets if a['kind']=='MEMORY' and matches(a)],'episodes':episodes(app.runtime().store,access,query,limit=50)},
             'experience':[a for a in exp if matches(a)],'capabilities':[c for c in caps if matches(c)],

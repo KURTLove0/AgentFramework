@@ -12,7 +12,7 @@
     root.dataset.theme = appearance === 'system' ? (systemTheme.matches ? 'dark' : 'light') : appearance;
     root.dataset.appearance = appearance;
     const select = document.getElementById('appearance-select');
-    if (select) select.value = appearance;
+    if (select) { select.value = appearance; if (typeof refreshFormControls === 'function') refreshFormControls(); }
   }
   applyTheme();
   systemTheme.addEventListener('change', applyTheme);

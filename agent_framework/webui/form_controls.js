@@ -13,7 +13,15 @@ function lockFormSubmission(form){
 }
 // Progressive enhancement: native selects remain the form's source of truth.
 const formPickers=new Map();
-let pickerOpen=null,controlsQueued=false;
+let pickerOpen=null,controlsQueued=false,pickerSequence=0;
+function pickerSourceHidden(select){
+ if(select.hidden||select.parentElement?.closest('[hidden],[inert],[aria-hidden="true"],details:not([open])'))return true;
+ const view=select.ownerDocument?.defaultView;
+ for(let node=select;node;node=node.parentElement){const style=view?.getComputedStyle?.(node);if(style&&(style.display==='none'||style.visibility==='hidden'))return true;}
+ return false;
+}
+function shouldEnhanceSelect(select){return !select.multiple&&select.size<=1&&!select.classList.contains('enhanced-select')&&!select.matches('[data-no-picker]')&&!pickerSourceHidden(select);}
+function ensureSelectIdentity(select){if(!select.id)select.id='af-select-'+(++pickerSequence);}
 function controlLabel(select){return select.labels?.[0]?.childNodes[0]?.textContent.trim()||select.getAttribute('aria-label')||'选项';}
 function focusFormControl(field){const picker=formPickers.get(field);(picker?.trigger||field)?.focus({preventScroll:true});(picker?.trigger||field)?.scrollIntoView({block:'nearest',behavior:'instant'});}
 function closeFormPicker(restore=false){
@@ -40,7 +48,8 @@ function positionPicker(p){
  Object.assign(p.popup.style,{width:width+'px',maxHeight:height+'px',left:Math.max(margin,Math.min(box.left,innerWidth-width-margin))+'px',top:(up?Math.max(margin,box.top-height-6):box.bottom+6)+'px'});
 }
 function openFormPicker(p){
- if(p.select.disabled)return;closeFormPicker();pickerOpen=p;p.search.value='';p.popup.hidden=false;
+ if(p.wrapper.hidden||p.select.matches(':disabled'))return;
+ syncFormPicker(p);closeFormPicker();pickerOpen=p;p.search.value='';p.popup.hidden=false;
  renderPicker(p);positionPicker(p);if(p.popup.showPopover)p.popup.showPopover();p.trigger.setAttribute('aria-expanded','true');p.search.focus({preventScroll:true});
 }
 function choosePicker(p,index){
@@ -48,22 +57,24 @@ function choosePicker(p,index){
  const changed=p.select.value!==o.value;p.select.value=o.value;syncFormPicker(p);closeFormPicker(true);if(changed){p.select.dispatchEvent(new Event('input',{bubbles:true}));p.select.dispatchEvent(new Event('change',{bubbles:true}));}else p.select.dispatchEvent(new CustomEvent('picker-selected',{bubbles:true}));
 }
 function syncFormPicker(p){
- const selected=p.select.selectedOptions[0],text=selected?.textContent||'请选择'+controlLabel(p.select);
+ const selected=p.select.selectedOptions[0],text=selected?.textContent||'请选择'+controlLabel(p.select),hidden=pickerSourceHidden(p.select);
  if(p.value.textContent!==text)p.value.textContent=text;
- p.trigger.disabled=p.select.disabled;p.trigger.setAttribute('aria-required',String(p.select.required));
+ p.wrapper.hidden=hidden;p.trigger.disabled=p.select.matches(':disabled');p.trigger.setAttribute('aria-required',String(p.select.required));
+ if(hidden&&pickerOpen===p)closeFormPicker();
  for(const attr of ['aria-invalid','aria-describedby','aria-busy']){const v=p.select.getAttribute(attr);if(v===null)p.trigger.removeAttribute(attr);else p.trigger.setAttribute(attr,v);}
  p.trigger.title=text;
- if(p.select.disabled&&pickerOpen===p)closeFormPicker();
+ if(p.select.matches(':disabled')&&pickerOpen===p)closeFormPicker();
  if(pickerOpen===p){if(p.fingerprint!==pickerFingerprint(p))renderPicker(p);positionPicker(p);}
 }
 function createFormPicker(select){
  if(formPickers.has(select))return;
+ ensureSelectIdentity(select);
  const wrapper=document.createElement('div');wrapper.className='select-picker';
  const trigger=document.createElement('button');trigger.type='button';trigger.className='select-trigger';trigger.id=select.id+'-picker';trigger.setAttribute('role','combobox');trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-controls',select.id+'-options');
  const value=document.createElement('span');value.id=select.id+'-selected';trigger.append(value);trigger.insertAdjacentHTML('beforeend',icon('chevron'));
  const label=select.labels?.[0];if(label){label.id||=select.id+'-label';trigger.setAttribute('aria-labelledby',label.id+' '+value.id);}else trigger.setAttribute('aria-label',controlLabel(select));
  const popup=document.createElement('div');popup.className='select-popover';popup.setAttribute('popover','manual');popup.hidden=true;
- popup.innerHTML=`<div class="select-search">${icon('search')}<input type="search" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="${select.id}-options" aria-label="搜索${esc(controlLabel(select))}" placeholder="搜索${esc(controlLabel(select))}"></div><p class="select-result-count" role="status"></p><div id="${select.id}-options" class="select-options" role="listbox" aria-label="${esc(controlLabel(select))}"></div><div class="select-empty" hidden><p>没有找到匹配的选项</p><button type="button" class="text-button">清除搜索</button></div><button type="button" class="select-create" hidden></button>`;
+ popup.innerHTML=`<div class="select-search">${icon('search')}<input type="search" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="${select.id}-options" aria-label="搜索${esc(controlLabel(select))}" placeholder="搜索${esc(controlLabel(select))}"></div><p class="select-result-count" role="status"></p><div id="${select.id}-options" class="select-options" role="listbox" aria-label="${esc(controlLabel(select))}"></div><div class="select-empty" hidden><p>没有找到匹配的选项</p><button type="button" class="text-button">清除搜索</button></div><button type="button" class="select-create" hidden></button><div class="select-keyboard-hints" aria-hidden="true"><span>↑ ↓ 选择 · ↵ 确认</span><span>Esc 关闭</span></div>`;
  wrapper.append(trigger,popup);select.after(wrapper);select.classList.add('enhanced-select');select.tabIndex=-1;select.setAttribute('aria-hidden','true');
  const p={select,wrapper,trigger,value,popup,search:popup.querySelector('input'),status:popup.querySelector('[role=status]'),list:popup.querySelector('[role=listbox]'),empty:popup.querySelector('.select-empty'),create:popup.querySelector('.select-create'),index:0,options:[]};formPickers.set(select,p);
  trigger.addEventListener('click',()=>pickerOpen===p?closeFormPicker(true):openFormPicker(p));
@@ -79,9 +90,10 @@ function createFormPicker(select){
  popup.addEventListener('click',e=>{const option=e.target.closest('[data-picker-index]');if(option)choosePicker(p,Number(option.dataset.pickerIndex));});
  p.empty.querySelector('button').addEventListener('click',()=>{p.search.value='';renderPicker(p);p.search.focus();});
  p.create.addEventListener('click',()=>{const name=p.search.value.trim();closeFormPicker();toggleAgentDomainEditor(true);$('#agent-domain-name').value=name;$('#agent-domain-name').dispatchEvent(new Event('input',{bubbles:true}));});
- select.addEventListener('change',()=>syncFormPicker(p));
- const observer=new MutationObserver(()=>syncFormPicker(p));observer.observe(select,{childList:true,subtree:true,attributes:true,attributeFilter:['disabled','required','aria-invalid','aria-describedby','aria-busy']});p.observer=observer;
- syncFormPicker(p);
+ select.addEventListener('change',()=>syncFormPicker(p));select.addEventListener('input',()=>syncFormPicker(p));
+ select.addEventListener('focus',()=>{if(!p.wrapper.hidden&&document.activeElement===select)p.trigger.focus({preventScroll:true});});
+ const observer=new MutationObserver(()=>syncFormPicker(p));observer.observe(select,{childList:true,subtree:true,attributes:true,attributeFilter:['disabled','required','aria-invalid','aria-describedby','aria-busy','hidden']});p.observer=observer;
+ syncFormPicker(p);if(document.activeElement===select)p.trigger.focus({preventScroll:true});
 }
 function enhanceFieldMeter(field){
  if(!field.id||field.dataset.meterEnhanced||field.maxLength<1)return;
@@ -100,7 +112,7 @@ function clearFieldInlineError(field){
 function refreshFormControls(){
  if(controlsQueued)return;controlsQueued=true;queueMicrotask(()=>{controlsQueued=false;
   for(const [select,p]of formPickers){if(!select.isConnected){if(pickerOpen===p)closeFormPicker();p.observer.disconnect();formPickers.delete(select);}}
-  for(const id of ['agent-domain','agent-model','task-agent']){const select=document.getElementById(id);if(select&&!formPickers.has(select))createFormPicker(select);}
+  for(const select of document.querySelectorAll('select'))if(shouldEnhanceSelect(select))createFormPicker(select);
   for(const id of ['agent-name','agent-description','agent-prompt','agent-domain-name','agent-domain-description','task-goal']){const field=document.getElementById(id);if(field){enhanceFieldMeter(field);field._updateMeter?.();}}
   for(const p of formPickers.values())syncFormPicker(p);
  });
@@ -108,7 +120,7 @@ function refreshFormControls(){
 document.addEventListener('DOMContentLoaded',()=>{refreshFormControls();new MutationObserver(refreshFormControls).observe(document.body,{childList:true,subtree:true});});
 document.addEventListener('pointerdown',e=>{if(pickerOpen&&!pickerOpen.wrapper.contains(e.target))closeFormPicker();},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&pickerOpen){e.preventDefault();e.stopImmediatePropagation();closeFormPicker(true);}},true);
-document.addEventListener('click',e=>{const label=e.target.closest('label[for]');if(label&&e.target===label){const p=formPickers.get(document.getElementById(label.htmlFor));if(p){e.preventDefault();p.trigger.focus();}}});
+document.addEventListener('click',e=>{const label=e.target.closest('label');if(label&&e.target===label){const p=formPickers.get(label.control||document.getElementById(label.htmlFor));if(p&&!p.wrapper.hidden){e.preventDefault();p.trigger.focus();}}});
 document.addEventListener('input',e=>{if(e.isComposing)return;if(e.target.dataset?.inlineErrorOriginal!==undefined&&e.target.validity.valid&&e.target.value.trim())clearFieldInlineError(e.target);});
 document.addEventListener('reset',refreshFormControls,true);window.addEventListener('resize',()=>{refreshFormControls();if(pickerOpen)positionPicker(pickerOpen);});
 

@@ -5,7 +5,7 @@ import time
 from .contracts import TERMINAL, canonical, digest, identifier
 from .runtime_config import ConfigConflict
 
-RUBRIC = 'job-history@2.0.0'
+RUBRIC = 'job-history@2.1.0'
 DEFAULT_POLICY = {'revision': 0, 'threshold': 80, 'window_days': 30, 'automatic': True}
 
 
@@ -119,6 +119,19 @@ def record(db, state, force=False):
     if score < effective_threshold:
         reasons.append(f'总分 {score:g} 低于有效基础阈值 {effective_threshold}')
     excluded = state['status'] == 'CANCELLED'
+    normal = task.get('execution_mode') in ('direct','conversation')
+    simulation = normal and profile.get('runtime', 'mock' if not snapshot.get('planner') else '') == 'mock'
+    assessment = {'scope':'STRUCTURAL' if normal else 'BUSINESS_RULES',
+                  'quality_status':'SIMULATION_ONLY' if simulation else 'NOT_ASSESSED' if normal else 'RULES_CHECKED',
+                  'label':'离线演示不计分' if simulation else '结构检查分' if normal else '业务规则检查分',
+                  'description':'离线运行仅验证流程，未执行实际模型任务。' if simulation else
+                                '检查交付结构、引用和执行边界；任务目标达成情况待人工或专项验收。' if normal else
+                                '按冻结职责与已登记的客观业务规则检查。'}
+    if normal:
+        duties=[{**d,'source_description':d['description'],'description':'交付格式与引用完整性'} for d in duties]
+    if simulation:
+        duties=[{**d,'score':None,'passed':None} for d in duties]
+        standards=[{**s,'score':None,'passed':None} for s in standards]
     report = {'rubric': RUBRIC, 'run_id': state['run_id'], 'agent_id': profile.get('id', task['agent_ref'].split('@')[0]),
               'agent_name': identity.get('name', profile.get('name', task['agent_ref'])),
               'agent_revision': profile.get('revision'), 'agent_ref': task['agent_ref'],
@@ -126,9 +139,10 @@ def record(db, state, force=False):
               'evaluation_contract': contract, 'contract_origin': 'FROZEN' if compiled.get('evaluation_contract') else 'DERIVED_FROM_FROZEN_JOB',
               'effective_threshold': effective_threshold, 'evidence_integrity': evidence_valid,
               'responsibilities': duties, 'standards': standards, 'baseline': baseline,
-              'dimensions': dimensions, 'score': None if excluded else score,
-              'verdict': 'EXCLUDED' if excluded else 'FAIL' if reasons else 'PASS',
-              'reasons': ['人工取消的任务不计入评分'] if excluded else reasons,
+              'dimensions': [] if simulation else dimensions, 'score': None if excluded or simulation else score,
+              'assessment':assessment,
+              'verdict': 'EXCLUDED' if excluded else 'SIMULATED' if simulation else 'FAIL' if reasons else 'PASS',
+              'reasons': ['人工取消的任务不计入评分'] if excluded else [assessment['description']] if simulation else reasons,
               'evidence_refs': evidence, 'policy': settings, 'status': state['status'],
               'goal': task['goal'], 'run_created_at': state['created_at']}
     fingerprint = digest(report)
@@ -202,27 +216,38 @@ class AgentEvaluations:
     def overview(self):
         settings = self.settings()
         with self.store.connect() as db:
-            rows = db.execute('SELECT data FROM agent_evaluations WHERE tenant=? AND project=? AND principal=? ORDER BY rowid DESC', self.scope).fetchall()
+            rows = db.execute('''WITH latest AS (
+                SELECT data,run_id,ROW_NUMBER() OVER(PARTITION BY run_id ORDER BY rowid DESC) AS position
+                FROM agent_evaluations WHERE tenant=? AND project=? AND principal=?
+                AND json_extract(data,'$.run_created_at')>=?)
+                SELECT e.data,json_extract(r.state,'$.task.execution_mode') AS mode,
+                json_extract(r.state,'$.snapshot.agent_profile.runtime') AS runtime
+                FROM latest e LEFT JOIN runs r ON r.id=e.run_id AND r.tenant_id=? WHERE position=1''',
+                (*self.scope,time.time()-settings['window_days']*86400,self.app.tenant)).fetchall()
             alerts = [{**json.loads(r['data']), 'acknowledged_at': r['acknowledged'], 'created_at': r['created']}
-                      for r in db.execute('SELECT * FROM agent_alerts WHERE tenant=? AND project=? AND principal=? ORDER BY created DESC', self.scope)]
+                      for r in db.execute('SELECT * FROM agent_alerts WHERE tenant=? AND project=? AND principal=? ORDER BY created DESC LIMIT 200', self.scope)]
+            open_alerts=db.execute('SELECT COUNT(*) FROM agent_alerts WHERE tenant=? AND project=? AND principal=? AND acknowledged IS NULL',self.scope).fetchone()[0]
         latest = {}
         for row in rows:
             report = json.loads(row[0])
+            if 'assessment' not in report and row['mode'] in ('direct','conversation'):
+                report=self._present_legacy(report,row['runtime'])
             if report['run_created_at'] >= time.time() - settings['window_days'] * 86400:
                 latest.setdefault(report['run_id'], report)
         groups = {}
         for report in latest.values():
-            group = groups.setdefault(report['agent_id'], {'agent_id': report['agent_id'], 'name': report['agent_name'], 'scores': [], 'failed': 0, 'excluded': 0})
+            group = groups.setdefault(report['agent_id'], {'agent_id': report['agent_id'], 'name': report['agent_name'], 'scores': [], 'failed': 0, 'excluded': 0,'simulated':0,'structural_samples':0})
             if report['score'] is None:
-                group['excluded'] += 1
+                group['simulated' if report['verdict']=='SIMULATED' else 'excluded'] += 1
             else:
                 group['scores'].append(report['score'])
                 group['failed'] += report['verdict'] == 'FAIL'
+                group['structural_samples'] += report.get('assessment',{}).get('scope')=='STRUCTURAL'
         for group in groups.values():
             scores = group.pop('scores')
             group.update(sample_count=len(scores), score=round(sum(scores) / len(scores), 2) if scores else None)
         return {'policy': settings, 'agents': list(groups.values()), 'reports': list(latest.values())[:200],
-                'alerts': alerts[:200], 'open_alert_count': sum(not a['acknowledged_at'] for a in alerts),
+                'alerts': alerts, 'open_alert_count': open_alerts,
                 'report_count': len(latest), 'limit': 200}
 
     def get(self, identity):
@@ -231,7 +256,22 @@ class AgentEvaluations:
                              (*self.scope, identifier(identity))).fetchone()
         if not row:
             raise KeyError('evaluation unavailable')
-        return json.loads(row[0])
+        report=json.loads(row[0])
+        if 'assessment' not in report:
+            state=self.store.load(self.app.tenant,report['run_id'])
+            if state['task'].get('execution_mode') in ('direct','conversation'):
+                report=self._present_legacy(report,state['snapshot'].get('agent_profile',{}).get('runtime'))
+        return report
+
+    @staticmethod
+    def _present_legacy(report,runtime):
+        simulation=runtime=='mock'
+        value={**report,'assessment':{'scope':'STRUCTURAL','quality_status':'SIMULATION_ONLY' if simulation else 'NOT_ASSESSED',
+                                    'label':'离线演示不计分' if simulation else '结构检查分',
+                                    'description':'历史记录仅衡量执行与交付结构；目标达成质量未评估。'}}
+        if simulation and report['verdict']!='EXCLUDED':
+            value.update(score=None,verdict='SIMULATED',historical_score=report['score'],dimensions=[],reasons=['历史离线演示不计入质量评分'])
+        return value
 
     def acknowledge(self, identity):
         with self.store.transaction() as db:

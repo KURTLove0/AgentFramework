@@ -100,6 +100,21 @@ class ReadCapabilityProxy:
             cap = self.gateway.capability(state, ref)
             if cap['effect'] != 'READ':
                 raise PolicyDenied('native write forbidden')
+            if state['task'].get('execution_mode') in ('direct','conversation') and ref=='knowledge.read@1.0.0':
+                # A normal model turn can read versions already supplied in its
+                # context or discovered by a native search, without a host plan.
+                # Keep this derived observation local: the parent owns checkpoints.
+                discovered=set()
+                for manifest in self.store.contexts(state['tenant_id'],state['run_id']):
+                    if (manifest['phase']=='execute' and manifest['scope']['project_id']==state['task']['project_id']
+                        and digest({k:v for k,v in manifest.items() if k!='hash'})==manifest['hash']):
+                        discovered.update(a['ref'] for a in manifest['selected'] if a['kind']=='KNOWLEDGE')
+                for item in self.store.evidence(state).values():
+                    if (item['source']=='knowledge.search@1.0.0' and item['tenant_id']==state['tenant_id']
+                        and item['run_id']==state['run_id'] and item['content_hash']==digest(item['data'])
+                        and item['data'].get('project_id')==state['task']['project_id']):
+                        discovered.update(a['ref'] for a in item['data'].get('hits',[]))
+                state={**state,'observations':{**state['observations'],'knowledge_hits':{'data':{'hits':[{'ref':r} for r in discovered]}}}}
             action = self.gateway.prepare(state, ActionProposal(ref, args, [], ['schema-and-scope'], 'native governed read'), self.store.evidence(state))
             action['logical_id'] = call_id
             action['authorization'] = self.gateway.authorize(state, action)

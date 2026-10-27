@@ -6,8 +6,8 @@
   const compactViewport = matchMedia('(max-width: 959px)');
   const read = (key, fallback) => { try { return localStorage.getItem(key) || fallback; } catch { return fallback; } };
   const save = (key, value) => { try { localStorage.setItem(key, value); } catch {} };
-  let appearance = read('af-appearance', 'system');
-  if (!['system', 'light', 'dark'].includes(appearance)) appearance = 'system';
+  let appearance = read('af-appearance', 'dark');
+  if (!['system', 'light', 'dark'].includes(appearance)) appearance = 'dark';
   function applyTheme() {
     root.dataset.theme = appearance === 'system' ? (systemTheme.matches ? 'dark' : 'light') : appearance;
     root.dataset.appearance = appearance;

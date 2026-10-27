@@ -8,13 +8,14 @@ import subprocess
 import time
 
 from .contracts import canonical
-from .llm import CodexConfig, CursorConfig, LLMPlanner
+from .llm import CodexConfig, CursorConfig, QoderConfig, CONFIG_TYPES, LLMPlanner, qoder_command
 from .store import Store
 
 PROVIDERS = {
     'mock': {'name': '模拟运行时', 'command': None, 'description': '确定性规划，离线演示与故障回归'},
     'codex': {'name': 'Codex CLI', 'command': 'codex', 'description': '使用本机 Codex 登录态和结构化输出'},
     'cursor': {'name': 'Cursor CLI', 'command': 'cursor-agent', 'description': '使用 Cursor Ask 模式和受限工具权限'},
+    'qoder': {'name': 'Qoder CLI', 'command': 'qodercli', 'description': '使用本机 Qoder 登录态和非交互结构化输出'},
 }
 
 
@@ -38,13 +39,19 @@ class RuntimeConfiguration:
             cursor = asdict(CursorConfig.local())
         except (ValueError, TypeError, OSError):
             cursor = {'model': '', 'timeout': 60, 'max_attempts': 2}
-        return {'default_runtime': 'mock', 'profiles': {'codex': codex, 'cursor': cursor}}
+        try:
+            qoder=asdict(QoderConfig.local())
+        except (ValueError,TypeError,OSError):
+            qoder={'model':'','timeout':60,'max_attempts':2}
+        return {'default_runtime': 'mock', 'profiles': {'codex': codex, 'cursor': cursor, 'qoder':qoder}}
 
     def get(self):
         with self.store.connect() as db:
             row = db.execute('SELECT * FROM runtime_configuration WHERE tenant=?', (self.tenant,)).fetchone()
         if row:
-            return {**json.loads(row['data']), 'revision': row['revision'], 'updated_at': row['updated']}
+            saved=json.loads(row['data'])
+            profiles={**self.defaults()['profiles'],**saved['profiles']}
+            return {**saved,'profiles':profiles,'revision': row['revision'], 'updated_at': row['updated']}
         return {**self.defaults(), 'revision': 0, 'updated_at': None}
 
     def save(self, data):
@@ -57,10 +64,13 @@ class RuntimeConfiguration:
         if type(revision) is not int or revision < 0:
             raise ValueError('配置版本号无效')
         profiles = data['profiles']
-        if not isinstance(profiles, dict) or set(profiles) != {'codex', 'cursor'}:
-            raise ValueError('需提供 Codex 和 Cursor 配置')
+        if not isinstance(profiles, dict) or set(profiles) not in ({'codex','cursor'},{'codex','cursor','qoder'}):
+            raise ValueError('需提供 Codex、Cursor 和 Qoder 配置')
+        # Older clients can still save without deleting an existing Qoder profile.
+        profiles={**self.get()['profiles'],**profiles}
         normalized = {}
-        for key, cls in [('codex', CodexConfig), ('cursor', CursorConfig)]:
+        for key, cls in CONFIG_TYPES.items():
+            if key not in profiles:profiles[key]={'model':'','timeout':60,'max_attempts':2}
             profile = profiles[key]
             fields = {'model', 'timeout', 'max_attempts'} | ({'reasoning_effort'} if key == 'codex' else set())
             if not isinstance(profile, dict) or set(profile) != fields:
@@ -86,13 +96,14 @@ class RuntimeConfiguration:
         return self.get()
 
     def catalog(self):
-        return [{'id': key, **info, 'installed': info['command'] is None or bool(shutil.which(info['command']))}
-                for key, info in PROVIDERS.items()]
+        return [{'id': key, **info,'command':qoder_command() if key=='qoder' else info['command'],
+                 'installed':info['command'] is None or bool(shutil.which(qoder_command() if key=='qoder' else info['command']))}
+                for key,info in PROVIDERS.items()]
 
     def detect(self, provider):
         if provider not in PROVIDERS:
             raise ValueError('不支持的运行时')
-        command = PROVIDERS[provider]['command']
+        command = qoder_command() if provider=='qoder' else PROVIDERS[provider]['command']
         if command is None:
             return {'provider': provider, 'installed': True, 'ok': True, 'version': 'built-in', 'message': '内置运行时可用，无需登录'}
         if not shutil.which(command):
@@ -114,5 +125,5 @@ class RuntimeConfiguration:
             return None
         if not any(item['id'] == provider and item['installed'] for item in self.catalog()):
             raise ValueError('请先安装所选运行时的 CLI')
-        cls = CodexConfig if provider == 'codex' else CursorConfig
+        cls = CONFIG_TYPES[provider]
         return LLMPlanner(cls(**settings['profiles'][provider]))

@@ -24,6 +24,8 @@ def archive(db, state):
              'visibility':'PRIVATE','summary':f"{state['task']['goal']}；结果 {state['status']}，重规划 {state['replans']} 次。"}
     db.execute('INSERT INTO episodic_memories VALUES(?,?,?,?,?,?)',
                (tenant,run,state['task']['project_id'],state['task']['environment'],state['task']['principal'],canonical(episode)))
+    # Normal turns retain their real episode; fixed workflow lessons are not inferred.
+    if state['task'].get('execution_mode') in ('direct','conversation'):return
     # Candidates are not retrieval context, executable policy, or automatically published.
     from .knowledge import Access, SPACE, insert_asset
     if 'action.unknown' in events or 'action.effect_confirmed' in events:
@@ -34,6 +36,8 @@ def archive(db, state):
         category,lesson='evidence-first','先获取并核对规范和变更证据，再按当前授权提出写入；缺证据不宣称完成。'
     if domain=='knowledge-answer@1.0.0' and category=='evidence-first':
         lesson='先检索并回读已发布知识，以原文与版本证据组织回答；资料不足时请求补充，完成前独立检查来源当前状态。'
+    if domain=='general-assistant@1.0.0':
+        lesson='按任务目标和自定义工作指令组织交付；需要外部事实时核对来源，信息不足时请求补充，不凭空宣称完成。'
     body={'title':f'运行经验候选 · {category}','content':{'category':category,'lesson':lesson,
           'conditions':{'domain_pack_ref':domain},'supporting_runs':[run],
           'counterexamples_required':True,'limitations':['固定模拟场景，不授予权限、不替代当前标准或独立验收。']},

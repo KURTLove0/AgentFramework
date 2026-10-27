@@ -57,6 +57,8 @@ class TaskContract:
     workflow_inputs: tuple = ()
     retrieval: dict | None = None
     source_run_id: str | None = None
+    execution_mode: str | None = None
+    conversation_context: dict | None = None
 
     def __post_init__(self):
         if self.retrieval is not None:
@@ -77,9 +79,37 @@ class TaskContract:
             expected = ('answer-grounded','answer-scope','answer-current')
             if tuple(self.acceptance) == CHECKS:object.__setattr__(self,'acceptance',expected)
             if self.agent_ref == 'release-assistant@1.0.0':object.__setattr__(self,'agent_ref','knowledge-assistant@1.0.0')
+        elif self.domain_pack_ref=='general-assistant@1.0.0':
+            expected=('result-complete','result-evidence')
+            if tuple(self.acceptance)==CHECKS:object.__setattr__(self,'acceptance',expected)
+            if self.agent_ref=='release-assistant@1.0.0':object.__setattr__(self,'agent_ref','general-assistant@1.0.0')
         elif self.domain_pack_ref != 'change-assessment@2.0.0':
             raise ValueError('unsupported task domain')
-        builtin = 'knowledge-assistant@1.0.0' if self.domain_pack_ref == 'knowledge-answer@1.0.0' else 'release-assistant@1.0.0'
+        if self.execution_mode not in (None,'direct','conversation'):
+            raise ValueError('unsupported execution mode')
+        if self.execution_mode in ('direct','conversation'):
+            if tuple(self.acceptance) in (CHECKS,expected):
+                object.__setattr__(self,'acceptance',('result-complete','result-evidence'))
+            expected=('result-complete','result-evidence')
+        if self.conversation_context is not None:
+            context=self.conversation_context
+            if self.execution_mode!='conversation' or not isinstance(context,dict) or set(context)!={'task_id','turn','goal','messages','history_hash','omitted_messages'}:
+                raise ValueError('invalid conversation context')
+            identifier(context['task_id'])
+            if type(context['turn']) is not int or context['turn']<1 or not isinstance(context['goal'],str) or not 1<=len(context['goal'])<=2000:
+                raise ValueError('invalid conversation turn')
+            if (not isinstance(context['messages'],list) or len(context['messages'])>200 or len(canonical(context).encode())>128000
+                or type(context['omitted_messages']) is not int or context['omitted_messages']<0 or not isinstance(context['history_hash'],str)):
+                raise ValueError('conversation history exceeds context budget')
+            for message in context['messages']:
+                if (not isinstance(message,dict) or set(message)!={'role','content','turn','run_id','status','citations'}
+                    or message['role'] not in ('user','assistant') or not isinstance(message['content'],str)
+                    or type(message['turn']) is not int or not 1<=message['turn']<context['turn']):
+                    raise ValueError('invalid conversation history message')
+                identifier(message['run_id'])
+            object.__setattr__(self,'conversation_context',json.loads(canonical(context)))
+        elif self.execution_mode=='conversation':raise ValueError('conversation context required')
+        builtin = 'general-assistant@1.0.0' if self.domain_pack_ref=='general-assistant@1.0.0' else 'knowledge-assistant@1.0.0' if self.domain_pack_ref == 'knowledge-answer@1.0.0' else 'release-assistant@1.0.0'
         if (self.agent_ref != builtin and not re.fullmatch(r'agent-[a-f0-9]{16}@[1-9][0-9]*', self.agent_ref)) or tuple(self.acceptance) != expected:
             raise ValueError('unsupported Agent or acceptance contract')
         if self.environment != "test":
@@ -90,6 +120,8 @@ class TaskContract:
         if not self.workflow_inputs:result.pop('workflow_inputs',None)
         if self.retrieval is None:result.pop('retrieval',None)
         if self.source_run_id is None:result.pop('source_run_id',None)
+        if self.execution_mode is None:result.pop('execution_mode',None)
+        if self.conversation_context is None:result.pop('conversation_context',None)
         return result
 
     @classmethod

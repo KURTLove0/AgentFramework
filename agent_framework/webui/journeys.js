@@ -5,6 +5,18 @@ const taskJourney = {step:0, initial:'', saving:false, opening:false, returnToTa
 const taskSteps = ['task-purpose','task-execution','task-permissions'];
 const taskStepNames = ['任务与范围','执行方式','审查与许可'];
 
+function updateCompactTask(){
+ const agent=selectedTaskAgent(),info=$('#task-agent-info');if(!info)return;
+ info.textContent=agent?`${agent.description?agent.description+' · ':''}${agentRuntimeLabel(agent.runtime)}${agent.runtime==='mock'?'':' · '+(agent.model||'未配置模型')} · v${agent.revision}`:(state.agents||[]).some(a=>!a.archived)?'选择已配置的智能体，沿用它的执行方式。':'当前空间还没有智能体，请先创建一个。';
+ $('#create-title').textContent='新建任务';
+ if(typeof refreshFormControls==='function')refreshFormControls();
+}
+function compactTaskPayload(){
+ const agent=selectedTaskAgent(),payload={goal:$('#task-goal').value.trim(),agent_id:agent.id,agent_revision:agent.revision,...(taskJourney.sourceRun?.run_id?{source_run_id:taskJourney.sourceRun.run_id}:{}),clear_draft:!!taskJourney.ownsDraft};
+ const {clear_draft,...identity}=payload,key=JSON.stringify(identity);if(taskJourney.submitKey!==key){taskJourney.submitKey=key;taskJourney.requestId=crypto.randomUUID();}
+ return {...payload,request_id:taskJourney.requestId};
+}
+
 function taskFormSnapshot(){
   return JSON.stringify([...$('#create-form').elements].filter(field=>field.name&&field.type!=='submit').map(field=>[field.name,field.type==='checkbox'?field.checked:field.value]));
 }
@@ -22,6 +34,7 @@ function showTaskFieldError(field){
   if(typeof focusFormControl==='function')focusFormControl(field);else{field.focus({preventScroll:true});field.scrollIntoView({block:'nearest',behavior:'instant'});}
 }
 function setTaskStep(index,validate=true){
+  if($('#create-form').dataset?.simple==='true'){taskJourney.step=0;updateCompactTask();return true;}
   if(taskJourney.saving)return false;
   index=Math.max(0,Math.min(taskSteps.length-1,index));
   if(validate&&index>taskJourney.step){
@@ -42,6 +55,7 @@ function setTaskStep(index,validate=true){
   return true;
 }
 function updateTaskReview(){
+  if($('#create-form').dataset?.simple==='true')return updateCompactTask();
   const form=$('#create-form'),agent=selectedTaskAgent(),readOnly=form.domain_pack_ref.value==='knowledge-answer@1.0.0';
   const provider=state.runtimeConfig?.providers.find(p=>p.id===form.planner.value);
   const model=agent?.model||state.runtimeConfig?.settings.profiles[form.planner.value]?.model;
@@ -77,6 +91,7 @@ function taskReadiness(){
   return {items,ready:!items.some(item=>item.status==='error')};
 }
 function renderTaskReadiness(){
+  if($('#create-form').dataset?.simple==='true')return updateCompactTask();
   const container=$('#task-readiness-body');if(!container)return;
   const result=taskReadiness();taskJourney.readiness=result;
   container.innerHTML=`<ul class="readiness-list">${result.items.map(item=>`<li class="${item.status}">${icon(item.status==='pass'?'check':item.status==='error'?'alert':'clock')}<span>${esc(item.text)}</span>${item.action?`<button type="button" class="text-button" data-action="${item.action}">${esc(item.actionLabel)}</button>`:''}</li>`).join('')}</ul>`;
@@ -85,6 +100,7 @@ function renderTaskReadiness(){
 }
 function taskSubmitGate(event){
   if(taskJourney.saving||state.composing||event?.isComposing||event?.keyCode===229)return false;
+  if($('#create-form').dataset?.simple==='true'){const invalid=taskInvalidField($('#create-form'));if(invalid){showTaskFieldError(invalid);return false;}if(!selectedTaskAgent()){showTaskFieldError($('#task-agent'));return false;}taskJourney.saving=true;$('#create-form').setAttribute('aria-busy','true');return true;}
   if(taskJourney.step<2){setTaskStep(taskJourney.step+1);return false;}
   const readiness=taskReadiness();
   if(!readiness.ready&&event?.submitter?.value==='save'){
@@ -101,7 +117,7 @@ function freezeTaskForm(frozen){
   else{(taskJourney.disabledFields||[]).forEach(([field,disabled])=>{field.disabled=disabled;});taskJourney.disabledFields=null;}
 }
 function taskSubmissionFinished(saved){
-  freezeTaskForm(false);taskJourney.saving=false;$('#create-form').removeAttribute('aria-busy');$('#task-step-status').textContent=`第 ${taskJourney.step+1} / 3 步 · ${taskStepNames[taskJourney.step]}`;
+  freezeTaskForm(false);taskJourney.saving=false;$('#create-form').removeAttribute('aria-busy');if($('#task-step-status'))$('#task-step-status').textContent=`第 ${taskJourney.step+1} / 3 步 · ${taskStepNames[taskJourney.step]}`;
   const owned=taskJourney.ownsDraft;
   if(saved){taskJourney.initial='';taskJourney.returnToTask=false;taskJourney.serverRevision=0;taskJourney.draftDirty=false;taskJourney.sourceRun=null;taskJourney.ownsDraft=false;if(owned)state.savedTaskDraft={draft:null,revision:0,updated_at:null};}
   renderTaskReadiness();
@@ -187,12 +203,12 @@ function confirmTaskDiscard(proceed=()=>$('#create-dialog').close()){
 }
 function leaveTaskForConfiguration(){
   taskJourney.returnToTask=true;taskJourney.workspace=state.workspaceId;saveTaskDraft();
-  const agent=selectedTaskAgent();$('#create-dialog').close();navigate(agent?'agents':'runtimes');if(agent&&typeof openAgent==='function')void openAgent(agent.id);
+  const agent=selectedTaskAgent();$('#create-dialog').close();navigate($('#create-form').dataset?.simple==='true'?'agents':agent?'agents':'runtimes');if(agent&&typeof openAgent==='function')void openAgent(agent.id);
 }
 function taskReturnBanner(){
   if(!taskJourney.returnToTask||taskJourney.workspace!==state.workspaceId)return '';
   if(state.view==='agents'&&state.agentSavedNotice?.workspace===state.workspaceId)return '';
-  return `<section class="journey-return task-config-return" aria-label="返回任务设置"><span>${icon('file')}<span><strong>任务设置已保留</strong><small>完成配置后返回，继续审查执行方式与许可。</small></span></span><div class="toolbar"><button class="button secondary" data-action="discard-task-draft">放弃设置</button><button class="button primary" data-action="return-task-draft">返回任务</button></div></section>`;
+  return `<section class="journey-return task-config-return" aria-label="返回任务设置"><span>${icon('file')}<span><strong>任务设置已保留</strong><small>完成配置后返回，目标已保留。</small></span></span><div class="toolbar"><button class="button secondary" data-action="discard-task-draft">放弃设置</button><button class="button primary" data-action="return-task-draft">返回任务</button></div></section>`;
 }
 function syncTaskReturnBanner(){
   $('#content .journey-return.task-config-return')?.remove();
@@ -208,8 +224,8 @@ async function returnToTaskDraft(button){
     if(!agentId)form.planner.value=runtime;updateTaskAgent();
     form.consent.checked=false;form.mcp_consent.checked=false;form.grant.checked=false;
     taskJourney.returnToTask=false;setTaskStep(agentId&&!form.agent_id.value?0:1,false);
-    $('#create-dialog').showModal();$('#'+taskSteps[taskJourney.step]).focus();
-    $('#task-return-note').textContent=agentId&&!form.agent_id.value?'原 Agent 已不可用，请重新选择。任务说明已保留。':'已更新可用配置，任务说明已保留。请重新审查本次许可。';$('#task-return-note').hidden=false;
+    $('#create-dialog').showModal();if($('#create-form').dataset?.simple==='true')$('#task-goal').focus();else $('#'+taskSteps[taskJourney.step]).focus();
+    $('#task-return-note').textContent=agentId&&!form.agent_id.value?'原 Agent 已不可用，请重新选择。任务说明已保留。':'已更新可用配置，任务目标已保留，可以开始执行。';$('#task-return-note').hidden=false;
     state.fingerprint='';render();
   }catch(e){toast(e.message);}finally{taskJourney.opening=false;if(button)button.disabled=false;}
 }
@@ -219,15 +235,16 @@ function runMatchesFilter(run,filter){
   return filter==='all'||run.status===filter;
 }
 function runNextStep(detail){
-  const run=detail.run,readOnly=run.task.domain_pack_ref==='knowledge-answer@1.0.0';
+  const run=detail.run,general=run.task.execution_mode==='direct'||run.task.domain_pack_ref==='general-assistant@1.0.0',readOnly=run.task.domain_pack_ref==='knowledge-answer@1.0.0';
   let title='',copy='',tab='evidence',button='查看验收与证据',tone='';
   if(run.status==='WAITING_AUTH'){title='下一步：审查本次写入';copy='先核对报告与工具参数，再使用上方的“审查并授权”。尚未授权时不会创建草稿。';tab='actions';button='查看动作提案';tone='warning';}
+  else if(run.status==='SUCCEEDED'&&general){title='任务结果已生成并通过检查';copy='查看交付内容和所列来源。';tab='report';button='阅读任务结果';tone='success';}
   else if(run.status==='SUCCEEDED'){title=readOnly?'回答已完成并通过验收':'评估已完成，草稿已通过回读验收';copy=readOnly?'查看引用回答，或展开证据核对来源。':'任务成功表示完成评估并创建草稿，变更是否可发布仍需依据报告判断。';tab='report';button=readOnly?'阅读知识回答':'阅读评估报告';tone='success';}
   else if(run.status==='WAITING_INPUT'){title=run.scenario==='missing-evidence'?'模拟场景：证据持续缺失':'下一步：补充任务所需材料';copy=run.scenario==='missing-evidence'?'此演示会持续返回缺少证据。可查看诊断，或新建正常场景任务体验完整流程。':'查看保留的证据与诊断提示。当前版本不支持在线追加材料，补充来源后请创建新任务。';}
   else if(run.status==='NEEDS_REVIEW'){title='下一步：核对验收结果';copy='存在需要人工复核的结果。先查看未通过项，当前任务的写入事实会保留。';tone='warning';}
-  else if(run.status==='FAILED'){title='执行未完成，先检查失败原因';copy='查看任务轨迹与已保留证据，再决定是否创建新任务。已发生的写入会保留，不会因失败自动撤销。';tab='trace';button='查看失败轨迹';tone='warning';}
-  else if(run.status==='EXPIRED'){title='本次执行已超出预算';copy='先核对已经完成的动作。需要继续时，可在新任务中调整预算并重新审查权限。';tab='trace';button='查看执行进度';tone='warning';}
-  else if(run.status==='CANCELLED'){title='任务已取消';copy='任务不会继续执行。已产生的草稿与操作证据保留，可在动作记录中核对。';tab='actions';button='核对已发生的动作';}
+  else if(run.status==='FAILED'){title='执行未完成，先检查失败原因';copy=general?'查看执行轨迹和原因，调整目标或智能体配置后重试。':'查看任务轨迹与已保留证据，再决定是否创建新任务。已发生的写入会保留，不会因失败自动撤销。';tab='trace';button='查看失败轨迹';tone='warning';}
+  else if(run.status==='EXPIRED'){title='本次执行已超出预算';copy=general?'查看已完成内容和执行进度，调整任务后重试。':'先核对已经完成的动作。需要继续时，可在新任务中调整预算并重新审查权限。';tab='trace';button='查看执行进度';tone='warning';}
+  else if(run.status==='CANCELLED'){title='任务已取消';copy=general?'任务已停止，执行记录保留。':'任务不会继续执行。已产生的草稿与操作证据保留，可在动作记录中核对。';tab='actions';button='核对已发生的动作';}
   else if(run.status==='CREATED'){title='任务已保存，等待启动';copy='输入和执行配置已冻结。使用上方“启动运行”开始执行。';tab='trace';button='查看任务轨迹';}
   if(!title)return '';
   const diagnostics=run.last_error?`<details class="notice-diagnostics"><summary>查看诊断信息</summary><pre>${esc(typeof run.last_error==='string'?run.last_error:JSON.stringify(run.last_error))}</pre></details>`:'';
@@ -250,7 +267,7 @@ function afterJourneyRender(){
   if(state.libraryFocusRef){const target=document.getElementById('library-asset-'+state.libraryFocusRef);if(target){target.scrollIntoView({block:'center',behavior:'instant'});target.focus({preventScroll:true});state.libraryFocusRef=null;}}
 }
 
-document.addEventListener('DOMContentLoaded',()=>{$('#create-form').noValidate=true;taskSteps.forEach(id=>$('#'+id).tabIndex=-1);});
+document.addEventListener('DOMContentLoaded',()=>{$('#create-form').noValidate=true;taskSteps.forEach(id=>{if($('#'+id))$('#'+id).tabIndex=-1;});});
 document.addEventListener('click',event=>{
   const step=event.target.closest('[data-task-section]');if(step){event.preventDefault();setTaskStep(taskSteps.indexOf(step.dataset.taskSection));return;}
   if(event.target.closest('#task-next'))setTaskStep(taskJourney.step+1);

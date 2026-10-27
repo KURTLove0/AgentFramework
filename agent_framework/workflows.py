@@ -95,7 +95,7 @@ class Workflows:
         return self.get(identity)
 
     def start(self,identity,data):
-        fields={'revision','change_id','grant','consent','mcp_consent','scenarios','max_wall_seconds','request_id'}
+        fields={'revision','change_id','grant','consent','mcp_consent','scenarios','max_wall_seconds','request_id','execution_mode'}
         if not isinstance(data,dict) or set(data)-fields:raise ValueError('工作流运行参数无效')
         for key in ('grant','consent','mcp_consent'):
             if key in data and type(data[key]) is not bool:raise ValueError('许可必须为布尔值')
@@ -114,8 +114,13 @@ class Workflows:
         definition=self.validate({k:w[k] for k in ('name','description','nodes')})
         profiles={n['id']:self.app.agents.get(n['agent_id']) for n in w['nodes']}
         if any(profiles[n['id']]['revision']!=n['agent_revision'] for n in w['nodes']):raise ConfigConflict('节点 Agent 在启动期间已更新，请重新审查')
-        compiled_profiles={n:AgentCompiler().compile(p) for n,p in profiles.items()}
-        if any(p['runtime']!='mock' for p in profiles.values()) and not data.get('consent'):raise PolicyDenied('真实 Agent 节点需要模拟上下文发送许可')
+        if data.get('execution_mode') not in (None,'direct'):raise ValueError('工作流执行方式无效')
+        if not isinstance(data.get('scenarios',{}),dict):raise ValueError('故障场景必须为节点配置对象')
+        direct=data.get('execution_mode')=='direct' or all((p.get('definition') or {}).get('domain_pack_ref')=='general-assistant@1.0.0' for p in profiles.values())
+        if direct and (data.get('grant') or any(s!='normal' for s in data.get('scenarios',{}).values())):raise ValueError('按目标执行的工作流不接受预先写入授权或故障场景')
+        modes={n:'direct' if direct or (p.get('definition') or {}).get('domain_pack_ref')=='general-assistant@1.0.0' else None for n,p in profiles.items()}
+        compiled_profiles={n:AgentCompiler().compile(p,execution_mode=modes[n]) for n,p in profiles.items()}
+        if any(p['runtime']!='mock' for p in profiles.values()) and not data.get('consent'):raise PolicyDenied('真实智能体节点需要允许模型处理本流程上下文')
         if any(((p.get('definition') or {}).get('native_read_refs') or any(m['enabled'] for m in p['mcp_servers'])) for p in profiles.values()) and not data.get('mcp_consent'):raise PolicyDenied('工作流需要受控 MCP 读取许可')
         max_wall=data.get('max_wall_seconds',1800);Budget(max_wall_seconds=max_wall)
         scenarios=data.get('scenarios',{})
@@ -124,9 +129,10 @@ class Workflows:
         for n,p in profiles.items():
             if scenarios.get(n,'normal') not in domain_runtime_settings(compiled_profiles[n]['domain_pack']['ref'])['scenarios']:raise ValueError('节点领域不支持此故障场景')
         frozen={'definition':definition,'profiles':profiles,'compiled':compiled_profiles,'workflow_id':identity,'revision':w['revision']}
+        if any(modes.values()):frozen['execution_modes']=modes
         state={'id':run,'workspace_id':self.scope[1],'project_id':self.app.workspace['project_id'],'principal':self.app.principal,'workflow_id':identity,'name':w['name'],
                'snapshot':frozen,'snapshot_hash':digest(frozen),'created_at':time.time(),'deadline':time.time()+max_wall,'status':'CREATED','request_hash':request_hash,
-               'change_id':identifier(data.get('change_id','change-demo-001')),'grant':data.get('grant',False),'scenarios':scenarios,
+               'change_id':identifier(data.get('change_id',run if direct else 'change-demo-001')),'grant':data.get('grant',False),'scenarios':scenarios,
                'nodes':{n['id']:{'status':'PENDING','run_id':None,'inputs':[]} for n in w['nodes']},'last_error':None}
         with self.store.transaction() as db:
             row=db.execute('SELECT data FROM workflow_runs WHERE tenant=? AND id=?',(self.app.tenant,run)).fetchone()
@@ -153,6 +159,42 @@ class Workflows:
         self.run(identity)
         with self.store.connect() as db:return [json.loads(r[0]) for r in db.execute('SELECT data FROM workflow_events WHERE tenant=? AND run_id=? ORDER BY seq',(self.app.tenant,identity))]
 
+    def current_child(self,run_id):
+        """Resolve a node's latest conversation turn without changing its frozen root."""
+        root=self.store.result(self.app.tenant,run_id);self.app.assert_run_access(root)
+        if root['task'].get('execution_mode') not in ('direct','conversation'):return root
+        from .task_conversations import TaskConversations
+        current=TaskConversations(self.app).view(run_id)['active_run_id']
+        if current==run_id:return root
+        child=self.store.result(self.app.tenant,current);self.app.assert_run_access(child)
+        self._assert_turn(root,child)
+        return child
+
+    def _assert_turn(self,root,child):
+        run_id=root['run_id']
+        if (child['task'].get('source_run_id')!=run_id or (child['task'].get('conversation_context') or {}).get('task_id')!=run_id
+            or digest(child['snapshot'].get('agent_profile'))!=digest(root['snapshot'].get('agent_profile'))
+            or digest(child['task'].get('workflow_inputs',[]))!=digest(root['task'].get('workflow_inputs',[]))
+            or child['task'].get('retrieval')!=root['task'].get('retrieval')):
+            raise PolicyDenied('workflow conversation binding mismatch')
+
+    def accepted_child(self,item):
+        root=self.store.result(self.app.tenant,item['run_id']);self.app.assert_run_access(root)
+        output=item.get('output_run_id') or root['run_id']
+        if output==root['run_id']:return root
+        child=self.store.result(self.app.tenant,output);self.app.assert_run_access(child);self._assert_turn(root,child)
+        return child
+
+    def continue_after_reply(self,root_id):
+        from .task_conversations import TaskConversations
+        view=TaskConversations(self.app).view(root_id)
+        if view['active'] or view['queued_count']:return
+        for state in self.runs():
+            if state['status']!='WAITING_INPUT' or state['lease_active'] or (self.app.job(state['id']) or {}).get('active'):continue
+            if any(item['run_id']==root_id for item in state['nodes'].values()):
+                try:self.app.schedule_flow(state['id'])
+                except (ConfigConflict,LeaseBusy):pass
+
     def _save(self,state,owner,kind,details=None):
         value={k:v for k,v in state.items() if k not in ('lease_active','cancel_requested')}
         with self.store.transaction() as db:
@@ -172,10 +214,12 @@ class Workflows:
         review=False
         for item in state['nodes'].values():
             if item['run_id'] and item['status']!='SUCCEEDED':
-                child=self.store.result(self.app.tenant,item['run_id']);self.app.assert_run_access(child)
+                child=self.current_child(item['run_id']);self.app.assert_run_access(child)
                 # Stop-only recovery reconciles uncertain effects without cognition or new dispatches.
-                if child['status'] not in FLOW_TERMINAL:self.app.runtime().cancel(child['run_id'],self.app.tenant)
-                item['status']=self.store.load(self.app.tenant,item['run_id'])['status']
+                if child['status'] not in FLOW_TERMINAL:
+                    if (self.app.job(child['run_id']) or {}).get('active'):self.app.mutate(child['run_id'],'cancel')
+                    else:self.app.runtime().cancel(child['run_id'],self.app.tenant)
+                item['status']=self.store.load(self.app.tenant,child['run_id'])['status']
                 review=review or item['status']=='NEEDS_REVIEW'
         return review
 
@@ -204,7 +248,7 @@ class Workflows:
                 # Current source checks apply before completed outputs can feed another Agent.
                 for n in nodes:
                     item=state['nodes'][n['id']]
-                    if item['status']=='SUCCEEDED' and not self._verified(self.store.result(self.app.tenant,item['run_id'])):
+                    if item['status']=='SUCCEEDED' and not self._verified(self.accepted_child(item)):
                         self._stop_children(state)
                         state['status']='NEEDS_REVIEW';state['last_error']='上游节点结果不再满足独立验收';self._save(state,owner,'workflow.source_invalidated');return self.run(identity)
                 if cancelled or expired:
@@ -220,7 +264,7 @@ class Workflows:
                     condition=n.get('condition');decision=None
                     if active and condition:
                         source=state['nodes'][condition['source']]
-                        report=self.store.result(self.app.tenant,source['run_id'])['report'] if source['status']=='SUCCEEDED' else {}
+                        report=self.accepted_child(source)['report'] if source['status']=='SUCCEEDED' else {}
                         active=source['status']=='SUCCEEDED' and matches(condition,report)
                         decision={'condition':condition,'source_hash':digest(report),'matched':active}
                     if not active:
@@ -241,7 +285,7 @@ class Workflows:
                 inputs=[]
                 for parent in node['depends_on']:
                     if state['nodes'][parent]['status']=='SKIPPED':continue
-                    prior=self.store.result(self.app.tenant,state['nodes'][parent]['run_id'])
+                    prior=self.accepted_child(state['nodes'][parent])
                     inputs.append({'node_id':parent,'run_id':prior['run_id'],'content_hash':digest(prior['report']),'artifact':prior['report']})
                 item['inputs']=inputs
                 self._save(state,owner,'node.intent',{'node_id':node['id'],'run_id':child_id,'input_hashes':[i['content_hash'] for i in inputs]})
@@ -249,6 +293,7 @@ class Workflows:
                 except KeyError:
                     task=TaskContract(project_id=state['project_id'],tenant_id=self.app.tenant,principal=self.app.principal,change_id=state['change_id'],goal=node['goal'],
                                       agent_ref=agent_ref(p),domain_pack_ref=state['snapshot']['compiled'][node['id']]['domain_pack']['ref'],workflow_inputs=tuple(inputs),
+                                      execution_mode=state['snapshot'].get('execution_modes',{}).get(node['id']),
                                       retrieval=node.get('retrieval'),
                                       budget=Budget(max_wall_seconds=max(1,min(600,state['deadline']-time.time()))))
                     child=runtime.submit(task,scenario=state['scenarios'].get(node['id'],'normal'),grant=state['grant'],agent_profile=p,run_id=child_id)
@@ -259,14 +304,29 @@ class Workflows:
                         or child['task'].get('retrieval')!=node.get('retrieval')
                         or child['snapshot']['compiled_agent']['hash']!=state['snapshot']['compiled'][node['id']]['hash']):
                     raise PolicyDenied('child task binding mismatch')
-                try:child=runtime.run(child_id,self.app.tenant,pause_after=1)
+                effective=self.current_child(child_id)
+                if (self.app.job(effective['run_id']) or {}).get('active') or self.app.lease(effective['run_id'])['active']:
+                    state['status']='WAITING_INPUT';state['last_error']='节点正在处理补充信息，完成后将继续工作流。';self._save(state,owner,'workflow.conversation_pending');return self.run(identity)
+                runtime=self.app.runtime()
+                cancel_state={'at':0,'value':False}
+                def child_cancelled():
+                    if self.app.closed or bool(self.app.jobs.get(identity,{}).get('cancel') and self.app.jobs[identity]['cancel'].is_set()):return True
+                    if time.monotonic()-cancel_state['at']>.1:
+                        with self.store.connect() as db:cancel_state['value']=bool(db.execute('SELECT cancel_requested FROM workflow_runs WHERE tenant=? AND id=?',(self.app.tenant,identity)).fetchone()[0])
+                        cancel_state['at']=time.monotonic()
+                    return cancel_state['value']
+                runtime.cancel_requested=child_cancelled
+                try:child=runtime.run(effective['run_id'],self.app.tenant,pause_after=1)
                 except CrashInjected:
                     item['status']='INTERRUPTED';state['status']='INTERRUPTED';state['last_error']='节点写入后中断；租约到期后恢复原任务核对。';self._save(state,owner,'node.interrupted');return self.run(identity)
                 item['status']=child['status'];ticks+=1
+                if child['status']=='SUCCEEDED':item['output_run_id']=child['run_id']
+                if child_cancelled():
+                    review=self._stop_children(state);state['status']='NEEDS_REVIEW' if review else 'CANCELLED';self._save(state,owner,'workflow.stopped');return self.run(identity)
                 if child['status'] in ('WAITING_AUTH','WAITING_INPUT'):
                     state['status']=child['status'];self._save(state,owner,'workflow.waiting',{'node_id':node['id'],'status':child['status']});return self.run(identity)
                 if child['status'] in FLOW_TERMINAL and (child['status']!='SUCCEEDED' or not self._verified(child)):
-                    state['status']='NEEDS_REVIEW' if child['status'] in ('NEEDS_REVIEW','SUCCEEDED') else child['status'];state['last_error']='节点未通过验收，依赖节点不会执行。';self._save(state,owner,'workflow.node_failed',{'node_id':node['id']});return self.run(identity)
+                    state['status']='WAITING_INPUT' if child['task'].get('execution_mode') in ('direct','conversation') and child['status'] in ('FAILED','EXPIRED','CANCELLED') else 'NEEDS_REVIEW' if child['status'] in ('NEEDS_REVIEW','SUCCEEDED') else child['status'];state['last_error']='节点未完成，请打开节点任务补充或重试。完成后将继续流程。' if state['status']=='WAITING_INPUT' else '节点未通过验收，依赖节点不会执行。';self._save(state,owner,'workflow.node_failed',{'node_id':node['id']});return self.run(identity)
                 self._save(state,owner,'node.checkpoint',{'node_id':node['id'],'status':child['status']})
                 if pause_after and ticks>=pause_after:
                     state['status']='PAUSED';self._save(state,owner,'workflow.paused');return self.run(identity)

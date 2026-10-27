@@ -6,6 +6,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib.resources import files
 import json
 import logging
+import re
 from pathlib import Path
 import secrets
 import shutil
@@ -14,7 +15,7 @@ import time
 from urllib.parse import parse_qs, urlsplit, unquote
 
 from . import __version__
-from .contracts import Budget, LeaseBusy, LeaseLost, PolicyDenied, TERMINAL, TaskContract, canonical, identifier
+from .contracts import Budget, LeaseBusy, LeaseLost, PolicyDenied, TERMINAL, TaskContract, canonical, digest, identifier
 from .llm import CodexConfig, LLMPlanner
 from .mock_tools import SCENARIOS
 from .runtime import CrashInjected, Runtime, registry_snapshot
@@ -72,6 +73,22 @@ class Application:
         scheduler_schema(self.runtime().store)
         self.scheduler_stop = threading.Event()
         self.scheduler_thread = None
+        from .task_conversations import schema as conversation_schema
+        conversation_schema(self.runtime().store)
+        self.conversation_stop=threading.Event()
+        self.conversation_thread=None
+
+    def start_conversation_dispatcher(self):
+        with self.lock:
+            if self.conversation_thread or self.closed:return
+            def loop():
+                from .task_conversations import TaskConversations
+                while not self.conversation_stop.is_set():
+                    try:TaskConversations.tick(self)
+                    except Exception:logging.getLogger(__name__).exception('Task conversation dispatch failed')
+                    self.conversation_stop.wait(1)
+            self.conversation_thread=threading.Thread(target=loop,name='task-conversations',daemon=True)
+            self.conversation_thread.start()
 
     def start_scheduler(self):
         with self.lock:
@@ -125,7 +142,7 @@ class Application:
         for node,item in state['nodes'].items():
             if item['run_id']:
                 try:
-                    child=self.runtime().store.result(self.tenant,item['run_id']);self.assert_run_access(child)
+                    child=flows.accepted_child(item) if item['status']=='SUCCEEDED' else flows.current_child(item['run_id']);self.assert_run_access(child)
                     children[node]={'run_id':child['run_id'],'status':child['status'],'checks':child['checks'],
                                     'required_check_count':len(child['task']['acceptance']),
                                     'draft_count':len(self.runtime().external.stats(self.tenant,child['run_id'])['drafts']),
@@ -169,7 +186,7 @@ class Application:
                 "domain_pack_ref": snapshot['compiled_agent']['domain_pack']['ref'],
                 "compiled_agent_hash": snapshot['compiled_agent']['hash'],
                 "capability_contracts": capability_definitions(),
-                "domain_packs": [get_domain(ref).descriptor() for ref in ("change-assessment@2.0.0","knowledge-answer@1.0.0")],
+                "domain_packs": [get_domain(ref).descriptor() for ref in ("general-assistant@1.0.0","change-assessment@2.0.0","knowledge-answer@1.0.0")],
                 "scenarios": [{"id": key, "label": SCENARIO_LABELS[key][0], "description": SCENARIO_LABELS[key][1]} for key in SCENARIOS],
                 "business_tools": "simulated", "max_workers": 4, "runtime_config": self.runtime_settings()}
 
@@ -195,11 +212,13 @@ class Application:
                 "until": row["lease_until"] if row else 0}
 
     def summary(self, state):
-        job = self.job(state["run_id"])
+        job = self.job(state.get('_conversation_active_run',state['run_id']))
         return {k: state[k] for k in ("run_id", "status", "created_at", "deadline", "steps", "replans", "scenario", "last_error")} | {
             "goal": state["task"]["goal"], "change_id": state["task"]["change_id"],
             "project_id": state["task"]["project_id"], "planner_ref": state["snapshot"]["planner_ref"],
             "domain_pack_ref": state["task"]["domain_pack_ref"], "source_run_id": state["task"].get("source_run_id"),
+            "execution_mode":state['task'].get('execution_mode'),
+            "processing_domain":{k:v for k,v in (state['snapshot'].get('agent_profile',{}).get('processing_domain') or {}).items() if k in ('id','name','revision')} or None,
             "updated_at": state.get("updated_at", state["created_at"]),
             "agent_id": state["snapshot"].get("agent_profile", {}).get("id"),
             "agent_name": state["snapshot"].get("agent_profile", {}).get("name") or state["snapshot"].get("agent", {}).get("identity", {}).get("name"),
@@ -213,7 +232,9 @@ class Application:
         with store.connect() as db:
             rows = db.execute("SELECT state FROM runs WHERE tenant_id=? ORDER BY rowid DESC", (self.tenant,)).fetchall()
         states = [json.loads(row[0]) for row in rows]
-        return [s for s in states if s['task']['project_id']==self.workspace['project_id'] and (not s['snapshot'].get('context_policy') or s['task']['principal']==self.principal)]
+        from .task_conversations import TaskConversations
+        service=TaskConversations(self)
+        return [service.summary_state(s) for s in states if (s['task'].get('conversation_context') or {}).get('turn',1)==1 and s['task']['project_id']==self.workspace['project_id'] and (not s['snapshot'].get('context_policy') or s['task']['principal']==self.principal)]
 
     def runs(self, params=None):
         params = params or {}
@@ -221,9 +242,13 @@ class Application:
             value = params.get(name, default)
             return value[0] if isinstance(value, list) else value
         states = self.accessible_run_states()
+        domain_facets={}
+        for state in states:
+            domain=state['snapshot'].get('agent_profile',{}).get('processing_domain')
+            if domain:domain_facets.setdefault(domain['id'],{'id':domain['id'],'name':domain['name']})
         counts = {"total": len(states), "running": 0, "waiting": 0, "succeeded": 0}
         for state in states:
-            job = self.job(state["run_id"])
+            job = self.job(state.get('_conversation_active_run',state['run_id']))
             counts["running"] += bool(job and job["active"]) or state["status"] in {"RUNNING", "RECONCILING", "VERIFYING"}
             counts["waiting"] += state["status"] in WAITING
             counts["succeeded"] += state["status"] == "SUCCEEDED"
@@ -237,7 +262,7 @@ class Application:
                 SCENARIO_LABELS.get(s['scenario'], ('', ''))[0],
                 s['snapshot'].get('agent_profile', {}).get('name', ''))).lower()]
         if status == 'group:running':
-            states = [s for s in states if (self.job(s['run_id']) or {}).get('active') or s['status'] in {'RUNNING','RECONCILING','VERIFYING'}]
+            states = [s for s in states if (self.job(s.get('_conversation_active_run',s['run_id'])) or {}).get('active') or s['status'] in {'RUNNING','RECONCILING','VERIFYING'}]
         elif status == 'group:waiting':
             states = [s for s in states if s['status'] in WAITING]
         elif status and status != 'all':
@@ -245,7 +270,7 @@ class Application:
         if agent:
             states = [s for s in states if s['snapshot'].get('agent_profile', {}).get('id') == agent]
         if domain:
-            states = [s for s in states if s['task']['domain_pack_ref'] == domain]
+            states = [s for s in states if (not s['snapshot'].get('agent_profile',{}).get('processing_domain') if domain=='none' else (s['snapshot'].get('agent_profile',{}).get('processing_domain') or {}).get('id')==domain or s['task']['domain_pack_ref']==domain)]
         after, before = option('created_after'), option('created_before')
         if after not in (None, ''):
             after = float(after);states = [s for s in states if s['created_at'] >= after]
@@ -273,15 +298,16 @@ class Application:
         page, has_more = states[:limit], len(states) > limit
         next_cursor = base64.urlsafe_b64encode(page[-1]['run_id'].encode()).decode().rstrip('=') if has_more and page else None
         return {"runs": [self.summary(s) for s in page], "counts": counts, "limit": limit,
-                "filtered_total": filtered_total, "next_cursor": next_cursor, "sort": sort}
+                "filtered_total": filtered_total, "next_cursor": next_cursor, "sort": sort,"processing_domains":list(domain_facets.values())}
 
     def attention(self):
         kinds = {'CREATED':'start','WAITING_AUTH':'auth','WAITING_INPUT':'input','NEEDS_REVIEW':'review','FAILED':'failed','EXPIRED':'expired'}
         tasks = []
         for state in self.accessible_run_states():
-            status, job = state['status'], self.job(state['run_id'])
+            active_id=state.get('_conversation_active_run',state['run_id'])
+            status, job = state['status'], self.job(active_id)
             kind = kinds.get(status)
-            resumable = status in {'CREATED','RUNNING','RECONCILING','VERIFYING'} and not (job and job['active']) and not self.lease(state['run_id'])['active']
+            resumable = status in {'CREATED','RUNNING','RECONCILING','VERIFYING'} and not (job and job['active']) and not self.lease(active_id)['active']
             if status == 'CREATED' and not resumable:
                 kind = None
             elif not kind and status in {'RUNNING','RECONCILING','VERIFYING'} and resumable:
@@ -317,9 +343,9 @@ class Application:
         for key in {'goal','change_id','agent_id','source_run_id'} & set(source):
             if not isinstance(source[key],str) or len(source[key]) > (2000 if key == 'goal' else 100):
                 raise ValueError('任务草稿文本字段无效')
-        if source.get('domain_pack_ref') not in {None,'change-assessment@2.0.0','knowledge-answer@1.0.0'}:
+        if source.get('domain_pack_ref') not in {None,'general-assistant@1.0.0','change-assessment@2.0.0','knowledge-answer@1.0.0'}:
             raise ValueError('任务草稿领域无效')
-        if source.get('planner') not in {None,'mock','codex','cursor'}:
+        if source.get('planner') not in {None,'mock','codex','cursor','qoder'}:
             raise ValueError('任务草稿运行时无效')
         if source.get('agent_id'):
             identifier(source['agent_id'])
@@ -349,7 +375,7 @@ class Application:
                        (self.tenant,self.workspace['id'],self.principal))
         return {'draft':None,'revision':0,'updated_at':None}
 
-    def detail(self, run_id):
+    def raw_detail(self, run_id):
         identifier(run_id)
         # Sample job completion before reading its durable result. Otherwise a worker
         # can finish between these reads and pair a stale state with active=False.
@@ -365,13 +391,82 @@ class Application:
                 "job": job, "lease": self.lease(run_id),
                 "grant": {"valid": grant_valid, "expires_at": grant["expires_at"] if grant else None}}
 
+    def detail(self,run_id):
+        detail=self.raw_detail(run_id)
+        if detail['run']['snapshot'].get('compiled_agent') and detail['run']['task']['principal']==self.principal:
+            from .task_conversations import TaskConversations
+            service=TaskConversations(self)
+            conversation=service.view(run_id)
+            current=self.raw_detail(conversation['active_run_id'])
+            # Both reads can cross a worker checkpoint. In particular, never
+            # return a completed current run with an older RUNNING reply view.
+            for _ in range(3):
+                turn=next(t for t in conversation['turns'] if t['run_id']==current['run']['run_id'])
+                if turn['updated_at']==current['run']['updated_at']:break
+                conversation=service.view(run_id)
+                current=self.raw_detail(conversation['active_run_id'])
+            # Completion may land between the initial read and the conversation
+            # view. Reuse the newer root result instead of returning no report
+            # alongside an already-completed first reply.
+            if current['run']['run_id']==run_id:detail={**current}
+            detail['conversation']={**conversation,'current':current}
+        return detail
+
+    def start_task(self, data, *, run_id=None, start=True):
+        """Start the selected agent; no business-write authorization is implied."""
+        allowed={'goal','agent_id','agent_revision','request_id','source_run_id','clear_draft'}
+        if not isinstance(data,dict) or set(data)-allowed:
+            raise ValueError('新建任务只接受目标和执行智能体')
+        goal=data.get('goal')
+        if not isinstance(goal,str) or not 1<=len(goal.strip())<=2000:
+            raise ValueError('请填写 1–2000 字的任务目标')
+        agent_id=identifier(data.get('agent_id',''))
+        request_id=identifier(data.get('request_id',''))
+        if type(data.get('agent_revision')) is not int:
+            raise ValueError('执行智能体版本无效，请重新选择')
+        if 'clear_draft' in data and type(data['clear_draft']) is not bool:
+            raise ValueError('clear_draft 必须为布尔值')
+        with self.lock:
+            self.workspace=self.workspaces.get(self.workspace['id'])
+            run_id=identifier(run_id) if run_id else 'task-'+digest([self.tenant,self.workspace['id'],self.principal,request_id])[:32]
+            runtime=self.runtime()
+            try:existing=runtime.store.load(self.tenant,run_id)
+            except KeyError:existing=None
+            if existing:
+                self.assert_run_access(existing)
+                profile=existing['snapshot'].get('agent_profile',{})
+                if (existing['task']['principal']!=self.principal or existing['task']['goal']!=goal.strip()
+                    or profile.get('id')!=agent_id or profile.get('revision')!=data.get('agent_revision')
+                    or existing['task'].get('source_run_id')!=data.get('source_run_id')):
+                    raise ConfigConflict('此提交编号已用于另一个任务，请重新提交')
+                from .task_conversations import TaskConversations
+                if start:
+                    TaskConversations(self).register(existing)
+                    TaskConversations(self).dispatch(run_id)
+                if data.get('clear_draft'):self.discard_task_draft()
+                return self.detail(run_id)
+            profile=self.agents.get(agent_id)
+            domain=(profile.get('definition') or {}).get('domain_pack_ref','change-assessment@2.0.0')
+            change_id=run_id
+            if domain=='change-assessment@2.0.0':
+                match=re.search(r'(?<![A-Za-z0-9_.-])(?:change|chg|cr)[-_][A-Za-z0-9][A-Za-z0-9_.-]{0,80}',goal,re.I)
+                change_id=match.group(0) if match else run_id
+            result=self._create({'goal':goal.strip(),'agent_id':agent_id,'agent_revision':data.get('agent_revision'),
+                'change_id':change_id,'source_run_id':data.get('source_run_id'),'clear_draft':data.get('clear_draft',False),
+                'grant':False,'consent':True,'mcp_consent':True,'start':False,'execution_mode':'conversation'},run_id=run_id,
+                conversation_context={'task_id':run_id,'turn':1,'goal':goal.strip(),'messages':[],'history_hash':digest([]),'omitted_messages':0})
+            from .task_conversations import TaskConversations
+            if start:
+                service=TaskConversations(self);service.register(result['run']);service.dispatch(run_id)
+            return self.detail(run_id)
+
     def create(self, data, *, run_id=None):
         with self.lock:
             self.workspace=self.workspaces.get(self.workspace['id'])
             return self._create(data, run_id=run_id)
 
-    def _create(self, data, *, run_id=None):
-        allowed = {"goal", "change_id", "project_id", "domain_pack_ref", "planner", "runtime", "runtime_revision", "agent_id", "agent_revision", "mcp_consent", "scenario", "grant", "consent", "budget", "start", "source_run_id", "clear_draft"}
+    def _create(self, data, *, run_id=None,conversation_context=None):
+        allowed = {"goal", "change_id", "project_id", "domain_pack_ref", "planner", "runtime", "runtime_revision", "agent_id", "agent_revision", "mcp_consent", "scenario", "grant", "consent", "budget", "start", "source_run_id", "clear_draft", "execution_mode"}
         if not isinstance(data, dict) or set(data) - allowed:
             raise ValueError("任务包含不支持的字段")
         if data.get('project_id',self.workspace['project_id'])!=self.workspace['project_id']:raise PolicyDenied('project outside current workspace')
@@ -398,7 +493,7 @@ class Application:
         planner_name = profile['runtime'] if profile else data.get("runtime", data.get("planner", settings['default_runtime']))
         if profile and any(data.get(k, planner_name) != planner_name for k in ('runtime','planner')):
             raise ValueError('任务运行时与所选 Agent 不一致')
-        if planner_name not in {"mock", "codex", "cursor"}:
+        if planner_name not in {"mock", "codex", "cursor", "qoder"}:
             raise ValueError("不支持的规划器")
         goal = data.get("goal", "评估指定变更并创建一份评估草稿")
         if not isinstance(goal, str) or not 1 <= len(goal.strip()) <= 2000:
@@ -417,7 +512,7 @@ class Application:
             self.assert_run_access(self.runtime().store.load(self.tenant,source_run_id))
         task = TaskContract(domain_pack_ref=domain_ref,goal=goal.strip(), change_id=data.get("change_id", "change-demo-001"),
                             project_id=self.workspace['project_id'], tenant_id=self.tenant,
-                            principal=self.principal, agent_ref=agent_ref(profile) if profile else 'release-assistant@1.0.0', budget=Budget(**budget), source_run_id=source_run_id)
+                            principal=self.principal, agent_ref=agent_ref(profile) if profile else 'release-assistant@1.0.0', budget=Budget(**budget), source_run_id=source_run_id,execution_mode=data.get('execution_mode'),conversation_context=conversation_context)
         runtime = self.runtime(planner)
         state = runtime.submit(task, scenario=data.get("scenario", "normal"), grant=data.get("grant", True), agent_profile=profile, run_id=run_id)
         lease = runtime.store.acquire(self.tenant, state["run_id"], self.lease_seconds)
@@ -460,6 +555,7 @@ class Application:
         with self.lock:
             job["state"] = "RUNNING"
         runtime = self.runtime()
+        runtime.cancel_requested=job['cancel'].is_set
         try:
             while True:
                 if job["cancel"].is_set():
@@ -483,6 +579,17 @@ class Application:
             with self.lock:
                 job["active"] = False
                 job["ended_at"] = time.time()
+            if not self.closed:
+                from .task_conversations import TaskConversations
+                try:
+                    service=TaskConversations(self)
+                    with service.store.connect() as db:
+                        row=db.execute('SELECT c.* FROM task_conversation_turns t JOIN task_conversations c ON c.tenant=t.tenant AND c.id=t.task_id WHERE t.tenant=? AND t.run_id=?',(self.tenant,run_id)).fetchone()
+                    if row:
+                        scoped=self.scoped(row['workspace'])
+                        TaskConversations(scoped).dispatch(row['id'])
+                        scoped.workflows().continue_after_reply(row['id'])
+                except Exception:logging.getLogger(__name__).exception('Next conversation turn could not be dispatched')
 
     def mutate(self, run_id, action):
         identifier(run_id)
@@ -514,6 +621,7 @@ class Application:
 
     def close(self):
         self.scheduler_stop.set()
+        self.conversation_stop.set()
         with self.lock:
             self.closed = True
             for job in self.jobs.values():
@@ -521,6 +629,7 @@ class Application:
                     job["cancel"].set()
         if self.scheduler_thread:
             self.scheduler_thread.join(timeout=5)
+        if self.conversation_thread:self.conversation_thread.join(timeout=2)
         self.pool.shutdown(wait=True, cancel_futures=False)
 
 
@@ -534,6 +643,7 @@ class WebServer(ThreadingHTTPServer):
         self.application = application
         super().__init__(address, Handler)
         application.start_scheduler()
+        application.start_conversation_dispatcher()
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -576,6 +686,31 @@ class Handler(BaseHTTPRequestHandler):
             if not secrets.compare_digest(self.headers.get("X-Agent-Token", ""), self.server.application.token):
                 raise APIError(403, "页面会话已失效，请刷新后重试")
 
+    def stream_task(self,app,identity):
+        """Push persisted public snapshots; reconnect/reload replays the current text."""
+        from .task_conversations import TaskConversations
+        service=TaskConversations(app);initial=service.view(identity)
+        self.send_response(200)
+        self.send_header('Content-Type','text/event-stream; charset=utf-8')
+        self.send_header('Cache-Control','no-cache, no-store')
+        self.send_header('X-Accel-Buffering','no')
+        self.send_header('Connection','close');self.end_headers();self.close_connection=True
+        last=None;heartbeat=0;deadline=time.monotonic()+60
+        try:
+            while not app.closed and not app.conversation_stop.is_set() and time.monotonic()<deadline:
+                view=initial if initial is not None else service.view(identity);initial=None
+                view['current']={'job':app.job(view['active_run_id'])}
+                payload=canonical(view)
+                if payload!=last:
+                    self.wfile.write(('event: conversation\ndata: '+payload+'\n\n').encode());self.wfile.flush()
+                    last=payload;heartbeat=time.monotonic()
+                elif time.monotonic()-heartbeat>=10:
+                    self.wfile.write(b': keep-alive\n\n');self.wfile.flush();heartbeat=time.monotonic()
+                if not view['active'] and not view['queued_count']:
+                    self.wfile.write(b'event: settled\ndata: {}\n\n');self.wfile.flush();break
+                app.conversation_stop.wait(.08)
+        except (BrokenPipeError,ConnectionResetError,TimeoutError,OSError,KeyError,PolicyDenied,ValueError):pass
+
     def dispatch(self, mutation=False):
         request_lock=self.server.application.lock if mutation else None
         if request_lock:request_lock.acquire()
@@ -595,6 +730,10 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError("请求必须为 JSON 对象")
             assets = {"/": ("index.html", "text/html; charset=utf-8"),
                       "/app.js": ("app.js", "text/javascript; charset=utf-8"),
+                      "/run_view.js": ("run_view.js", "text/javascript; charset=utf-8"),
+                      "/run_view.css": ("run_view.css", "text/css; charset=utf-8"),
+                      "/task_conversation.js": ("task_conversation.js", "text/javascript; charset=utf-8"),
+                      "/task_conversation.css": ("task_conversation.css", "text/css; charset=utf-8"),
                       "/agents.js": ("agents.js", "text/javascript; charset=utf-8"),
                       "/form_controls.js": ("form_controls.js", "text/javascript; charset=utf-8"),
                       "/agent_experience.js": ("agent_experience.js", "text/javascript; charset=utf-8"),
@@ -608,6 +747,8 @@ class Handler(BaseHTTPRequestHandler):
                       "/styles.css": ("styles.css", "text/css; charset=utf-8"),
                       "/hig.css": ("hig.css", "text/css; charset=utf-8"),
                       "/agents.css": ("agents.css", "text/css; charset=utf-8"),
+                      "/domains.css": ("domains.css", "text/css; charset=utf-8"),
+                      "/domains.js": ("domains.js", "text/javascript; charset=utf-8"),
                       "/form_controls.css": ("form_controls.css", "text/css; charset=utf-8"),
                       "/appearance.js": ("appearance.js", "text/javascript; charset=utf-8"),
                       "/journeys.js": ("journeys.js", "text/javascript; charset=utf-8"),
@@ -828,7 +969,7 @@ class Handler(BaseHTTPRequestHandler):
                 from .definitions import capability_definitions, DOMAIN, STANDARDS, default_definition, get_domain
                 catalog = {'/api/capabilities': {'capabilities': list(capability_definitions().values())},
                            '/api/standards': {'standards': [{'ref': r, 'verifier_refs': v} for r, v in STANDARDS.items()]},
-                           '/api/domain-packs': {'domain_packs': [DOMAIN.descriptor(),get_domain('knowledge-answer@1.0.0').descriptor()]},
+                           '/api/domain-packs': {'domain_packs': [get_domain('general-assistant@1.0.0').descriptor(),DOMAIN.descriptor(),get_domain('knowledge-answer@1.0.0').descriptor()]},
                            '/api/agent-definition-default': {'definition': default_definition(domain_ref=query.get('domain',['change-assessment@2.0.0'])[0])}}
                 return self.reply(200, catalog[path])
             if path == '/api/agents':
@@ -836,7 +977,17 @@ class Handler(BaseHTTPRequestHandler):
             if path == '/api/agent-domains':
                 from .agent_domains import AgentDomains
                 domains = AgentDomains(app.agents.store, app.tenant, app.workspace['id'])
-                return self.reply(201, domains.create(data)) if mutation else self.reply(200, {'domains': domains.list()})
+                return self.reply(201, domains.create(data)) if mutation else self.reply(200, {
+                    'domains': domains.catalog() if query.get('include_archived', ['0'])[0] == '1' else domains.list()})
+            domain_path = path.strip('/').split('/')
+            if len(domain_path) in (3, 4) and domain_path[:2] == ['api', 'agent-domains']:
+                from .agent_domains import AgentDomains
+                domains = AgentDomains(app.agents.store, app.tenant, app.workspace['id'])
+                identity = identifier(domain_path[2])
+                if len(domain_path) == 3:
+                    return self.reply(200, domains.update(identity, data)) if mutation else self.reply(200, domains.get(identity, include_archived=True))
+                if mutation and domain_path[3] == 'archive':
+                    return self.reply(200, domains.archive(identity, data))
             agent_path = path.strip('/').split('/')
             if len(agent_path) in (3,4) and agent_path[:2]==['api','agents']:
                 identity=identifier(agent_path[2])
@@ -892,6 +1043,30 @@ class Handler(BaseHTTPRequestHandler):
                     if set(data)-{'project_id','evaluation_id'}:raise ValueError('unsupported review fields')
                     return self.reply(200,service.publish(scope,ref,data.get('evaluation_id')))
                 if not mutation and action=='evaluations':return self.reply(200,{'evaluations':service.evaluations(scope,ref)})
+            if path == '/api/tasks' and mutation:
+                return self.reply(202, app.start_task(data))
+            task_path=path.strip('/').split('/')
+            if len(task_path)>=3 and task_path[:2]==['api','tasks']:
+                from .task_conversations import TaskConversations
+                service=TaskConversations(app);identity=identifier(task_path[2])
+                if len(task_path)==3 and not mutation:return self.reply(200,app.detail(service.root_id(identity)))
+                if len(task_path)==4 and task_path[3]=='stream' and not mutation:return self.stream_task(app,identity)
+                if len(task_path)==4 and task_path[3]=='export' and not mutation:
+                    conversation=service.view(identity)
+                    if query.get('kind',['markdown'])[0]=='json':return self.reply(200,conversation,filename=conversation['id']+'-conversation.json')
+                    text='# '+conversation['goal']+'\n\n'
+                    for turn in conversation['turns']:
+                        text+='## 你 · 第 '+str(turn['number'])+' 轮\n\n'+turn['content']+'\n\n'
+                        if turn['cancelled_queue']:text+='（已取消排队）\n\n';continue
+                        text+='## '+(conversation['agent'].get('name') or '智能体')+'\n\n'
+                        if turn['reply']:
+                            from .cli import artifact_markdown
+                            text+=artifact_markdown(turn['reply'])+'\n\n'
+                        else:text+=(turn['error'] or '等待回复')+'\n\n'
+                    return self.reply(200,text,'text/markdown; charset=utf-8',conversation['id']+'-conversation.md')
+                if len(task_path)==4 and task_path[3]=='messages' and mutation:return self.reply(202,service.append(identity,data))
+                if len(task_path)==6 and task_path[3]=='messages' and task_path[5]=='cancel' and mutation:
+                    return self.reply(200,service.cancel_queued(identity,int(task_path[4]),data))
             if path == "/api/runs":
                 return self.reply(202, app.create(data)) if mutation else self.reply(200, app.runs(query))
             pieces = path.strip("/").split("/")

@@ -9,7 +9,7 @@ from urllib.parse import urlsplit
 from uuid import uuid4
 
 from .contracts import canonical
-from .llm import CodexConfig, CursorConfig, LLMPlanner
+from .llm import CONFIG_TYPES, LLMPlanner
 from .runtime_config import ConfigConflict
 from .store import Store
 
@@ -89,18 +89,18 @@ class AgentRegistry:
 
     def save(self,data,identity=None):
         fields={'name','description','runtime','model','options','prompt','skills','mcp_servers','revision'}
-        if not isinstance(data,dict) or set(data) - (fields | {'definition','skill_bindings','evaluation_config','processing_domain_id'}) or not fields <= set(data):raise ValueError('Agent 配置字段不完整或包含未知字段')
+        if not isinstance(data,dict) or set(data) - (fields | {'definition','skill_bindings','evaluation_config','processing_domain_id','processing_domain_revision'}) or not fields <= set(data):raise ValueError('Agent 配置字段不完整或包含未知字段')
         prior = self.get(identity) if identity else None
         name=text(data['name'],'Agent 名称',80)
         description=text(data['description'],'Agent 描述',500,empty=True)
         provider=data['runtime']
-        if provider not in {'mock','codex','cursor'}:raise ValueError('不支持的运行时')
+        if provider not in {'mock',*CONFIG_TYPES}:raise ValueError('不支持的运行时')
         model=text(data['model'],'模型',120,empty=provider=='mock')
         options=data['options']
         expected=set() if provider=='mock' else {'timeout','max_attempts'}|({'reasoning_effort'} if provider=='codex' else set())
         if not isinstance(options,dict) or set(options)!=expected:raise ValueError('运行时选项无效')
         if provider!='mock':
-            cls=CodexConfig if provider=='codex' else CursorConfig
+            cls=CONFIG_TYPES[provider]
             cls(model=model,**options)
             selected=self.models.require(provider,model)
             if provider=='codex' and selected.get('efforts') and options['reasoning_effort'] not in selected['efforts']:
@@ -124,16 +124,26 @@ class AgentRegistry:
                 raise ValueError('岗位 identity 必须是对象')
             source['identity']['name'] = name
         profile['definition'] = normalize_definition(source, name)
+        domain_selection = None
+        if 'processing_domain_revision' in data:
+            if not data.get('processing_domain_id') or type(data['processing_domain_revision']) is not int or data['processing_domain_revision'] < 1:
+                raise ValueError('请选择有效的处理领域版本')
         if 'processing_domain_id' in data:
             domain_id = text(data['processing_domain_id'], '处理领域', 80, empty=True)
             if domain_id:
                 from .agent_domains import AgentDomains
-                profile['processing_domain'] = AgentDomains(self.store,self.tenant,self.workspace_id).get(domain_id)
+                prior_domain = (prior or {}).get('processing_domain')
+                selected_revision = data.get('processing_domain_revision')
+                if prior_domain and domain_id == prior_domain['id'] and selected_revision == prior_domain['revision']:
+                    profile['processing_domain'] = deepcopy(prior_domain)
+                else:
+                    selected = AgentDomains(self.store,self.tenant,self.workspace_id).get(domain_id)
+                    if selected_revision is not None and selected['revision'] != selected_revision:
+                        raise ConfigConflict('处理领域已更新，请重新选择领域后保存智能体')
+                    profile['processing_domain'] = selected
+                    domain_selection = selected
         elif (prior or {}).get('processing_domain'):
             profile['processing_domain'] = deepcopy(prior['processing_domain'])
-        if (profile.get('processing_domain') and
-                profile['processing_domain']['domain_pack_ref'] != profile['definition']['domain_pack_ref']):
-            raise ValueError('处理领域的工作方式与岗位配置不一致，请重新选择领域')
         from .evaluation_contract import normalize_config
         if 'evaluation_config' in data or (prior or {}).get('evaluation_config'):
             profile['evaluation_config'] = normalize_config(data.get('evaluation_config', (prior or {}).get('evaluation_config')),
@@ -162,6 +172,11 @@ class AgentRegistry:
             if revision!=0:raise ConfigConflict('新 Agent 的版本应为 0')
             identity='agent-'+uuid4().hex[:16]
         with self.store.transaction() as db:
+            if domain_selection:
+                selected = db.execute('SELECT data,archived FROM agent_domains WHERE tenant=? AND workspace=? AND id=?',
+                                      (self.tenant, self.workspace_id, domain_selection['id'])).fetchone()
+                if not selected or selected['archived'] or json.loads(selected['data']) != domain_selection:
+                    raise ConfigConflict('处理领域已更新或归档，请重新选择后保存智能体')
             row=db.execute('SELECT revision,created,archived FROM agent_profiles WHERE tenant=? AND id=? AND workspace_id=?',(self.tenant,identity,self.workspace_id)).fetchone()
             if (row['revision'] if row else 0)!=revision:raise ConfigConflict('Agent 已被其他页面更新，请重新加载')
             if not row and not creating:raise KeyError('Agent not found')
@@ -222,7 +237,7 @@ class AgentRegistry:
     def planner(self,profile):
         if profile['archived']:raise ValueError('此 Agent 已归档，请选择其他 Agent')
         if profile['runtime']=='mock':return None
-        cls=CodexConfig if profile['runtime']=='codex' else CursorConfig
+        cls=CONFIG_TYPES[profile['runtime']]
         return LLMPlanner(cls(model=profile['model'],**profile['options']),agent_profile=deepcopy(profile))
 
 
@@ -241,6 +256,9 @@ def public_agent_context(profile, legacy=False):
             'mcp_tools':([{'server':'governed','tools':[NATIVE_NAMES[ref] for ref in native]}] if native else [])}
     if profile.get('processing_domain'):
         result['processing_domain'] = deepcopy(profile['processing_domain'])
+        method=profile['processing_domain'].get('work_method','')
+        if method:
+            result['prompt']+='\n\n领域工作方式（在已配置能力、任务范围与验收要求内执行）：\n'+method
     if profile.get('skill_packages'):
         from .skills import package_catalog
         result['available_skills']=package_catalog(profile)

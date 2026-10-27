@@ -40,8 +40,10 @@ class WorkspaceScheduler:
 
     def validate_task(self, task):
         from .agents import text
-        if not isinstance(task, dict) or set(task) != TASK_FIELDS:
+        if not isinstance(task, dict) or not TASK_FIELDS<=set(task) or set(task)-TASK_FIELDS-{'execution_mode'}:
             raise ValueError('每日任务字段不完整或含未知字段')
+        if 'execution_mode' in task and task['execution_mode']!='conversation':raise ValueError('每日任务执行方式无效')
+        if task.get('execution_mode')=='conversation' and task['grant']:raise ValueError('普通每日任务不预授予业务写入权限')
         for key in ('grant', 'consent', 'mcp_consent'):
             if type(task[key]) is not bool:
                 raise ValueError(key + ' 必须为布尔值')
@@ -134,7 +136,7 @@ class WorkspaceScheduler:
         day = local.date().isoformat()
         with self.store.connect() as db:
             prior = db.execute('SELECT data FROM workspace_daily_plans WHERE tenant=? AND workspace=? AND principal=? AND day=?', (*self.scope, day)).fetchone()
-            states = [json.loads(r[0]) for r in db.execute('SELECT state FROM runs WHERE tenant_id=?', (self.app.tenant,))]
+        states=self.app.accessible_run_states()
         if prior:
             old_plan = json.loads(prior[0])
             if old_plan['schedule_revision'] == config['revision'] or any(i.get('run_id') for i in old_plan['items']):
@@ -150,7 +152,7 @@ class WorkspaceScheduler:
                 item['agent_name'] = profile['name']
                 item['responsibilities'] = profile['definition']['responsibilities']
                 matching = next((s for s in pending if s['snapshot'].get('agent_profile', {}).get('id') == task['agent_id'] and
-                                 s['task']['goal'] == task['goal'] and s['task']['change_id'] == task['change_id']), None)
+                                 s['task']['goal'] == task['goal'] and (task.get('execution_mode')=='conversation' or s['task']['change_id'] == task['change_id'])), None)
                 if matching:
                     item.update(status='SKIPPED', reason='同目标任务尚未结束，先处理原任务', existing_run_id=matching['run_id'])
             except (ValueError, KeyError, ConfigConflict) as exc:
@@ -202,19 +204,20 @@ class WorkspaceScheduler:
                     try:
                         self.validate_task(item['task'])
                         # Recheck after preview: a manual task may have appeared in the meantime.
-                        with self.store.connect() as db:
-                            pending = [json.loads(r[0]) for r in db.execute('SELECT state FROM runs WHERE tenant_id=?', (self.app.tenant,))]
+                        pending=self.app.accessible_run_states()
                         matching = next((s for s in pending if s['status'] not in TERMINAL and
                                          s['task']['project_id'] == self.app.workspace['project_id'] and
                                          s['task']['principal'] == self.app.principal and
                                          s['snapshot'].get('agent_profile', {}).get('id') == item['task']['agent_id'] and
                                          s['task']['goal'] == item['task']['goal'] and
-                                         s['task']['change_id'] == item['task']['change_id']), None)
+                                         (item['task'].get('execution_mode')=='conversation' or s['task']['change_id'] == item['task']['change_id'])), None)
                         if matching:
                             item.update(status='SKIPPED', reason='同目标任务尚未结束，先处理原任务', existing_run_id=matching['run_id'])
                             self._save_claim(plan, owner)
                             continue
-                        self.app.create({**item['task'], 'start': False}, run_id=run_id)
+                        if item['task'].get('execution_mode')=='conversation':
+                            self.app.start_task({k:item['task'][k] for k in ('goal','agent_id','agent_revision')}|{'request_id':run_id},run_id=run_id,start=False)
+                        else:self.app.create({**item['task'], 'start': False}, run_id=run_id)
                         item.update(run_id=run_id, status='DISPATCHED', reason=None)
                     except (ValueError, KeyError, ConfigConflict) as exc:
                         item.update(status='BLOCKED', reason=str(exc))

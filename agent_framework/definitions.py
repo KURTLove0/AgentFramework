@@ -15,7 +15,8 @@ POLICY_REF = 'release-reviewer-policy@1.0.0'
 SKILL_REF = 'release-risk-analysis@1.0.0'
 STANDARDS = {'report-evidence@1.0.0': list(CHECKS[:2]),
              'release-review-rubric@1.0.0': list(CHECKS),
-             'knowledge-source-evidence@1.0.0': ['answer-grounded','answer-scope','answer-current']}
+             'knowledge-source-evidence@1.0.0': ['answer-grounded','answer-scope','answer-current'],
+             'goal-driven-delivery@1.0.0':['result-complete','result-evidence']}
 ADAPTERS = ('mock-worker@1.0.0', 'mock-cli@1.0.0', 'mock-mcp@1.0.0')
 KNOWLEDGE = 'simulated-change-context@1.0.0'
 NATIVE_NAMES = {TOOLS[0]: 'change_read', TOOLS[1]: 'standards_read', TOOLS[3]: 'report_read',
@@ -112,6 +113,9 @@ DOMAIN = ChangeDomain()
 
 def get_domain(ref):
     if ref == DOMAIN_REF:return DOMAIN
+    if ref == 'general-assistant@1.0.0':
+        from .domains.general_assistant import DOMAIN as general_domain
+        return general_domain
     from .domains.knowledge_answer import DOMAIN as knowledge_domain
     if ref == knowledge_domain.ref:return knowledge_domain
     raise ValueError('unpublished DomainPack reference')
@@ -122,10 +126,26 @@ def domain_for(snapshot):
     domain = get_domain(compiled['domain_pack']['ref']) if compiled else DOMAIN
     if compiled and compiled.get('domain_pack') != domain.descriptor():
         raise ValueError('frozen DomainPack is unavailable or has drifted')
+    if compiled and compiled.get('execution_protocol'):
+        if compiled['execution_protocol'].get('ref')=='task-conversation@1.0.0':
+            from .conversation_execution import descriptor,ModelExecutionDomain
+        else:
+            from .model_execution import descriptor,ModelExecutionDomain
+        if compiled['execution_protocol']!=descriptor():
+            raise ValueError('frozen model execution protocol has drifted')
+        return ModelExecutionDomain(domain)
     return domain
 
 
 def default_definition(name='变更评估助手', domain_ref=DOMAIN_REF):
+    if domain_ref=='general-assistant@1.0.0':
+        domain=get_domain(domain_ref)
+        return {'identity':{'name':name,'role':'general_assistant'},
+                'responsibilities':[{'description':'按任务目标与自定义执行指令交付结果','deliverable_ref':'task-deliverable@1.0.0','check_refs':list(domain.checks)}],
+                'domain_pack_ref':domain.ref,'standard_refs':['goal-driven-delivery@1.0.0'],
+                'knowledge_spaces':[KNOWLEDGE],'skill_refs':[domain.skill_ref],'capability_refs':list(domain.capabilities),
+                'policy_ref':domain.policy_ref,'runtime_profile_ref':'profile-runtime@1','prompt_template_ref':'profile-prompt@1',
+                'adapter_bindings':{},'native_read_refs':[]}
     if domain_ref != DOMAIN_REF:
         domain=get_domain(domain_ref)
         return {'identity':{'name':name,'role':'knowledge_assistant'},
@@ -181,14 +201,15 @@ def normalize_definition(value, name):
     try:
         get_domain(result['domain_pack_ref'])
     except ValueError as error:
-        raise ValueError('请为处理领域选择可用的工作方式') from error
+        raise ValueError('请为智能体选择可用的执行模板') from error
     if not isinstance(result['adapter_bindings'], dict):
         raise ValueError('adapter_bindings 必须是引用映射')
     return result
 
 
 class AgentCompiler:
-    def compile(self, profile=None, domain_ref=DOMAIN_REF):
+    def compile(self, profile=None, domain_ref=DOMAIN_REF, *, execution_mode=None):
+        if execution_mode not in (None,'direct','conversation'):raise ValueError('unsupported execution mode')
         from .agents import agent_ref
         profile = deepcopy(profile)
         definition = normalize_definition(profile.get('definition'), profile['name']) if profile else default_definition('知识问答助手' if domain_ref != DOMAIN_REF else '变更评估助手',domain_ref)
@@ -250,19 +271,18 @@ class AgentCompiler:
             raise ValueError('未登记 MCP 效果：请关闭原生直连，改用 definition.native_read_refs 受控读取')
         runtime_binding = {'ref': 'mock-planner@1.0.0'}
         if profile and profile['runtime'] != 'mock':
-            from .llm import CodexConfig, CursorConfig, LLMPlanner
-            config_type = {'codex': CodexConfig, 'cursor': CursorConfig}.get(profile['runtime'])
+            from .llm import CONFIG_TYPES, LLMPlanner
+            config_type = CONFIG_TYPES.get(profile['runtime'])
             if not config_type:
                 raise ValueError('unregistered cognitive runtime')
-            runtime_binding = LLMPlanner(config_type(model=profile['model'], **profile['options']), agent_profile=profile).descriptor()
+            runtime_binding = LLMPlanner(config_type(model=profile['model'], **profile['options']), agent_profile=profile,execution_mode=execution_mode).descriptor()
         domain_descriptor = domain.descriptor()
         processing_domain = (profile or {}).get('processing_domain')
         if processing_domain:
             from .agent_domains import normalize_domain
             processing_domain = normalize_domain(processing_domain, frozen=True)
-            if processing_domain['domain_pack_ref'] != domain.ref:
-                raise ValueError('处理领域与工作方式不一致')
-        result = {'schema_version': 2, 'ref': agent_ref(profile) if profile else ('release-assistant@1.0.0' if domain.ref==DOMAIN_REF else 'knowledge-assistant@1.0.0'),
+        builtin_ref='general-assistant@1.0.0' if domain.ref=='general-assistant@1.0.0' else 'release-assistant@1.0.0' if domain.ref==DOMAIN_REF else 'knowledge-assistant@1.0.0'
+        result = {'schema_version': 2, 'ref': agent_ref(profile) if profile else builtin_ref,
                   'definition': definition, 'domain_pack': domain_descriptor, 'capabilities': compiled_caps,
                   'standards': {ref: {'ref': ref, 'verifier_refs': list(STANDARDS[ref])} for ref in definition['standard_refs']},
                   'skills': [domain_descriptor['skill']] + [{'ref': 'inline-skill:' + digest(s), 'kind': 'instructions-only', **s}
@@ -279,6 +299,14 @@ class AgentCompiler:
                 validate_frozen(item['package'])
                 if item['ref']!=item['skill_id']+'@'+str(item['version']):raise ValueError('Skill version binding mismatch')
                 if item['enabled']:result['skills'].append({'kind':'agent-skill-package',**deepcopy(item)})
+        if execution_mode in ('direct','conversation'):
+            if execution_mode=='conversation':
+                from .conversation_execution import descriptor,evaluation_contract
+            else:
+                from .model_execution import descriptor,evaluation_contract
+            result['execution_protocol']=descriptor()
+            result['evaluation_contract']=evaluation_contract(result)
+            result['cognition_schema_hash']=result['execution_protocol']['schema_hash']
         return {**result, 'hash': digest(result)}
 
     @staticmethod
@@ -321,5 +349,9 @@ def domain_runtime_settings(ref):
     if ref == 'knowledge-answer@1.0.0':
         from .domains.knowledge_answer import KnowledgePlanner
         return {'planner_type':KnowledgePlanner,'refresh_keys':('knowledge_hits','knowledge_documents'),
+                'scenarios':('normal',),'cognitive_domain_ref':ref}
+    if ref=='general-assistant@1.0.0':
+        from .domains.general_assistant import GeneralPlanner
+        return {'planner_type':GeneralPlanner,'refresh_keys':('knowledge_hits','knowledge_documents'),
                 'scenarios':('normal',),'cognitive_domain_ref':ref}
     raise ValueError('unregistered domain runtime settings')

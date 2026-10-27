@@ -40,8 +40,8 @@ def legacy_registry_snapshot(planner=None, agent_profile=None):
     return {**snapshot, "hash": digest(snapshot)}
 
 
-def registry_snapshot(planner=None, agent_profile=None, domain_ref="change-assessment@2.0.0"):
-    compiled = AgentCompiler().compile(agent_profile,domain_ref)
+def registry_snapshot(planner=None, agent_profile=None, domain_ref="change-assessment@2.0.0",execution_mode=None):
+    compiled = AgentCompiler().compile(agent_profile,domain_ref,execution_mode=execution_mode)
     definition = compiled['definition']
     snapshot = {'agent': {'ref': compiled['ref'], 'identity': definition['identity'],
                          'responsibilities': definition['responsibilities'], 'standards': definition['standard_refs'],
@@ -88,7 +88,7 @@ class Runtime:
             from .agents import agent_ref
             if task.agent_ref != agent_ref(agent_profile):
                 raise ValueError('Agent reference does not match frozen definition')
-        elif task.agent_ref not in ('release-assistant@1.0.0','knowledge-assistant@1.0.0'):
+        elif task.agent_ref not in ('release-assistant@1.0.0','knowledge-assistant@1.0.0','general-assistant@1.0.0'):
             raise ValueError('custom Agent requires a registered profile')
         if scenario not in SCENARIOS:
             raise ValueError("unknown fault scenario")
@@ -98,15 +98,18 @@ class Runtime:
         settings = domain_runtime_settings(domain.ref)
         if scenario not in settings['scenarios']:
             raise ValueError('scenario is not supported by this DomainPack')
-        if isinstance(self.planner,LLMPlanner):self.planner.domain_pack_ref=settings['cognitive_domain_ref']
-        if any(resolve_capability({},ref)['effect']=='WRITE' for ref in domain.capabilities):
+        if isinstance(self.planner,LLMPlanner):
+            self.planner.domain_pack_ref=settings['cognitive_domain_ref']
+            self.planner.execution_mode=task.execution_mode
+        if task.execution_mode in ('direct','conversation') and scenario!='normal':raise ValueError('normal tasks do not use fault scenarios')
+        if task.execution_mode is None and task.change_id!='unresolved-change' and any(resolve_capability({},ref)['effect']=='WRITE' for ref in domain.capabilities):
             self.external.seed(task.to_dict())
-        snapshot = registry_snapshot(self.planner, agent_profile,task.domain_pack_ref)
+        snapshot = registry_snapshot(self.planner, agent_profile,task.domain_pack_ref,execution_mode=task.execution_mode)
         from .knowledge import Library
         snapshot.pop('hash')
         snapshot['context_policy'] = Library(self.store).binding(task.to_dict(), snapshot['compiled_agent']['definition']['knowledge_spaces'], snapshot['compiled_agent']['definition']['standard_refs'])
         snapshot['hash'] = digest(snapshot)
-        return self.store.create(task, snapshot, scenario, grant=grant and scenario != "denied", run_id=run_id)
+        return self.store.create(task, snapshot, scenario, grant=grant and task.execution_mode is None and scenario != "denied", run_id=run_id)
 
     def checkpoint(self, state, lease, kind, data=None, **kwargs):
         with self._state_lock:
@@ -157,6 +160,7 @@ class Runtime:
                     if any(s['enabled'] for s in (self.planner.agent_profile or {}).get('mcp_servers', [])):
                         raise ModelError('legacy_mcp_effect_unclassified')
                     self.planner.transport.governed_profile = proxy_profile
+                    self.planner.transport.should_cancel=getattr(self,'cancel_requested',None) if state['task'].get('execution_mode') in ('direct','conversation') else None
                 from .context_builder import build, enrich_mock
                 context,manifest = build(self.store,state,method,self.context(state))
                 if manifest:
@@ -180,6 +184,8 @@ class Runtime:
             if isinstance(self.planner, LLMPlanner):
                 self.planner.observer = None
                 self.planner.transport.governed_profile = None
+                self.planner.transport.progress=None
+                self.planner.transport.should_cancel=None
 
     def cognition_failed(self, state, lease, exc):
         from .contracts import LeaseLost
@@ -192,6 +198,9 @@ class Runtime:
             return
         has_effect = any(self.is_write(state, a) and a["status"] in ("DISPATCHED", "UNKNOWN", "RECONCILING", "OBSERVED") for a in self.store.actions(state))
         code = exc.code if isinstance(exc, ModelError) else type(exc).__name__
+        if code=='task_cancelled':
+            self.stop(state,lease,'CANCELLED','任务已取消。')
+            return
         if isinstance(exc,ModelError) and time.time()>=state["deadline"]:code="task_deadline"
         status = "NEEDS_REVIEW" if has_effect or code == "legacy_mcp_effect_unclassified" else "EXPIRED" if code in ("model_call_budget", "model_token_budget", "task_deadline") else "FAILED"
         self.stop(state, lease, status, "认知调用失败：" + code)
@@ -386,6 +395,38 @@ class Runtime:
                     action["status"] = "VERIFIED"
                     self.checkpoint(state, lease, "action.verified", {"logical_id": action["logical_id"]}, action=action)
 
+    def execute_model_task(self,state,lease):
+        """No model-authored plan/decide/review calls for ordinary tasks."""
+        from .model_execution import MockExecution,SCHEMA
+        from .structured import validate
+        if not isinstance(self.planner,LLMPlanner) and self._domain_mock:self.planner=MockExecution()
+        if state['status']=='CREATED' and not state['steps']:
+            state['deadline']=time.time()+state['task']['budget']['max_wall_seconds']
+        state['status']='RUNNING';state['last_error']=None
+        self.checkpoint(state,lease,'execution.started',{'runtime':state['snapshot']['planner_ref']})
+        if not self.charge(state,lease):return self.store.result(state['tenant_id'],state['run_id'])
+        try:
+            output=self.cognize(state,lease,'execute');validate(output,SCHEMA)
+            if (output['kind']=='result')!=(output['result'] is not None):raise ModelError('inconsistent_execution_result')
+        except Exception as exc:
+            self.cognition_failed(state,lease,exc)
+            return self.store.result(state['tenant_id'],state['run_id'])
+        self.checkpoint(state,lease,'execution.summary',{'text':output['summary'],'source':'model' if isinstance(self.planner,LLMPlanner) else 'offline'})
+        if output['kind']=='request_input':
+            self.stop(state,lease,'WAITING_INPUT',output['summary'])
+            return self.store.result(state['tenant_id'],state['run_id'])
+        state['report']=output['result']
+        checks=domain_for(state['snapshot']).task_checks(state,self.store.evidence(state),store=self.store)
+        state['checks']=checks
+        evidence={'id':'result-'+digest([state['run_id'],state['report']])[:20],'source':'model.result',
+                  'observed_at':time.time(),'data':state['report'],'content_hash':digest(state['report']),
+                  'tenant_id':state['tenant_id'],'run_id':state['run_id']}
+        cancelled=callable(getattr(self,'cancel_requested',None)) and self.cancel_requested()
+        state['status']='CANCELLED' if cancelled else 'SUCCEEDED' if all(c['passed'] for c in checks.values()) else 'NEEDS_REVIEW'
+        state['last_error']='结果中的引用未通过来源核对，请查看运行记录。' if state['status']=='NEEDS_REVIEW' else None
+        self.checkpoint(state,lease,'run.'+state['status'].lower(),{'summary':output['summary']},evidence=evidence,checks=checks)
+        return self.store.result(state['tenant_id'],state['run_id'])
+
     def run(self, run_id, tenant="tenant-demo", pause_after=None):
         state = self.store.load(tenant, run_id)
         if state["status"] in TERMINAL or (state["status"] == "WAITING_INPUT" and not state["snapshot"].get("context_policy") and not self.invalid_readback(state)):
@@ -418,9 +459,14 @@ class Runtime:
             elif isinstance(self.planner, LLMPlanner):
                 self.stop(state, lease, "FAILED", "不能在已有模拟运行中替换规划器")
                 return self.store.result(tenant, run_id)
+            direct=bool(snapshot.get('compiled_agent',{}).get('execution_protocol'))
+            if direct!=(state['task'].get('execution_mode') in ('direct','conversation')):
+                self.stop(state,lease,'FAILED','执行协议与任务快照不一致')
+                return self.store.result(tenant,run_id)
+            if direct:return self.execute_model_task(state,lease)
             if not isinstance(self.planner,LLMPlanner) and self._domain_mock:
                 requested_type=domain_runtime_settings(domain_for(snapshot).ref)['planner_type']
-                registered_types={domain_runtime_settings(ref)['planner_type'] for ref in ('change-assessment@2.0.0','knowledge-answer@1.0.0')}
+                registered_types={domain_runtime_settings(ref)['planner_type'] for ref in ('change-assessment@2.0.0','knowledge-answer@1.0.0','general-assistant@1.0.0')}
                 if type(self.planner) in registered_types and type(self.planner) is not requested_type:
                     self.planner=requested_type()
             # Supplementing sources is an explicit resume. Keep fixed intents intact;
@@ -435,6 +481,9 @@ class Runtime:
                             self.checkpoint(state,lease,'read.invalidated_after_input',{'logical_id':read['logical_id']},action=read)
                     if not self.replan(state,lease,'补充资料后重新检索与评估',refresh=True):
                         return self.store.result(tenant,run_id)
+            if state['task']['change_id']=='unresolved-change' and domain_for(snapshot).ref=='change-assessment@2.0.0':
+                self.stop(state,lease,'WAITING_INPUT','此历史智能体需要具体变更编号。请在任务目标中补充 change-… 编号后重新创建，或将智能体切换为通用执行配置。')
+                return self.store.result(tenant,run_id)
             state["status"] = "RUNNING"
             self.checkpoint(state, lease, "run.resumed")
             for action in self.store.actions(state):

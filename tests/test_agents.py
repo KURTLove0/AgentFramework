@@ -81,10 +81,10 @@ class AgentTests(unittest.TestCase):
         data=definition('mock');data['definition']=default_definition(data['name'])
         saved=self.app.agents.save(data)
         data['definition']['domain_pack_ref']='custom-domain@1.0.0'
-        with self.assertRaisesRegex(ValueError,'工作方式'):
+        with self.assertRaisesRegex(ValueError,'执行模板'):
             self.app.agents.save(data)
         data['revision']=1
-        with self.assertRaisesRegex(ValueError,'工作方式'):
+        with self.assertRaisesRegex(ValueError,'执行模板'):
             self.app.agents.save(data,saved['id'])
         self.assertEqual(self.app.agents.list(),[saved])
 

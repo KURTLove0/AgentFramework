@@ -1,0 +1,737 @@
+{
+  "checks": [
+    "空工作台引导创建智能体，无演示任务或固定执行链路",
+    "每日模板只填目标和智能体，派发后可明确开始，直接执行一轮",
+    "连续修改保留同一任务，手机可查看任务属性和导出完整对话",
+    "复盘采用最新修订结果，可直接沉淀并进入资料库",
+    "知识草稿、审核、发布和修订可连续完成，修订保留原发布版本",
+    "Skill 可编辑保存、发布和导出",
+    "通用工作流无固定目标或预授权；节点补充信息后自动使用最新结果继续",
+    "12 个模块在桌面、平板及手机深浅色下无页面横向溢出"
+  ],
+  "errors": [],
+  "layouts": [
+    {
+      "view": "workbench",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "workbench",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "workbench",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "workbench",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "workbench",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "workbench",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "workbench",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "workbench",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "workbench",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "workbench",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "runs",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "runs",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "runs",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "runs",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "runs",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "runs",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "runs",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "runs",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "runs",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "runs",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "daily",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "daily",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "daily",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "daily",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "daily",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "daily",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "daily",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "daily",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "daily",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "daily",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "evaluations",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "evaluations",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "evaluations",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "evaluations",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "evaluations",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "evaluations",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "evaluations",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "evaluations",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "evaluations",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "evaluations",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "agents",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "agents",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "agents",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "agents",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "agents",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "agents",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "agents",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "agents",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "agents",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "agents",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "workflows",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "workflows",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "workflows",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "workflows",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "workflows",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "workflows",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "workflows",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "workflows",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "workflows",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "workflows",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "skills",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "skills",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "skills",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "skills",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "skills",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "skills",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "skills",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "skills",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "skills",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "skills",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "domains",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "domains",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "domains",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "domains",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "domains",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "domains",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "domains",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "domains",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "domains",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "domains",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "library",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "library",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "library",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "library",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "library",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "library",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "library",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "library",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "library",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "library",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "registry",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "registry",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "registry",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "registry",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "registry",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "registry",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "registry",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "registry",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "registry",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "registry",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "runtimes",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "runtimes",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "runtimes",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "runtimes",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "runtimes",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "runtimes",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "runtimes",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "runtimes",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "runtimes",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "runtimes",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "workspaces",
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "workspaces",
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "workspaces",
+      "theme": "light",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "workspaces",
+      "theme": "light",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "workspaces",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "view": "workspaces",
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "view": "workspaces",
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "view": "workspaces",
+      "theme": "dark",
+      "width": 414,
+      "overflow": false
+    },
+    {
+      "view": "workspaces",
+      "theme": "dark",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "view": "workspaces",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    }
+  ],
+  "taskId": "run-daily-97f081b91dced8633d575929",
+  "workflowId": "flowrun-2dbc44b12125474e7a59768f"
+}

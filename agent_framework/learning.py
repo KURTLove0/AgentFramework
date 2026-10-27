@@ -51,9 +51,9 @@ def agent_generate(app, profile, purpose, context, output_schema, consent, offli
         skills=for_message(profile,message)
         return offline(),{'model_calls':0,'usage':[],'skill_selection':skills['selection'] if skills else None}
     if consent is not True:raise PolicyDenied('请明确允许将所选模拟上下文、Agent 与 Schema 发送到模型服务')
-    from .llm import CodexConfig,CursorConfig,CodexTransport,CursorTransport
-    config=(CodexConfig if provider=='codex' else CursorConfig)(model=profile['model'],**profile['options'])
-    transport=(CodexTransport if provider=='codex' else CursorTransport)()
+    from .llm import CONFIG_TYPES,TRANSPORT_TYPES
+    config=CONFIG_TYPES[provider](model=profile['model'],**profile['options'])
+    transport=TRANSPORT_TYPES[provider]()
     deadline=time.time()+config.timeout
     def generate(phase,data,shape):
         remaining=deadline-time.time()
@@ -99,13 +99,27 @@ class Learning:
 
     def run_context(self,run_id):
         detail=self.app.detail(identifier(run_id));run=detail['run']
+        conversation=detail.get('conversation')
+        whole=bool(conversation and conversation['id']==run_id and len(conversation['turns'])>1)
+        if whole:
+            detail=conversation['current'];run=detail['run']
+            if conversation['active'] or conversation['queued_count']:raise ConfigConflict('请等待本轮对话结束后复盘')
         if run['task']['principal']!=self.app.principal:raise PolicyDenied('只能复盘本人运行记录')
         if detail['job'] and detail['job']['active'] or run['status'] in {'CREATED','RUNNING','VERIFYING','RECONCILING'}:
             raise ConfigConflict('请等待运行暂停或结束后复盘')
-        facts={'run_id':run_id,'goal':run['task']['goal'],'status':run['status'],'checks':run['checks'],
+        facts={'run_id':run['run_id'],'goal':conversation['goal'] if whole else run['task']['goal'],'status':run['status'],'checks':run['checks'],
                'steps':run['steps'],'replans':run['replans'],'report':run['report'],
                'domain_pack_ref':run['task']['domain_pack_ref'],'last_error':run['last_error']}
-        sources=[{'ref':'run:'+run_id,'content_hash':digest(facts),'data':facts}]
+        if whole:
+            turns=[{'number':t['number'],'goal':t['content'],'status':t['status'],'reply':t['reply']} for t in conversation['turns'] if not t['cancelled_queue']]
+            history=[];used=0
+            for turn in reversed(turns[:-1]):
+                size=len(canonical(turn).encode())
+                if used+size>24000:break
+                history.append(turn);used+=size
+            facts['task_id']=run_id;facts['latest_request']=run['task']['goal'];facts['conversation_history']=list(reversed(history))
+            facts['conversation_hash']=digest(turns);facts['omitted_turns']=max(0,len(turns)-1-len(history))
+        sources=[{'ref':'run:'+run['run_id'],'content_hash':digest(facts),'data':facts}]
         for ref,e in detail['evidence'].items():
             sources.append({'ref':ref,'content_hash':e['content_hash'],'data':{'source':e['source'],'data':e['data']}})
         context={'run_id':run_id,'facts':facts,'sources':sources,'source_hash':digest(sources),
@@ -236,8 +250,16 @@ class Learning:
             for item_id in selected:
                 item=items[item_id];kind=item['kind'];asset_id='learned-'+digest([identity,item_id])[:24]
                 if kind=='EXPERIENCE':
-                    source=self.library.get(self.access,'experience-'+prior['run_id']+'@1')
-                    content={**deepcopy(source['content']),'lesson':item['text'],'limitations':item['limitations']+['Agent 复盘建议；离线评测只验证已登记模拟规则，不能证明所有文字归纳。']}
+                    source_run=self.store.load(self.app.tenant,context['facts']['run_id'])
+                    mode=source_run['task'].get('execution_mode')
+                    if mode in ('direct','conversation'):
+                        content={'category':'task-delivery','conditions':{'domain_pack_ref':context['facts']['domain_pack_ref'],'execution_mode':mode},
+                                 'supporting_runs':[source_run['run_id']],'counterexamples_required':True}
+                        limitation='离线评测核对结果结构与来源，不证明文字归纳适用于其他任务。'
+                    else:
+                        source=self.library.get(self.access,'experience-'+source_run['run_id']+'@1');content=deepcopy(source['content'])
+                        limitation='离线评测只验证已登记模拟规则，不能证明所有文字归纳。'
+                    content.update(lesson=item['text'],limitations=item['limitations']+[limitation])
                 elif kind=='ONTOLOGY':content=item['content']
                 else:content={'text':item['text'],'limitations':item['limitations']}
                 body={'title':item['title'],'content':content,'space_ref':SPACE,'source_uri':'local:retrospective/'+identity if kind!='ONTOLOGY' else 'local:ontology/'+identity,
@@ -256,7 +278,7 @@ class Learning:
     def assert_sources(self,db,proposal):
         context=proposal['source_context']
         if proposal['purpose']=='retrospective':
-            row=db.execute('SELECT state FROM runs WHERE tenant_id=? AND id=?',(self.app.tenant,proposal['run_id'])).fetchone()
+            row=db.execute('SELECT state FROM runs WHERE tenant_id=? AND id=?',(self.app.tenant,context['facts']['run_id'])).fetchone()
             if not row or json.loads(row['state'])['status']!=context['facts']['status']:raise ConfigConflict('运行事实已变化')
             if self.run_context(proposal['run_id'])['source_hash']!=proposal['source_hash']:raise ConfigConflict('运行证据已变化')
         else:
@@ -271,6 +293,11 @@ class Learning:
         values=[('knowledge','KNOWLEDGE','任务事实与验收依据',summary),('memory','MEMORY','本次任务的工作记忆',summary+'\n后续处理应先核对原运行的当前状态与来源。'),
                 ('capability','CAPABILITY','证据驱动的任务复核方法','输入：运行目标、证据与验收项。\n步骤：核对来源与范围；审查动作和授权；复核验收；未知写入按原幂等键核对。\n输出：有来源的复核结论。\n验收：未确认的事实标明限制，不重复执行业务写入。')]
         if context['experience_allowed']:values.insert(2,('experience','EXPERIENCE','任务复盘的可复用经验','先获取可信证据，再按授权执行；结果以独立验收为准，写入状态不明时先核对再决定后续动作。'))
+        if 'result-complete' in f['checks']:
+            summary=f"目标：{f['goal']}\n结果：{f['status']}；结果与来源检查 {passed}/{len(f['checks'])}。"
+            values=[(i,k,t,summary if k=='KNOWLEDGE' else summary+'\n后续处理应核对当前结果与来源。' if k=='MEMORY' else v) for i,k,t,v in values]
+            limitations=['仅归纳本次任务的事实，需人工审阅，不代表普遍规律。','离线归纳未调用模型，不改变原任务结果或智能体能力范围。']
+            values=[(i,k,t,('输入：任务目标、约束与已有结果。\n方法：核对实际交付是否符合要求；需要外部事实时核对来源；结合后续反馈修改结果。\n输出：有依据、可继续修改的交付内容。' if k=='CAPABILITY' else '根据明确目标交付结果，保留来源与限制，并依据后续要求继续修订。' if k=='EXPERIENCE' else v)) for i,k,t,v in values]
         return {'summary':summary,'outcome':f['status'],'acceptance':{'passed':passed,'total':len(f['checks'])},
                 'items':[{'id':i,'kind':k,'title':t,'text':v,'source_refs':[run],'limitations':limitations} for i,k,t,v in values]}
 

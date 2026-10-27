@@ -1,13 +1,13 @@
 {
-  "date": "2026-10-25",
+  "date": "2026-10-27",
   "framework": "Python backend; existing buildless HTML/CSS/JavaScript UI",
   "existing_frontend": true,
   "existing_tokens": true,
   "audience": "developers and business operators",
   "use_case": "configure agents, skills and workflows; run, authorize, verify and recover tasks",
-  "genre": "modern-minimal",
+  "genre": "atmospheric",
   "macrostructure": "Index-First",
-  "theme": "System Blue",
+  "theme": "Deep Space Glass",
   "motion": "short feedback only; reduced-motion supported",
   "preserve": [
     "runtime contracts",
@@ -15,11 +15,11 @@
     "verification",
     "idempotent recovery",
     "existing tasks",
-    "all eleven routes"
+    "all twelve routes"
   ],
   "design_source": "design.md",
-  "verification": "docs/ui-review-20261025/reviewer/final-score.json (independent 97/100; no unresolved P0/P1/P2)",
-  "routes": 11,
+  "verification": "Deep Space Glass verified: 12 routes in light/dark across five widths, clean workbench/runtime contrast audits, passing project/simple-task/domain browser journeys, 336 Python tests and front-end interaction suites",
+  "routes": 12,
   "scan_source": "docs/ui95/baseline-inventory.json",
   "evidence": "docs/ui-review-20261025/completion-audit.json"
 }

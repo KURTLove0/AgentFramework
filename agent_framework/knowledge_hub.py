@@ -28,6 +28,6 @@ def hub(app,query=''):
             'memory':{'preferences':[a for a in assets if a['kind']=='PREFERENCE' and matches(a)],'notes':[a for a in assets if a['kind']=='MEMORY' and matches(a)],'episodes':episodes(app.runtime().store,access,query,limit=50)},
             'experience':[a for a in exp if matches(a)],'capabilities':[c for c in caps if matches(c)],
             'capability_methods':[a for a in assets if a['kind']=='CAPABILITY' and matches(a)],'ontologies':ontologies,'ontology_matches':semantic['concepts'],
-            'skills':[get_domain(ref).descriptor()['skill'] for ref in ('change-assessment@2.0.0','knowledge-answer@1.0.0')],
+            'skills':[get_domain(ref).descriptor()['skill'] for ref in ('general-assistant@1.0.0','change-assessment@2.0.0','knowledge-answer@1.0.0')],
             'counts':{'knowledge':sum(a['kind']=='KNOWLEDGE' for a in assets),'preferences':sum(a['kind']=='PREFERENCE' for a in assets),'notes':sum(a['kind']=='MEMORY' for a in assets),'episodes':len(episodes(app.runtime().store,access,limit=50)),'experience':len(exp),'capabilities':len(caps),'capability_methods':sum(a['kind']=='CAPABILITY' for a in assets),'ontologies':sum(a['kind']=='ONTOLOGY' for a in assets)},
             'identity':{'principal':access.principal,'roles':access.roles,'mode':'local-simulation'}}

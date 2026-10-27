@@ -278,7 +278,8 @@ class HTTPTests(unittest.TestCase):
         status, _, body = self.request('/api/runtime-config')
         self.assertEqual(status, 200)
         config = json.loads(body)
-        self.assertEqual({p['id'] for p in config['providers']}, {'mock', 'codex', 'cursor'})
+        self.assertEqual({p['id'] for p in config['providers']}, {'mock', 'codex', 'cursor', 'qoder'})
+        self.assertIn('qoder', config['settings']['profiles'])
         data = {k: config['settings'][k] for k in ('default_runtime', 'profiles', 'revision')}
         data['default_runtime'] = 'cursor'
         data['profiles']['cursor']['model'] = 'cursor-http-fixture'

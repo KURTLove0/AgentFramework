@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 
 from .contracts import Budget, LeaseBusy, LeaseLost, TaskContract
-from .llm import CodexConfig, CursorConfig, LLMPlanner
+from .llm import CodexConfig, CursorConfig, QoderConfig, LLMPlanner
 from .planner import MockPlanner
 from .mock_tools import SCENARIOS
 from .runtime import CrashInjected, Runtime
@@ -23,6 +23,11 @@ def summary(result):
 
 
 def artifact_markdown(report):
+    if 'content' in report:
+        text='# '+report['title']+'\n\n'+report['content']
+        if report.get('citations'):
+            text+='\n\n## 来源\n\n'+'\n'.join('- '+c['asset_ref']+' ['+c['evidence_ref']+']' for c in report['citations'])
+        return text+'\n\n'+'\n'.join(report.get('limitations',[]))+'\n'
     if 'answer' in report:
         text='# '+report['question']+'\n\n'+report['answer']+'\n\n## 来源\n\n'
         text+='\n'.join('- '+c['asset_ref']+' ['+c['evidence_ref']+']' for c in report['citations'])
@@ -49,10 +54,10 @@ def parser():
     p.add_argument("--tenant", default="tenant-demo")
     p.add_argument("--lease-seconds", type=float, default=10, help="worker lease; must exceed tool timeout")
     p.add_argument("--tool-timeout", type=float, default=2)
-    p.add_argument("--planner", choices=("mock", "codex", "cursor"), help="new tasks default to mock; resume restores the frozen planner")
-    p.add_argument("--domain",choices=("change-assessment@2.0.0","knowledge-answer@1.0.0"),default="change-assessment@2.0.0")
+    p.add_argument("--planner", choices=("mock", "codex", "cursor", "qoder"), help="new tasks default to mock; resume restores the frozen planner")
+    p.add_argument("--domain",choices=("general-assistant@1.0.0","change-assessment@2.0.0","knowledge-answer@1.0.0"),default="change-assessment@2.0.0")
     p.add_argument("--goal",help="new task instruction / knowledge question")
-    p.add_argument("--model", help="model ID for Codex/Cursor; defaults to that CLI's local model preference")
+    p.add_argument("--model", help="model ID for Codex/Cursor/Qoder; defaults to that CLI's local model preference")
     p.add_argument("--reasoning-effort", choices=("minimal", "low", "medium", "high", "xhigh", "max", "ultra"))
     p.add_argument("--model-timeout", type=float, default=60)
     p.add_argument("--model-attempts", type=int, default=2, help="bounded JSON/schema repair attempts")
@@ -92,15 +97,16 @@ def main(argv=None):
             from .web import serve
             serve(args.data_dir, args.tenant, args.host, args.port, args.principal)
             return 0
-        if args.planner not in {"codex", "cursor"} and args.model:
-            raise ValueError("--model requires --planner codex or cursor")
+        if args.planner not in {"codex", "cursor", "qoder"} and args.model:
+            raise ValueError("--model requires --planner codex, cursor or qoder")
         if args.reasoning_effort and args.planner != "codex":
             raise ValueError("--reasoning-effort requires --planner codex")
         planner = LLMPlanner(CodexConfig.local(model=args.model, reasoning_effort=args.reasoning_effort,
                     timeout=args.model_timeout, max_attempts=args.model_attempts)) if args.planner == "codex" else MockPlanner() if args.planner == "mock" else None
-        if args.planner == 'cursor':
-            config = CursorConfig(args.model) if args.model else CursorConfig.local()
-            planner = LLMPlanner(CursorConfig(config.model, timeout=args.model_timeout, max_attempts=args.model_attempts))
+        if args.planner in {'cursor','qoder'}:
+            config_type=CursorConfig if args.planner=='cursor' else QoderConfig
+            config=config_type(args.model) if args.model else config_type.local()
+            planner=LLMPlanner(config_type(config.model,timeout=args.model_timeout,max_attempts=args.model_attempts))
         runtime = Runtime(args.data_dir, planner=planner, lease_seconds=args.lease_seconds, tool_timeout=args.tool_timeout)
         if args.command in ("demo", "submit"):
             task = TaskContract.from_dict(json.loads(args.task.read_text(encoding="utf-8"))) if args.task else TaskContract(

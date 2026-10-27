@@ -1,11 +1,12 @@
 'use strict';
 const roleLabels={
+ 'goal-driven-delivery@1.0.0':['目标交付与来源核对','按自定义指令交付内容，引用外部资料时核对真实来源。'],
  'report-evidence@1.0.0':['报告事实与证据','章节完整，关键事实绑定可信工具证据。'],
  'release-review-rubric@1.0.0':['变更风险与草稿验收','按测试和依赖判定风险，创建后独立回读草稿。'],
  'knowledge-source-evidence@1.0.0':['知识来源与引用','回答逐字引用原文；检查来源范围、发布状态、版本与有效期。']
 };
-const checkLabels={'report-sections':'报告章节与风险规则','critical-claims-evidence':'关键事实与证据引用','draft-readback':'草稿独立回读','answer-grounded':'回答与原文一致','answer-scope':'来源属于任务范围','answer-current':'来源当前有效'};
-const deliverableLabels={'release-report@1.0.0':'变更评估报告','release-draft@1.0.0':'可核对的评估草稿','knowledge-answer@1.0.0':'带原文引用的知识回答'};
+const checkLabels={'result-complete':'交付内容完整','result-evidence':'引用来源可核对','report-sections':'报告章节与风险规则','critical-claims-evidence':'关键事实与证据引用','draft-readback':'草稿独立回读','answer-grounded':'回答与原文一致','answer-scope':'来源属于任务范围','answer-current':'来源当前有效'};
+const deliverableLabels={'task-deliverable@1.0.0':'按任务要求交付内容','release-report@1.0.0':'变更评估报告','release-draft@1.0.0':'可核对的评估草稿','knowledge-answer@1.0.0':'带原文引用的知识回答'};
 async function initRoleEditor(definition){
  if(!state.roleCatalog){const [standards,domains,caps]=await Promise.all([api('/api/standards'),api('/api/domain-packs'),api('/api/capabilities')]);state.roleCatalog={standards:standards.standards,domains:domains.domain_packs,caps:caps.capabilities};}
  state.roleDefinition=structuredClone(definition);$('#agent-role').value=definition.identity.role;renderAgentDomainOptions();
@@ -19,8 +20,8 @@ async function initRoleEditor(definition){
 function roleDomain(){return state.roleCatalog.domains.find(d=>d.ref===state.roleDefinition.domain_pack_ref);}
 function roleChecks(){return [...new Set(state.roleDefinition.responsibilities.flatMap(r=>r.check_refs).concat(state.roleCatalog.standards.filter(s=>state.roleDefinition.standard_refs.includes(s.ref)).flatMap(s=>s.verifier_refs)))];}
 function dutyRow(duty={description:'',deliverable_ref:state.roleDefinition.domain_pack_ref==='knowledge-answer@1.0.0'?'knowledge-answer@1.0.0':'release-report@1.0.0',check_refs:[]}){
- const qa=state.roleDefinition.domain_pack_ref==='knowledge-answer@1.0.0';const deliverables=qa?['knowledge-answer@1.0.0']:['release-report@1.0.0','release-draft@1.0.0'];
- const checks=qa?['answer-grounded','answer-scope','answer-current']:['report-sections','critical-claims-evidence','draft-readback'];
+ const general=state.roleDefinition.domain_pack_ref==='general-assistant@1.0.0',qa=state.roleDefinition.domain_pack_ref==='knowledge-answer@1.0.0';if(general&&duty.deliverable_ref==='release-report@1.0.0')duty.deliverable_ref='task-deliverable@1.0.0';const deliverables=general?['task-deliverable@1.0.0']:qa?['knowledge-answer@1.0.0']:['release-report@1.0.0','release-draft@1.0.0'];
+ const checks=general?['result-complete','result-evidence']:qa?['answer-grounded','answer-scope','answer-current']:['report-sections','critical-claims-evidence','draft-readback'];
  return `<fieldset class="duty-row"><legend>岗位职责</legend><label>职责说明<textarea data-duty="description" required rows="2" maxlength="1000">${esc(duty.description)}</textarea></label><label>交付物<select data-duty="deliverable">${deliverables.map(ref=>`<option value="${ref}" ${duty.deliverable_ref===ref?'selected':''}>${esc(deliverableLabels[ref])}</option>`).join('')}</select></label><p class="role-check-heading">此职责负责哪些验收项？</p><div class="duty-checks" role="group" aria-label="职责验收项">${checks.map(ref=>`<label class="check-label"><input type="checkbox" data-check-ref="${ref}" ${duty.check_refs.includes(ref)?'checked':''}><span>${esc(checkLabels[ref])}</span></label>`).join('')}</div><button type="button" class="text-button" data-remove-duty>移除此职责</button></fieldset>`;
 }
 function serializeRoleDefinition(validate=false){
@@ -35,7 +36,8 @@ function roleDefinitionIssues(definition=serializeRoleDefinition()){
  const issues=[],add=(section,code,message,fields)=>issues.push({section,code,message,fields:fields.filter(Boolean),source:'role'});
  const missingIdentity=[$('#agent-role')].filter(field=>!field.value.trim());
  if(missingIdentity.length)add('identity','identity','请填写岗位角色。',missingIdentity);
- if(!agentDomainChoice($('#agent-domain').value)||agentDomainChoice($('#agent-domain').value).domain_pack_ref!==definition.domain_pack_ref)add('identity','domain','请选择已有领域，或先创建新领域。',[$('#agent-domain')]);
+ if(!agentDomainChoice($('#agent-domain').value))add('identity','domain','请选择已有领域，或先创建新领域。',[$('#agent-domain')]);
+ if(!state.roleCatalog.domains.some(d=>d.ref===definition.domain_pack_ref))add('runtime','execution-config','执行配置不可用，请重新读取智能体。',[$('#agent-prompt')]);
  if(!$('#agent-domain-create-fields').hidden)add('identity','domain-draft','请先创建并选用新领域，或取消新建。',[$('#agent-domain-name')]);
  const rows=$$('#agent-duties .duty-row');
  if(!definition.responsibilities.length)add('responsibilities','duties','至少添加一项岗位职责，并选择对应的验收项。',[$('[data-action="add-agent-duty"]')]);

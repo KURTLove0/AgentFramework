@@ -4,6 +4,7 @@ Evaluation uses separate temporary simulated systems. It never dispatches a
 historical action, calls a model, or grants production authorization.
 """
 import json
+from copy import deepcopy
 from pathlib import Path
 import tempfile
 import time
@@ -34,10 +35,10 @@ class ExperienceService:
         if asset['kind']!='EXPERIENCE' or asset['status'] not in {'CANDIDATE','EVALUATED'}:
             raise ValueError('experience is not an evaluable candidate')
         content=asset['content']
-        if content['category'] not in {'uncertain-write','readback-integrity','evidence-first'}:
+        if content['category'] not in {'uncertain-write','readback-integrity','evidence-first','task-delivery'}:
             raise ValueError('unregistered experience evaluation rubric')
         # Inspect the actual archived source and its frozen verification evidence.
-        sources=[]
+        sources=[];source_states=[]
         with self.store.connect() as db:
             for run in content['supporting_runs']:
                 row=db.execute('SELECT data FROM episodic_memories WHERE tenant=? AND run_id=? AND project=? AND environment=?',
@@ -45,6 +46,7 @@ class ExperienceService:
                 if not row:raise PolicyDenied('source episode is unavailable in review scope')
                 episode=json.loads(row[0])
                 state=self.store.result(access.tenant,run)
+                source_states.append(state)
                 evidence=self.store.evidence(state)
                 from .definitions import domain_for
                 checks=domain_for(state['snapshot']).task_checks(state,evidence,store=self.store)
@@ -52,6 +54,23 @@ class ExperienceService:
                 consistent=(state['status']!='SUCCEEDED' or recomputed) and episode['snapshot_hash']==state['snapshot']['hash']
                 sources.append({'run_id':run,'episode_hash':digest(episode),'snapshot_hash':state['snapshot']['hash'],
                                 'outcome':state['status'],'checks_recomputed':checks,'consistent':consistent})
+        if content['category']=='task-delivery':
+            cases=[]
+            from .definitions import domain_for
+            for state in source_states:
+                if (state['task'].get('execution_mode') not in ('direct','conversation')
+                    or state['task']['domain_pack_ref']!=content['conditions']['domain_pack_ref']):
+                    raise PolicyDenied('experience source does not match normal task execution')
+                domain=domain_for(state['snapshot'])
+                for name,report,expected in (
+                    ('complete-deliverable',{'title':'结构验证','content':'用于验证交付格式的本地内容。','citations':[],'limitations':[]},True),
+                    ('empty-deliverable',{'title':'空内容','content':'','citations':[],'limitations':[]},False),
+                    ('forged-citation',{'title':'伪造来源','content':'无依据的内容','citations':[{'asset_ref':'missing@1','content_hash':'missing','quote':'missing','evidence_ref':'missing'}],'limitations':[]},False)):
+                    sample=deepcopy(state);sample['report']=report
+                    checks=domain.task_checks(sample,{},store=self.store)
+                    cases.append({'scenario':name,'kind':'support' if expected else 'counterexample','passed':all(c['passed'] for c in checks.values())==expected,
+                                  'checks':{key:check['passed'] for key,check in checks.items()},'draft_count':0,'write_calls':0})
+            return self._save_evaluation(access,asset,sources,cases,mode='local-deliverable-checks')
         from .runtime import Runtime
         from .contracts import TaskContract, TOOLS
         evaluation_domain=get_domain(content['conditions']['domain_pack_ref'])
@@ -59,12 +78,26 @@ class ExperienceService:
                   'tampered-draft':'NEEDS_REVIEW','denied':'WAITING_AUTH'}
         if evaluation_domain.ref=='knowledge-answer@1.0.0':
             expected={'normal':'SUCCEEDED','forged-answer':'FAILED','premature-finish':'NEEDS_REVIEW'}
+        general=evaluation_domain.ref=='general-assistant@1.0.0'
+        if general:
+            expected={'normal':'SUCCEEDED','forged-citation':'FAILED','premature-finish':'NEEDS_REVIEW'}
         cases=[]
         with tempfile.TemporaryDirectory(prefix='experience-replay-') as directory:
             for scenario,status in expected.items():
                 planner=None
-                read_only=evaluation_domain.ref=='knowledge-answer@1.0.0'
-                if read_only and scenario!='normal':
+                read_only=general or evaluation_domain.ref=='knowledge-answer@1.0.0'
+                if general and scenario!='normal':
+                    from .domains.general_assistant import GeneralPlanner
+                    from .contracts import Decision
+                    class GeneralCounterexample(GeneralPlanner):
+                        def compose(self,context):
+                            report=super().compose(context)
+                            report['citations']=[{'asset_ref':'invented@1','evidence_ref':'invented','content_hash':'invented','quote':'invented'}]
+                            return report
+                        def decide(self,context):
+                            return Decision('request_finish','未交付内容却申请完成') if scenario=='premature-finish' else super().decide(context)
+                    planner=GeneralCounterexample()
+                elif read_only and scenario!='normal':
                     from .domains.knowledge_answer import KnowledgePlanner
                     from .contracts import Decision
                     class Counterexample(KnowledgePlanner):
@@ -82,11 +115,15 @@ class ExperienceService:
                 cases.append({'scenario':scenario,'status':result['status'],'draft_count':drafts,'write_calls':writes,
                               'passed':correct,'kind':'support' if scenario in ('normal','response-lost') else 'counterexample',
                               'checks':{key:value['passed'] for key,value in result['checks'].items()}})
-        result={'id':'evaluation-'+uuid4().hex[:16],'ref':ref,'asset_hash':asset['content_hash'],
+        return self._save_evaluation(access,asset,sources,cases)
+
+    def _save_evaluation(self,access,asset,sources,cases,mode='isolated-mock-replay'):
+        evaluation_domain=get_domain(asset['content']['conditions']['domain_pack_ref'])
+        result={'id':'evaluation-'+uuid4().hex[:16],'ref':asset['ref'],'asset_hash':asset['content_hash'],
                 'evaluator_ref':'experience-review@1.0.0','domain_hash':digest(evaluation_domain.descriptor()),'domain_ref':evaluation_domain.ref,
                 'actor':access.principal,'created_at':time.time(),'sources':sources,'cases':cases,
                 'passed':bool(sources) and all(s['consistent'] for s in sources) and all(c['passed'] for c in cases),
-                'mode':'isolated-mock-replay','live_model_calls':0,'historical_write_replays':0}
+                'mode':mode,'live_model_calls':0,'historical_write_replays':0}
         with self.store.transaction() as db:
             cursor=db.execute("UPDATE asset_versions SET status='EVALUATED' WHERE tenant=? AND id=? AND version=? AND hash=? AND status IN ('CANDIDATE','EVALUATED')",
                               (access.tenant,asset['id'],asset['version'],asset['content_hash']))

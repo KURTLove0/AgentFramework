@@ -28,11 +28,17 @@ def build(store, state, phase, base):
     retrieval=state['task'].get('retrieval')
     result=library.search(access,retrieval['query'] if retrieval else state['task']['goal'],spaces=binding['spaces'],for_context=True,
                           limit=50 if retrieval else 12)
+    conversation=None;history_redactions=[]
+    if state['task'].get('conversation_context'):
+        from .task_conversations import refresh_history
+        conversation,sources,history_redactions=refresh_history(library,access,state['task']['conversation_context'])
+        present={a['ref'] for a in result['items']}
+        result['items'] += [a for a in sources if a['ref'] not in present and a['space_ref'] in binding['spaces']]
     if retrieval:
         result['items']=([a for a in result['items'] if a['kind']=='KNOWLEDGE'][:retrieval['top_k']]
                          +[a for a in result['items'] if a['kind']!='KNOWLEDGE'][:12])
     conflicts=[item for item in result['excluded'] if item['critical'] and item['reason']=='conflicting-published-sources' and item.get('standard_ref') in state['snapshot']['compiled_agent']['definition']['standard_refs']]
-    if conflicts:raise KnowledgeUnavailable('conflicting critical knowledge requires review')
+    if conflicts and state['task'].get('execution_mode') not in ('direct','conversation'):raise KnowledgeUnavailable('conflicting critical knowledge requires review')
     allowed_evidence={}
     policy_excluded=[]
     for ref,item in base['evidence'].items():
@@ -86,6 +92,9 @@ def build(store, state, phase, base):
               'selected':selected,'excluded':excluded,
               'evidence':[{'ref':key,'content_hash':value['content_hash']} for key,value in base['evidence'].items()],
               'budget':{'optional_bytes':used,'max_optional_bytes':binding['max_optional_bytes'],'mandatory_evidence_trimmed':False}}
+    if conversation:
+        manifest['conversation_history_hash']=conversation['history_hash']
+        manifest['conversation_redactions']=history_redactions
     manifest['hash']=digest(manifest)
     preferences.sort(key=lambda item:item['observed_at'])
     presentation={}
@@ -93,6 +102,9 @@ def build(store, state, phase, base):
     bundle={**base,'knowledge':knowledge,'memory':{'preferences':preferences,'presentation':presentation,'episodes':recalled,'notes':notes},'experience':experience,
             'capability_guidance':methods,
             'context_manifest':{k:manifest[k] for k in ('id','hash','policy_ref','selected','budget')}}
+    if conversation:
+        bundle['conversation_context']=conversation
+        bundle['context_manifest']['conversation_redactions']=history_redactions
     return bundle,manifest
 
 

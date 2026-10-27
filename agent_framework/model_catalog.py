@@ -13,6 +13,7 @@ import time
 from .contracts import canonical
 from . import __version__
 from .store import Store
+from .llm import qoder_command, qoder_environment
 
 
 class ModelDiscoveryError(ValueError):
@@ -33,18 +34,19 @@ class ModelCatalog:
         return {**json.loads(row['data']),'fetched_at':row['fetched'],'cached':True} if row else None
 
     def list(self, provider, refresh=False):
-        if provider not in {'codex','cursor','mock'}:raise ValueError('不支持的运行时')
+        if provider not in {'codex','cursor','qoder','mock'}:raise ValueError('不支持的运行时')
         if provider=='mock':return {'provider':'mock','models':[{'id':'builtin','name':'内置确定性规划器','efforts':[]}],'source':'built-in','cached':False,'fetched_at':None}
         with self.lock:
             cached=self.cached(provider)
             if cached and not refresh and time.time()-cached['fetched_at']<300:return cached
             try:
-                models=self._codex() if provider=='codex' else self._cursor()
+                models={'codex':self._codex,'cursor':self._cursor,'qoder':self._qoder}[provider]()
                 if not models:raise ModelDiscoveryError('CLI 未返回可选择的模型')
             except (OSError,subprocess.SubprocessError,ValueError,KeyError,TypeError,AttributeError,queue.Empty) as exc:
                 # A previous list remains available for display but cannot pretend to be fresh.
+                if provider=='qoder' and isinstance(exc,ModelDiscoveryError):raise
                 raise ModelDiscoveryError('无法读取 '+provider+' 模型列表，请检查 CLI 登录态、网络与版本后重试') from exc
-            data={'provider':provider,'models':models,'source':'codex app-server model/list' if provider=='codex' else 'cursor-agent models'}
+            data={'provider':provider,'models':models,'source':{'codex':'codex app-server model/list','cursor':'cursor-agent models','qoder':qoder_command()+' --list-models'}[provider]}
             now=time.time()
             with self.store.connect() as db:
                 db.execute('INSERT OR REPLACE INTO model_catalog VALUES(?,?,?,?)',(self.tenant,provider,canonical(data),now))
@@ -55,6 +57,53 @@ class ModelCatalog:
         for item in self.list(provider)['models']:
             if item['id']==model:return item
         raise ValueError('请选择当前 CLI 模型列表中的具体模型')
+
+    @staticmethod
+    def _qoder():
+        with tempfile.TemporaryDirectory(prefix='agent-qoder-models-') as directory:
+            result=subprocess.run([qoder_command(),'--setting-sources','','--list-models','--output-format','json'],
+                                  cwd=directory,capture_output=True,text=True,timeout=20,env=qoder_environment())
+        if result.returncode:
+            if 'not logged in' in result.stderr.lower() or 'unauthenticated' in result.stderr.lower():
+                raise ModelDiscoveryError('Qoder CLI 尚未登录，请在终端执行 '+qoder_command()+' login 后刷新模型。')
+            raise ModelDiscoveryError('无法读取 Qoder 模型列表，请检查 CLI 登录态、网络与版本后重试。')
+        if len(result.stdout.encode())>2*1024*1024:raise ModelDiscoveryError('Qoder 模型目录过大')
+        plain=re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]','',result.stdout).strip()
+        try:
+            payload=json.loads(plain)
+        except ValueError:payload=None
+        models=[];seen=set()
+        def add(identity,name):
+            if not isinstance(identity,str):return
+            identity=identity.strip()
+            if not identity or len(identity)>120 or identity.startswith('-') or any(ord(c)<32 for c in identity) or identity in seen:return
+            if not isinstance(name,str) or not name.strip():return
+            seen.add(identity);models.append({'id':identity,'name':name.strip()[:200],'efforts':[]})
+        if payload is not None:
+            rows=payload.get('models',payload.get('data')) if isinstance(payload,dict) else payload
+            if not isinstance(rows,list):raise ModelDiscoveryError('Qoder 未返回有效的模型目录')
+            for row in rows:
+                if isinstance(row,str):add(row,row)
+                elif isinstance(row,dict):
+                    if row.get('enable') is False or row.get('hidden'):continue
+                    identity=row.get('id') or row.get('modelId') or row.get('modelID') or row.get('key') or row.get('name')
+                    add(identity,row.get('displayName') or row.get('display_name') or row.get('name') or identity)
+        else:
+            lines=[line.strip() for line in plain.splitlines() if line.strip()]
+            if lines and lines[0]=='MODEL':
+                # qodercli 1.0.31 ignores output-format for --list-models and emits
+                # names for system models, or "Display name (key)" for custom ones.
+                for line in lines[1:]:
+                    custom=re.fullmatch(r'(.+?) \(([^()]+)\)',line)
+                    if custom:
+                        if '…' not in custom[2] and not custom[2].endswith('...'):add(custom[2],custom[1])
+                    else:add(line,line)
+            else:
+                for line in lines:
+                    match=re.fullmatch(r'(?:[-*•]\s*)?([A-Za-z0-9][A-Za-z0-9_.:/-]{0,119})\s+-\s+(.+?)',line)
+                    if match:add(match[1],match[2])
+        if not models:raise ModelDiscoveryError('Qoder CLI 未返回可选模型，请登录后重试或检查 CLI 版本。')
+        return models
 
     @staticmethod
     def _cursor():

@@ -233,10 +233,11 @@ class Library:
         return f'{identity}@1'
 
     def binding(self, task, spaces, standards=()):
-        access=Access.task(task);ref=self.bootstrap(access)
+        access=Access.task(task);direct=task.get('execution_mode') in ('direct','conversation')
+        ref=None if direct or task.get('domain_pack_ref')=='general-assistant@1.0.0' else self.bootstrap(access)
         available=self.search(access,'',spaces=spaces)['items']
-        required=[asset for asset in available if asset['critical'] and asset['standard_ref'] in standards]
-        if SPACE in spaces and 'release-review-rubric@1.0.0' in standards and not required:required=[self.get(access,ref)]
+        required=[] if direct else [asset for asset in available if asset['critical'] and asset['standard_ref'] in standards]
+        if not direct and SPACE in spaces and 'release-review-rubric@1.0.0' in standards and not required:required=[self.get(access,ref)]
         return {'ref':CONTEXT_REF,'spaces':list(spaces),'required_assets':[
             {'ref':a['ref'],'content_hash':a['content_hash']} for a in required], 'max_optional_bytes':12000}
 

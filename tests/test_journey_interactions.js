@@ -109,6 +109,22 @@ async function main(){
  });
  await scenario('reduced motion skips both route and tab animations',f=>{f.setReduced(true);f.run('afterJourneyRender()');f.state.tab='report';f.run('afterJourneyRender()');assert.equal(f.calls.filter(call=>call.kind==='animation').length,0);});
  await scenario('normal polling does not replay route entry animation',f=>{f.run('afterJourneyRender()');const first=f.calls.filter(call=>call.kind==='animation').length;assert.equal(first,1);f.run('afterJourneyRender()');assert.equal(f.calls.filter(call=>call.kind==='animation').length,first);f.state.tab='report';f.run('afterJourneyRender()');assert.equal(f.calls.filter(call=>call.kind==='animation').length,first+1);});
+ const simple=f=>{f.form.dataset.simple='true';f.context.agentRuntimeLabel=runtime=>runtime==='mock'?'模拟运行':runtime;f.context.crypto=require('node:crypto');f.form.agent_id.required=true;f.state.agents=[{id:'agent-general',revision:3,name:'自定义执行助手',runtime:'mock',model:'builtin',archived:false,definition:{domain_pack_ref:'general-assistant@1.0.0'}}];};
+ await scenario('simple task uses two required fields and starts without advancing through review',async f=>{
+  simple(f);await f.run('newTask({agentId:"agent-general"})');assert.equal(f.journey.step,0);assert.equal(f.form.goal.value,'');
+  await f.submit();assert.equal(f.calls.filter(c=>c.kind==='api'&&c.url==='/api/tasks').length,0);assert.equal(f.context.document.activeElement,f.form.goal);
+  f.form.goal.value='整理客户回访要点';let payload;f.setApi((url,data)=>{assert.equal(url,'/api/tasks');payload=data;return {run:{run_id:'run-simple'}};});await f.submit();
+  assert.deepEqual(Object.keys(payload).sort(),['goal','agent_id','agent_revision','request_id','clear_draft'].sort());assert.equal(payload.agent_revision,3);assert.equal(f.nodes['create-dialog'].open,false);assert.equal(f.state.detail.run.run_id,'run-simple');
+ });
+ await scenario('simple task requires an explicitly selected saved agent',async f=>{
+  simple(f);await f.run('newTask()');f.form.goal.value='撰写一份邮件';f.form.agent_id.value='';await f.submit();assert.equal(f.context.document.activeElement,f.form.agent_id);assert.equal(f.journey.saving,false);assert.equal(f.calls.filter(c=>c.kind==='api'&&c.url==='/api/tasks').length,0);
+ });
+ await scenario('simple task rejects duplicate clicks and preserves input after a failed start',async f=>{
+  simple(f);await f.run('newTask({agentId:"agent-general"})');f.form.goal.value='失败后保留的目标';let rejectRequest;f.setApi(()=>new Promise((resolve,reject)=>rejectRequest=reject));const first=f.submit();await tick();const before=f.calls.filter(c=>c.kind==='api'&&c.url==='/api/tasks').length;await f.submit();assert.equal(f.calls.filter(c=>c.kind==='api'&&c.url==='/api/tasks').length,before);rejectRequest(Error('temporary failure'));await first;assert.equal(f.journey.saving,false);assert.equal(f.form.goal.value,'失败后保留的目标');assert.equal(f.form.agent_id.value,'agent-general');assert.equal(f.nodes['create-dialog'].open,true);
+ });
+ await scenario('simple task retry identity ignores asynchronous draft bookkeeping',async f=>{
+  simple(f);await f.run('newTask({agentId:"agent-general"})');f.form.goal.value='相同目标';const first=f.run('compactTaskPayload()');f.journey.ownsDraft=true;const second=f.run('compactTaskPayload()');assert.equal(first.request_id,second.request_id);assert.equal(second.clear_draft,true);f.form.goal.value='修改后的目标';assert.notEqual(f.run('compactTaskPayload()').request_id,first.request_id);assert.equal(f.run('taskSubmitGate({isComposing:true})'),false);
+ });
  console.log('Journey interaction scenarios: '+passed+'/'+passed+' passed (synthetic DOM/API only).');
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

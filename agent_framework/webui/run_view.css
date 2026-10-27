@@ -1,0 +1,45 @@
+.runtime-detail .detail-head{align-items:flex-start}
+.runtime-detail .detail-title{min-width:0}
+.runtime-detail h2{overflow-wrap:anywhere}
+.run-runtime-label{margin:0 0 8px;font-size:13px;font-weight:600;color:var(--muted)}
+.run-summary-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:16px;color:var(--muted);font-size:13px}
+.runtime-detail .detail-grid{margin-top:24px}
+.runtime-detail .detail-aside{font-size:14px}
+.runtime-detail .detail-aside summary{font-weight:600;cursor:pointer;min-height:44px;padding:12px 0}
+.run-more-records{border-top:1px solid var(--border);padding-top:8px}
+.run-more-records .toolbar{display:flex;align-items:flex-start;flex-direction:column;gap:0;padding-bottom:8px}
+.run-more-records button{min-height:44px;text-align:left}
+.run-configuration{border-top:1px solid var(--border)}
+.runtime-process-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:24px}
+.runtime-process-heading h3{margin:0 0 8px;font-size:17px}
+.runtime-process-heading p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+.runtime-live{display:inline-flex;align-items:center;white-space:nowrap;gap:8px;font-size:13px;color:var(--blue);padding-top:3px}
+.runtime-live>span{width:7px;height:7px;border-radius:50%;background:currentColor}
+.runtime-feed{list-style:none;margin:0;padding:0}
+.runtime-entry{position:relative;display:flex;gap:14px;padding:0 0 24px}
+.runtime-entry:not(:last-child):before{content:'';position:absolute;left:15px;top:34px;bottom:3px;width:1px;background:var(--border)}
+.runtime-entry-mark{display:flex;align-items:center;justify-content:center;flex:0 0 32px;width:32px;height:32px;border:1px solid var(--border);border-radius:10px;color:var(--muted);background:var(--surface)}
+.runtime-entry-mark svg{width:16px;height:16px}
+.runtime-entry-content{min-width:0;flex:1;padding-top:3px}
+.runtime-entry-head{display:flex;align-items:center;flex-wrap:wrap;gap:6px 16px}
+.runtime-entry-head strong{font-size:14px;font-weight:600}
+.runtime-entry-head time{color:var(--muted);font-size:12px;margin-left:auto}
+.runtime-entry-text{margin-top:8px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.8}
+.runtime-entry.is-summary .runtime-entry-text,.runtime-entry.is-message .runtime-entry-text{padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+.runtime-entry.is-done .runtime-entry-mark{color:var(--green)}
+.runtime-entry.is-error .runtime-entry-mark{color:var(--red)}
+.runtime-waiting{display:flex;align-items:center;gap:10px;margin:0 0 24px 46px;font-size:14px;color:var(--muted);line-height:1.7}
+.runtime-spinner{display:inline-block;flex:none;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:runtime-spin 1s linear infinite}
+@keyframes runtime-spin{to{transform:rotate(360deg)}}
+.runtime-empty{padding:24px 0;color:var(--muted)}
+.runtime-audit,.runtime-earlier{border-top:1px solid var(--border);margin-top:16px;padding-top:8px}
+.runtime-audit>summary,.runtime-earlier>summary{cursor:pointer;min-height:44px;padding:12px 0;font-size:13px;color:var(--muted)}
+.runtime-audit>summary span{margin-left:8px}
+.runtime-audit-events{list-style:none;padding:0;margin:8px 0 0}
+.runtime-audit-events>li{border-top:1px solid var(--border);padding:10px 0;font-size:13px}
+.runtime-audit-events summary{cursor:pointer;min-height:32px;line-height:1.7;overflow-wrap:anywhere}
+.runtime-audit-events time{margin-left:12px;color:var(--muted);font-size:12px}
+.runtime-question{padding:20px 24px;margin:0 24px;border:1px solid var(--border);border-radius:12px;line-height:1.8}
+.runtime-question p{white-space:pre-wrap;overflow-wrap:anywhere;margin-bottom:0}
+@media(max-width:700px){.runtime-detail .detail-head{gap:20px}.runtime-process-heading{gap:12px}.runtime-process-heading p{font-size:13px}.runtime-entry{gap:10px}.runtime-entry-head time{margin-left:0}.runtime-entry-text{font-size:15px}.runtime-waiting{margin-left:42px}.runtime-question{margin:0 16px;padding:16px}.run-summary-meta{gap:8px 12px}}
+@media(prefers-reduced-motion:reduce){.runtime-spinner{animation:none}}

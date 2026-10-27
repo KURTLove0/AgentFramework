@@ -99,27 +99,29 @@ function flowStartReadiness(workflow,agents,hub,hubError){
  if(workflow.nodes.some(n=>n.retrieval)){
   if(hubError)items.push({status:'error',text:'无法核对知识来源：'+hubError});
   else{
-   const now=Date.now()/1000,assets=[...(hub?.knowledge||[]),...(hub?.memory?.preferences||[]),...(hub?.memory?.notes||[]),...(hub?.experience||[]),...(hub?.capability_methods||[])],available=assets.filter(a=>a.status==='PUBLISHED'&&(a.effective_at||0)<=now&&(a.effective_until||Infinity)>now);
-   items.push(available.length?{status:'pass',text:available.length+' 份当前有效资料可用于流程检索。'}:{status:'error',text:'流程包含知识检索，但当前空间没有可用的已发布资料。'});
+   const now=Date.now()/1000,assets=hub?.knowledge||[],available=assets.filter(a=>a.status==='PUBLISHED'&&(a.effective_at||0)<=now&&(a.effective_until||Infinity)>now);
+   items.push(available.length?{status:'pass',text:available.length+' 份当前有效知识可供检索，实际结果按查询词匹配。'}:{status:'error',text:'流程包含知识检索，但当前空间没有可用的已发布资料。'});
   }
  }
- if(!items.some(item=>item.status==='error'))items.unshift({status:'pass',text:'节点配置检查通过，执行时仍逐节点授权与验收。'});
+ if(!items.some(item=>item.status==='error'))items.unshift({status:'pass',text:'节点配置已就绪，执行时会保存每个节点的结果和来源。'});
  return {ready:!items.some(item=>item.status==='error'),markup:`<section class="flow-start-readiness"><h4>运行准备检查</h4><ul class="readiness-list">${items.map(item=>`<li class="${item.status}">${icon(item.status==='pass'?'check':item.status==='error'?'alert':'clock')}<span>${esc(item.text)}</span></li>`).join('')}</ul></section>`};
 }
+function flowUsesBusinessTools(agents){return agents.some(a=>a&&!a.definition||(a?.definition?.capability_refs||[]).some(ref=>state.meta?.capability_contracts?.[ref]?.effect==='WRITE')||(a?.definition?.responsibilities||[]).some(r=>r.deliverable_ref==='release-draft@1.0.0'));}
 async function openFlowStart(id){
   const w=state.flows.workflows.find(w=>w.id===id);if(!w||w.archived){toast('此工作流不可运行，请刷新后重试');return;}
   if(flowNeedsReview(w)){openFlowEditor(w);toast('绑定的智能体版本已变化，请重新选择当前版本并保存。');return;}
   const f=$('#flow-start-form');f.reset();f.dataset.id=id;f.dataset.revision=w.revision;f.dataset.requestId='request-'+crypto.randomUUID();
-  $('#flow-start-summary').innerHTML=`<h3>${esc(w.name)} <span class="pill">v${w.revision}</span></h3><p class="field-help">确认输入与许可后创建运行。每个节点使用已审查的 Agent 版本。</p><details><summary>检查 ${w.nodes.length} 个执行节点</summary>${flowGraph(w.nodes)}</details>`;
+  $('#flow-start-summary').innerHTML=`<h3>${esc(w.name)} <span class="pill">v${w.revision}</span></h3><p class="field-help">确认后按节点目标开始执行。各节点使用已保存的智能体版本。</p><details><summary>检查 ${w.nodes.length} 个执行节点</summary>${flowGraph(w.nodes)}</details>`;
   const agents=w.nodes.map(n=>(state.agents||[]).find(a=>a.id===n.agent_id));
   let hub=null,hubError='';if(w.nodes.some(n=>n.retrieval)){try{hub=await api('/api/knowledge-hub');}catch(error){hubError=error.message;}}
   const readiness=flowStartReadiness(w,agents,hub,hubError);$('#flow-start-summary').insertAdjacentHTML('beforeend',readiness.markup);$('button[type="submit"]',f).disabled=!readiness.ready;
-  const readonly=w.nodes.every((n,i)=>agents[i]?.revision===n.agent_revision&&agents[i]?.definition?.domain_pack_ref==='knowledge-answer@1.0.0');
-  $('#flow-change').closest('label').hidden=readonly;$('#flow-change').disabled=readonly;$('#flow-grant').closest('label').hidden=readonly;$('#flow-grant').disabled=readonly;
-  if(readonly)$('#flow-start-summary').insertAdjacentHTML('beforeend','<p class="field-help">此流程只读取当前空间的资料，无需填写变更标识或授予草稿写入权限。</p>');
-  $('#flow-live-consent').hidden=!agents.some(a=>a?.runtime!=='mock');$('#flow-mcp-consent-label').hidden=!agents.some(a=>a?.definition?.native_read_refs?.length||a?.mcp_servers?.some(s=>s.enabled));
-  $('#flow-scenarios').innerHTML=w.nodes.filter((n,i)=>agents[i]?.definition?.domain_pack_ref!=='knowledge-answer@1.0.0').map(n=>`<label>${esc(n.name)}<select data-flow-scenario="${esc(n.id)}">${state.meta.scenarios.map(s=>`<option value="${esc(s.id)}">${esc(s.label)}</option>`).join('')}</select></label>`).join('')||'<p class="field-help">此流程只有只读节点，无需注入写入故障。</p>';
-  $('#flow-start-error').hidden=true;$('#flow-start-dialog').showModal();$('#flow-change').focus();
+  const readonly=!flowUsesBusinessTools(agents);f.dataset.executionMode=readonly?'direct':'';
+  $('#flow-change').closest('label').hidden=readonly;$('#flow-change').disabled=readonly;$('#flow-grant').closest('label').hidden=true;$('#flow-grant').disabled=true;$('#flow-grant').checked=false;
+  if(readonly)$('#flow-start-summary').insertAdjacentHTML('beforeend','<p class="field-help">按节点目标直接执行，使用已保存的模型、工作指令和读取能力。</p>');else $('#flow-start-summary').insertAdjacentHTML('beforeend','<p class="field-help">此流程包含业务操作。产生具体写入提案后，再确认是否执行。</p>');
+  $('#flow-live-consent').hidden=readonly||!agents.some(a=>a?.runtime!=='mock');$('#flow-mcp-consent-label').hidden=readonly||!agents.some(a=>a?.definition?.native_read_refs?.length||a?.mcp_servers?.some(s=>s.enabled));
+  if(readonly){$('#flow-consent').checked=true;$('#flow-mcp-consent').checked=true;}
+  $('#flow-change').value='';$('#flow-scenarios').innerHTML='';$('#flow-scenarios').closest('details').hidden=true;
+  $('#flow-start-error').hidden=true;$('#flow-start-dialog').showModal();(readonly?$('button[type="submit"]',f):$('#flow-change')).focus();
 }
 document.addEventListener('click',async e=>{
   const section=e.target.closest('[data-flow-section]');if(section){state.flowSection=section.dataset.flowSection;if(state.selected)navigate('workflows');else{state.fingerprint='';render();}}
@@ -152,5 +154,5 @@ $('#flow-chat-form').addEventListener('submit',async e=>{
 $('#flow-chat-message').addEventListener('keydown',e=>{if(e.isComposing||state.composing||e.keyCode===229)return;if((e.metaKey||e.ctrlKey)&&e.key==='Enter'&&!$('#flow-chat-send').disabled){e.preventDefault();$('#flow-chat-form').requestSubmit();}});
 $('#flow-start-form').addEventListener('submit',async e=>{
   e.preventDefault();const workspace=state.workspaceId,f=e.target,restore=flowButtonBusy($('button[type="submit"]',f),'正在创建运行…');$('#flow-start-error').hidden=true;const unlock=typeof lockFormSubmission==='function'?lockFormSubmission(f):()=>{};
-  try{const data={revision:Number(f.dataset.revision),request_id:f.dataset.requestId,change_id:$('#flow-change').value,grant:$('#flow-grant').checked,consent:$('#flow-consent').checked,mcp_consent:$('#flow-mcp-consent').checked,scenarios:Object.fromEntries($$('[data-flow-scenario]').map(s=>[s.dataset.flowScenario,s.value]))};const d=await api('/api/workflows/'+f.dataset.id+'/start',data);$('#flow-start-dialog').close();const feedback=flowRememberMutation('run',d,workspace,'运行已创建，按节点依赖开始执行');if(feedback)navigate('workflows',d.run.id);await flowRefreshAfterMutation(feedback);}catch(error){unlock();flowInlineError('#flow-start-error',error);}finally{unlock();restore();}
+  try{const data={revision:Number(f.dataset.revision),request_id:f.dataset.requestId,grant:false,consent:$('#flow-consent').checked,mcp_consent:$('#flow-mcp-consent').checked,...(f.dataset.executionMode==='direct'?{execution_mode:'direct'}:{change_id:$('#flow-change').value})};const d=await api('/api/workflows/'+f.dataset.id+'/start',data);$('#flow-start-dialog').close();const feedback=flowRememberMutation('run',d,workspace,'运行已创建，按节点依赖开始执行');if(feedback)navigate('workflows',d.run.id);await flowRefreshAfterMutation(feedback);}catch(error){unlock();flowInlineError('#flow-start-error',error);}finally{unlock();restore();}
 });

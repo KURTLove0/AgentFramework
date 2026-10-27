@@ -1,0 +1,10 @@
+version = 1
+name = "AgentFramework"
+
+[setup]
+script = ""
+
+[[actions]]
+name = "启动 1.3.0"
+icon = "run"
+command = "sh scripts/start.sh"

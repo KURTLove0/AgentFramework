@@ -1,0 +1,10 @@
+{
+  "name": "agent-framework-browser-tests",
+  "private": true,
+  "engines": {"node": ">=22"},
+  "scripts": {
+    "test": "node --test tests/test_*.js",
+    "test:browser": "python3 scripts/run_browser_tests.py"
+  },
+  "devDependencies": {"playwright": "1.62.1"}
+}

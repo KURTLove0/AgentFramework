@@ -4,7 +4,9 @@
   "engines": {"node": ">=22"},
   "scripts": {
     "test": "node --test tests/test_*.js",
-    "test:browser": "python3 scripts/run_browser_tests.py"
+    "test:browser": "python3 scripts/run_browser_tests.py",
+    "test:controls": "python3 scripts/run_browser_tests.py --suite controls --suite control-routes --suite run-filters",
+    "test:ui-details": "python3 scripts/run_browser_tests.py --suite ui-details"
   },
   "devDependencies": {"playwright": "1.62.1"}
 }

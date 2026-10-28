@@ -1,0 +1,82 @@
+/* Hallmark · genre: atmospheric · design-system: design.md · app typography and measured geometry */
+/* Shared roles keep text legible without turning metadata into body copy. */
+/* Hallmark · pre-emit critique: P4 H5 E4 S5 R5 V4 · reviewed as a productivity application */
+:root {
+ --type-title:28px; --type-section:18px; --type-dialog:20px;
+ --type-body:14px; --type-label:14px; --type-help:13px; --type-meta:12px;
+ --line-body:1.65; --line-help:1.6; --empty-space:32px;
+ --control-line-height:1.5; --control-padding:8px 12px;
+}
+body {font-size:var(--type-body)}
+:is(#content,dialog) :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]),textarea,select:not(.enhanced-select)) {font-size:var(--control-font-size);line-height:var(--control-line-height)}
+#content :not(pre)>code {font-size:max(.9em,12px)}
+#content :is(.page-head,.agent-directory-head,.agent-detail-title) h1 {font-size:var(--type-title);line-height:1.35;letter-spacing:-.025em}
+#content h2 {font-size:var(--type-section);line-height:1.5}
+#content h3 {font-size:16px;line-height:1.5}
+:is(#content,dialog) :where(p:not(.eyebrow):not(.evaluation-number),li) {font-size:var(--type-body);line-height:var(--line-body)}
+#content .evaluation-number {font-size:44px;line-height:1.25}
+:is(#content,dialog) label {font-size:var(--type-label);line-height:1.5;font-weight:500}
+:is(#content,dialog) :is(.field-help,.field-validation,.field-validation-error,.required-note,.inline-error,.resource-results,.context-indicator,.operations-note,.runtime-detection,.runtime-auth p,.runtime-boundary,.agent-section-copy,.agent-version-note,.agent-live-note,.agent-live-facts .fact,.agent-live-checks li,.task-selected-agent p,.task-agent-execution p,.readiness-list li,.evaluation-detail small) {font-size:var(--type-help);line-height:var(--line-help)}
+#content .page-head p:not(.eyebrow),#content .library-module-heading p {font-size:var(--type-body);line-height:var(--line-body)}
+dialog .dialog-head h2 {font-size:var(--type-dialog);line-height:1.4}
+:is(#agent-dialog,#create-dialog) :is(.field-help,.field-validation-error,.agent-form-state,.agent-config-overview p,.agent-form-next-hint) {font-size:var(--type-help);line-height:var(--line-help)}
+:is(#content,dialog) :is(.field-meter,.pill,.run-filter-count,.agent-row-version,.agent-detail-meta>span,.task-message-main time,.chat-process-count,.chat-agent-label,.chat-queued-label,.select-result-count) {font-size:var(--type-meta)}
+#content :is(.tool-row small,.capability-list small,.registry-grid small,.agent-duty-list small,.agent-detail-skills p,.agent-detail-inspector>.fact,.runtime-choice small) {font-size:var(--type-help);line-height:var(--line-help)}
+
+/* A compound field includes its border in the same height as its neighbours. */
+:is(.filter-input,.resource-search) {height:max(var(--control-height),calc(1.5em + 18px));min-height:var(--control-height);box-sizing:border-box}
+:is(.filter-input,.resource-search)>input {height:100%;min-height:0!important;box-sizing:border-box;line-height:var(--control-line-height);padding-block:0!important}
+:is(form,dialog,.run-advanced-filters) input:not([type=checkbox]):not([type=radio]):not([type=hidden]):not(.enhanced-select):not([type=file]):not(.filter-input>input,.resource-search>input,.select-search>input) {height:max(var(--control-height),calc(1.5em + 18px));padding-block:8px;box-sizing:border-box}
+.select-trigger {height:max(var(--control-height),calc(1.5em + 18px));box-sizing:border-box}
+:is(.resource-toolbar,.hub-search,.model-picker,.run-filter-toolbar)>.button,.model-picker>.button {height:max(var(--control-height),calc(1.5em + 18px));min-height:var(--control-height);box-sizing:border-box;padding-block:0;display:inline-flex;align-items:center}
+.hub-search.resource-toolbar>.resource-search {flex:1 1 240px;min-width:0}
+.hub-search.resource-toolbar>.select-picker {flex:0 0 176px;width:176px;max-width:200px;min-width:0}
+.hub-search.resource-toolbar>.button {flex:none}
+.resource-toolbar {align-items:center}
+.run-advanced-filters {grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+
+/* Empty containers follow the content instead of reserving a large panel. */
+#content .empty {display:flex;flex-direction:column;align-items:center;gap:12px;min-height:0;padding:var(--empty-space) 24px;text-align:center}
+#content .empty>svg {width:32px;height:32px;padding:8px;margin:0;border-radius:12px;box-sizing:content-box;flex:none}
+#content .empty h3 {font-size:18px;line-height:1.4;margin:0}
+#content .empty p {font-size:var(--type-body);line-height:var(--line-body);margin:0;max-width:58ch}
+#content .empty>.button {margin-top:4px}
+#content :is(.resource-empty,.domain-empty,.agent-first-empty,.agent-tab-empty) {padding:var(--empty-space) 24px}
+#content :is(.resource-empty,.domain-empty,.agent-first-empty) p {font-size:var(--type-body);line-height:var(--line-body)}
+.panel-heading {gap:16px}
+.panel-heading>div,.dialog-head>div {min-width:0}
+.panel-heading h2 {line-height:1.5}
+.run-list-heading h2 small {font-size:var(--type-meta)}
+.agent-live-summary {box-shadow:none}
+
+/* Conversation prose uses the same reading scale as the rest of the workspace. */
+#content :is(.task-user-content,.task-chat-answer,.chat-question,.chat-turn-error) {font-size:var(--type-body);line-height:1.75}
+#content :is(.chat-process-body,.chat-citations,.chat-limitations,.chat-cancelled-note,.chat-thinking-note,.chat-preview-label,.task-composer-footer>span) {font-size:var(--type-help);line-height:var(--line-help)}
+
+@media(max-width:700px) {
+ :root {--type-title:24px;--type-body:16px;--type-help:14px;--empty-space:24px}
+ #content .page-head p:not(.eyebrow) {max-width:100%}
+ #content :is(.agent-section-heading p,.agent-duty-list p,.agent-instructions-content,.domain-explanation,.domain-builtin-grid p,.domain-builtins>div>p,.help-list p,.help-technical p,.registry-skill>p) {font-size:var(--type-body);line-height:var(--line-body)}
+ :is(#content,dialog) :is(.library-intro,.library-intro .field-help,.run-advanced-filters label,.agent-row-description,.agent-row-mobile-domain,.agent-empty-steps,.agent-step-copy>span,.runtime-choice>span,.runtime-auth,.evaluation-detail small,.agent-section-heading .text-button) {font-size:var(--type-help);line-height:var(--line-help)}
+ #content :is(.agent-detail-tabs a,.agent-directory-scopes button,.task-turn-progress>summary,.chat-answer-actions .text-button,.chat-queue-actions button) {font-size:14px}
+ #agent-dialog :is(.field-help,.agent-dialog-intro,.agent-config-overview,.agent-config-overview p,.agent-form-state,.agent-form-next-hint,.agent-instruction-preview p) {font-size:var(--type-help);line-height:var(--line-help)}
+ #agent-dialog .agent-step-copy>span {font-size:14px}
+ #agent-dialog .agent-step-number {display:none}
+ #agent-dialog .agent-config-tabs {gap:6px}
+ #agent-dialog .agent-config-tab {padding:10px 8px;justify-content:center}
+ #agent-form>.dialog-foot {flex-wrap:wrap}
+ .hub-search.resource-toolbar>.resource-search {flex:1 1 calc(100% - 80px)}
+ .hub-search.resource-toolbar>.select-picker {flex:1 1 100%;width:100%;max-width:none}
+ .hub-tabs {flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;max-width:100%;padding-bottom:2px}
+ .hub-tabs .button {flex:0 0 auto}
+ .hub-tabs .button:focus-visible {outline:2px solid var(--blue);outline-offset:-3px;border-radius:4px}
+ .run-filter-toggle {font-size:14px}
+ #content :is(.run-filter-chip,.run-filter-chips>.text-button,.chat-answer-actions .text-button,.chat-queue-actions button,.chat-citations>summary,.chat-latest-bar button,.chat-process-body>button) {min-height:44px}
+ #content .empty {padding-inline:20px}
+ #content :is(.resource-empty,.domain-empty,.agent-first-empty,.agent-tab-empty) {padding-inline:20px}
+ .task-chat-composer textarea {font-size:16px}
+ .task-composer-footer>button {min-height:44px;font-size:14px}
+}
+@media(pointer:coarse) and (min-width:701px) {
+ :root {--type-body:16px;--type-help:14px}
+}

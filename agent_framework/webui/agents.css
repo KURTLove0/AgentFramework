@@ -13,12 +13,12 @@
 .agent-directory-scopes button[aria-pressed=true]{background:var(--subtle);color:var(--ink);font-weight:600}
 .agent-directory-scopes button:hover{background:var(--subtle);color:var(--ink)}
 .agent-directory-scopes button>span{font:12px var(--mono);color:var(--muted)}
-.agent-directory-search.filter-input{flex:0 1 310px;min-width:160px;margin:0;background:var(--subtle);border:1px solid var(--border-strong);border-radius:9px}
+.agent-directory-search.filter-input{flex:0 1 310px;min-width:160px;margin:0;background:var(--control-background);border:1px solid var(--control-border);border-radius:var(--control-radius)}
 .agent-directory-search.filter-input>svg{position:static;transform:none;width:18px;height:18px;flex:none;margin:0 0 0 12px;color:var(--muted)}
-.agent-directory-search.filter-input>input{min-width:0;min-height:44px;width:100%;padding:10px;border:0;background:transparent;box-shadow:none;margin:0;font-size:14px}
+.agent-directory-search.filter-input>input{min-width:0;min-height:calc(var(--control-height) - 2px);width:100%;padding:9px 10px;border:0;background:transparent;box-shadow:none;margin:0;font-size:var(--control-font-size)}
 .agent-directory-filters{display:flex;align-items:center;gap:8px;padding:12px 20px;flex-wrap:wrap}
 .agent-directory-filters label{margin:0;min-width:0}
-.agent-directory-filters select{width:auto;max-width:220px;min-height:44px;margin:0;font-size:13px;padding:8px 30px 8px 12px;background-color:var(--surface)}
+.agent-directory-filters select{width:auto;max-width:220px;min-height:var(--control-height);margin:0;font-size:var(--control-font-size);padding:9px 30px 9px 12px;background-color:var(--control-background)}
 .agent-directory-filters .text-button{font-size:13px;min-height:44px;padding:8px 10px}
 .agent-sort-label{display:flex;align-items:center;gap:8px;margin-left:auto!important;color:var(--muted);font-size:13px}
 .agent-directory-table{display:table;width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px}

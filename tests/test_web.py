@@ -230,7 +230,7 @@ class HTTPTests(unittest.TestCase):
         return result
 
     def test_static_session_and_download(self):
-        for path, mime in (('/', 'text/html'), ('/app.js', 'text/javascript'), ('/styles.css', 'text/css')):
+        for path, mime in (('/', 'text/html'), ('/app.js', 'text/javascript'), ('/styles.css', 'text/css'), ('/ui_details.css', 'text/css')):
             status, headers, body = self.request(path)
             self.assertEqual(status, 200)
             self.assertTrue(headers['Content-Type'].startswith(mime))

@@ -746,6 +746,7 @@ class Handler(BaseHTTPRequestHandler):
                       "/skills.js": ("skills.js", "text/javascript; charset=utf-8"),
                       "/styles.css": ("styles.css", "text/css; charset=utf-8"),
                       "/hig.css": ("hig.css", "text/css; charset=utf-8"),
+                      "/ui_details.css": ("ui_details.css", "text/css; charset=utf-8"),
                       "/agents.css": ("agents.css", "text/css; charset=utf-8"),
                       "/domains.css": ("domains.css", "text/css; charset=utf-8"),
                       "/domains.js": ("domains.js", "text/javascript; charset=utf-8"),

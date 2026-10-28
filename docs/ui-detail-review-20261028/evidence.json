@@ -1,0 +1,184 @@
+{
+  "recordedAt": "2026-10-28T07:27:32.589Z",
+  "browserScope": "Desktop Chrome, responsive and emulated touch; no real-device or human usability study",
+  "reviewScore": {
+    "baseline": 80,
+    "total": 96,
+    "method": "Manual design review against the fixed five-dimension rubric; measurements and regression checks are supporting evidence, not the score generator",
+    "dimensions": {"typography": 24, "controls": 24, "containers": 24, "interaction": 15, "mobile": 9}
+  },
+  "normalContexts": 240,
+  "enlargedTextContexts": 21,
+  "violations": [],
+  "errors": [],
+  "measurements": [
+    {
+      "theme": "light",
+      "minFieldBoundaryContrast": 3.0394666830619377,
+      "minFieldTextContrast": 13.850969143165539,
+      "knowledge": [
+        {
+          "width": 375,
+          "title": 24,
+          "toolbar": [
+            {
+              "cls": "resource-search",
+              "h": 44,
+              "y": 485.34375,
+              "w": 271
+            },
+            {
+              "cls": "button secondary",
+              "h": 44,
+              "y": 485.34375,
+              "w": 62
+            },
+            {
+              "cls": "select-picker",
+              "h": 44,
+              "y": 539.34375,
+              "w": 343
+            }
+          ]
+        },
+        {
+          "width": 1440,
+          "title": 28,
+          "toolbar": [
+            {
+              "cls": "resource-search",
+              "h": 40,
+              "y": 379.78125,
+              "w": 874
+            },
+            {
+              "cls": "button secondary",
+              "h": 40,
+              "y": 379.78125,
+              "w": 62
+            },
+            {
+              "cls": "select-picker",
+              "h": 40,
+              "y": 379.78125,
+              "w": 176
+            }
+          ]
+        }
+      ],
+      "runEmpty": [
+        {
+          "width": 375,
+          "height": 257.96875
+        },
+        {
+          "width": 1440,
+          "height": 244.28125
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "minFieldBoundaryContrast": 3.047579413443439,
+      "minFieldTextContrast": 14.093832511777933,
+      "knowledge": [
+        {
+          "width": 375,
+          "title": 24,
+          "toolbar": [
+            {
+              "cls": "resource-search",
+              "h": 44,
+              "y": 485.34375,
+              "w": 271
+            },
+            {
+              "cls": "button secondary",
+              "h": 44,
+              "y": 485.34375,
+              "w": 62
+            },
+            {
+              "cls": "select-picker",
+              "h": 44,
+              "y": 539.34375,
+              "w": 343
+            }
+          ]
+        },
+        {
+          "width": 1440,
+          "title": 28,
+          "toolbar": [
+            {
+              "cls": "resource-search",
+              "h": 40,
+              "y": 379.78125,
+              "w": 874
+            },
+            {
+              "cls": "button secondary",
+              "h": 40,
+              "y": 379.78125,
+              "w": 62
+            },
+            {
+              "cls": "select-picker",
+              "h": 40,
+              "y": 379.78125,
+              "w": 176
+            }
+          ]
+        }
+      ],
+      "runEmpty": [
+        {
+          "width": 375,
+          "height": 257.96875
+        },
+        {
+          "width": 1440,
+          "height": 244.28125
+        }
+      ]
+    }
+  ],
+  "regression": [
+    {
+      "suite": "ui-details",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "suite": "controls",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "suite": "control-routes",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "suite": "run-filters",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "suite": "journeys",
+      "passed": true,
+      "exit_code": 0
+    }
+  ],
+  "sourceReports": [
+    "/private/tmp/af-ui95-final-enlargement/results.json",
+    "/private/tmp/af-ui95-final/results.json",
+    "/private/tmp/af-ui95-final-touch/results.json"
+  ],
+  "screenshots": [
+    "library-light-1440.png",
+    "library-light-375.png",
+    "runs-light-1440.png",
+    "agent-dark-375.png"
+  ]
+}

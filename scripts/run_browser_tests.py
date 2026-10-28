@@ -18,6 +18,10 @@ SUITES={
     'conversations':('serve_model_execution_fixture.py','TASK_CHAT_PORT','verify_task_conversations.cjs','TASK_CHAT_TEST_URL','TASK_CHAT_OUTPUT'),
     'ontology':('serve_project_review_fixture.py','PROJECT_REVIEW_PORT','verify_ui_review_ontology_form.cjs','AGENT_UI_BASE_URL','AGENT_UI_OUTPUT'),
     'audit-fixes':('serve_audit_fix_fixture.py','PROJECT_REVIEW_PORT','verify_audit_fixes.cjs','AGENT_UI_BASE_URL','AGENT_UI_OUTPUT'),
+    'controls':('serve_project_review_fixture.py','PROJECT_REVIEW_PORT','verify_control_consistency.cjs','CONTROL_UI_BASE_URL','CONTROL_UI_OUTPUT'),
+    'control-routes':('serve_project_review_fixture.py','PROJECT_REVIEW_PORT','verify_control_routes.cjs','AGENT_UI_BASE_URL','CONTROL_ROUTES_OUTPUT'),
+    'run-filters':('serve_project_review_fixture.py','PROJECT_REVIEW_PORT','verify_run_filters.cjs','RUN_FILTER_BASE_URL','RUN_FILTER_OUTPUT'),
+    'ui-details':('serve_project_review_fixture.py','PROJECT_REVIEW_PORT','verify_ui_details.cjs','UI_DETAILS_BASE_URL','UI_DETAILS_OUTPUT'),
     'legacy-modules':('serve_project_review_fixture.py','PROJECT_REVIEW_PORT','verify_ui95_modules.cjs','AGENT_UI_BASE_URL','AGENT_UI_OUTPUT')}
 
 

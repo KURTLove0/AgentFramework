@@ -68,7 +68,7 @@ function chatMarkdown(text){
  flush();if(code!==null)out.push('<pre><code>'+esc(code.join('\n'))+'</code></pre>');return out.join('');
 }
 function taskChatStatus(c){return c.resumable?(c.status==='CREATED'?'等待开始':'等待继续'):chatStatus(c.status);}
-function chatStatus(status){return ({CREATED:'等待执行',QUEUED:'排队中',RUNNING:'正在回复',SUCCEEDED:'已回复',WAITING_INPUT:'等待你补充',FAILED:'本轮未完成',ERROR:'本轮未完成',CANCELLED:'已停止',NEEDS_REVIEW:'结果待确认',EXPIRED:'本轮已超时',WAITING_AUTH:'等待确认'})[status]||status;}
+function chatStatus(status){return ({CREATED:'等待执行',QUEUED:'排队中',RUNNING:'正在回复',SUCCEEDED:'最新一轮已回复',WAITING_INPUT:'等待你补充',FAILED:'本轮未完成',ERROR:'本轮未完成',CANCELLED:'已停止',NEEDS_REVIEW:'结果待确认',EXPIRED:'本轮已超时',WAITING_AUTH:'等待确认'})[status]||status;}
 function chatTurnProgress(turn,root){
  const unique=[],seen=new Set();for(const p of turn.progress){const key=p.kind+'\n'+p.text;if(seen.has(key))continue;seen.add(key);if(p.kind==='status'&&unique.at(-1)?.kind==='status')unique[unique.length-1]=p;else unique.push(p);}
  const busy=['CREATED','RUNNING'].includes(turn.status)&&!turn.resumable,key=root+':'+turn.number,open=taskChatUI.openedProgress.has(key)||busy&&!taskChatUI.closedProgress.has(key);

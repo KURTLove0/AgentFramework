@@ -12,6 +12,7 @@ input[type=checkbox],input[type=radio] {width:18px;height:18px;min-height:18px;p
 .filter-input:focus-within,.resource-search:focus-within {border-color:var(--control-focus);outline:2px solid var(--control-focus);outline-offset:1px}
 .filter-input input:focus-visible,.resource-search input:focus-visible {outline:none}
 .filter-input input:focus,.resource-search input:focus {box-shadow:none}
+.command-input:focus-within {outline:2px solid var(--control-focus);outline-offset:1px;border-radius:var(--control-radius)}
 .filter-input:hover,.resource-search:hover {border-color:var(--control-hover-border)}
 .filter-input:has(input:disabled),.resource-search:has(input:disabled) {opacity:var(--control-disabled-opacity);cursor:not-allowed;background:var(--subtle);border-color:var(--control-border)}
 .enhanced-select {position:absolute!important;width:1px!important;height:1px!important;margin:0!important;padding:0!important;clip-path:inset(50%);overflow:hidden;opacity:0;pointer-events:none}
@@ -28,7 +29,7 @@ input[type=checkbox],input[type=radio] {width:18px;height:18px;min-height:18px;p
 .select-popover::backdrop {background:transparent}
 .select-popover[data-searchable=false] :is(.select-search,.select-result-count,.select-keyboard-hints) {display:none}
 .select-search {display:flex;align-items:center;gap:8px;flex:none;min-height:var(--control-height);padding:0 10px;border:1px solid transparent;border-bottom-color:var(--popover-border);border-radius:6px 6px 0 0;background:var(--popover-background)}
-.select-search:focus-within {border-bottom-color:var(--control-focus);outline:none}
+.select-search:focus-within {border-bottom-color:var(--control-focus);outline:2px solid var(--control-focus);outline-offset:-2px}
 .select-search>svg {width:18px;height:18px;color:var(--muted);flex:none}
 .select-search>input {width:100%;min-width:0;min-height:calc(var(--control-height) - 2px)!important;border:0!important;box-shadow:none!important;background:transparent!important;margin:0!important;padding:8px 0!important;outline:0!important;font:400 var(--control-font-size)/var(--control-line-height) var(--font);color:var(--ink)}
 .select-result-count {font-size:12px;color:var(--muted);margin:4px 8px;flex:none}
@@ -87,6 +88,13 @@ input[type=checkbox],input[type=radio] {width:18px;height:18px;min-height:18px;p
 #agent-form>.dialog-foot .button {max-width:100%;overflow-wrap:anywhere}
 #agent-form #agent-save {min-width:112px}
 #agent-form>.agent-config-panel {scrollbar-gutter:stable}
+
+.asset-visibility-field {display:block;margin-bottom:16px}
+.asset-advanced {border-top:1px solid var(--border);margin:4px 0 16px}
+.asset-advanced>summary {display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-height:44px;cursor:pointer}
+.asset-advanced>summary>small {margin-left:auto;color:var(--muted);font-size:12px;font-weight:400}
+.asset-advanced-body {padding-top:16px}
+.asset-advanced-body>label {display:block;margin-bottom:16px}
 
 /* Shared scroll structure for resource, workspace and operations forms. */
 dialog.structured-dialog {position:fixed;inset:0;margin:auto;height:fit-content;padding:0;width:min(680px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:clip}

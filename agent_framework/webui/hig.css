@@ -170,6 +170,7 @@ main {max-width:1560px; padding:36px 36px 48px; align-self:center}
 .attention-item>.button {flex:none}
 .attention-empty {display:flex;align-items:center;justify-content:center;gap:12px;padding:24px;color:var(--muted);font-size:14px;text-align:center}
 .attention-empty svg {color:var(--green)}
+.attention-empty-inline {justify-content:flex-start;margin:0 0 20px;padding:0 4px;background:transparent;text-align:left;font-size:13px}
 .detail-section {margin-top:0}
 .task-readiness {margin:0 0 20px;padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--subtle)}
 .task-readiness h4 {margin:0 0 12px;font-size:14px}
@@ -197,7 +198,7 @@ main {max-width:1560px; padding:36px 36px 48px; align-self:center}
 .run-filter-toggle svg {width:16px;height:16px;flex:none}
 .run-filter-toggle:hover {border-color:var(--control-hover-border);background:var(--control-hover-background);color:var(--ink)}
 .run-filter-toggle[aria-expanded=true] {background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
-.run-filter-count {display:inline-grid;place-items:center;min-width:18px;height:18px;padding-inline:4px;border-radius:4px;background:var(--blue-soft);color:var(--blue);font-size:11px}
+.run-filter-count {display:inline-grid;place-items:center;min-width:18px;height:18px;padding-inline:4px;border-radius:4px;background:var(--blue-soft);color:var(--blue);font-size:12px}
 .run-filter-chips {display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:0 20px 14px}
 .run-filter-chip {display:inline-flex;align-items:center;gap:6px;max-width:100%;min-height:28px;padding:3px 8px;border:1px solid var(--border);border-radius:6px;background:var(--subtle);color:var(--ink);font:12px/20px var(--font)}
 .run-filter-chip>span {max-width:32ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -305,6 +306,7 @@ tr:hover:not(.selected) {background:var(--subtle)}
 .tool-row span:first-child {font-size:12px; min-width:0; overflow-wrap:anywhere}
 .tool-row {flex-wrap:wrap; gap:10px}
 .runtime-layout {grid-template-columns:260px minmax(0,1fr)}
+.runtime-selector {display:grid;gap:12px;align-content:start;min-width:0}
 .runtime-choice {min-height:120px; border-radius:14px; padding:20px; border-color:var(--border)}
 .runtime-choice.selected {box-shadow:inset 0 0 0 1px var(--blue)}
 .runtime-choice>span:nth-child(2),.runtime-choice small {font-size:13px}
@@ -510,8 +512,8 @@ dialog[open] {animation:hig-dialog-in 160ms var(--ease-out)}
   .library-intro,.flow-overview {padding:20px}
   .library-asset {padding:20px}
   .library-asset .mini-heading {flex-wrap:wrap}
-  .runtime-picker {grid-template-columns:repeat(2,minmax(0,1fr))}
-  .runtime-choice {min-height:0; padding:16px}
+  .runtime-picker {display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding:0 0 4px;scrollbar-width:thin}
+  .runtime-choice {flex:0 0 min(220px,72vw);scroll-snap-align:start;min-height:0;padding:14px}
   .runtime-choice>span:nth-child(2) {max-width:none}
   .runtime-choice small {margin-top:8px}
   .runtime-fields {padding:20px}
@@ -657,6 +659,7 @@ button[data-action=refresh][aria-busy=true] svg {animation:hig-spin 1s linear in
 .timeline-history>summary,.notice-diagnostics>summary {font-size:13px;color:var(--muted)}
 .notice-diagnostics pre {font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:8px}
 .mono {font-size:12px; font-variant-numeric:tabular-nums}
+.technical-id {display:inline-block;max-width:32ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
 .plan .mono {font-size:12px; line-height:1.6}
 .plan li,.event summary {font-size:14px; line-height:1.7}
 .event time,.event .kind {font-size:12px; line-height:1.6; color:var(--muted)}
@@ -987,7 +990,7 @@ button[data-action=refresh][aria-busy=true] svg {animation:hig-spin 1s linear in
 .agent-review-options[open]>summary::after {content:'−'}
 .agent-review-options>summary small {font-weight:400;color:var(--muted);font-size:12px;margin-left:auto}
 .agent-review-options>.agent-extension {margin-top:0;padding-top:16px}
-#agent-form>.agent-config-progress {border:0;padding:4px 0 8px;gap:10px}
+#agent-form>.agent-config-progress {display:none}
 #agent-form>.agent-config-progress progress {display:none}
 #agent-form>.agent-config-tabs {margin:8px 0 12px}
 #agent-form>.agent-config-overview {font-size:13px;line-height:1.6}
@@ -1026,7 +1029,7 @@ main {max-width:1600px;padding:var(--space-xl);margin-inline:auto;width:100%;box
 .page-head h1 {font-size:28px;line-height:1.35;letter-spacing:-.6px}
 .page-head p {font-size:14px;line-height:1.7;max-width:75ch;margin-top:var(--space-sm)}
 .page-head>.button {margin-top:0}
-.page-head .eyebrow,.dialog-head .eyebrow {display:none}
+/* Repeated module eyebrows are removed; meaningful record metadata remains. */
 .panel {box-shadow:var(--control-shadow)}
 .sidebar .nav-section,.sidebar #version,.footer,.metric small,.registry-grid small,.table-bottom {font-size:12px}
 .button,.text-button {font-size:14px}
@@ -1040,7 +1043,7 @@ td .task-link {min-height:44px;max-width:100%;display:-webkit-box;-webkit-line-c
 #flow-editor-form {max-height:calc(100dvh - 34px);overflow-y:auto;overscroll-behavior:contain;scroll-padding-block:88px}
 #flow-editor-form>.dialog-head {position:sticky;top:0;z-index:var(--layer-dialog-controls);background:var(--surface)}
 #flow-editor-form>.dialog-foot {position:sticky;bottom:0;z-index:var(--layer-dialog-controls)}
-.topbar {flex-wrap:wrap;backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--nav)}
+.topbar {flex-wrap:wrap}
 .topbar .toast,dialog .dialog-notice {position:static;inset:auto;transform:none;flex:1 0 100%;width:100%;max-width:none;box-sizing:border-box;margin:0;padding:var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);background:var(--subtle);color:var(--ink);border-color:var(--border-strong);box-shadow:none;animation:none}
 .topbar .toast-message,dialog .dialog-notice .toast-message {flex:1;max-width:none}
 .topbar .toast-dismiss:hover,dialog .dialog-notice .toast-dismiss:hover {background:var(--nav-hover);color:var(--ink)}
@@ -1157,13 +1160,13 @@ body {background-color:var(--canvas);background-image:var(--canvas-bg);backgroun
 .sidebar nav a {position:relative;border:1px solid transparent}
 .sidebar nav a.active {background:var(--nav-active);border-color:var(--border);color:var(--blue);box-shadow:inset 2px 0 var(--blue),0 0 22px var(--glow-cyan)}
 .sidebar nav a.active svg {filter:drop-shadow(0 0 6px var(--glow-cyan))}
-.page-head .eyebrow,.dialog-head .eyebrow {display:block;margin:0 0 8px;font:600 12px/1.5 var(--mono);letter-spacing:.16em;color:var(--blue)}
+.page-head .eyebrow,.dialog-head .eyebrow {display:none}
 .page-head h1 {letter-spacing:-.03em}
-.panel,.metric {background-color:var(--glass);background-image:var(--panel-gradient);border-color:var(--border);box-shadow:var(--panel-shadow);backdrop-filter:blur(18px) saturate(130%);-webkit-backdrop-filter:blur(18px) saturate(130%)}
-.metric-link:hover {border-color:var(--blue)!important;box-shadow:0 0 24px var(--glow-cyan),var(--panel-shadow);transform:translateY(-1px)}
+.panel,.metric {background-color:var(--surface);background-image:none;border-color:var(--border);box-shadow:var(--control-shadow);backdrop-filter:none;-webkit-backdrop-filter:none}
+.metric-link:hover {border-color:var(--blue)!important;box-shadow:var(--control-shadow);transform:none}
 .metric-icon,.attention-icon,.agent-avatar,.workspace-card-icon {box-shadow:inset 0 0 0 1px var(--border)}
-.primary {background-color:var(--action);background-image:var(--action-bg);color:var(--color-accent-ink);border-color:transparent;box-shadow:0 0 22px var(--glow-cyan),var(--control-shadow)}
-.primary:hover:not(:disabled) {background-color:var(--action);background-image:var(--action-bg);color:var(--color-accent-ink);box-shadow:0 0 30px var(--glow-violet),var(--control-shadow)}
+.primary {background-color:var(--action);background-image:var(--action-bg);color:var(--color-accent-ink);border-color:transparent;box-shadow:var(--control-shadow)}
+.primary:hover:not(:disabled) {background-color:var(--action);background-image:var(--action-bg);color:var(--color-accent-ink);box-shadow:var(--control-shadow)}
 .button.primary:active:not(:disabled) {background:var(--action-hover);color:var(--color-accent-ink)}
 .secondary,.command-trigger,.appearance-control {background:var(--glass);border-color:var(--border);box-shadow:var(--control-shadow)}
 .secondary:hover:not(:disabled) {background:var(--subtle);border-color:var(--border-strong)}
@@ -1173,7 +1176,7 @@ input::placeholder,textarea::placeholder {color:var(--control-placeholder)}
 th {background:var(--subtle)}
 .tabs {background:transparent}
 .tab.active,.agent-config-tab[aria-selected=true],.flow-mobile-panes button[aria-selected=true] {background:var(--blue-soft);color:var(--blue);box-shadow:inset 0 0 0 1px var(--border)}
-.runtime-choice,.agent-card,.workspace-card,.skill-card,.library-asset,.flow-canvas-node,.flow-node {background-color:var(--glass);background-image:var(--panel-gradient);border-color:var(--border);box-shadow:var(--control-shadow)}
+.runtime-choice,.agent-card,.workspace-card,.skill-card,.library-asset,.flow-canvas-node,.flow-node {background-color:var(--surface);background-image:none;border-color:var(--border);box-shadow:var(--control-shadow)}
 .runtime-choice.selected,.workspace-card.is-current,.flow-canvas-node.selected,.flow-node.selected {border-color:var(--blue);box-shadow:0 0 0 1px var(--blue),0 0 24px var(--glow-cyan)}
 dialog {background:var(--glass-strong);border-color:var(--border-strong);box-shadow:var(--shadow),0 0 40px var(--glow-violet);backdrop-filter:blur(28px) saturate(140%);-webkit-backdrop-filter:blur(28px) saturate(140%)}
 .dialog-foot,#create-form>.dialog-foot,#flow-editor-form>.dialog-foot,#flow-editor-form>.dialog-head,.learning-dialog>.dialog-head,.learning-dialog>.dialog-foot,.task-form-steps {background:var(--glass-strong)}
@@ -1191,5 +1194,10 @@ dialog {background:var(--glass-strong);border-color:var(--border-strong);box-sha
  .sidebar,.topbar {background:var(--nav)}
  .panel,.metric,.runtime-choice,.agent-card,.workspace-card,.skill-card,.library-asset,.flow-canvas-node,.flow-node {background:var(--surface)}
  dialog,.toast {background:var(--surface)}
+}
+@media(max-width:700px) {
+ .technical-id {max-width:24ch}
+ .library-intro {padding-bottom:12px}
+ .library-intro>.field-help,.library-module-heading {display:none}
 }
 @media(prefers-reduced-motion:reduce) {.metric-link:hover {transform:none}}

@@ -17,6 +17,8 @@
 .agent-directory-search.filter-input>svg{position:static;transform:none;width:18px;height:18px;flex:none;margin:0 0 0 12px;color:var(--muted)}
 .agent-directory-search.filter-input>input{min-width:0;min-height:calc(var(--control-height) - 2px);width:100%;padding:9px 10px;border:0;background:transparent;box-shadow:none;margin:0;font-size:var(--control-font-size)}
 .agent-directory-filters{display:flex;align-items:center;gap:8px;padding:12px 20px;flex-wrap:wrap}
+.agent-filter-toggle{display:none;align-items:center;justify-content:center;gap:8px;min-height:44px}
+.agent-filter-toggle>span{display:inline-grid;place-items:center;min-width:20px;height:20px;padding-inline:4px;border-radius:5px;background:var(--blue-soft);color:var(--blue);font-size:12px}
 .agent-directory-filters label{margin:0;min-width:0}
 .agent-directory-filters select{width:auto;max-width:220px;min-height:var(--control-height);margin:0;font-size:var(--control-font-size);padding:9px 30px 9px 12px;background-color:var(--control-background)}
 .agent-directory-filters .text-button{font-size:13px;min-height:44px;padding:8px 10px}
@@ -138,9 +140,9 @@
 
 /* Confirmed Deep Space Glass direction for the Agent directory, detail and editor. */
 .agent-eyebrow{margin-bottom:8px}
-.agent-directory-surface,.agent-detail-layout{background-color:var(--glass);background-image:var(--panel-gradient);border-color:var(--border);box-shadow:var(--panel-shadow);backdrop-filter:blur(18px) saturate(130%);-webkit-backdrop-filter:blur(18px) saturate(130%)}
+.agent-directory-surface,.agent-detail-layout{background-color:var(--surface);background-image:none;border-color:var(--border);box-shadow:var(--control-shadow);backdrop-filter:none;-webkit-backdrop-filter:none}
 .agent-directory-scopes button{border:1px solid transparent}
-.agent-directory-scopes button[aria-pressed=true]{background:var(--nav-active);border-color:var(--border);box-shadow:inset 0 0 0 1px var(--glow-cyan)}
+.agent-directory-scopes button[aria-pressed=true]{background:var(--nav-active);border-color:var(--border);box-shadow:inset 0 0 0 1px var(--border-strong)}
 .agent-row-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .agent-row-version{display:inline-flex;align-items:center;min-height:22px;padding:1px 6px;border:1px solid var(--border);border-radius:6px;background:var(--subtle);color:var(--muted);font:12px/1.4 var(--mono)}
 .agent-row-identity .agent-avatar,.agent-detail-identity>.agent-avatar{background:linear-gradient(135deg,var(--blue-soft),var(--nav-active));color:var(--blue);box-shadow:inset 0 0 0 1px var(--border)}
@@ -156,7 +158,7 @@
 #agent-dialog .agent-config-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:8px 0 16px;background:transparent;border-bottom:1px solid var(--border);border-radius:0}
 #agent-dialog .agent-config-tab{display:flex;align-items:center;gap:10px;min-width:0;min-height:60px;padding:10px 12px;border:1px solid transparent;border-radius:12px;background:var(--subtle);color:var(--muted);text-align:left;flex:initial}
 #agent-dialog .agent-config-tab:hover{background:var(--nav-hover);color:var(--ink)}
-#agent-dialog .agent-config-tab[aria-selected=true]{background:var(--nav-active);border-color:var(--border-strong);color:var(--blue);box-shadow:inset 0 0 0 1px var(--glow-cyan),0 0 18px var(--glow-cyan)}
+#agent-dialog .agent-config-tab[aria-selected=true]{background:var(--nav-active);border-color:var(--border-strong);color:var(--blue);box-shadow:inset 0 0 0 1px var(--border-strong)}
 #agent-dialog .agent-step-number{display:grid;place-items:center;width:28px;height:28px;flex:none;border:1px solid var(--border-strong);border-radius:8px;font:600 12px var(--mono)}
 #agent-dialog .agent-config-tab[data-step-state=complete] .agent-step-number{color:var(--green);border-color:var(--green)}
 #agent-dialog .agent-config-tab[data-step-state=error] .agent-step-number{color:var(--red);border-color:var(--red)}
@@ -164,7 +166,7 @@
 #agent-dialog .agent-step-copy>span{display:block;font-size:13px;font-weight:600}
 #agent-dialog .agent-config-tab .agent-step-copy small{display:block;margin-top:2px;color:var(--muted);font-size:12px;font-weight:400;line-height:1.5}
 #agent-dialog .agent-config-tab .agent-step-status{margin-left:auto;color:var(--muted);font-size:12px;white-space:nowrap}
-.agent-live-summary{display:block;align-self:start;min-width:0;padding:18px;border:1px solid var(--border);border-radius:15px;background-color:var(--glass);background-image:var(--panel-gradient);box-shadow:var(--control-shadow)}
+.agent-live-summary{display:block;align-self:start;min-width:0;padding:18px;border:1px solid var(--border);border-radius:15px;background-color:var(--surface);background-image:none;box-shadow:var(--control-shadow)}
 .agent-live-summary-head{display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid var(--border)}
 .agent-summary-avatar{display:grid;place-items:center;width:38px;height:38px;flex:none;border:1px solid var(--border);border-radius:11px;background:linear-gradient(135deg,var(--blue-soft),var(--nav-active));color:var(--blue)}
 .agent-summary-avatar svg{width:20px;height:20px}
@@ -203,6 +205,12 @@
  #agent-dialog .agent-config-tab{flex:1 0 auto;min-width:max-content;gap:4px;padding:8px 6px;white-space:nowrap}
  #agent-dialog .agent-step-number{width:22px;height:22px}
  #agent-dialog .agent-step-copy>span{font-size:12px;white-space:nowrap}
+}
+@media(max-width:600px){
+ .agent-filter-toggle{display:inline-flex;width:calc(100% - 24px);margin:0 12px 12px}
+ .agent-directory-filters{display:none}
+ .agent-directory-filters[data-open=true]{display:flex;padding:12px}
+ .agent-directory-filters[data-open=true] .agent-sort-label{margin-left:0!important;justify-content:flex-start}
 }
 @media(prefers-reduced-transparency:reduce),(prefers-contrast:more){
  .agent-directory-surface,.agent-detail-layout,.agent-live-summary{backdrop-filter:none;-webkit-backdrop-filter:none;background-image:none;background:var(--surface)}

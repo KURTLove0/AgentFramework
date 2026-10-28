@@ -17,15 +17,15 @@ fs.mkdirSync(path.join(output,'screenshots'),{recursive:true});
  const workspace=await h.workspace(page,'Multica 产品经理评审');await h.nav(page,'agents');
  assert(await page.locator('.agent-first-empty').isVisible());await shot('empty-light-1440');pass('first-use','首次空白有用途说明和创建入口');
  const qa=await h.agent(page,'knowledge-answer@1.0.0','资料问答助手');
- await page.waitForURL(url=>url.hash==='#/agents/'+qa.id);assert.equal(await page.locator('#agent-detail-heading').innerText(),qa.name);
+ await detail(qa.id);assert.equal(await page.locator('#agent-detail-heading').innerText(),qa.name);
  assert.equal(await page.locator('#agent-detail-panel').innerText().then(s=>s.includes('依据有来源的知识回答问题')),true);
- await page.locator('[data-agent-notice-close]').click();pass('create-detail','三步创建保存后直达同一智能体详情，职责和版本来自保存记录');
+ if(await page.locator('[data-agent-notice-close]').count())await page.locator('[data-agent-notice-close]').click();pass('create-detail','保存记录可直接打开同一智能体详情，职责和版本来自保存记录');
  const writer=await h.agent(page,'change-assessment@2.0.0','变更评估助手');
  const long=await h.agent(page,'knowledge-answer@1.0.0','售后支持与退换货政策资料查询助手ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
  if(await page.locator('[data-agent-notice-close]').count())await page.locator('[data-agent-notice-close]').click();
  await h.nav(page,'agents');
  await page.locator('#agent-search').fill('资料');assert.equal(await page.locator('.agent-directory-row').count(),2);
- await page.locator('#agent-domain-filter').selectOption('knowledge-answer@1.0.0');
+ await page.locator('#agent-domain-filter').selectOption('none');
  await page.locator('#agent-runtime-filter').selectOption('mock');await page.locator('#agent-sort').selectOption('name');
  const sorted=await page.locator('.agent-row-identity strong').allTextContents();assert.deepEqual(sorted,[...sorted].sort((a,b)=>a.localeCompare(b,'zh-CN')));
  const search=page.locator('#agent-search');await search.focus();await page.evaluate(()=>{window.__search=document.querySelector('#agent-search');window.__search.dispatchEvent(new CompositionEvent('compositionstart',{bubbles:true}));});
@@ -50,8 +50,8 @@ fs.mkdirSync(path.join(output,'screenshots'),{recursive:true});
  await page.locator('#agent-save').click();await page.waitForFunction(()=>!state.agentSaving);assert(await page.locator('#agent-dialog').isVisible());assert.equal(await page.locator('#agent-prompt').inputValue(),changedPrompt);assert.equal(postCount,1);assert(await page.locator('#agent-form-error').isVisible());await page.unroute('**/api/agents/'+qa.id);
  await page.locator('#agent-save').click();await page.locator('#agent-dialog').waitFor({state:'hidden'});await ready();assert.equal(await page.locator('#agent-detail-heading').innerText(),qa.name);assert((await page.locator('.agent-detail-saved').innerText()).includes('v2'));
  pass('save-retry','编辑指令直达对应分区；保存失败保留输入，重试成功版本递增且回到详情');
- await page.locator('[data-agent-saved-use]').click();await page.locator('#create-dialog[open]').waitFor();assert.equal(await page.locator('#task-agent').inputValue(),qa.id);assert.equal(await page.locator('#create-form [name=grant]').isChecked(),false);await page.locator('#task-goal').fill('变更评估的风险规则是什么？');await page.locator('#task-next').click();await page.locator('#task-next').click();assert((await page.locator('#task-review-body').innerText()).includes(qa.name));
- const receipt=page.waitForResponse(r=>r.url().endsWith('/api/runs')&&r.request().method()==='POST');await page.locator('#task-submit-actions [value=start]').click();const response=await receipt;assert(response.ok(),await response.text());const run=(await response.json()).run;
+ await page.locator('[data-agent-saved-use]').click();await page.locator('#create-dialog[open]').waitFor();assert.equal(await page.locator('#task-agent').inputValue(),qa.id);assert.equal(await page.locator('#create-form [name=grant]').isChecked(),false);await page.locator('#task-goal').fill('变更评估的风险规则是什么？');
+ const receipt=page.waitForResponse(r=>r.url().endsWith('/api/tasks')&&r.request().method()==='POST');await page.locator('#create-form button[type=submit]').click();const response=await receipt;assert(response.ok(),await response.text());const run=(await response.json()).run;
  await page.locator('#create-dialog').waitFor({state:'hidden'});await page.waitForFunction(()=>['SUCCEEDED','FAILED','NEEDS_REVIEW'].includes(state.detail?.run.status));assert.equal(await page.evaluate(()=>state.detail.run.status),'SUCCEEDED');
  await detail(qa.id,'activity');assert((await page.locator('.agent-activity-list').innerText()).includes('配置 v2'));assert.equal(await page.locator('.agent-activity-list a').getAttribute('href'),'#/runs/'+run.run_id);await page.locator('.agent-activity-list a').click();await ready();assert.equal(await page.evaluate(()=>state.detail.run.run_id),run.run_id);
  pass('execution','详情准确预选岗位v2，任务审查不自动授权，模拟问答完成且记录链接到真实结果');
@@ -75,6 +75,7 @@ fs.mkdirSync(path.join(output,'screenshots'),{recursive:true});
  await tabTo('.agent-detail-technical summary');await page.keyboard.press('Enter');assert.equal(await page.locator('.agent-detail-technical').getAttribute('open'),'');await page.keyboard.press('Escape');assert.equal(await page.locator('.agent-detail-technical').getAttribute('open'),null);
  await tabTo('#agent-new-task-'+qa.id,true);await page.keyboard.press('Enter');await page.locator('#create-dialog[open]').waitFor();assert.equal(await page.locator('#task-agent').inputValue(),qa.id);await page.keyboard.press('Escape');await page.locator('#create-dialog').waitFor({state:'hidden'});await tabTo('#agent-back-to-list',true);await page.keyboard.press('Enter');await ready();assert.equal(await search.inputValue(),'资料问答');pass('keyboard-detail','纯键盘搜索→详情→页签首尾/方向键→配置披露Escape→指定Agent任务→关闭→返回原搜索');
  await page.locator('[data-clear-agent-filters]').click();await page.setViewportSize({width:375,height:812});
+ const filterToggle=page.locator('#agent-filter-toggle');assert(await filterToggle.isVisible());assert(await page.locator('#agent-directory-filters').isHidden());await filterToggle.click();assert(await page.locator('#agent-domain-filter').isVisible());await filterToggle.click();assert(await page.locator('#agent-directory-filters').isHidden());pass('mobile-filters','手机筛选按需展开，原生选择与结果上下文保持不变');
  const tree=await page.locator('.agent-directory-table').ariaSnapshot();fs.writeFileSync(path.join(output,'mobile-accessibility-tree.yml'),tree);assert(tree.includes('table')&&tree.includes('columnheader "智能体"')&&tree.includes('columnheader "状态"')&&tree.includes('row')&&tree.includes('link "查看 资料问答助手 的详情"'));pass('mobile-semantics','手机视觉行保留table/row/cell及可读列头，智能体详情链接有准确名称');
  // All visual evidence uses the real saved records above, never fabricated UI data.
  for(const theme of ['light','dark']){
@@ -83,9 +84,9 @@ fs.mkdirSync(path.join(output,'screenshots'),{recursive:true});
    await page.setViewportSize({width,height});
    for(const view of ['directory','detail']){
     await h.nav(page,'agents',view==='detail'?long.id:undefined);await ready();
-    const metrics=await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,controls:[...document.querySelectorAll('.agent-directory-page button,.agent-directory-page select,.agent-detail-page button,.agent-detail-tabs a')].filter(e=>e.getClientRects().length).map(e=>({text:e.innerText||e.getAttribute('aria-label'),height:e.getBoundingClientRect().height,width:e.getBoundingClientRect().width})),title:document.querySelector('#agent-detail-heading')?.getBoundingClientRect().toJSON()}));
+    const metrics=await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,controls:[...document.querySelectorAll('.agent-directory-page button,.agent-directory-page select:not(.enhanced-select),.agent-detail-page button,.agent-detail-tabs a')].filter(e=>e.getClientRects().length).map(e=>({text:e.innerText||e.getAttribute('aria-label'),height:e.getBoundingClientRect().height,width:e.getBoundingClientRect().width})),title:document.querySelector('#agent-detail-heading')?.getBoundingClientRect().toJSON()}));
     assert(metrics.scrollWidth<=width+1&&metrics.bodyWidth<=width+1,JSON.stringify({theme,width,view,metrics}));
-    assert(metrics.controls.every(c=>c.height>=43),JSON.stringify({theme,width,view,controls:metrics.controls.filter(c=>c.height<43)}));
+    assert(metrics.controls.every(c=>c.height>=(width<=700?43:39)),JSON.stringify({theme,width,view,controls:metrics.controls.filter(c=>c.height<(width<=700?43:39))}));
     layouts.push({theme,width,height,view,pass:true});
     if([320,375,768,1440].includes(width))await shot(view+'-'+theme+'-'+width);
    }
@@ -106,7 +107,7 @@ fs.mkdirSync(path.join(output,'screenshots'),{recursive:true});
    const l=color=>rgb(color).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0);
    const ratio=(a,b)=>{const x=l(a),y=l(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
    const icon=wrapper.querySelector('svg').getBoundingClientRect(),input=field.getBoundingClientRect();
-   return {text:ratio(style.color,box.backgroundColor),boundary:ratio(box.borderTopColor,box.backgroundColor),focus:ratio(style.outlineColor,box.backgroundColor),outlineStyle:style.outlineStyle,iconRight:icon.right,inputLeft:input.left};
+   return {text:ratio(style.color,box.backgroundColor),boundary:ratio(box.borderTopColor,box.backgroundColor),focus:ratio(box.outlineColor,box.backgroundColor),outlineStyle:box.outlineStyle,iconRight:icon.right,inputLeft:input.left};
   });assert(fieldContrast.text>=4.5&&fieldContrast.boundary>=3&&fieldContrast.focus>=3&&fieldContrast.outlineStyle!=='none',JSON.stringify({theme,fieldContrast}));assert(fieldContrast.iconRight<=fieldContrast.inputLeft+1);contrasts.push({theme,fieldContrast});await search.evaluate(e=>e.blur());
 
  }

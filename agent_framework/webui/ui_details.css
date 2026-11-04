@@ -80,3 +80,21 @@ dialog .dialog-head h2 {font-size:var(--type-dialog);line-height:1.4}
 @media(pointer:coarse) and (min-width:701px) {
  :root {--type-body:16px;--type-help:14px}
 }
+.flow-agent-draft {min-width:0; margin:16px 0; padding:12px; border:1px solid var(--border); border-radius:8px; background:var(--surface)}
+.flow-agent-draft legend {padding:0 4px; color:var(--ink); font-size:13px}
+.flow-agent-draft label:last-child {margin-bottom:0}
+.flow-draft-summary {margin:16px 0; padding:12px; border:1px solid var(--border); border-radius:8px}
+.flow-draft-summary article + article {border-top:1px solid var(--border); margin-top:12px; padding-top:12px}
+.flow-agent-prompt {white-space:pre-wrap; overflow-wrap:anywhere}
+.run-review {min-width:0;margin:0 0 24px;padding:18px;border:1px solid var(--border-strong);border-radius:12px;background:var(--amber-soft)}
+.run-review h3,.run-review h4 {margin:0 0 8px}.run-review p {margin:8px 0;white-space:pre-wrap}
+.run-review :is(p,code,dd,strong) {overflow-wrap:anywhere}
+.run-review dl {display:grid;grid-template-columns:minmax(5em,auto) minmax(0,1fr);gap:6px 16px;margin:12px 0;font-size:var(--type-help)}
+.run-review dt {color:var(--muted)}.run-review dd {margin:0;min-width:0;white-space:pre-wrap}
+.run-review-operations article {padding:12px;margin:12px 0;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+.run-review-checks {padding-left:20px}.run-review-checks li {margin:12px 0}
+.run-review>button,.run-review>details>summary {min-height:44px;white-space:normal}
+.run-review>details>summary {display:flex;align-items:center;cursor:pointer}
+.run-review textarea {width:100%;resize:vertical;min-height:160px;max-height:50vh;box-sizing:border-box;white-space:pre-wrap;overflow-wrap:anywhere;font:var(--type-help)/1.6 var(--mono)}
+.run-review [data-run-review-status]:empty {display:none}
+@media(max-width:600px){.run-review{padding:12px}.run-review dl{grid-template-columns:minmax(0,1fr);gap:4px}.run-review dd{margin-bottom:8px}}

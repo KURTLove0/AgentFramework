@@ -1,0 +1,137 @@
+{
+  "date": "2026-11-02",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Shared SSE admission, prompt idle disconnect cleanup, hidden-page release and monotonic scoped reconnect backoff with HTTP polling fallback",
+  "before": {
+    "frontend": {
+      "tests": 2,
+      "failed": 2,
+      "log": "/private/tmp/af-stream-lifecycle-frontend-before.log"
+    },
+    "backend": {
+      "tests": 2,
+      "assertion_failures": 1,
+      "errors": 1,
+      "log": "/private/tmp/af-stream-lifecycle-backend-before.log",
+      "note": "Third stream returned 200 despite configured limit; idle-release test could not inspect an admission counter because no capacity object existed."
+    }
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests",
+    "passed": 1030,
+    "seconds": 190.851,
+    "log": "/private/tmp/af-stream-lifecycle-backend-full.log",
+    "sha256": "5756bc07c05c1def49c3961681f1fa4c23273bd0306ff1dfc264ee14417592d8",
+    "new_lifecycle_tests": 9
+  },
+  "frontend": {
+    "command": "node --test tests/test_*.js",
+    "passed": 787,
+    "duration_ms": 8391.741709,
+    "log": "/private/tmp/af-stream-lifecycle-frontend-final.log",
+    "sha256": "5ee2e334eecb13bf82cd0545aa3a12533238476cc8c003e064bad31de558a779",
+    "new_lifecycle_tests": 11
+  },
+  "browser": {
+    "command": ".venv/bin/python scripts/run_browser_tests.py --suite stream-lifecycle --suite streaming --suite cancellations --output /private/tmp/af-stream-lifecycle-browser-final",
+    "suites": [
+      {
+        "suite": "stream-lifecycle",
+        "result": "/private/tmp/af-stream-lifecycle-browser-final/stream-lifecycle/results.json",
+        "sha256": "7f65a22badd1041aa5cc9f2027d933c4683d14c9d51c04030dba26a1c91a3727",
+        "checks": [
+          "同源七个标签页最多占四条实时连接，超出连接明确返回暂满",
+          "连接暂满的标签页仍能普通读取、轮询进展，并保留草稿和光标",
+          "受控后台状态关闭所有真实连接，后台渲染和待重试计时器不重新占用名额",
+          "服务主动断开和连续拒绝触发递增重试，轮询保持可用，恢复后接回原任务",
+          "四条推送同时打开时停止立即可用，连接全部释放且未重发消息或重跑模型"
+        ],
+        "layouts": 0,
+        "errors": []
+      },
+      {
+        "suite": "streaming",
+        "result": "/private/tmp/af-stream-lifecycle-browser-final/streaming/results.json",
+        "sha256": "e72e923515df3505509e43e6620ce88b3d44b7daaf4ead8dcc7fa840d05c66d4",
+        "checks": [
+          "公开摘要在任务仍运行时逐段增长，通过持续连接显示",
+          "回答正文在最终结果保存之前连续增长，未泄露协议 JSON 或转义字符",
+          "逐段更新保持输入框节点、草稿和光标位置",
+          "流连接暂不可用时，同一检查点和时间戳的迟到轮询不会覆盖新增公开过程，正文、输入焦点与光标保留",
+          "同一数据位置的完整轮次详情可恢复，重连推送保留匹配的操作信息",
+          "刷新后立即重放已生成片段，并继续接收同一轮回答",
+          "生成结束无重复正文，Unicode 正确，隐藏思考与 HTML 执行内容不会泄露",
+          "连接中断后能继续接收输出，未重新调用模型或重复追加",
+          "停止生成会保留已显示片段，并明确标记本轮未完成",
+          "生成失败保留正文片段和错误信息，未把片段伪装为最终结果",
+          "桌面、平板和手机深浅色显示正常，输入和发送操作保持可用"
+        ],
+        "layouts": 8,
+        "errors": []
+      },
+      {
+        "suite": "cancellations",
+        "result": "/private/tmp/af-stream-lifecycle-browser-final/cancellations/results.json",
+        "sha256": "f922d15743f433a2727fd965dacbb64a24f1b4b41627807da43b96e64d47d4e5",
+        "checks": [
+          "停止返回已保存请求，清楚显示正在停止并保留片段及排队消息，不提前显示已停止",
+          "执行器内存记录消失后刷新仍显示同一停止请求，输入草稿与桌面深浅色布局保留",
+          "停止当前轮次后继续明确排队的下一轮，不重复调用模型，不丢失未发送草稿",
+          "停止处理失败跨刷新保留，显式重试后结束原任务并保留同一请求历史",
+          "停止重试已完成但响应丢失时，只读核对替换旧的停止中状态，明确显示已结束且不重复提交"
+        ],
+        "layouts": 8,
+        "errors": []
+      }
+    ],
+    "lifecycle_measurements": {
+      "tab_count": 7,
+      "stream_limit": 4,
+      "rejected_streams": 8,
+      "ordinary_request_ms": 18,
+      "retry_intervals_ms": [
+        2211
+      ],
+      "task_posts": 1,
+      "message_posts": 0,
+      "stop_posts": 1,
+      "model_calls": 1,
+      "visibility": "controlled document.hidden and visibilitychange in headless Chrome; real HTTP and SSE connections"
+    },
+    "visual_review": "Inspected stopped-draft-preserved.png from the first successful lifecycle run; no layout/style changes in this increment."
+  },
+  "candidate": {
+    "command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-stream-lifecycle-source-candidate-20261102",
+    "directory": "/private/tmp/af-stream-lifecycle-source-candidate-20261102",
+    "package_files_verified": 139,
+    "source_and_wheel_match": true,
+    "bundle_wheel_match": true,
+    "inner_and_outer_checksums_verified": true,
+    "fresh_environment_install_rerun": false,
+    "published": false,
+    "artifacts": {
+      "/private/tmp/af-stream-lifecycle-source-candidate-20261102/agent-framework-1.3.0.tar.gz": "6313825fa223be256de9b1668a1eea0b27cb29ddacf9c3d2296ceddb0aa07408",
+      "/private/tmp/af-stream-lifecycle-source-candidate-20261102/bounded_agent_mvp-1.3.0-py3-none-any.whl": "5f8dbd63267ccaed47d22f5d65472c3036b3d122c2fbbe7520bfd05f184802cd"
+    }
+  },
+  "source_sha256": {
+    "agent_framework/stream_capacity.py": "f9f7e92692d7acec923c61bb4f566144ceb718e39633e70e493157b461583ba3",
+    "agent_framework/web.py": "8c33ec4e71fb43368183321bf6a7d13927c9779531847c0d189efc0245814a94",
+    "agent_framework/webui/task_conversation.js": "9886fd310924882a9579a863ab5cca197f830e3327f9ef4d482215c14e365d03",
+    "tests/test_stream_lifecycle.py": "9903b149494877433871ba807ceaef7ac16fde7eb6959022a1a0d7c716ff9faa",
+    "tests/test_stream_lifecycle.js": "3d60c314ee186ce42ebfae0b0e3e85942099d56fdbcd75ff55e484c5191b996d",
+    "tests/serve_streaming_task_fixture.py": "8753dfd6e9de84a79f57fc6ad5f9e4be6bb20cb1dce40740ac2bb96864541043",
+    "tests/verify_stream_lifecycle.cjs": "db81441496c4a0cd7277a91f6c5e4b7a00394667e4f82700859f17f9635dec81",
+    "scripts/run_browser_tests.py": "f943d16607a6bd6c8be9c12022a9db6cf76faedc858ec237646e278ad49439c1",
+    "README.md": "1003f14b627ef566a5545cad4a8c426d30f91593f1357741e4d0ba7139f7bb7c",
+    "design.md": "24ff3fef59fddd422cb0179286da4e2e4fd465e2a640aa0d513f2dbee736d863",
+    "docs/reliability/stream-lifecycle.md": "51fd079f3eb4626b2fb657ade550da0503a8d8fc1de9b2b8e18d1f74e924aeb5"
+  },
+  "boundaries": [
+    "Admission is per application instance; it does not coordinate separate processes or bound all ordinary HTTP threads.",
+    "Headless visibility tests drive controlled document.hidden and visibilitychange; HTTP/SSE and server disconnects are real.",
+    "Page cache restore is covered by frontend event regression, not claimed as a native operating-system visibility or bfcache acceptance.",
+    "Timing observations are from isolated synthetic fixtures, not service latency guarantees."
+  ]
+}

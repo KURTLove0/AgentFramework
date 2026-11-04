@@ -1,0 +1,349 @@
+{
+  "recorded_on": "2026-10-31",
+  "scope": "Current source: complete private evaluation alert inbox with confirmation-state and agent filtering, keyset pages, stable acknowledgement time, accepted-receipt preservation, and explicit navigation taking priority over background refresh. No packaging or release.",
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests -q",
+    "tests": 793,
+    "passed": true,
+    "failed": 0,
+    "seconds": 152.868,
+    "log": "/private/tmp/af-alert-full-20261031.log",
+    "targeted": {
+      "tests": 10,
+      "passed": true,
+      "seconds": 0.965,
+      "log": "/private/tmp/af-alert-inbox-targeted-20261031.log"
+    },
+    "log_note": "The full suite logged a background conversation dispatch KeyError ('workspace unavailable') during workspace lifecycle coverage and finished OK. This slice did not alter conversation dispatch."
+  },
+  "ui": {
+    "command": "npm test",
+    "tests": 315,
+    "passed": true,
+    "failed": 0,
+    "new_cases": 16,
+    "seconds": 4.036266875,
+    "log": "/private/tmp/af-alert-ui-final-20261031.log"
+  },
+  "baselines": [
+    {
+      "tests": 9,
+      "passed": false,
+      "failures": 1,
+      "errors": 8,
+      "log": "/private/tmp/af-alert-inbox-baseline-20261031.log",
+      "reason": "The complete inbox service and HTTP endpoint were missing; recent acknowledged records hid all pending records in the legacy overview."
+    },
+    {
+      "tests": 16,
+      "passed": false,
+      "failures": 1,
+      "log": "/private/tmp/af-alert-ui-background-baseline-20261031.log",
+      "reason": "Explicit next-page clicks were ignored while an unrendered background refresh was pending."
+    }
+  ],
+  "browser": [
+    {
+      "suite": "alert-inbox",
+      "passed": true,
+      "exit_code": 0,
+      "results": "/private/tmp/af-alert-browser-feedback-20261031/alert-inbox/results.json",
+      "log": "/private/tmp/af-alert-browser-feedback-20261031/alert-inbox.log",
+      "checks": [
+        "230条较新已确认记录不再遮挡61条未确认提醒，键盘翻页能到达最早记录且焦点可见",
+        "旧提醒能打开当时的评测，再转到原始执行记录，离开时详情窗口正常关闭",
+        "确认成功但后续读取失败仍保留已确认结果，重试只读取列表，待处理数降为60",
+        "已确认历史可完整翻到第231条，原提醒与首次确认时间保留",
+        "历史岗位即使不在当前智能体目录也可筛选，按岗位筛选在分页之前生效",
+        "翻页等待时切换状态，新筛选立即生效，迟到的旧页不会覆盖结果",
+        "长提醒与分页控件在8组桌面深浅色和200%文字下可读、无横向溢出",
+        "提醒按工作空间隔离，空列表有明确说明，浏览和筛选没有产生写入"
+      ],
+      "errors": [],
+      "layouts": [
+        {
+          "theme": "light",
+          "width": 1024,
+          "scale": 1,
+          "baseline": 14,
+          "bounds": {
+            "root": 1024,
+            "scroll": 738,
+            "client": 738,
+            "focused": true,
+            "left": 891,
+            "right": 967,
+            "top": 452.78125,
+            "bottom": 496.78125,
+            "font": 14
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1024,
+          "scale": 2,
+          "baseline": 14,
+          "bounds": {
+            "root": 1024,
+            "scroll": 738,
+            "client": 738,
+            "focused": true,
+            "left": 849,
+            "right": 967,
+            "top": 497.28125,
+            "bottom": 564.078125,
+            "font": 28
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "scale": 1,
+          "baseline": 14,
+          "bounds": {
+            "root": 1440,
+            "scroll": 1134,
+            "client": 1134,
+            "focused": true,
+            "left": 1307,
+            "right": 1383,
+            "top": 425.671875,
+            "bottom": 469.671875,
+            "font": 14
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "scale": 2,
+          "baseline": 14,
+          "bounds": {
+            "root": 1440,
+            "scroll": 1134,
+            "client": 1134,
+            "focused": true,
+            "left": 1265,
+            "right": 1383,
+            "top": 470.171875,
+            "bottom": 536.96875,
+            "font": 28
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "scale": 1,
+          "baseline": 14,
+          "bounds": {
+            "root": 1024,
+            "scroll": 738,
+            "client": 738,
+            "focused": true,
+            "left": 891,
+            "right": 967,
+            "top": 452.78125,
+            "bottom": 496.78125,
+            "font": 14
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "scale": 2,
+          "baseline": 14,
+          "bounds": {
+            "root": 1024,
+            "scroll": 738,
+            "client": 738,
+            "focused": true,
+            "left": 849,
+            "right": 967,
+            "top": 497.28125,
+            "bottom": 564.078125,
+            "font": 28
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "scale": 1,
+          "baseline": 14,
+          "bounds": {
+            "root": 1440,
+            "scroll": 1134,
+            "client": 1134,
+            "focused": true,
+            "left": 1307,
+            "right": 1383,
+            "top": 425.671875,
+            "bottom": 469.671875,
+            "font": 14
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "scale": 2,
+          "baseline": 14,
+          "bounds": {
+            "root": 1440,
+            "scroll": 1134,
+            "client": 1134,
+            "focused": true,
+            "left": 1265,
+            "right": 1383,
+            "top": 470.171875,
+            "bottom": 536.96875,
+            "font": 28
+          }
+        }
+      ]
+    },
+    {
+      "suite": "daily-recovery",
+      "passed": true,
+      "exit_code": 0,
+      "results": "/private/tmp/af-alert-browser-regression-final-20261031/daily-recovery/results.json",
+      "log": "/private/tmp/af-alert-browser-regression-final-20261031/daily-recovery.log",
+      "checks": [
+        "执行器拒绝后保存中断原因，提供显式重试且不重复创建首项任务",
+        "工作台待办显示真实派发中断原因并可返回原计划处理",
+        "修改模板后重试保留原目标和版本，容量不足时完整保存两项任务及自动启动请求",
+        "刷新和桌面深浅色布局保留排队状态，重试不延长原任务授权",
+        "关闭定时期间容量恢复仍自动执行原任务，每项只创建一次草稿"
+      ],
+      "errors": [],
+      "layouts": 4
+    },
+    {
+      "suite": "audit-fixes",
+      "passed": true,
+      "exit_code": 0,
+      "results": "/private/tmp/af-alert-browser-regression-final-20261031/audit-fixes/results.json",
+      "log": "/private/tmp/af-alert-browser-regression-final-20261031/audit-fixes.log",
+      "checks": [
+        "Failed generation can be repaired, validated, deposited and published without another generation",
+        "Assertion evidence rejects invented quotations and stores exact offsets with human review",
+        "Assertion evidence dialog fits mobile and desktop in both themes",
+        "JSON-LD download contains the reviewed quotation and source hash",
+        "Withdrawing a replacement does not silently roll back; explicit activation restores the chosen version",
+        "Offline ordinary tasks show no quality score in the evaluation UI",
+        "Expired ontology explains its state and offers no browsing or activation action"
+      ],
+      "errors": [],
+      "layouts": 0
+    },
+    {
+      "suite": "legacy-modules",
+      "passed": true,
+      "exit_code": 0,
+      "results": "/private/tmp/af-alert-browser-regression-final-20261031/legacy-modules/module-results.json",
+      "log": "/private/tmp/af-alert-browser-regression-final-20261031/legacy-modules.log",
+      "checks": [
+        {
+          "id": "agent-task",
+          "passed": true
+        },
+        {
+          "id": "knowledge-publish",
+          "passed": true
+        },
+        {
+          "id": "knowledge-revise",
+          "passed": true
+        },
+        {
+          "id": "grounded-result",
+          "passed": true
+        },
+        {
+          "id": "skill-lifecycle",
+          "passed": true
+        },
+        {
+          "id": "skill-import-withdraw",
+          "passed": true
+        },
+        {
+          "id": "workflow-run",
+          "passed": true
+        },
+        {
+          "id": "workflow-chat",
+          "passed": true
+        },
+        {
+          "id": "daily-plan",
+          "passed": true
+        },
+        {
+          "id": "evaluation-loop",
+          "passed": true
+        },
+        {
+          "id": "retrospective",
+          "passed": true
+        },
+        {
+          "id": "ontology-loop",
+          "passed": true
+        }
+      ],
+      "errors": [],
+      "layouts": 0
+    }
+  ],
+  "preliminary_browser_attempts": [
+    {
+      "results": "/private/tmp/af-alert-browser-20261031/results.json",
+      "suite": "alert-inbox",
+      "passed": false,
+      "reason": "The slow-page test waited for a request that was never sent. A focused UI test then reproduced the explicit-click/background-refresh collision; the interaction was corrected."
+    },
+    {
+      "results": "/private/tmp/af-alert-browser-diagnostic-20261031/results.json",
+      "suite": "alert-inbox",
+      "passed": false,
+      "reason": "Automatic recovery completed after the fixture restored reads, removing the retry button before its scripted click. The fixture now restores reads in response to the actual retry intent, separately validating manual recovery."
+    }
+  ],
+  "scenario": {
+    "seeded_alerts": 291,
+    "initial_pending": 61,
+    "initial_acknowledged": 230,
+    "pending_page_sizes": [
+      50,
+      11
+    ],
+    "remaining_pending_after_one_confirmation": 60,
+    "acknowledged_after_one_confirmation": 231,
+    "acknowledgement_posts": 1,
+    "external_model_calls": 0,
+    "browsing_writes": 0
+  },
+  "source_sha256": {
+    "agent_framework/agent_evaluation.py": "f1639c7ae3a539d7a3d907ce67a46543bebbf672e6c1bcbeb175456c0044c466",
+    "agent_framework/web.py": "f2572219d9e6292d069bbfd7b674b7f3db1a134320632fc1e5e3f68f7cb53158",
+    "agent_framework/webui/operations.js": "fc1e1b96cdb9f2b9d64d44a6cac36f591d529eafae2f5e7c1f8251d4a0e481d3",
+    "agent_framework/webui/evaluation_alerts.js": "a47128c1eb1da2de693159dae1e6e750af3f1c328d3a54208efce8d3ee40caf9",
+    "agent_framework/webui/operations.css": "ecd7de4677dedb6a67b1b2b0c532927766cc200a602a2049ca09487ef360a434",
+    "agent_framework/webui/app.js": "9209e0ce3f9b4c7b5d0e8bff7a4abc8384872ffc9af2c84ab10bd76b46b2127f",
+    "agent_framework/webui/index.html": "a10fbb7194f6ec87c195b58e33c2f7169f01a78fb31d1a94e8a9dca94d73efbb",
+    "tests/test_alert_inbox.py": "a268fa8a8f74595e03fb1a81de2e049fb066516b468c7c5864e26aec1b401e5b",
+    "tests/test_alert_inbox_interactions.js": "9bc56bde253444595285d65bf667837a04541fbed76b42a84ade85e095223bc4",
+    "tests/serve_alert_inbox_fixture.py": "153e8068289fcb88d17340d4b180e2c4dc328a4ea77d698ba98569b3fdba1c4d",
+    "tests/verify_alert_inbox.cjs": "d0cb1e139ae7deef18161f0c5585fe55387369252c2eb4b808b2b83f7811d815",
+    "scripts/run_browser_tests.py": "4726e0884d5e875ddc2a119917852801611fc70580e91b39045738d109956b6a"
+  },
+  "screenshots": [
+    "docs/operations/alert-inbox-light.png",
+    "docs/operations/alert-inbox-dark.png"
+  ],
+  "constraints": [
+    "Alert pagination covers all historical alerts within the current tenant, project and principal. Authorization is independent of the cursor.",
+    "Counts and rows share one read snapshot; confirmation state may change between requests, so a page can become empty.",
+    "The legacy overview endpoint and its scoring report window/recent-200 presentation remain compatible.",
+    "The overview still includes its historical recent alert payload; this feature is not an optimization of the entire evaluation overview.",
+    "Current source only; no release archive rebuilt or deployment performed."
+  ]
+}

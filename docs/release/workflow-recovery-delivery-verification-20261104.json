@@ -1,0 +1,394 @@
+{
+  "date": "2026-11-04",
+  "scope": "New independent candidate and installed browser coverage; no application implementation changes this turn; not published",
+  "candidate_manifest": {
+    "candidate": "/private/tmp/af-installed-workflow-candidate-20261104",
+    "bundle_sha256": "336c9e714da03f67aa7cb6bda3dda139622d7b3df47700d8dbbb03d6f61a801a",
+    "wheel_sha256": "7c14d686fc7566175ca5e581547246a7d1c96a7d071e6d17bd03d2fdb8753cba",
+    "source_files": 168,
+    "source_matches_wheel": true,
+    "bundle_companions_match": {
+      "README.md": "docs/release/INSTALL.md",
+      "RELEASE_NOTES.md": "docs/release/RELEASE_NOTES.md",
+      "scripts/install.sh": "scripts/install.sh",
+      "scripts/start.sh": "scripts/start.sh"
+    },
+    "changed_since_export_candidate": [
+      "agent_framework/web.py",
+      "agent_framework/webui/hig.css",
+      "agent_framework/webui/index.html",
+      "agent_framework/webui/workflow_control.js",
+      "agent_framework/webui/workflow_grant.js",
+      "agent_framework/webui/workflows.js"
+    ],
+    "removed_since_export_candidate": [],
+    "historical_artifacts_unchanged": {
+      "agent-framework-1.1.0.tar.gz": "78fda0c93a5ce6b091183a0e47c6120f1a3f18cbeec1251cd2d33b54326894bc",
+      "bounded_agent_mvp-1.3.0-py3-none-any.whl": "ada65ea8468cb675263ddbab69c452de1654612258fb4e574747fb184aaaf83a",
+      "bounded_agent_mvp-1.1.0-py3-none-any.whl": "50334ab2c04575706f49ead28d3fa7a731f5a726636e152b8a68142d093ec869",
+      "agent-framework-1.3.0.tar.gz": "32004453ac6355f6fd272edac325d743a21a1f0467ae9048ec27799bb0efbe08",
+      "agent-framework-1.2.0.tar.gz": "73f6c5f15aa5546418810f1404a49a91ba87fcad5a43f01aa27d0c38556af7be",
+      "bounded_agent_mvp-1.2.0-py3-none-any.whl": "43cf6789ab121b46500648b222daf637187033db2fbb1148dcad53a3dc71259a"
+    }
+  },
+  "installed_report_path": "/private/tmp/af-installed-workflow-delivery-20261104.json",
+  "installed_report": {
+    "verified_at": "2026-11-04T09:36:22.101106+00:00",
+    "artifact": "/private/tmp/af-installed-workflow-candidate-20261104/agent-framework-1.3.0.tar.gz",
+    "artifact_sha256": "336c9e714da03f67aa7cb6bda3dda139622d7b3df47700d8dbbb03d6f61a801a",
+    "version": "1.3.0",
+    "scope": "bundled-install-and-start-scripts",
+    "fresh_offline_install": true,
+    "all_modules": {
+      "version": "1.3.0",
+      "modules": 85,
+      "yaml_version": "6.0.3"
+    },
+    "ui_resources_matching_wheel": 72,
+    "clean_startup_runs": 0,
+    "agent_save_replay": true,
+    "task_submission_replay_and_lookup": true,
+    "isolated_business_worker": true,
+    "verified_simulated_drafts": 1,
+    "installed_export_verifier": true,
+    "caller_code_executed": false,
+    "test_data": "temporary-isolated-directories",
+    "restart_checks": [
+      {
+        "draft_state": "saved",
+        "draft_revision": 3,
+        "new_process_session": true,
+        "graceful_shutdown": true,
+        "settings_revision": 2,
+        "settings_and_receipts_preserved": true,
+        "agent_and_receipt_preserved": true,
+        "task_history_and_receipt_preserved": true,
+        "task_count_after_replay": 2,
+        "simulated_drafts_after_replay": 1
+      },
+      {
+        "draft_state": "discarded",
+        "draft_revision": 4,
+        "new_process_session": true,
+        "graceful_shutdown": true,
+        "settings_revision": 2,
+        "settings_and_receipts_preserved": true,
+        "agent_and_receipt_preserved": true,
+        "task_history_and_receipt_preserved": true,
+        "task_count_after_replay": 2,
+        "simulated_drafts_after_replay": 1
+      }
+    ],
+    "backup_restore_checks": {
+      "installed_cli": true,
+      "contents": {
+        "version": 1,
+        "counts": {
+          "execution_records": 2,
+          "conversations": 1,
+          "agents": 1,
+          "workspaces": 1,
+          "workflows": 0,
+          "workflow_runs": 0,
+          "runtime_configurations": 1,
+          "saved_task_drafts": 0,
+          "business_drafts": 1
+        },
+        "workspaces": {
+          "total": 1,
+          "offset": 0,
+          "limit": 100,
+          "has_more": false,
+          "next_offset": null,
+          "items": [
+            {
+              "tenant": "delivery-tenant",
+              "id": "workspace-default",
+              "project_id": "project-demo",
+              "name": "默认工作空间",
+              "deleted": false
+            }
+          ]
+        }
+      },
+      "original_databases_unchanged": true,
+      "existing_target_rejected_unchanged": true,
+      "restored_server_started": true,
+      "settings_drafts_history_receipts_and_replays_preserved": true,
+      "browser_uses_restored_data": true
+    },
+    "dependency_wheels": {
+      "pyyaml-6.0.3-cp314-cp314-macosx_11_0_arm64.whl": "34d5fcd24b8445fadc33f9cf348c1047101756fd760b4dacb5c3e99755703310"
+    },
+    "browser_results": "/private/tmp/af-installed-workflow-delivery-20261104-browser/results.json",
+    "browser_suites": {
+      "task_submissions": {
+        "results": "/private/tmp/af-installed-workflow-delivery-20261104-browser/results.json",
+        "checks": 4,
+        "layouts": 0
+      },
+      "task_opening": {
+        "results": "/private/tmp/af-installed-workflow-delivery-20261104-browser/task-opening/results.json",
+        "checks": 4,
+        "layouts": 8
+      },
+      "task_names": {
+        "results": "/private/tmp/af-installed-workflow-delivery-20261104-browser/task-names/results.json",
+        "checks": 7,
+        "layouts": 10,
+        "fixture_tasks": 4
+      },
+      "task_archive": {
+        "results": "/private/tmp/af-installed-workflow-delivery-20261104-browser/task-archive/results.json",
+        "checks": 7,
+        "layouts": 8,
+        "fixture_tasks": 4
+      },
+      "task_favorites": {
+        "results": "/private/tmp/af-installed-workflow-delivery-20261104-browser/task-favorites/results.json",
+        "checks": 7,
+        "layouts": 24,
+        "fixture_tasks": 51
+      },
+      "installed_exports": {
+        "results": "/private/tmp/af-installed-workflow-delivery-20261104-browser/installed-exports/results.json",
+        "checks": 7,
+        "layouts": 16,
+        "fixture_tasks": 2,
+        "fixture_execution_records": 3
+      },
+      "installed_workflows": {
+        "results": "/private/tmp/af-installed-workflow-delivery-20261104-browser/installed-workflows/results.json",
+        "checks": 7,
+        "layouts": 8,
+        "fixture_workflows": 1,
+        "fixture_workflow_runs": 2,
+        "fixture_child_tasks": 2
+      },
+      "chat_drafts": {
+        "results": "/private/tmp/af-installed-workflow-delivery-20261104-browser/chat-drafts/results.json",
+        "checks": 13,
+        "layouts": 10
+      }
+    }
+  },
+  "delivery_unit": {
+    "passed": 25,
+    "seconds": 2.478,
+    "log": "/private/tmp/af-installed-workflow-delivery-unit-20261104.log"
+  },
+  "workflow_browser": {
+    "checks": [
+      "安装服务通过公开接口创建两条真实等待授权的运行，模块来自独立安装环境",
+      "恢复请求跨重绘保持禁用，丢失已受理响应后只读核对原节点，不重复恢复或新增草稿",
+      "取消响应丢失后核对真实终态，返回失败历史页不复现旧等待授权记录或错误数量",
+      "安装后的历史重试在八组桌面布局中可用，键盘读取恢复真实筛选结果，不重新提交操作",
+      "具体提案授权响应丢失后核对已完成结果，创建一次模拟草稿；历史成功读取后才显示零匹配",
+      "安装后的服务重放已接受授权凭据不新增审计授权或第二次草稿写入",
+      "浏览器刷新后安装服务保留两条终态、原节点和冻结配置，恢复没有新增子任务或额外写入"
+    ],
+    "errors": [],
+    "layouts": [
+      {
+        "theme": "light",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 277,
+          "right": 367,
+          "top": 611.46875,
+          "bottom": 655.46875,
+          "font": 14,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 277,
+          "right": 423,
+          "top": 785.34375,
+          "bottom": 846.53125,
+          "font": 28,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 297,
+          "right": 387,
+          "top": 611.46875,
+          "bottom": 655.46875,
+          "font": 14,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 297,
+          "right": 443,
+          "top": 739.15625,
+          "bottom": 800.34375,
+          "font": 28,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 277,
+          "right": 367,
+          "top": 611.46875,
+          "bottom": 655.46875,
+          "font": 14,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 277,
+          "right": 423,
+          "top": 785.34375,
+          "bottom": 846.53125,
+          "font": 28,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 297,
+          "right": 387,
+          "top": 611.46875,
+          "bottom": 655.46875,
+          "font": 14,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 297,
+          "right": 443,
+          "top": 739.15625,
+          "bottom": 800.34375,
+          "font": 28,
+          "focused": true,
+          "root": 1440
+        }
+      }
+    ],
+    "posts": [
+      {
+        "url": "/api/workflow-runs/flowrun-6e4aecdc20dd5281e925a28b/resume",
+        "body": {}
+      },
+      {
+        "url": "/api/workflow-runs/flowrun-6e4aecdc20dd5281e925a28b/cancel",
+        "body": {}
+      },
+      {
+        "url": "/api/workflow-runs/flowrun-ed9adf94efafaa01f74e9e63/grant",
+        "body": {
+          "node_id": "review",
+          "proposal_token": "78b8407102b0e3c82392e4352e3b4d015c440fb36a0cc9100633e3e1ed98eecb"
+        }
+      },
+      {
+        "url": "/api/workflow-runs/flowrun-ed9adf94efafaa01f74e9e63/grant",
+        "body": {
+          "node_id": "review",
+          "proposal_token": "78b8407102b0e3c82392e4352e3b4d015c440fb36a0cc9100633e3e1ed98eecb"
+        }
+      }
+    ],
+    "packageOrigin": {
+      "prefix": "/private/tmp/agent installed delivery euz1ok44/clean environment",
+      "module": "/private/tmp/agent installed delivery euz1ok44/clean environment/lib/python3.14/site-packages/agent_framework/workflows.py",
+      "version": "1.3.0"
+    },
+    "fixture": {
+      "workspace": "workspace-8678f3ad117c42e1",
+      "workflow": "workflow-edb485d1ce1344b0",
+      "roots": [
+        "flowrun-6e4aecdc20dd5281e925a28b",
+        "flowrun-ed9adf94efafaa01f74e9e63"
+      ],
+      "children": [
+        "run-9c2b7842d5a1ffb6",
+        "run-8a283ebfefda60aa"
+      ]
+    },
+    "final": [
+      {
+        "id": "flowrun-6e4aecdc20dd5281e925a28b",
+        "status": "CANCELLED",
+        "child": "run-9c2b7842d5a1ffb6",
+        "drafts": 0
+      },
+      {
+        "id": "flowrun-ed9adf94efafaa01f74e9e63",
+        "status": "SUCCEEDED",
+        "child": "run-8a283ebfefda60aa",
+        "drafts": 1
+      }
+    ],
+    "externalModelCalls": 0
+  },
+  "browser_totals": {
+    "suites": 8,
+    "checks": 56,
+    "layouts": 84,
+    "page_errors": 0
+  },
+  "verification_source_sha256": {
+    "scripts/verify_release.py": "1e9038b52e9ece82aecd14ad4b4fe90f717fa39d26dc9acf73102dc4cc80993a",
+    "tests/verify_installed_workflows.cjs": "af77d591115c23052ce6e555e9fd25fa5fdd1efc33fbd3ca5d783062de58ec74"
+  },
+  "screenshots": {
+    "light": {
+      "path": "workflow-installed-history-light.png",
+      "width": 1024,
+      "height": 1100,
+      "control_font_px": 28,
+      "sha256": "b5848a7998260f4e0fc8e0ce2f815bc1264c04861a2144942bef19173d9dacdf"
+    },
+    "dark": {
+      "path": "workflow-installed-history-dark.png",
+      "width": 1024,
+      "height": 1100,
+      "control_font_px": 28,
+      "sha256": "1650abb1a6dc16448c9f0b27830e875636627c1ea1a194160a9df03aa071e2eb"
+    }
+  },
+  "boundaries": [
+    "Workflow and export fixtures were created after backup restoration and did not themselves pass through process restart or backup restoration.",
+    "Workflow browser reload was verified; the two process restarts covered the separately seeded settings, drafts, task history and receipts.",
+    "All model execution and business writes used local mock implementations.",
+    "No release artifact was overwritten; candidate version remains 1.3.0."
+  ]
+}

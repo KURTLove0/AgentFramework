@@ -1,16 +1,15 @@
 """Codex app-server inference with actual public summary and answer deltas."""
 import json
-import os
-import queue
-import signal
+import sys
 import subprocess
 import tempfile
-import threading
 import time
 
 from .agent_extensions import allowed_mcp_call, codex_mcp_args
 from .contracts import canonical
 from .model_stream import LIMIT, PublicProgress
+from .processes import stop_process_group, finish_process
+from .process_pipes import ProcessPipes
 
 
 def generate(transport,prompt,schema,config,timeout,profile):
@@ -31,24 +30,20 @@ def generate(transport,prompt,schema,config,timeout,profile):
         try:process=subprocess.Popen(command,cwd=directory,stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE,text=True,start_new_session=True)
         except OSError as exc:raise ModelError('codex_unavailable') from exc
-        messages=queue.Queue(maxsize=64);stopped=threading.Event();deadline=time.monotonic()+timeout
+        pipes=None;deadline=time.monotonic()+timeout
         progress=PublicProgress('codex',getattr(transport,'progress',None) or (lambda data:None),profile)
         usage=None;answer='';calls=[];completed=False;thread_id=None;phases={};size=0;pending=''
-        def reader(pipe,label):
+        def check_execution():
+            if callable(getattr(transport,'should_cancel',None)) and transport.should_cancel():raise ModelError('task_cancelled')
+            if time.monotonic()>=deadline:raise ModelError('model_timeout')
+        def send(data):
             try:
-                while not stopped.is_set():
-                    line=pipe.readline(65536)
-                    if not line:break
-                    while not stopped.is_set():
-                        try:messages.put((label,line),timeout=.1);break
-                        except queue.Full:pass
-            finally:
-                if not stopped.is_set():
-                    try:messages.put((label,None),timeout=.2)
-                    except queue.Full:pass
-        readers=[threading.Thread(target=reader,args=(getattr(process,label),label),daemon=True) for label in ('stdout','stderr')]
-        for thread in readers:thread.start()
-        def send(data):process.stdin.write(canonical(data)+'\n');process.stdin.flush()
+                pipes.queue_input(canonical(data)+'\n')
+                while pipes.input:
+                    check_execution();pipes.poll(min(.05,max(0,deadline-time.monotonic())))
+                if pipes.input_error:raise pipes.input_error
+            except OSError as exc:raise ModelError('codex_input_failed') from exc
+            check_execution()
         def handle(message):
             nonlocal usage,answer,completed
             method=message.get('method');data=message.get('params',{})
@@ -93,22 +88,24 @@ def generate(transport,prompt,schema,config,timeout,profile):
         def receive():
             nonlocal size,pending
             while True:
-                if callable(getattr(transport,'should_cancel',None)) and transport.should_cancel():raise ModelError('task_cancelled')
-                if time.monotonic()>=deadline:raise ModelError('model_timeout')
-                try:label,line=messages.get(timeout=.05)
-                except queue.Empty:
-                    progress.flush()
-                    if process.poll() is not None:raise ModelError('codex_exit_'+str(process.returncode))
+                check_execution()
+                if '\n' in pending:
+                    line,pending=pending.split('\n',1)
+                else:
+                    event=pipes.receive(.05)
+                    if event is None:
+                        progress.flush()
+                        if process.poll() is not None:raise ModelError('codex_exit_'+str(process.returncode))
+                        continue
+                    label,chunk=event
+                    if chunk is None:
+                        if label=='stdout':raise ModelError('incomplete_model_turn')
+                        continue
+                    size+=len(chunk.encode())
+                    if size>LIMIT:raise ModelError('invalid_model_envelope')
+                    if label=='stderr':continue
+                    pending+=chunk
                     continue
-                if line is None:
-                    if label=='stdout':raise ModelError('incomplete_model_turn')
-                    continue
-                size+=len(line.encode())
-                if size>LIMIT:raise ModelError('invalid_model_envelope')
-                if label=='stderr':continue
-                pending+=line
-                if '\n' not in pending:continue
-                line,pending=pending.split('\n',1)
                 try:value=json.loads(line)
                 except (ValueError,RecursionError) as exc:raise ModelError('invalid_model_envelope') from exc
                 if not isinstance(value,dict):raise ModelError('invalid_model_envelope')
@@ -120,6 +117,7 @@ def generate(transport,prompt,schema,config,timeout,profile):
                     if 'error' in message:raise ModelError('codex_request_rejected')
                     return message.get('result',{})
         try:
+            pipes=ProcessPipes(process)
             send({'id':1,'method':'initialize','params':{'clientInfo':{'name':'agent-framework-stream','version':'1.0.0'}}})
             response(1);send({'method':'initialized'})
             send({'id':2,'method':'thread/start','params':{'model':config.model,'cwd':directory,'approvalPolicy':'never',
@@ -133,11 +131,4 @@ def generate(transport,prompt,schema,config,timeout,profile):
             if usage is None:raise ModelError('invalid_model_usage')
             return answer,{'usage':usage,'model':config.model,'mcp_calls':calls}
         finally:
-            stopped.set()
-            if process.poll() is None:
-                try:os.killpg(process.pid,signal.SIGTERM)
-                except ProcessLookupError:pass
-                try:process.wait(timeout=1)
-                except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait(timeout=1)
-            for pipe in (process.stdin,process.stdout,process.stderr):pipe.close()
-            for thread in readers:thread.join(timeout=1)
+            finish_process(process,pipes,sys.exception(),stop=stop_process_group)

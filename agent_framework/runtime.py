@@ -8,7 +8,7 @@ from contextlib import nullcontext
 import threading
 import time
 
-from .contracts import AgentSpec, Decision, PolicyDenied, TERMINAL, TaskContract, ToolFailure, canonical, digest
+from .contracts import AgentSpec, Decision, LeaseBusy, PolicyDenied, TERMINAL, TaskContract, ToolFailure, canonical, digest
 from .gateway import Gateway
 from .llm import CodexConfig, LLMPlanner, ModelError
 from .mock_tools import MockSystem, SCENARIOS
@@ -67,6 +67,9 @@ def registry_snapshot(planner=None, agent_profile=None, domain_ref="change-asses
 class Runtime:
     def __init__(self, data_dir=".agent-data", planner=None, lease_seconds=10, tool_timeout=2):
         self.data_dir = Path(data_dir).resolve()
+        from .backups import restore_incomplete
+        if restore_incomplete(self.data_dir):
+            raise ValueError('数据恢复尚未完成，禁止启动此目录；请将备份重新恢复到新的目录')
         if lease_seconds <= tool_timeout:
             raise ValueError("lease duration must exceed the worker timeout")
         self.store = Store(self.data_dir / "runtime.sqlite3")
@@ -77,12 +80,23 @@ class Runtime:
         self._domain_mock = planner is None or type(planner) is MockPlanner
         self.lease_seconds = lease_seconds
         self._state_lock = threading.RLock()
+        self.execution_epoch = None
+        self._cancellation_cache={}
+
+    def cancellation_requested(self,state,*,force=False):
+        callback=getattr(self,'cancel_requested',None)
+        if callable(callback) and callback():return True
+        key=(state['tenant_id'],state['run_id']);cached=self._cancellation_cache.get(key);now=time.monotonic()
+        if force or not cached or now-cached[0]>.1:
+            request=self.store.cancellation(*key)
+            cached=(now,bool(request and request['pending']));self._cancellation_cache[key]=cached
+        return cached[1]
 
     @staticmethod
     def is_write(state, action):
         return resolve_capability(state['snapshot'], action['tool_ref'])['effect'] == 'WRITE'
 
-    def submit(self, task=None, scenario="normal", grant=True, agent_profile=None, run_id=None):
+    def submit(self, task=None, scenario="normal", grant=True, agent_profile=None, run_id=None, *, on_created=None):
         task = task or TaskContract()
         if agent_profile:
             from .agents import agent_ref
@@ -109,7 +123,7 @@ class Runtime:
         snapshot.pop('hash')
         snapshot['context_policy'] = Library(self.store).binding(task.to_dict(), snapshot['compiled_agent']['definition']['knowledge_spaces'], snapshot['compiled_agent']['definition']['standard_refs'])
         snapshot['hash'] = digest(snapshot)
-        return self.store.create(task, snapshot, scenario, grant=grant and task.execution_mode is None and scenario != "denied", run_id=run_id)
+        return self.store.create(task, snapshot, scenario, grant=grant and task.execution_mode is None and scenario != "denied", run_id=run_id,on_created=on_created)
 
     def checkpoint(self, state, lease, kind, data=None, **kwargs):
         with self._state_lock:
@@ -117,6 +131,8 @@ class Runtime:
 
     def cognize(self, state, lease, method):
         """Heartbeat while inference blocks; only the fenced runtime may apply its output."""
+        if state.get('cleanup_failure'):
+            raise ModelError(state.get('cleanup_model_error') or 'model_cleanup_failed')
         stopped, failures = threading.Event(), []
 
         def heartbeat():
@@ -128,10 +144,19 @@ class Runtime:
                     failures.append(exc)
                     return
 
+        def should_cancel():
+            # Abort even when the model produces no public events. Propagate the
+            # lease error itself: treating it as user cancellation could let a
+            # superseded worker request a stop against its replacement.
+            if failures:raise failures[0]
+            return self.cancellation_requested(state)
+
         def observe(kind, data):
             if failures:
                 raise failures[0]
             if kind == "model.requested":
+                if self.cancellation_requested(state,force=True):
+                    raise ModelError('task_cancelled')
                 if state.get("model_calls", 0) >= state["task"]["budget"].get("max_model_calls", 24):
                     raise ModelError("model_call_budget")
                 state["model_calls"] = state.get("model_calls", 0) + 1
@@ -139,6 +164,11 @@ class Runtime:
                 usage = data.get("usage", {})
                 tokens = sum(usage.get(k, 0) for k in ("input_tokens", "output_tokens") if type(usage.get(k, 0)) is int and usage.get(k, 0) >= 0)
                 state["model_tokens"] = state.get("model_tokens", 0) + tokens
+            if kind=='model.failed' and data.get('cleanup_failure'):
+                # Persist the cleanup hold with the first diagnostic. A crash
+                # before cognition_failed must not leave a retryable model call.
+                state['cleanup_failure']=data['cleanup_failure']
+                state['cleanup_model_error']=data['code']
             self.checkpoint(state, lease, kind, data)
             if state.get("model_tokens", 0) > state["task"]["budget"].get("max_model_tokens", 200000):
                 raise ModelError("model_token_budget")
@@ -160,11 +190,30 @@ class Runtime:
                     if any(s['enabled'] for s in (self.planner.agent_profile or {}).get('mcp_servers', [])):
                         raise ModelError('legacy_mcp_effect_unclassified')
                     self.planner.transport.governed_profile = proxy_profile
-                    self.planner.transport.should_cancel=getattr(self,'cancel_requested',None) if state['task'].get('execution_mode') in ('direct','conversation') else None
+                    self.planner.transport.should_cancel=should_cancel
                 from .context_builder import build, enrich_mock
-                context,manifest = build(self.store,state,method,self.context(state))
-                if manifest:
-                    with self._state_lock:self.store.save_context(state,lease,manifest)
+                context=self.context(state)
+                if isinstance(self.planner,LLMPlanner):
+                    def prepare_context(phase,previous,attempt):
+                        if failures:raise failures[0]
+                        if time.time()>=state['deadline']:raise ModelError('task_deadline')
+                        if state.get('model_calls',0)>=state['task']['budget'].get('max_model_calls',24):raise ModelError('model_call_budget')
+                        if state.get('model_tokens',0)>state['task']['budget'].get('max_model_tokens',200000):raise ModelError('model_token_budget')
+                        if self.cancellation_requested(state,force=True):
+                            raise ModelError('task_cancelled')
+                        with self._state_lock:self.store.renew(state,lease,self.lease_seconds)
+                        fresh,manifest=build(self.store,state,phase,self.context(state))
+                        if 'activated_skills' in previous:fresh['activated_skills']=previous['activated_skills']
+                        if manifest:
+                            manifest['model_attempt']=attempt;manifest.pop('hash');manifest['hash']=digest(manifest)
+                            fresh['context_manifest']['hash']=manifest['hash']
+                            with self._state_lock:self.store.save_context(state,lease,manifest)
+                        return fresh
+                    self.planner.prepare_context=prepare_context
+                else:
+                    context,manifest=build(self.store,state,method,context)
+                    if manifest:
+                        with self._state_lock:self.store.save_context(state,lease,manifest)
                 if state['snapshot'].get('agent_profile',{}).get('skill_packages'):
                     from .skill_context import prepare
                     context=prepare(self.planner,context,state['snapshot']['agent_profile'],
@@ -173,6 +222,7 @@ class Runtime:
                 if not isinstance(self.planner,LLMPlanner):result = enrich_mock(result,context,method)
             if failures:
                 raise failures[0]
+            if self.cancellation_requested(state,force=True):raise ModelError('task_cancelled')
             if time.time() >= state["deadline"]:
                 raise ModelError("task_deadline")
             with self._state_lock:
@@ -183,6 +233,7 @@ class Runtime:
             thread.join()
             if isinstance(self.planner, LLMPlanner):
                 self.planner.observer = None
+                self.planner.prepare_context = None
                 self.planner.transport.governed_profile = None
                 self.planner.transport.progress=None
                 self.planner.transport.should_cancel=None
@@ -191,13 +242,23 @@ class Runtime:
         from .contracts import LeaseLost
         if isinstance(exc, LeaseLost):
             raise exc
+        cleanup=getattr(exc,'cleanup_failure',None)
+        if cleanup:
+            state['cleanup_failure']=cleanup
+            state['cleanup_model_error']=exc.code if isinstance(exc,ModelError) else type(exc).__name__
+            self.checkpoint(state,lease,'model.cleanup_unconfirmed',cleanup)
+        # A transport or read can fail while its process is responding to stop.
+        # Honor the durable intent and use the same write drain as normal cancel.
+        if self.cancellation_requested(state,force=True):
+            self._cancel_owned(state,lease)
+            return
         from .knowledge import KnowledgeUnavailable
         if isinstance(exc,KnowledgeUnavailable):
             effects = any(self.is_write(state,a) and a['status'] in ('DISPATCHED','UNKNOWN','RECONCILING','OBSERVED') for a in self.store.actions(state))
             self.stop(state,lease,'NEEDS_REVIEW' if effects else 'WAITING_INPUT',str(exc))
             return
         has_effect = any(self.is_write(state, a) and a["status"] in ("DISPATCHED", "UNKNOWN", "RECONCILING", "OBSERVED") for a in self.store.actions(state))
-        code = exc.code if isinstance(exc, ModelError) else type(exc).__name__
+        code = state.get('cleanup_model_error') or (exc.code if isinstance(exc, ModelError) else type(exc).__name__)
         if code=='task_cancelled':
             self.stop(state,lease,'CANCELLED','任务已取消。')
             return
@@ -205,7 +266,37 @@ class Runtime:
         status = "NEEDS_REVIEW" if has_effect or code == "legacy_mcp_effect_unclassified" else "EXPIRED" if code in ("model_call_budget", "model_token_budget", "task_deadline") else "FAILED"
         self.stop(state, lease, status, "认知调用失败：" + code)
 
+    def restore_cleanup_failure(self,state):
+        """Recover older diagnostic-only checkpoints without replaying inference."""
+        if state.get('cleanup_failure') and state.get('cleanup_model_error'):return True
+        with self.store.connect() as db:
+            row=db.execute('''SELECT data FROM events WHERE tenant_id=? AND run_id=? AND kind='model.failed'
+                AND json_type(data,'$.cleanup_failure')='object' ORDER BY seq DESC LIMIT 1''',
+                (state['tenant_id'],state['run_id'])).fetchone()
+        diagnostic=json.loads(row['data']) if row else {}
+        failure=state.get('cleanup_failure') or diagnostic.get('cleanup_failure')
+        if not failure:return False
+        code=diagnostic.get('code') if diagnostic.get('cleanup_failure')==failure else None
+        state['cleanup_failure']=failure
+        state['cleanup_model_error']=code if isinstance(code,str) and code else 'model_cleanup_failed'
+        return True
+
+    def settle_cleanup_failure(self,state,lease):
+        """Finish an interrupted failure; only read back already-dispatched writes."""
+        self.checkpoint(state,lease,'model.cleanup_recovery_started',{'code':state['cleanup_model_error']})
+        pending=[a for a in self.store.actions(state) if self.is_write(state,a) and a['status'] in ('DISPATCHED','UNKNOWN','RECONCILING')]
+        for action in pending:
+            while action['status'] in ('DISPATCHED','UNKNOWN','RECONCILING'):
+                if self.cancellation_requested(state,force=True):self._cancel_owned(state,lease);return
+                self.store.renew(state,lease,self.lease_seconds)
+                if not self.charge(state,lease,reconciling=True):return
+                self.reconcile(state,lease,action)
+                if state['status'] in TERMINAL:return
+        if state['status']=='NEEDS_REVIEW':return
+        self.cognition_failed(state,lease,ModelError(state['cleanup_model_error']))
+
     def stop(self, state, lease, status, reason, action=None):
+        if state.get('cleanup_failure'):reason+='；本地模型进程清理未确认，请先检查运行环境。'
         state["status"], state["last_error"] = status, reason
         self.checkpoint(state, lease, "run." + status.lower(), {"reason": reason}, action=action)
 
@@ -413,7 +504,8 @@ class Runtime:
             return self.store.result(state['tenant_id'],state['run_id'])
         self.checkpoint(state,lease,'execution.summary',{'text':output['summary'],'source':'model' if isinstance(self.planner,LLMPlanner) else 'offline'})
         if output['kind']=='request_input':
-            self.stop(state,lease,'WAITING_INPUT',output['summary'])
+            if self.cancellation_requested(state,force=True):self.stop(state,lease,'CANCELLED','已按停止请求结束本轮，已有内容与运行记录保留。')
+            else:self.stop(state,lease,'WAITING_INPUT',output['summary'])
             return self.store.result(state['tenant_id'],state['run_id'])
         state['report']=output['result']
         checks=domain_for(state['snapshot']).task_checks(state,self.store.evidence(state),store=self.store)
@@ -421,7 +513,7 @@ class Runtime:
         evidence={'id':'result-'+digest([state['run_id'],state['report']])[:20],'source':'model.result',
                   'observed_at':time.time(),'data':state['report'],'content_hash':digest(state['report']),
                   'tenant_id':state['tenant_id'],'run_id':state['run_id']}
-        cancelled=callable(getattr(self,'cancel_requested',None)) and self.cancel_requested()
+        cancelled=self.cancellation_requested(state,force=True)
         state['status']='CANCELLED' if cancelled else 'SUCCEEDED' if all(c['passed'] for c in checks.values()) else 'NEEDS_REVIEW'
         state['last_error']='结果中的引用未通过来源核对，请查看运行记录。' if state['status']=='NEEDS_REVIEW' else None
         self.checkpoint(state,lease,'run.'+state['status'].lower(),{'summary':output['summary']},evidence=evidence,checks=checks)
@@ -429,12 +521,18 @@ class Runtime:
 
     def run(self, run_id, tenant="tenant-demo", pause_after=None):
         state = self.store.load(tenant, run_id)
-        if state["status"] in TERMINAL or (state["status"] == "WAITING_INPUT" and not state["snapshot"].get("context_policy") and not self.invalid_readback(state)):
+        cancellation=self.store.cancellation(tenant,run_id)
+        if cancellation and cancellation['pending']:
+            return self.store.result(tenant,run_id) if cancellation['error'] else self.cancel(run_id,tenant,requested=True)
+        if state["status"] in TERMINAL or (state["status"] == "WAITING_INPUT" and not state["snapshot"].get("context_policy") and not self.invalid_readback(state) and not self.restore_cleanup_failure(state)):
             return self.store.result(tenant, run_id)
-        lease = self.store.acquire(tenant, run_id, self.lease_seconds)
+        lease = self.store.acquire(tenant,run_id,self.lease_seconds,expected_epoch=self.execution_epoch) if self.execution_epoch is not None else self.store.acquire(tenant,run_id,self.lease_seconds)
+        if self.execution_epoch is not None:self.execution_epoch=lease[1]
         crashed, calls = False, 0
         try:
             state = self.store.load(tenant, run_id)
+            previous=state.pop('interruption',None)
+            if previous:self.checkpoint(state,lease,'worker.resumed',{'code':previous['code'],'previous_epoch':previous['epoch']})
             snapshot = dict(state["snapshot"])
             expected = snapshot.pop("hash")
             if digest(snapshot) != expected:
@@ -447,6 +545,9 @@ class Runtime:
             except (ValueError, PolicyDenied) as exc:
                 self.stop(state, lease, 'NEEDS_REVIEW', str(exc))
                 return self.store.result(tenant, run_id)
+            if self.restore_cleanup_failure(state):
+                self.settle_cleanup_failure(state,lease)
+                return self.store.result(tenant,run_id)
             descriptor = snapshot.get("planner")
             if descriptor:
                 restored = LLMPlanner.restore(descriptor)
@@ -501,6 +602,8 @@ class Runtime:
                     return self.store.result(tenant, run_id)
                 self.checkpoint(state, lease, "plan.created", {"plan": state["plan"]})
             while state["status"] not in TERMINAL | {"WAITING_AUTH", "WAITING_INPUT"}:
+                if self.cancellation_requested(state,force=True):
+                    self._cancel_owned(state,lease);break
                 self.store.renew(state, lease, self.lease_seconds)
                 if not self.charge(state, lease):
                     break
@@ -569,21 +672,30 @@ class Runtime:
             if not crashed:
                 self.store.release(state, lease)
 
-    def cancel(self, run_id, tenant="tenant-demo"):
+    def _cancel_owned(self,state,lease):
+        self.store.request_cancellation(state['tenant_id'],state['run_id'])
+        previous=state.pop('interruption',None)
+        if previous:self.checkpoint(state,lease,'worker.cancel_requested',{'code':previous['code'],'previous_epoch':previous['epoch']})
+        pending = [a for a in self.store.actions(state) if self.is_write(state, a) and a["status"] in ("DISPATCHED", "UNKNOWN", "RECONCILING")]
+        for action in pending:
+            while action["status"] in ("DISPATCHED", "UNKNOWN", "RECONCILING"):
+                self.store.renew(state, lease, self.lease_seconds)
+                if not self.charge(state, lease, reconciling=True):return
+                self.reconcile(state, lease, action)
+        if state["status"] != "NEEDS_REVIEW":self.stop(state,lease,'CANCELLED','已停止后续调度；已有内容与业务结果保留，未执行补偿')
+
+    def cancel(self, run_id, tenant="tenant-demo", *, requested=False):
         state = self.store.load(tenant, run_id)
+        if not requested:self.store.request_cancellation(tenant,run_id,retry=True)
         if state["status"] in TERMINAL:
-            return state
-        lease = self.store.acquire(tenant, run_id, self.lease_seconds)
+            return self.store.result(tenant,run_id)
+        try:lease = self.store.acquire(tenant,run_id,self.lease_seconds,expected_epoch=self.execution_epoch) if self.execution_epoch is not None else self.store.acquire(tenant,run_id,self.lease_seconds)
+        except LeaseBusy:return self.store.result(tenant,run_id)
+        if self.execution_epoch is not None:self.execution_epoch=lease[1]
         try:
-            pending = [a for a in self.store.actions(state) if self.is_write(state, a) and a["status"] in ("DISPATCHED", "UNKNOWN", "RECONCILING")]
-            for action in pending:
-                while action["status"] in ("DISPATCHED", "UNKNOWN", "RECONCILING"):
-                    self.store.renew(state, lease, self.lease_seconds)
-                    if not self.charge(state, lease, reconciling=True):
-                        return state
-                    self.reconcile(state, lease, action)
-            if state["status"] != "NEEDS_REVIEW":
-                self.stop(state, lease, "CANCELLED", "已停止后续调度；已创建草稿予以保留，未执行补偿")
-            return state
+            state=self.store.load(tenant,run_id)
+            self.restore_cleanup_failure(state)
+            self._cancel_owned(state,lease)
+            return self.store.result(tenant,run_id)
         finally:
             self.store.release(state, lease)

@@ -70,7 +70,7 @@ class WebTests(unittest.TestCase):
         self.assertEqual(len(d['external']['drafts']), 0)
         pending = [a for a in d['run']['actions'] if a['status'] == 'PREPARED']
         self.assertTrue(pending)
-        self.app.mutate(d['run']['run_id'], 'grant')
+        self.app.mutate(d['run']['run_id'], 'grant',{'proof':d['permissions']['grant_token']})
         self.assert_one_draft(self.wait(d['run']['run_id']))
 
     def test_tamper_and_unverifiable_stay_review(self):
@@ -144,7 +144,7 @@ class WebTests(unittest.TestCase):
         self.app.close()
         self.app=Application(self.tmp.name,lease_seconds=.5,tool_timeout=.2)
         self.assertEqual(self.app.task_draft()['draft']['goal'],'保留的模拟目标')
-        created=self.app.create({'start':False,'clear_draft':True})
+        created=self.app.create({'start':False,'clear_draft':True,'draft_revision':saved['revision']})
         self.assertEqual(created['run']['status'],'CREATED')
         self.assertIsNone(self.app.task_draft()['draft'])
 
@@ -230,7 +230,7 @@ class HTTPTests(unittest.TestCase):
         return result
 
     def test_static_session_and_download(self):
-        for path, mime in (('/', 'text/html'), ('/app.js', 'text/javascript'), ('/styles.css', 'text/css'), ('/ui_details.css', 'text/css')):
+        for path, mime in (('/', 'text/html'), ('/app.js', 'text/javascript'), ('/chat_draft.js', 'text/javascript'), ('/workflow_chat_request.js', 'text/javascript'), ('/workflow_control.js', 'text/javascript'), ('/run_inspector.js', 'text/javascript'), ('/run_history.js', 'text/javascript'), ('/attention.js', 'text/javascript'), ('/styles.css', 'text/css'), ('/ui_details.css', 'text/css'), ('/conversation_ui.css', 'text/css'), ('/task_search.js', 'text/javascript'), ('/task_search.css', 'text/css')):
             status, headers, body = self.request(path)
             self.assertEqual(status, 200)
             self.assertTrue(headers['Content-Type'].startswith(mime))
@@ -270,7 +270,8 @@ class HTTPTests(unittest.TestCase):
         status,_,body=self.request('/api/attention')
         self.assertEqual(status,200)
         self.assertEqual(json.loads(body)['counts']['total'],0)
-        self.assertEqual(self.request('/api/task-draft/discard','POST','{}')[0],200)
+        self.assertEqual(self.request('/api/task-draft/discard','POST','{}')[0],400)
+        self.assertEqual(self.request('/api/task-draft/discard','POST','{"revision":1}')[0],200)
         self.assertIsNone(self.app.task_draft()['draft'])
 
     def test_runtime_configuration_routes_and_task_selection(self):

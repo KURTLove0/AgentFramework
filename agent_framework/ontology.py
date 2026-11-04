@@ -38,11 +38,11 @@ def ontology_schema(context,operational=False):
     return shape
 
 
-def source_context(library,access,refs):
+def source_context(library,access,refs,*,db=None):
     if not isinstance(refs,list) or not 1<=len(refs)<=12 or any(not isinstance(r,str) for r in refs) or len(set(refs))!=len(refs):raise ValueError('请选择 1–12 个不同的已发布来源')
     sources=[];now=time.time()
     for ref in sorted(refs):
-        a=library.get(access,ref)
+        a=library.get(access,ref,db=db)
         if a['kind'] not in {'KNOWLEDGE','MEMORY','EXPERIENCE','CAPABILITY'} or a['status']!='PUBLISHED' or not a['effective_at']<=now<a['effective_until']:raise ValueError('本体来源必须是当前有效的已发布资料')
         sources.append({'ref':a['ref'],'content_hash':a['content_hash'],'kind':a['kind'],'title':a['title'],'content':a['content']})
     if len(canonical(sources).encode())>80000:raise ValueError('本体来源超过 80 KB，请减少选定资料')
@@ -126,11 +126,11 @@ def mock_ontology(context,operational=False):
     return result
 
 
-def sources_current(library,access,asset):
+def sources_current(library,access,asset,*,db=None):
     """Check the frozen source versions; later versions do not replace evidence."""
     try:
         sources=asset['provenance']['sources']
-        context=source_context(library,access,[s['ref'] for s in sources])
+        context=source_context(library,access,[s['ref'] for s in sources],db=db)
         expected={s['ref']:s['content_hash'] for s in sources}
         return all(expected[s['ref']]==s['content_hash'] for s in context['sources'])
     except (KeyError,ValueError,PolicyDenied):return False
@@ -148,9 +148,9 @@ def _intact(asset):
     return digest(body)==asset['content_hash']
 
 
-def ontology_state(library,access,asset):
+def ontology_state(library,access,asset,*,db=None):
     now=time.time();effective=asset['effective_at']<=now<asset['effective_until']
-    current=sources_current(library,access,asset);active=library.active_ontology_ref(access,asset['id'])
+    current=sources_current(library,access,asset,db=db);active=library.active_ontology_ref(access,asset['id'],db=db)
     integrity=_intact(asset)
     reason=('本体已撤回' if asset['status']=='WITHDRAWN' else '本体尚未发布' if asset['status']!='PUBLISHED' else
             '本体尚未生效' if now<asset['effective_at'] else '本体已过期' if not effective else
@@ -165,18 +165,25 @@ def activate(library,access,ref,data):
     asset=library.get(access,ref)
     if asset['kind']!='ONTOLOGY' or asset['owner']!=access.principal or 'curator' not in access.roles:raise PolicyDenied('只能启用本人管理的本体版本')
     with library.store.transaction() as db:
-        asset=library.get(access,ref)
-        state=ontology_state(library,access,asset)
+        library.assert_writable(db,access)
+        asset=library.get(access,ref,db=db)
+        state=ontology_state(library,access,asset,db=db)
         if state['active_ref']!=data['expected_active_ref']:raise ConfigConflict('生效版本已变化，请刷新后重试')
         if asset['status']!='PUBLISHED' or not state['effective'] or not state['sources_current']:raise PolicyDenied('仅有效、来源可访问的已发布版本可明确启用')
         validate_ontology(asset['content'],{s['ref'] for s in asset['provenance']['sources']})
         db.execute('INSERT OR REPLACE INTO ontology_activation VALUES(?,?,?)',(access.tenant,asset['id'],asset['version']))
         db.execute('INSERT INTO asset_events VALUES(?,?,?,?,?,?,?)',(access.tenant,asset['id'],asset['version'],time.time(),access.principal,'ontology.activated',canonical(data)))
-    return {**asset,**ontology_state(library,access,asset)}
+        return {**asset,**ontology_state(library,access,asset,db=db)}
 
 
 def revise(library,access,ref,data):
-    if not isinstance(data,dict) or set(data)!={'content'}:raise ValueError('修订需要完整的本体内容')
+    if not isinstance(data,dict) or set(data) not in ({'content'},{'content','request_id'}):raise ValueError('修订需要完整的本体内容')
+    data=deepcopy(data);request=identifier(data['request_id']) if 'request_id' in data else None
+    request_hash=digest({'operation':'ontology.revise','base_ref':ref,'content':data['content']})
+    if request:
+        with library.store.read_snapshot() as db:
+            library.assert_writable(db,access);receipt=library._save_receipt(db,access,request,request_hash)
+            if receipt:return receipt
     prior=library.get(access,ref)
     if prior['kind']!='ONTOLOGY' or prior['owner']!=access.principal or 'curator' not in access.roles:raise PolicyDenied('只能修订本人管理的本体')
     if not sources_current(library,access,prior):raise ConfigConflict('来源已撤回或变化，请基于当前资料重新生成')
@@ -184,12 +191,35 @@ def revise(library,access,ref,data):
     body={k:deepcopy(v) for k,v in prior.items() if k not in {'ref','id','version','kind','status','owner','tenant_id','project_id','environment','visibility','content_hash'}}
     body.update(content=data['content'],title=data['content']['name'],supersedes=prior['ref'],observed_at=time.time())
     with library.store.transaction() as db:
+        library.assert_writable(db,access)
+        if request:
+            receipt=library._save_receipt(db,access,request,request_hash)
+            if receipt:return receipt
         latest=db.execute('SELECT MAX(version) FROM asset_versions WHERE tenant=? AND id=?',(access.tenant,prior['id'])).fetchone()[0]
         if latest!=prior['version']:raise ConfigConflict('本体已有新版本，请加载最新版本')
-        if not sources_current(library,access,prior):raise ConfigConflict('来源已变化')
+        if not sources_current(library,access,prior,db=db):raise ConfigConflict('来源已变化')
         insert_asset(db,access,prior['id'],latest+1,'ONTOLOGY',body,visibility=prior['visibility'])
         db.execute('INSERT INTO asset_events VALUES(?,?,?,?,?,?,?)',(access.tenant,prior['id'],latest+1,time.time(),access.principal,'ontology.revised','{}'))
-    return library.get(access,prior['id']+'@'+str(latest+1))
+        asset=library.get(access,prior['id']+'@'+str(latest+1),db=db)
+        if request:
+            now=time.time()
+            db.execute('INSERT INTO asset_save_requests VALUES(?,?,?,?,?,?,?,?,?,?)',
+                       (access.tenant,access.project,access.environment,access.principal,request,request_hash,asset['id'],asset['version'],asset['content_hash'],now))
+            asset['save_receipt']={'request_id':request,'request_hash':request_hash,'ref':asset['ref'],'version':asset['version'],'content_hash':asset['content_hash'],'status':'DRAFT','at':now,'replayed':False}
+        return asset
+
+
+def save_status(library,access,request_id,base_ref):
+    """Read the original save and current version in one authorized snapshot."""
+    identifier(request_id)
+    with library.store.read_snapshot() as db:
+        library.assert_writable(db,access);base=library.get(access,base_ref,db=db)
+        if base['kind']!='ONTOLOGY' or base['owner']!=access.principal:raise PolicyDenied('只能核对本人修订的本体')
+        saved=library._save_receipt(db,access,request_id)
+        if saved and (saved['kind']!='ONTOLOGY' or saved['id']!=base['id'] or saved.get('supersedes')!=base_ref):raise ConfigConflict('保存编号属于其他内容，请核对原保存')
+        latest=db.execute('SELECT MAX(version) FROM asset_versions WHERE tenant=? AND id=?',(access.tenant,base['id'])).fetchone()[0]
+        current=library.get(access,base['id']+'@'+str(latest),db=db)
+        return {'request_id':request_id,'base_ref':base_ref,'state':'COMPLETE' if saved else 'MISSING','saved':saved,'latest':current}
 
 
 def expand(library,access,query,limit=12,max_hops=2,predicates=None):

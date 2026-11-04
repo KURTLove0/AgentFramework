@@ -4,7 +4,14 @@ const fs=require('node:fs'),assert=require('node:assert/strict'),{chromium}=requ
  async function rejectPending(name,form,dialog,field,endpoint,error){const before=await p.locator(field).inputValue();let release,posts=0;
   await p.route('**'+endpoint,async route=>{if(route.request().method()!=='POST')return route.continue();posts++;await new Promise(r=>release=r);return route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:'独立评审：模拟保存失败，请重试'})})});
   await p.locator(form+' [type=submit]').click();while(!release)await new Promise(r=>setTimeout(r,10));await H.settled(p);
-  const enabled=await p.locator(form).evaluate(f=>[...f.querySelectorAll('input,textarea,select,button')].filter(e=>e.getClientRects().length&&!e.disabled).map(e=>e.id||e.textContent.trim()));assert.deepEqual(enabled,[],name+' has enabled controls while pending');
+  const enabled=await p.locator(form).evaluate(f=>[...f.querySelectorAll('input,textarea,select,button')].filter(e=>e.getClientRects().length&&!e.disabled).map(e=>e.id||e.textContent.trim()));if(name==='workflow-chat'){
+   assert.deepEqual(enabled,['flow-chat-message']);await p.evaluate(selector=>document.querySelector(selector).requestSubmit(),form);assert.equal(posts,1);
+   await p.keyboard.press('Escape');assert(!await p.locator(dialog).isVisible());await p.evaluate(()=>openFlowChat());
+   const response=p.waitForResponse(r=>r.url().endsWith(endpoint)&&r.request().method()==='POST');release();await response;
+   await p.locator('#flow-chat-recovery').waitFor();assert.equal(await p.locator(field).inputValue(),before);assert(await p.locator(field).isEnabled());
+   records.push({name,enabled,posts,inputPreserved:true,recoveryAfterClose:true});console.log('PASS '+name);await p.unroute('**'+endpoint);await H.closeAll(p);return;
+  }
+  assert.deepEqual(enabled,[],name+' has enabled controls while pending');
   await p.evaluate(selector=>document.querySelector(selector).requestSubmit(),form);assert.equal(posts,1,name+' duplicate submission');await p.keyboard.press('Escape');assert(await p.locator(dialog).isVisible(),name+' escaped pending modal');release();await p.locator(error).waitFor();await p.waitForFunction(selector=>document.querySelector(selector).getAttribute('aria-busy')!=='true',form);assert.equal(await p.locator(field).inputValue(),before);assert(await p.locator(field).isEnabled(),name+' did not restore field');assert(await p.evaluate(selector=>document.activeElement===document.querySelector(selector)||document.querySelector(selector).contains(document.activeElement),error),name+' error focus missing');await p.unroute('**'+endpoint);records.push({name,enabled,posts,inputPreserved:true,escapeProtected:true,errorFocused:true});console.log('PASS '+name);await H.closeAll(p);
  }
  try{const w=await H.workspace(p,'独立评审：异步表单');const agent=await H.agent(p),flow=await H.workflow(p,agent.id);

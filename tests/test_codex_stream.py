@@ -60,5 +60,20 @@ class CodexStreamTests(unittest.TestCase):
                 self.generate('import time;time.sleep(10)',cancel=cancel,timeout=.12)
             self.assertLess(time.monotonic()-start,2);self.assertIsNotNone(self.process.poll())
 
+    def test_leader_exit_does_not_leave_a_child_holding_rpc_pipes_open(self):
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory(prefix='rpc-descendant-',dir='/private/tmp') as tmp:
+            ready=Path(tmp)/'ready'
+            # Install the stubborn child's handler before the leader exits.
+            # Without this handshake SIGTERM can kill it during Python startup,
+            # so the fixture never exercises the intended inherited-pipe case.
+            child="import signal,time;from pathlib import Path;signal.signal(signal.SIGTERM,signal.SIG_IGN);Path("+repr(str(ready))+").write_text('ready');time.sleep(3)"
+            script="import subprocess,sys,json,time;from pathlib import Path\nsubprocess.Popen([sys.executable,'-c',"+repr(child)+"])\nwhile not Path("+repr(str(ready))+").exists():time.sleep(.01)\nrequest=json.loads(sys.stdin.readline());print(json.dumps({'id':request['id'],'result':{}}),flush=True)"
+            start=time.monotonic()
+            with self.assertRaisesRegex(ModelError,'codex_exit_0'):self.generate(script,timeout=2)
+            self.assertLess(time.monotonic()-start,1.5);self.assertIsNotNone(self.process.poll())
+            self.assertTrue(all(pipe.closed for pipe in (self.process.stdin,self.process.stdout,self.process.stderr)))
+
 
 if __name__=='__main__':unittest.main()

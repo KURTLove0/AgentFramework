@@ -1,4 +1,5 @@
 """Episodic facts and experience candidates, archived with the fenced checkpoint."""
+import base64
 import json
 import time
 
@@ -48,15 +49,77 @@ def archive(db, state):
     insert_asset(db,Access.task(state['task']),'experience-'+run,1,'EXPERIENCE',body,'CANDIDATE','PRIVATE')
 
 
-def episodes(store, access, query='', limit=12):
+def episode_count(store,access,*,db=None):
+    with store.read_snapshot(db) as connection:
+        return connection.execute('SELECT COUNT(*) FROM episodic_memories WHERE tenant=? AND project=? AND environment=? AND principal=?',
+                                  (access.tenant,access.project,access.environment,access.principal)).fetchone()[0]
+
+
+def episodes(store, access, query='', limit=12, *, db=None):
     if not isinstance(query,str) or len(query)>2000 or type(limit) is not int or not 1<=limit<=50:raise ValueError('invalid memory query')
-    with store.connect() as db:
-        rows=db.execute('SELECT data FROM episodic_memories WHERE tenant=? AND project=? AND environment=? AND principal=? ORDER BY rowid DESC',
-                        (access.tenant,access.project,access.environment,access.principal)).fetchall()
     from .knowledge import tokens
-    terms=set(tokens(query));result=[]
-    for row in rows:
-        episode=json.loads(row[0])
-        if not terms or terms.intersection(tokens(episode['summary'])):result.append(episode)
-        if len(result)>=limit:break
-    return result
+    terms=set(tokens(query));scope='tenant=? AND project=? AND environment=? AND principal=?'
+    params=(access.tenant,access.project,access.environment,access.principal)
+    with store.read_snapshot(db) as connection:
+        if not terms:
+            rows=connection.execute('SELECT data FROM episodic_memories WHERE '+scope+' ORDER BY rowid DESC LIMIT ?',(*params,limit))
+            return [json.loads(row[0]) for row in rows]
+        selected=[]
+        summaries=connection.execute("SELECT rowid,json_extract(data,'$.summary') AS summary FROM episodic_memories WHERE "+scope+' ORDER BY rowid DESC',params)
+        for row in summaries:
+            if terms.intersection(tokens(row['summary'])):selected.append(row['rowid'])
+            if len(selected)>=limit:break
+        if not selected:return []
+        rows=connection.execute('SELECT data FROM episodic_memories WHERE '+scope+' AND rowid IN ('+','.join('?' for _ in selected)+') ORDER BY rowid DESC',(*params,*selected))
+        return [json.loads(row[0]) for row in rows]
+
+
+def page(store, access, query='', *, limit=50, cursor=None, db=None):
+    """Browse a private, insertion-ordered window without shifting on new archives."""
+    from .knowledge import tokens
+    from .structured import parse_json
+    if not isinstance(query,str) or len(query)>2000:raise ValueError('记忆检索内容须在 2000 字以内')
+    if type(limit) is not int:
+        if not isinstance(limit,str) or not limit.isascii() or not limit.isdigit() or len(limit)>2:raise ValueError('记忆分页大小须为 1–50')
+        limit=int(limit)
+    if not 1<=limit<=50:raise ValueError('记忆分页大小须为 1–50')
+    params=(access.tenant,access.project,access.environment,access.principal)
+    scope='tenant=? AND project=? AND environment=? AND principal=?'
+    signature=digest([*params,query,limit]);upper=before=None
+    if cursor is not None:
+        try:
+            if not isinstance(cursor,str) or not cursor or len(cursor)>2048:raise ValueError()
+            value=parse_json(base64.b64decode(cursor+'='*(-len(cursor)%4),altchars=b'-_',validate=True).decode('utf-8'))
+            if (not isinstance(value,dict) or set(value)!={'v','upper','before','query'}
+                    or type(value['v']) is not int or value['v']!=1 or value['query']!=signature
+                    or type(value['upper']) is not int or not 0<=value['upper']<9223372036854775807
+                    or type(value['before']) is not int or not 1<=value['before']<=value['upper']+1):raise ValueError()
+            upper,before=value['upper'],value['before']
+        except (ValueError,TypeError,UnicodeError,OverflowError):
+            raise ValueError('记忆分页位置无效或条件已变化，请从最新记录开始') from None
+    terms=set(tokens(query))
+    with store.read_snapshot(db) as connection:
+        if upper is None:
+            upper=connection.execute('SELECT COALESCE(MAX(rowid),0) FROM episodic_memories WHERE '+scope,params).fetchone()[0]
+            before=upper+1
+        total=connection.execute('SELECT COUNT(*) FROM episodic_memories WHERE '+scope+' AND rowid<=?',(*params,upper)).fetchone()[0]
+        newer=connection.execute('SELECT COUNT(*) FROM episodic_memories WHERE '+scope+' AND rowid>?',(*params,upper)).fetchone()[0]
+        if not terms:
+            filtered=total
+            offset=connection.execute('SELECT COUNT(*) FROM episodic_memories WHERE '+scope+' AND rowid<=? AND rowid>=?',(*params,upper,before)).fetchone()[0]
+            rows=connection.execute('SELECT rowid,data FROM episodic_memories WHERE '+scope+' AND rowid<=? AND rowid<? ORDER BY rowid DESC LIMIT ?',(*params,upper,before,limit)).fetchall()
+        else:
+            selected=[];filtered=offset=0
+            summaries=connection.execute("SELECT rowid,json_extract(data,'$.summary') AS summary FROM episodic_memories WHERE "+scope+' AND rowid<=? ORDER BY rowid DESC',(*params,upper))
+            for row in summaries:
+                if not terms.intersection(tokens(row['summary'])):continue
+                filtered+=1
+                if row['rowid']>=before:offset+=1
+                elif len(selected)<limit:selected.append(row['rowid'])
+            rows=connection.execute('SELECT rowid,data FROM episodic_memories WHERE '+scope+' AND rowid IN ('+','.join('?' for _ in selected)+') ORDER BY rowid DESC',(*params,*selected)).fetchall() if selected else []
+        items=[json.loads(row['data']) for row in rows]
+    def encode(position):
+        return base64.urlsafe_b64encode(canonical({'v':1,'upper':upper,'before':position,'query':signature}).encode()).decode().rstrip('=')
+    more=offset+len(items)<filtered
+    return {'episodes':items,'total':total,'filtered_total':filtered,'offset':offset,'newer_count':newer,'limit':limit,
+            'cursor':encode(before),'next_cursor':encode(rows[-1]['rowid']) if more and rows else None,'has_more':more}

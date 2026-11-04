@@ -1,0 +1,476 @@
+{
+  "date": "2026-11-04",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Freeze inline domain creation payload and workspace, lock the originating agent form, fence stale completion, retain failed input, and verify accepted-but-lost retries select the same domain before explicit agent save.",
+  "new_unit_tests": 6,
+  "new_interaction_scenarios": 1,
+  "baseline": {
+    "tests": 6,
+    "pass": 2,
+    "fail": 4,
+    "skipped": 0,
+    "cancelled": 0,
+    "duration_ms": 253.446708,
+    "log": {
+      "path": "/private/tmp/af-domain-create-baseline-20261104.log",
+      "sha256": "f6dcfa30d099eedae9057e7bed893f6b5532e262b01156e9cb7a73ff772ac6c9"
+    }
+  },
+  "baseline_sources": [
+    {
+      "path": "/private/tmp/af-domain-create-original-agent_domains.js",
+      "sha256": "c7d442cec480a60e9ca2b8b46d98465a8659c69412d1a50e31ff090dd3c29a0d"
+    },
+    {
+      "path": "/private/tmp/af-domain-create-original-agents.js",
+      "sha256": "3516074848ccf092dbd9f3e3d569901c1f0be65fb263c53f4c90f458a82d27d9"
+    }
+  ],
+  "frontend": {
+    "related": {
+      "tests": 40,
+      "pass": 40,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "duration_ms": 1019.56075,
+      "log": {
+        "path": "/private/tmp/af-domain-create-related-final-20261104.log",
+        "sha256": "3108f9e6da01d4c8e216607081af479a508b76eecc340316690f2074ff009d51"
+      }
+    },
+    "full": {
+      "tests": 1126,
+      "pass": 1126,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "duration_ms": 14177.591458,
+      "log": {
+        "path": "/private/tmp/af-domain-create-frontend-20261104.log",
+        "sha256": "c926a381042a1c8ebe4426515b393fa74f46b79d43fe53bab137a470ab507836"
+      }
+    }
+  },
+  "browser": {
+    "runner": {
+      "results": [
+        {
+          "suite": "agent-domain-creation",
+          "passed": true,
+          "exit_code": 0
+        },
+        {
+          "suite": "agent-opening",
+          "passed": true,
+          "exit_code": 0
+        },
+        {
+          "suite": "agent-drafts",
+          "passed": true,
+          "exit_code": 0
+        },
+        {
+          "suite": "agent-saves",
+          "passed": true,
+          "exit_code": 0
+        }
+      ]
+    },
+    "runner_evidence": {
+      "path": "/private/tmp/af-domain-create-browser-20261104/results.json",
+      "sha256": "d2a414a8d5e462c7be16c0d7431b2f5f4edcc41ebd8bf8ba62eb81cf4b2f1d68"
+    },
+    "runner_log": {
+      "path": "/private/tmp/af-domain-create-browser-20261104.log",
+      "sha256": "6600ac3f01909b45dd0aa6236498c9e878d2a8299a31581dcb608a5dd7113953"
+    },
+    "suites": {
+      "agent-domain-creation": {
+        "checks": [
+          "快捷创建锁定当前表单并显示等待，Escape、重复提交和替换编辑器不打断写入；503 后恢复编辑并保留原始字段",
+          "服务端已受理但响应丢失时保留原提交字段，明确重试选中同一领域 v1，领域数量仍为 1，智能体尚未保存",
+          "选中领域随草稿刷新恢复，明确保存后生成一个绑定该领域版本的智能体，指令保持一致"
+        ],
+        "layouts": 0,
+        "errors": [],
+        "evidence": {
+          "path": "/private/tmp/af-domain-create-browser-20261104/agent-domain-creation/results.json",
+          "sha256": "0a2d1a33f3173a351e7062185f021200a63a117bbd3deddbddcb8f4264fc47a4"
+        },
+        "log": {
+          "path": "/private/tmp/af-domain-create-browser-20261104/agent-domain-creation.log",
+          "sha256": "292f6d54303d5887d6880f1243b778e708f5904d973147e02d53a9d354e4e7db"
+        },
+        "result": {
+          "checks": [
+            "快捷创建锁定当前表单并显示等待，Escape、重复提交和替换编辑器不打断写入；503 后恢复编辑并保留原始字段",
+            "服务端已受理但响应丢失时保留原提交字段，明确重试选中同一领域 v1，领域数量仍为 1，智能体尚未保存",
+            "选中领域随草稿刷新恢复，明确保存后生成一个绑定该领域版本的智能体，指令保持一致"
+          ],
+          "errors": [],
+          "domainPosts": [
+            {
+              "name": "售后资料核对",
+              "description": "核对售后资料并给出建议",
+              "work_method": "先核对资料\n  再列出后续建议"
+            },
+            {
+              "name": "售后资料核对",
+              "description": "核对售后资料并给出建议",
+              "work_method": "先核对资料\n  再列出后续建议"
+            },
+            {
+              "name": "售后资料核对",
+              "description": "核对售后资料并给出建议",
+              "work_method": "先核对资料\n  再列出后续建议"
+            }
+          ],
+          "domain": "domain-a1f0f95dc9b64b5daee942de",
+          "domainRevision": 1,
+          "domainCount": 1,
+          "agent": "agent-3e2bdb5dc8e243b3",
+          "agentWrites": 1,
+          "realModelCalls": 0,
+          "locked": {
+            "busy": "true",
+            "enabled": []
+          }
+        }
+      },
+      "agent-opening": {
+        "checks": [
+          "等待时显示可取消的读取状态，Escape 立即释放入口，迟到成功不会打开编辑器",
+          "读取期间离开页面会取消打开，旧响应不会弹窗或改变当前页面",
+          "读取失败显示明确原因并支持键盘重试，不产生保存；浅深主题与两档字号共八组布局通过",
+          "新建智能体读取另一处已更新的默认值并准确保存，后续默认变更不会替换已保存智能体的独立配置",
+          "旧执行模板慢读取可关闭并立即打开另一份配置，迟到响应保留新窗口的职责和指令，不影响新的保存状态",
+          "模板读取失败可重试，等待期间修改职责则保留原配置并要求明确重试；随后保存独立通用副本，原智能体版本和指令保持不变",
+          "执行配置读取期间可用键盘保留草稿并关闭；存储失败保持窗口，重试成功后恢复原配置与职责，迟到成功和失败均不影响继续输入且无保存请求"
+        ],
+        "layouts": 8,
+        "errors": [],
+        "evidence": {
+          "path": "/private/tmp/af-domain-create-browser-20261104/agent-opening/results.json",
+          "sha256": "d2b9529b168eb64c127903bb71bc2f80053797b897a70d12dd52a3807b810997"
+        },
+        "log": {
+          "path": "/private/tmp/af-domain-create-browser-20261104/agent-opening.log",
+          "sha256": "b5bb144196225e20a07a53e6f142fd7af768692d9e43d6bbebdfbc300bc8307f"
+        }
+      },
+      "agent-drafts": {
+        "checks": [
+          "刷新恢复未填完的职责、原始 MCP JSON、不可用技能与工作指令，不发送保存请求",
+          "创建入口不会覆盖现有草稿，同标签页两个工作空间各自保留输入",
+          "浅深主题、四档桌面宽度和两倍文字的 16 组布局可用，保留关闭支持键盘并返回恢复入口",
+          "刷新后保留目录中已移除的模型与推理强度，提示重新选择，避免静默替换配置",
+          "保存已受理但响应丢失后，刷新保留原编号与后续输入；只读核对后明确更新同一智能体，成功清理草稿",
+          "未修改的新建、复制和已有配置均可明确保留，刷新后恢复原字段及版本；存储失败可重试，普通取消不留草稿，恢复不保存且原智能体不变",
+          "取消放弃保留副本，清理损坏副本不删除服务中的智能体",
+          "浏览器存储失败明确提示并保持编辑窗口，仍可主动保存到服务"
+        ],
+        "layouts": 16,
+        "errors": [],
+        "evidence": {
+          "path": "/private/tmp/af-domain-create-browser-20261104/agent-drafts/results.json",
+          "sha256": "3befb492ee49b1594bf870ce4486a1989702f80ec69c8ece15b8846db8917b78"
+        },
+        "log": {
+          "path": "/private/tmp/af-domain-create-browser-20261104/agent-drafts.log",
+          "sha256": "c70f5d780dfb6a925f96f29543427b634074524c1deafc4f61828f4bfb1eb120"
+        }
+      },
+      "agent-saves": {
+        "checks": [
+          "创建已提交但回执丢失后，原页重试复用同一回执与智能体，不产生副本",
+          "失败后继续编辑不会另建智能体，核对后的保存仍校验最新版本，冲突保留本页指令",
+          "回执确认前配置已归档时保留输入并显示真实状态，明确另存副本后原归档保持不变",
+          "未被接受的保存可在核对后继续原页重试，输入与保存意图保留"
+        ],
+        "layouts": 0,
+        "errors": [],
+        "evidence": {
+          "path": "/private/tmp/af-domain-create-browser-20261104/agent-saves/results.json",
+          "sha256": "4a022ddc7e24a62893f62cc05cc7c9afbea923ada0c64f3c0bf977e136fe3546"
+        },
+        "log": {
+          "path": "/private/tmp/af-domain-create-browser-20261104/agent-saves.log",
+          "sha256": "4592d79a5fe77ce031349c020cecad234a58f85c8ff0e54b5926a1655dd03593"
+        }
+      }
+    },
+    "screenshots": [
+      {
+        "path": "/private/tmp/af-domain-create-browser-20261104/agent-domain-creation/inline-domain-pending.png",
+        "sha256": "5b42676ddded54001bbb605057d8730b4a225ba8558c7fc9b6025649b791e929"
+      },
+      {
+        "path": "/private/tmp/af-domain-create-browser-20261104/agent-domain-creation/inline-domain-selected.png",
+        "sha256": "bb6b419c8ad15c2862994d12bf950484369550767202232900b32b614a116adb"
+      }
+    ]
+  },
+  "candidate": {
+    "bundle": {
+      "path": "/private/tmp/af-domain-create-source-candidate-20261104/agent-framework-1.3.0.tar.gz",
+      "sha256": "21002437bf6c1224ae0a8c1c349f7bc4f549f4b2d17fff52bdc99b7ccc4df909"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-domain-create-source-candidate-20261104/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "180378e6d7de6f37c7b81f00c1b3b825cfe7476598c5340aa87b08edb80c4fa5"
+    },
+    "build_log": {
+      "path": "/private/tmp/af-domain-create-build-20261104.log",
+      "sha256": "de86217096a0ee3fc06fbe711aa3563b02e74be0e0e21ae1a56bb2027851403a"
+    },
+    "package_check": {
+      "version": "1.3.0",
+      "application_files": 167,
+      "matches_saved_source": true,
+      "bundle_sha256": "21002437bf6c1224ae0a8c1c349f7bc4f549f4b2d17fff52bdc99b7ccc4df909",
+      "wheel_sha256": "180378e6d7de6f37c7b81f00c1b3b825cfe7476598c5340aa87b08edb80c4fa5",
+      "changed_application_files": [
+        "agent_framework/webui/agent_domains.js",
+        "agent_framework/webui/agents.js"
+      ],
+      "source_files": {
+        "agent_framework/__init__.py": "83a72ef49a7e486f8afb18d453fb302d36e0266aaa3ffc25fc9c0548bcca55c9",
+        "agent_framework/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+        "agent_framework/adapters.py": "c43895c9d8d310fa8a450f919ea48a5bfd8505bbde8aa8d6a2a90b8d88a3604a",
+        "agent_framework/agent_domains.py": "d7a080fb1cc7dffe0fbdc996d23b983bc9ab0d7c0a483262bbcf7719daf2e79d",
+        "agent_framework/agent_evaluation.py": "5d7c79ec818bd43f1b1e40ef7b5614e8a1454b1e1beb5f5fbbd6f1a56b41b51d",
+        "agent_framework/agent_extensions.py": "80517684761d8d05c2d76a31cd990194f664017a9d7be091c18176fbd15fdf96",
+        "agent_framework/agents.py": "f30fd4c52fbfbe217d97bed65529818e93c92ec9affa135ff28185560029d958",
+        "agent_framework/assistant_evaluate.py": "dc6a1ced9a2e37f773daa309b2c3b4e0ded378751d84d51ab773320bbb5d1780",
+        "agent_framework/backups.py": "7556a251fce49e897988f47a2a64f442213e57a284f1b7e10e57c2c29fc91007",
+        "agent_framework/cli.py": "856dde3b5e0f45a4896ca783b9abd3bbdeb07116d61f1f4ea38f38d96a5f2874",
+        "agent_framework/codex_stream.py": "9fdfc09c596113d4c5c6aa43a128f92966d56799461c7d4589ce79a6e347bd0b",
+        "agent_framework/context_builder.py": "6c34122acebb3ae53e9a0c33e5e20b48406892206afc47c35c514627dbef8580",
+        "agent_framework/contracts.py": "e0c83c4784e06e78a655040a3b49ec4775cc3fc2518a6865c6deceace888fbd4",
+        "agent_framework/conversation_execution.py": "11aecbbfde88035f0d6fc7b8ab862acbd5d41da52affa18f0eae686a351fa5ed",
+        "agent_framework/conversation_history.py": "d7c3551f20c145baf38bda65611def579b1e14ebee5b6c5c1dd080a971d9c528",
+        "agent_framework/conversation_projection.py": "25648c97b45eb8dd41e791d535d3370995012adac68022e307701a96a495c80c",
+        "agent_framework/definitions.py": "16b689919e38d7cbc3047b7ef3e1bdd3911563f07eb6e220bc52c98b6047ffe8",
+        "agent_framework/domains/__init__.py": "93fbe1f965bfb446f59909ed81ee4593519de4a15b8e24de3ef95af4d61a04fd",
+        "agent_framework/domains/change_assessment.py": "40c36b5faa4e86d28341d54e7f41e361aa9976625060f90d98d9998fd965a4eb",
+        "agent_framework/domains/change_verifier.py": "406976d65ac5cd27045bb753b7a8d19e30377023767e38bf5c2aa3ee2b560c38",
+        "agent_framework/domains/general_assistant.py": "17e1a3b5079393fb8017bbe81df252b4978fd2eaa7db8d28dc0f9a3a25c1c81a",
+        "agent_framework/domains/knowledge_answer.py": "18cfa6114d4635e59b0a61deaf24a9e25dc4795df0ddae07c149af777eebaf7b",
+        "agent_framework/evaluate.py": "f25d3f1fc4d55ec88cc3c1103c57ec4a4adc44bcf24e14edb2f4e5cd8e635f5b",
+        "agent_framework/evaluation_catalog.py": "8a626f5211819d67e6615b4d1bd2df4554377211b302005bf8c438d353399dc9",
+        "agent_framework/evaluation_contract.py": "27e8752c03228f76766ae9b411e0e7b5d3d78bb67cc75f03a3997b7a000a4686",
+        "agent_framework/experience.py": "4c015e9199baf2a0487b30ac0f4afa38ad9de0813fe94f9d5b37b0c0673f80e1",
+        "agent_framework/exports.py": "71381ba8c6f473a4dbb0f4f9d053762275bb3ef50701f825cc77f2da44d9ca01",
+        "agent_framework/file_durability.py": "b993329df09f4d61acfc285a0db355ae0219c334d91afaaecf7d6d2623f81d1e",
+        "agent_framework/gateway.py": "d311679639c0aa7710d3bba477fe2c4c17fb5c57ede5aae7cb6b4770627f5f47",
+        "agent_framework/history_dependencies.py": "75b8c1aead8c005188ef58339e8d1a19326dd2198fb726243f0a4150a7821bab",
+        "agent_framework/inspection.py": "83f5d04d43916a1153d50df49b4754d95520f2ed2dbd924f6b2bc03c0f807810",
+        "agent_framework/knowledge.py": "04428e90d99500554afbaaf6aee03539f8030d97f4cf3ae98691ef72b7350bb6",
+        "agent_framework/knowledge_hub.py": "3edfaffeddbe430133fd1877389477e0cfb0322cbff598abc2c9b8ffbbe248ac",
+        "agent_framework/learning.py": "548699227edd223df1b3d9016d0e3f4c8ff0844b49253782c6f8a9474ee47d3f",
+        "agent_framework/learning_generation.py": "109bfdb390660dd3d617d13e752417b8a99ef9cb6381892f2df56e8092640cb6",
+        "agent_framework/learning_writes.py": "1a6996f966806909b0537f64fc5bb390fa4d4d9adcbc2fb33db9eb6f8e90ab66",
+        "agent_framework/library_cli.py": "5ced6c3153ad05099bb0a69d11de272840dfa9240787ee0993b88e4cb915fb39",
+        "agent_framework/llm.py": "9f8433717aa77458a3ebed104cc1a9790e5903385026021a703db775bf7a0b43",
+        "agent_framework/memory.py": "ac612c5f9e1d5b986036bfdf622e0182145fffae666b9120baa4e22899b3b9c6",
+        "agent_framework/mock_tools.py": "be121aad25a03f17e5cdf0792f22e58ec50e29c35b45ce52d15942f2d8b345b2",
+        "agent_framework/model_catalog.py": "9cd93e8b32a0d646ff5499eb002175bbbf8bbb51c2c3892e71e620af92f22792",
+        "agent_framework/model_discovery.py": "76ef9f9d44c0a2fec915270850ab7902733b493d0a53267b7c229ab0b3c81e18",
+        "agent_framework/model_execution.py": "5818a5d29b8957bc71580447118c8b02ea9a2c985c2c88d1ebffeb939dcf0e28",
+        "agent_framework/model_output_stream.py": "c3fd51556c43d8fbcdf1748cba4dd7517ec2beb73f52026b1d94a4180585146f",
+        "agent_framework/model_stream.py": "a60d13be2ec827d39bf719b0f4449506cc954cd0cb10f1352eea8c7ea5b29733",
+        "agent_framework/ontology.py": "26e0887632d11c83b53fcf93d186b1370bfd76aae9a26bc829bd04b61e0921a1",
+        "agent_framework/ontology_evidence.py": "923a4df5f689700c9e44caf0dc7d22609521a667248b56d12e7faa002a48e165",
+        "agent_framework/ontology_model.py": "447dd0df02e47c121d6e9de10138663da486070599f0449c1bafac6231c6909f",
+        "agent_framework/p0_evaluate.py": "0f07368b3fcaedb6db4d9a2d545cbcd5e5a338eebfb06640faf2d42fe02d32d2",
+        "agent_framework/planner.py": "87dae7afd294e8c562afc74ae1ec94eb8bf29901e3b9e2f732380e5c5743bb8e",
+        "agent_framework/process_pipes.py": "06995f21334e58286bfe6393b5c022f92518db5d960fa7141970faee36f332b4",
+        "agent_framework/processes.py": "07d43b478737d5371c83734f02efd2061abf843c50c136c6238b2dbb84625f68",
+        "agent_framework/proposal_capacity.py": "34c71eb436274d7528835278349191cf2d8b550e6cb37f7b94cc87cb4816d869",
+        "agent_framework/read_proxy.py": "ab3cd84d410ed99faefb78561fb408f7be01b0e22bc36c93d9542e1499d92e37",
+        "agent_framework/resources/agent.json": "be29f8965003f180b1bf921b48e51f6fe5ae904ca3e979c57e0fdc09fd185fa2",
+        "agent_framework/resources/capability.json": "7a9959fde2e84368eae66010679afc1f688da8180c40c3b6cfb39850502b647f",
+        "agent_framework/resources/change-assessment.md": "a7595e6c0f4bba6542f31e34a1f1013bd2b171cd96d7f3bc1054c07e94d61c19",
+        "agent_framework/resources/skills/release-risk-analysis/SKILL.md": "c66db09fcc43d38b69825ebbf95a9e6d4e1e5b54aa24d928520bfa624a49cd10",
+        "agent_framework/resources/skills/release-risk-analysis/references/method.md": "3cb3030e3aa67e72e906cf05d6e7c6173948001f04c87701ee0a4b78753e8597",
+        "agent_framework/resources/skills/source-grounded-answer/SKILL.md": "4c37235e1c254fbad27ffee31119402191d6ff2945e1ce5860fb6af45d5dddc3",
+        "agent_framework/resources/skills/source-grounded-answer/references/grounding.md": "ff951a1feb19885e26dba2664aacb76c2214236ccdefe712558e5c7a04c51e0a",
+        "agent_framework/run_catalog.py": "029488681d9894bd001d69b8e970a610b83889e8924146a16d6cf5585962acf5",
+        "agent_framework/runtime.py": "26f8876b9e5d007bf931bf254feb3f5478f1e360ae150a42564ac8db9935a975",
+        "agent_framework/runtime_config.py": "cd86146d9caf1c4f74f93596f29702ee2ed55c2e3c92e156da2ee17e90090592",
+        "agent_framework/runtime_detection.py": "65c0c208f3d002e1ce4ef576d3da34b0cf12e851ec2a0ae29471b0ac42e17977",
+        "agent_framework/skill_context.py": "6b830a4a13eb37ea0aeb61bce3f9013890100f6b0d1f76b0b7db04b904d7bc98",
+        "agent_framework/skills.py": "8fa52bf3193f753b9a08b834892f0563de687847ae7f46fd271e6a40ed3393b3",
+        "agent_framework/source_exposure.py": "837340626f555cbc7d5fbb0e0fadfe05848ada9f58368ca4b40f1ce28a51d007",
+        "agent_framework/store.py": "98edc0e1e72c2b79b74d540a4c09b689f1c0d7c879c210aeb1d512d9c55c4c92",
+        "agent_framework/stream_capacity.py": "f9f7e92692d7acec923c61bb4f566144ceb718e39633e70e493157b461583ba3",
+        "agent_framework/structured.py": "c1fcf856717fab2168404a13e1f9c59e88e470d5ed8ac53b44dfd69ab4c9919a",
+        "agent_framework/task_archive.py": "db91561cd8c25fe02c8d6f7d66b94264573451af9c6da9ba01b9fbafcb288b08",
+        "agent_framework/task_cleanup.py": "40c1d577bbff9638575dee86ad4f169b7bc0fe035f9f5433bbcaef7c8e247a32",
+        "agent_framework/task_conversations.py": "b06d4576ce437fe1664febfc4b44dd1f7272592328f63f56979374faf384d3b4",
+        "agent_framework/task_exports.py": "e68e1ea90e1f0588ec3de573f84a0f8b269e96fbfab26a33f6dc44893084f38d",
+        "agent_framework/task_favorites.py": "45b1183fa9df86e034b561334cd3b6a851deca51c3a3bc43fce6a7fa5e99a9f0",
+        "agent_framework/task_message_edits.py": "1c7b1b33d4aaa5b7f08cad0dd8395a0c8dcaec972964d360f2822b0d7f295ed0",
+        "agent_framework/task_message_history.py": "08adf33e5af9e18ab20868ce0725fd515fd11ad1b8109d5a146e484f9974cafd",
+        "agent_framework/task_names.py": "29b085518246890e9ef4fce8f1424aae5220cf99197eb30dadb6975298365187",
+        "agent_framework/task_permissions.py": "28e5ed5d29707698db90efc1f43c11ca6b943f7c15687d8177b13a02aa1a4953",
+        "agent_framework/task_relations.py": "19f694eb93647d08c1c0f1a9a747e6f9bd322f018a94dfa14505c57a202b1277",
+        "agent_framework/task_text_search.py": "8b9e1c4187f562ef16e4f12700efba49f2b10fdbd2ae5f5161c646d4fba08a2d",
+        "agent_framework/verifier.py": "840834bfa62b9e6d512f87330d8534154d8d0225e7d7d8d9bce38bb369aa756e",
+        "agent_framework/web.py": "3e930614c28b516f054b7e27e7154f9c7cd3cce226da1652967bf4d1150bd56a",
+        "agent_framework/webui/MARKDOWN-IT-LICENSE.txt": "869b3482be5073dd75775389288dd1c53fa7698c3c817f262822bafaf978c89c",
+        "agent_framework/webui/OFL-SpaceGrotesk.txt": "564ce565c371c5e5bbf286006565a7c9aa55a9f56e7ca58d56e05d649dd61a72",
+        "agent_framework/webui/agent_domains.js": "2484cfe7dbb1e16c285e83b63fb3c63acce0a128f582ee9955efa4ba355f5533",
+        "agent_framework/webui/agent_draft.js": "6c30187e5ee342a17ef71c1d38aac57656eba5cceb708b21425b6044503a2f23",
+        "agent_framework/webui/agent_experience.js": "bf4a084b40de81d168722bf17be4ca6a5126ddfbeaa907ba851f0f5a7ca387b5",
+        "agent_framework/webui/agents.css": "240cce6c3a5b8b589e94a5f5fd46b5c07ea440ce4ed856a15b33cdcb2d2b68f8",
+        "agent_framework/webui/agents.js": "00ba682f45cae576af6cbe73308a9d42f9a2774b560546c29c9b1860004aef51",
+        "agent_framework/webui/app.js": "ec9ce89838d355968434900a1ed7487a2a4118bae40a6633ec7a07df4251068a",
+        "agent_framework/webui/appearance.js": "51558291ac3e59858080ce94ce75ee1c67e9d7950b19f1e10cc51e6bf02e9a52",
+        "agent_framework/webui/asset_draft.js": "15c88eb117651cda99e8f8b12f65f2d8537a1081e302ffae9635b3562b9692c9",
+        "agent_framework/webui/asset_save.js": "e760436245698150b8c7fe2267d129bbde6f47791550d92b63ec2258ff636a85",
+        "agent_framework/webui/attention.js": "fee6e0bd90e014cd378970ce4b67c2c02a6950f6b7e23bfbc2486161750871c5",
+        "agent_framework/webui/chat_draft.js": "9b7723c3260a13cc2bba8a09ed0e525d243cf5622561f7409a9e16cd25a0a5f5",
+        "agent_framework/webui/commands.js": "d285da271974cd58501f99506fcfe87419b46e4a96c348858c68b2196ba4ce76",
+        "agent_framework/webui/conversation_ui.css": "9bc15652717af93f5529367287afcc3004df3ab277d1764dd477e113f297ea3f",
+        "agent_framework/webui/domains.css": "779c8ebf1553c0dd9a831c2ef96393f99bec5cc1ff8d6b0f8f0376c1c3637fa8",
+        "agent_framework/webui/domains.js": "2dd07987952c801157ed06e4f898c16e32b6e126dcfeaf55b955de506f08dca0",
+        "agent_framework/webui/evaluation_alerts.js": "a47128c1eb1da2de693159dae1e6e750af3f1c328d3a54208efce8d3ee40caf9",
+        "agent_framework/webui/evaluation_history.js": "2c8970270f5c4b35533c2f29de6971057cac5bdf39136dd97b380d2ac5ed4a1a",
+        "agent_framework/webui/form_controls.css": "2162e2947091afd56bf32d4a448ee1044f09928e8b7b4f77ff14c226127ec27f",
+        "agent_framework/webui/form_controls.js": "affc8408b33472e72638e7505639f9fe6ba4606f277cc360f4acd232469c7e0b",
+        "agent_framework/webui/hig.css": "cfd8ea9fc12888ac6ac0d15064b5c094c3c0af0c2cbf5bc921f70db6f4d823a0",
+        "agent_framework/webui/index.html": "6efce74d5014d7732e8f0b4e10442c2ba87b6148d446bb489d012f2752d29719",
+        "agent_framework/webui/journeys.js": "a2c895775b3ac4ae89eec95e89423713f2c15502501cb1bca0a067be1b9129ee",
+        "agent_framework/webui/learning.js": "041c78b81982b1cacb4d6a995802d25a5053a373e95b15ffa3ee4ff6c3d37bf0",
+        "agent_framework/webui/learning_request.js": "f1b6dab1c5bba0aad506e431ae9bde5c81461a7c494f30c2495127b41e48fb8f",
+        "agent_framework/webui/learning_review.js": "c17900e928918d877538725ffb5cc3ce8858c9685b52ce7f3acd074c6256bb2f",
+        "agent_framework/webui/library.js": "cdef5765e77f36fcc6abd8db251b18b590be71f9d31374aca741ba6fee5606a6",
+        "agent_framework/webui/markdown-it-15.0.3.min.js": "758061fd114ea825a7864ad8a4aeffa4ab97233b1ff9924f51e9bb635c0776f2",
+        "agent_framework/webui/ontology_evidence.js": "3d64e15b0036dd5b5f928e2d103289e998ea05a86616be32f80387781dc97783",
+        "agent_framework/webui/ontology_model.js": "2512c41c82589dc965580eefe7ec71848775f344827728341d40e593a53da57e",
+        "agent_framework/webui/ontology_save.js": "b3161448a89f23d2b0e203db4838e262858b94ff9c4f3928dafbe323dfb745d6",
+        "agent_framework/webui/operations.css": "735f629a161f9ea71ea18a3a02ad532d3a432773928cbace8dd63bbbebb1d7fb",
+        "agent_framework/webui/operations.js": "a3db84ee4372b301bba041a9de6a4b00ee77e5e7c329488f37e8191726a106ae",
+        "agent_framework/webui/reply_markdown.css": "3e28ef69921d787b669c47e07d4904449e61b85c736dd37ed7e6031cace43714",
+        "agent_framework/webui/reply_markdown.js": "1846ecea7fc27c18558b2691dedba633a9ed401236bf83afb1a3567a207938fd",
+        "agent_framework/webui/roles.js": "be6eac69ddaddff8665a09e5716e4c0bc25a20837bfeeeae11add3a52e5c0883",
+        "agent_framework/webui/run_action.js": "ba9405afff7f77c3e119dea1fbafd5595af51689a61ad02bd2c99a9633eb1eef",
+        "agent_framework/webui/run_history.js": "f7ecd91f460e4d582e320e6b55bf1a1d5fdde35f4be16a33bf5c7db220ecf6c2",
+        "agent_framework/webui/run_inspector.js": "7a48571db3333c483764c51714775d3ed2724778c4948aa76f8bd4bbb03c19de",
+        "agent_framework/webui/run_view.css": "611406c74d54facab212e160d25d09be03c4853e7266a47ce4e88237aeced680",
+        "agent_framework/webui/run_view.js": "e6422b56eed9d6e7e991a9fd134a1fe209f3d587b69cdb9205a5315c07ddb8d5",
+        "agent_framework/webui/runtime_settings.js": "6aef2bb8d2f35c93ffade632f39de617f3846973c13ec58d3b532a9d6c62dbdc",
+        "agent_framework/webui/skill_save.js": "4bf1b3c3320afd94c02b3c10a72b1e2ecd79d15d8c6ab72c56e69ab7cc2dfa86",
+        "agent_framework/webui/skills.js": "be9b1ab67da4cea3906f08a98d382232046ed3d28957ed434d17443577f93780",
+        "agent_framework/webui/space-grotesk.ttf": "acad6de1fc93436f5c0f1f4137751ef04f1aea3063e7036535970ffcfbd79f72",
+        "agent_framework/webui/styles.css": "37680f7a3f4101d4bb131aebc3c3f1239e8672c7a942c0b313e7391b29811f77",
+        "agent_framework/webui/task_archive.js": "e4a9e453a724ed60d14cb5b6833537b68ac988069c30999aa35883287594664a",
+        "agent_framework/webui/task_cleanup.js": "441ca3b66b788cb211dc21ba1292fc75b11f9b5a7097514fd4dbc9819a7aea45",
+        "agent_framework/webui/task_conversation.css": "cadf2cbacfd7975f7530c649dafb2e68feaba3345d1176a53d027fc600be4d06",
+        "agent_framework/webui/task_conversation.js": "79245c9c8c9847c51f24580e20cece2d7ba3754eaa9ab83b85767c403d6d5a75",
+        "agent_framework/webui/task_export.js": "73add475e9c80350e1c4221c250a2931807c1e16b300a51bf3f1b1fcbba82117",
+        "agent_framework/webui/task_favorites.js": "e598666a5a8d675e4d079485a03932e787246bd83bbc52a0856db296f220e1a2",
+        "agent_framework/webui/task_message.js": "2b24d9a3176f6590ceaefd5c9cb629e32e6c558d1832791447b5e9bcb94da78f",
+        "agent_framework/webui/task_message_edit.js": "bf037fc8977377245b80848ef931b04978c13aca943e4965668a53a03f8eb11f",
+        "agent_framework/webui/task_message_history.js": "704efc124018bf6c30efe94503d9d96dd3bbabfeb1c4c7da2cef06d7825bd14d",
+        "agent_framework/webui/task_names.js": "4a06b3962820e8e43f4e262495f13db49b3af8dd4fccc0805d5518971584bda5",
+        "agent_framework/webui/task_relations.js": "ba094d537c4a6f38de05a009c4d0fd6a20cf9677acb619a2bd6ceddf78125a9a",
+        "agent_framework/webui/task_reply_copy.js": "8e58f8289b0b277b5d53c909406a05a3fb5b7a0eb81e49c04b81b98290f5b03d",
+        "agent_framework/webui/task_reuse.js": "2483e4974697cb94dc52172f72728f250fcc627126dee9b455e11ef2974aa18c",
+        "agent_framework/webui/task_search.css": "71392ea2f912ed0f52decc28d3ada9a3e70ae856f760bf9574d7f1a288f671f4",
+        "agent_framework/webui/task_search.js": "ac5d405fb7dedca680364e3757505c0b6c4fc02e2d774154ba6e12fc629f46fc",
+        "agent_framework/webui/task_submission.js": "9502ccce5413af3b48c1873436d8816928d3c9bb055e87c011d57b3b3d9e00dd",
+        "agent_framework/webui/task_text_search.js": "972db59ec49ff465298d863d8814362a017ea820cf841bd6db665e005e38bb5f",
+        "agent_framework/webui/ui_details.css": "445745eed71473830ab0501c02d606ef27f10bbdffc7cb3a62bea65f101bc675",
+        "agent_framework/webui/workflow_chat_request.js": "4db0fa6bca3bd6da4eab50038e557b509296b79b934fe68c9d1deec0995328c5",
+        "agent_framework/webui/workflow_designer.js": "f08c4f56bb6f02e718e8ae4269ea4bc6fa1d13cb32c907dee38c6a40fe97132c",
+        "agent_framework/webui/workflow_draft.js": "01ccc196dc89e1337181a60c9596bd1d64c57680d05f9e45351056fbc401abe4",
+        "agent_framework/webui/workflow_grant.js": "bdbf77aaa18204d15c455a133dbd469afb7acbfd8389e07ed0b3df4632fa55a2",
+        "agent_framework/webui/workflow_save.js": "0eef3c0c9d055d72dd73e084758c1881b49d440dea646414a058ca9790163d3f",
+        "agent_framework/webui/workflow_start.js": "814da8b3bca65397003693a474ce486fc55aa06dc87f6c1515d32ed28521a075",
+        "agent_framework/webui/workflows.js": "c42f8d13b4ee1ca7ad9413cc4f96fbe22f70c6eab010d334b4c8fde5b211ca17",
+        "agent_framework/webui/workspaces.js": "e64a3401d34240cd3785e06e9ede74e6d7ec7f46c5a74d88c19a95dbc9f7d2ae",
+        "agent_framework/worker.py": "604b82876569f3fa24ad1cfb7ffc34d5a805ce3ff80acb991d14374bba6abab8",
+        "agent_framework/workflow_agents.py": "050af8e76c22d1244ec92e7eefe19e22eb424888cff618fb2e05c9288814e7ad",
+        "agent_framework/workflow_catalog.py": "a5a6bcacfc607034771aa7e0c4e34658b3aa85a325880790caf3c78354b60a40",
+        "agent_framework/workflow_chat.py": "ad0b42516768e3d554105439b98b3a463a1964fee78ce28c9afcf0a4efbee13b",
+        "agent_framework/workflow_chat_requests.py": "bc43342de8c19ab2e52a578b11ec3cf5380dbcbd1464c53a4947872cd65fb4a8",
+        "agent_framework/workflow_evaluate.py": "fbc56293a68fc457a8347fc6254034aedb4c92ae8b92b95f4d1ac2200cb0a888",
+        "agent_framework/workflow_rules.py": "e9dac3813849425fbb9665ad5cbb540648c1dd3d2d96f252c8ad5dcea199bb59",
+        "agent_framework/workflows.py": "12fc9b997a0a853cc8b6559e8602635741b33589700fbc7eb28cfd25e91fe61a",
+        "agent_framework/workspace_scheduler.py": "9568d9dba9ddc57591469f02dc88404eb26e0c0566aea3ff62692505bee304e9",
+        "agent_framework/workspaces.py": "7acae0e7dd420e317e1ef58324b7196ade332c9e01599b582456726234ba0154"
+      },
+      "companion_files": {
+        "scripts/install.sh": "94d7e77d3f56ca6f17916c4b2d793e2298b425a5e5a75efd969ec34a8a7a2a1d",
+        "scripts/start.sh": "70a6931ef2d9993f9764c14593a3cec3b7bf9c8c50ed80082f8b850766c4bc54",
+        "docs/release/INSTALL.md": "faae93499a0346f956f99e698127158471d4aa555fd1fc812285aa0894f58d48",
+        "docs/release/RELEASE_NOTES.md": "ff3ef4b5f861b8f8a81f9b5091cf153950204149d515c66234dd115d2b7f74db"
+      }
+    },
+    "package_check_evidence": {
+      "path": "/private/tmp/af-domain-create-package-check-20261104.json",
+      "sha256": "3d873c90113f448c14dc09ce04d60804ed4f2932c0814084dbae18d3bc378c85"
+    },
+    "published": false
+  },
+  "backend": {
+    "source_changed": false,
+    "targeted_tests": 15,
+    "duration_seconds": 1.477,
+    "log": {
+      "path": "/private/tmp/af-domain-create-backend-20261104.log",
+      "sha256": "b6cf5f0f42f12a309b751b4993d3fa190521fecf962ed39b50ac508f62f836ca"
+    },
+    "full_repeated": false
+  },
+  "installed": {
+    "repeated": false,
+    "reason": "Two existing JavaScript resources changed; packaged application and companion files were checked against saved source."
+  },
+  "source_files": {
+    "agent_framework/webui/agent_domains.js": "2484cfe7dbb1e16c285e83b63fb3c63acce0a128f582ee9955efa4ba355f5533",
+    "agent_framework/webui/agents.js": "00ba682f45cae576af6cbe73308a9d42f9a2774b560546c29c9b1860004aef51",
+    "agent_framework/webui/form_controls.js": "affc8408b33472e72638e7505639f9fe6ba4606f277cc360f4acd232469c7e0b",
+    "agent_framework/agent_domains.py": "d7a080fb1cc7dffe0fbdc996d23b983bc9ab0d7c0a483262bbcf7719daf2e79d",
+    "tests/test_agent_domain_creation.js": "7d944fdbd86c08f0e9219fb8f42ca971a42aebef8470337ac894ed8d248985d5",
+    "tests/test_agent_interactions.js": "8a73f13a6e444b22d6cb2d2ce04df859ef4f421b4c0581f80c2ca98393c1761b",
+    "tests/test_agent_template_interactions.js": "97ead8ee88f0d0a2aae1d5bb0737cc3618c23ac05f8503a2d34090fe64980682",
+    "tests/test_agent_draft_interactions.js": "2687c60519a3a99b6a79be01e9f2bf0eb743f731b4c8e2dfc5d78e5d1812df07",
+    "tests/test_agent_domains.py": "bbd43fe53c5c5b16a31541b120237c8b1f156a33e6978ece3e20e227d8cce4a2",
+    "tests/verify_agent_domain_creation.cjs": "b449dbc90d1e823898cde78b82817655dd99f62ca0d360a5cb8070f5089429eb",
+    "tests/verify_agent_opening.cjs": "d3ee9dc7c796ea6a48b0e9c4cb38f739d12a82bfe0f49070e63b98072a634db2",
+    "tests/verify_agent_drafts.cjs": "444561ef48d0da72926a6e1f8417e3bce81645eda5cd140edb25209d8c9245d3",
+    "tests/verify_agent_saves.cjs": "7517d86074c7012e48dcef37bf3147cc40313b536d6f9c7257de17d3d3d826c4",
+    "tests/serve_project_review_fixture.py": "dddbd230fe87e39a8e28f71998597c645b1fbab0fb9da46aca882f561de23a2f",
+    "tests/serve_runtime_settings_fixture.py": "e14136b483ed6a77239bd4fffb16e292b087ace80387afe00a8c47170cb4ed98",
+    "scripts/run_browser_tests.py": "d45f51e0ca61a1deff23eb02f5de480f352c66e41f6872ea86bb7fb81a7fca8d",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "scripts/verify_release.py": "d80c4e7d838d99914aae3be302d343ffec8c67eee1177efff2beb0ec081c62ee",
+    "scripts/install.sh": "94d7e77d3f56ca6f17916c4b2d793e2298b425a5e5a75efd969ec34a8a7a2a1d",
+    "scripts/start.sh": "70a6931ef2d9993f9764c14593a3cec3b7bf9c8c50ed80082f8b850766c4bc54",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "d971ceca53aed512af87b339e3f779f218eddce5afef1113f32c61502a60bf21",
+    "design.md": "5cbf7e03034e88a67472ed32b7f43d208fd7f2bf469325217fc404c091b85d6a",
+    "docs/reliability/agent-domain-creation.md": "d1b5a6d26179dd671b8d201defff10e759adf150348f8f93ce5fca2951101664",
+    "docs/release/INSTALL.md": "faae93499a0346f956f99e698127158471d4aa555fd1fc812285aa0894f58d48",
+    "docs/release/RELEASE_NOTES.md": "ff3ef4b5f861b8f8a81f9b5091cf153950204149d515c66234dd115d2b7f74db"
+  },
+  "historical_artifacts": {
+    "agent-framework-1.1.0.tar.gz": "78fda0c93a5ce6b091183a0e47c6120f1a3f18cbeec1251cd2d33b54326894bc",
+    "agent-framework-1.2.0.tar.gz": "73f6c5f15aa5546418810f1404a49a91ba87fcad5a43f01aa27d0c38556af7be",
+    "agent-framework-1.3.0.tar.gz": "32004453ac6355f6fd272edac325d743a21a1f0467ae9048ec27799bb0efbe08",
+    "bounded_agent_mvp-1.1.0-py3-none-any.whl": "50334ab2c04575706f49ead28d3fa7a731f5a726636e152b8a68142d093ec869",
+    "bounded_agent_mvp-1.2.0-py3-none-any.whl": "43cf6789ab121b46500648b222daf637187033db2fbb1148dcad53a3dc71259a",
+    "bounded_agent_mvp-1.3.0-py3-none-any.whl": "ada65ea8468cb675263ddbab69c452de1654612258fb4e574747fb184aaaf83a"
+  },
+  "limits": [
+    "Domain creation saves an independent record before the later explicit agent save.",
+    "Existing deduplication applies to identical normalized content; changed or archived domains retain existing conflicts.",
+    "No automatic retry or cancellation of an accepted domain write.",
+    "No full backend rerun or fresh installation in this increment; isolated synthetic browser data and no real model calls."
+  ]
+}

@@ -83,6 +83,27 @@ class TaskConversationTests(unittest.TestCase):
         self.assertEqual(history[-1]['content'],'会议安排在什么时候？')
         self.assertIn('周五下午三点',detail['conversation']['turns'][1]['reply']['content'])
         self.assertEqual(self.app.runs()['counts']['total'],1)
+
+    def test_answered_question_does_not_permanently_block_workspace_deletion(self):
+        from tests.test_workspaces import space
+        self.app.workspaces.save(space())
+        identity=self.app.workspace['id'];root=self.start('先追问时间');self.wait(root,status='WAITING_INPUT')
+        self.assertFalse(self.app.workspaces.deletion_check(identity)['can_delete'])
+        self.send(root,'周五下午三点');self.wait(root,2,'SUCCEEDED')
+        self.assertEqual(self.app.runtime().store.load(self.app.tenant,root)['status'],'WAITING_INPUT')
+        self.assertTrue(self.app.workspaces.deletion_check(identity)['can_delete'])
+        self.assertTrue(self.app.workspaces.lifecycle(identity,1,True)['deleted'])
+
+    def test_cancelling_queued_answer_leaves_question_unanswered(self):
+        from tests.test_workspaces import space
+        self.app.workspaces.save(space());identity=self.app.workspace['id']
+        root=self.start('先追问时间');self.wait(root,status='WAITING_INPUT')
+        # Keep the background dispatcher outside this explicitly queued window.
+        with self.app.lock,patch.object(self.service,'dispatch',return_value=False):
+            detail=self.send(root,'周五下午三点')
+            self.service.cancel_queued(root,2,{'revision':detail['conversation']['revision']})
+        check=self.app.workspaces.deletion_check(identity)
+        self.assertFalse(check['can_delete']);self.assertEqual(check['blockers'][0]['kind'],'tasks')
     def test_pending_messages_are_ordered_and_cancellation_never_sends_them(self):
         self.fixture.release.clear();root=self.start();self.assertTrue(self.fixture.entered.wait(2))
         self.send(root,'第二轮要求','queued-second');third=self.send(root,'不应发送给模型','queued-third')
@@ -135,9 +156,15 @@ class TaskConversationTests(unittest.TestCase):
         self.assertEqual(len(self.app.detail(root)['conversation']['turns']),1)
     def test_queued_turn_and_history_resume_after_application_restart(self):
         root=self.start();self.wait(root)
-        with patch.object(self.app,'schedule',side_effect=APIError(429,'queue full')):pending=self.send(root,'重启后继续处理')
-        self.assertEqual(pending['conversation']['turns'][1]['status'],'CREATED')
-        self.app.close();self.app=Application(self.temp.name,lease_seconds=3,tool_timeout=.2);self.service=TaskConversations(self.app)
+        # The first worker's completion handoff may already hold a shallow
+        # workspace copy when wait() observes its inactive job. Patching only
+        # this instance leaves that copy able to dispatch before shutdown.
+        # Keep scheduling unavailable for both views through the entire close.
+        with patch.object(Application,'schedule',side_effect=APIError(429,'queue full')):
+            pending=self.send(root,'重启后继续处理')
+            self.assertEqual(pending['conversation']['turns'][1]['status'],'CREATED')
+            self.app.close()
+        self.app=Application(self.temp.name,lease_seconds=3,tool_timeout=.2);self.service=TaskConversations(self.app)
         self.app.start_conversation_dispatcher();detail=self.wait(root,2,'SUCCEEDED')
         self.assertEqual(len(detail['conversation']['turns']),2)
         self.assertIn('会议定在周五下午三点',canonical(self.fixture.requests[-1]))

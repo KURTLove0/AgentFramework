@@ -13,6 +13,11 @@ from agent_framework.web import Application,WebServer
 
 def generate(transport,prompt,schema,config,timeout):
     request=json.loads(prompt[prompt.index('\n{')+1:])
+    if 'designer' in request:
+        drafts=[dict(id='draft-agent-fixture-analysis',name='资料分析员',description='分析输入，整理事实与待确认事项',prompt='结合任务输入与上游证据，区分事实和推断，交付分析要点。'),
+                dict(id='draft-agent-fixture-report',name='报告撰写员',description='根据上游分析形成报告',prompt='依据已验收的分析结果撰写报告，保留证据与限制。')]
+        nodes=[dict(id='node-'+str(i+1),name=d['name'],agent_id=d['id'],agent_revision=1,goal=d['description'],depends_on=[] if i==0 else ['node-1']) for i,d in enumerate(drafts)]
+        return json.dumps(dict(reply='已自主设计分析与报告智能体，请审查后保存。',workflow=dict(name='自主协作流程',description=request['message'],nodes=nodes,agent_drafts=drafts)),ensure_ascii=False),{}
     if request['phase']!='execute':raise AssertionError('Normal tasks must execute directly')
     task=request['context']['task'];goal=task['goal'];history=task.get('conversation_context') or {}
     progress=PublicProgress('fixture',getattr(transport,'progress',None) or (lambda data:None))
@@ -25,6 +30,9 @@ def generate(transport,prompt,schema,config,timeout):
         value={'kind':'request_input','summary':'会议安排在什么时候？','result':None}
     else:
         content='已完成：'+goal
+        if '对话版式验收' in goal or '整理会议纪要' in goal:
+            content='## 会议纪要\n\n本次讨论已整理为以下三项行动，便于继续确认与跟进。\n\n### 已确认事项\n\n- **产品方案**：周五前完成第一版，标明已确认内容与待讨论事项。\n- **客户沟通**：先确认问题，再发送简洁的进展说明。\n- **后续安排**：明确负责人、交付时间和完成标准。\n\n### 建议下一步\n\n1. 由各负责人补充尚未确认的信息。\n2. 核对时间安排后，再形成最终版本。\n\n```json\n{"status": "待确认", "owner": "待补充"}\n```\n\n你可以继续补充要求，我会在同一任务中更新这份纪要。'
+        if '细节排版验收' in goal:content='# 执行摘要\n\n'+content+'\n\n### 补充说明\n\n请核对尚未确认的信息。'
         if history.get('messages'):content+='\n已有对话：'+str(len(history['messages']))+' 条。'
         for item in task.get('workflow_inputs',[]):content+='\n上游结果：'+item['artifact']['content']
         value={'kind':'result','summary':'已按目标整理本轮结果。','result':{'title':'本轮结果','content':content,'citations':[],'limitations':[]}}

@@ -1,0 +1,87 @@
+{
+  "recorded_on": "2026-10-30",
+  "scope": "Current source; historical project registration at startup; no release rebuild or publishing",
+  "runtime": {
+    "python": "3.14.3",
+    "sqlite": "3.51.3",
+    "platform": "Darwin",
+    "machine": "arm64"
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests -q",
+    "tests": 675,
+    "seconds": 138.922,
+    "passed": true,
+    "new_registration_checks": 10,
+    "workspace_related_checks": 54,
+    "log": "/private/tmp/af-workspace-registration-reviewed-backend-20261030.log",
+    "audit_preservation": "Nonempty audit records are included in the final seed and asserted unchanged"
+  },
+  "ui": {
+    "command": "npm test",
+    "tests": 193,
+    "failed": 0,
+    "passed": true,
+    "log": "/private/tmp/af-workspace-registration-ui-20261030.log"
+  },
+  "browser": {
+    "command": ".venv/bin/python scripts/run_browser_tests.py --suite workspace-history --suite workspace-sync --suite workspace-safety --output /private/tmp/af-workspace-registration-browser-20261030",
+    "suites": [
+      {
+        "suite": "workspace-history",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "workspace-sync",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "workspace-safety",
+        "passed": true,
+        "exit_code": 0
+      }
+    ],
+    "history": {
+      "checks": [
+        "历史 CLI 项目在启动时可达，重启保留用户名称与修订号，默认空间和另一个历史空间继续保持删除状态",
+        "从实际历史列表打开原任务，项目隔离、已完成结果和冻结快照保持一致",
+        "显式恢复历史空间并从卡片进入后，仅显示对应项目的原任务，冻结结果保持可读"
+      ],
+      "errors": [],
+      "projects": 2,
+      "runs": 4
+    },
+    "reviewed_screenshot": "historical-project-runs.png"
+  },
+  "benchmark": {
+    "file": "registration-benchmark-20261030.json",
+    "command": ".venv/bin/python scripts/benchmark_workspace_registration.py --compare",
+    "matching_directories": true,
+    "history_unchanged": true,
+    "warm_median_speedup": 4.563,
+    "boundary_command": ".venv/bin/python scripts/benchmark_workspace_registration.py --runs 1 --projects 1 --body-bytes 1 --repeats 1 --compare",
+    "boundary_passed": true
+  },
+  "limits": [
+    "SQLite still scans current-tenant JSON to project project identifiers; this is not constant-time startup",
+    "Tracemalloc counts Python allocations, excluding SQLite/native allocations and process RSS",
+    "Measurements cover registry initialization with tracing, not complete app startup, disk-cold IO or model discovery",
+    "Invalid unregistered project identifiers fail registration; this is not a complete historical integrity validator",
+    "Benchmarks use synthetic registration records; browser coverage independently executes genuine mock CLI tasks"
+  ],
+  "sha256": {
+    "agent_framework/workspaces.py": "c4c76af5e22743958efe5cc9821a4fc2015e2e64deb7791acb2bea7c88c03e52",
+    "agent_framework/webui/workspaces.js": "bd33fb29c798e9e12b0d45cad510bab8441f29b0e9d1061466d50decb0152421",
+    "agent_framework/webui/app.js": "73551cc27c8a8f1f5baa3df10a0ac82828ca5977d06bc07744e305a3ceca36a2",
+    "scripts/benchmark_workspace_registration.py": "085aa8718066a36b04813d4040b100bc1e46e02ef27095a39dd97dca75837bab",
+    "tests/test_workspace_registration.py": "59ecdf77efc910dde83c6ea1af06fd3ce123ea09d12a7e083955e934930c51e8",
+    "tests/serve_workspace_history_fixture.py": "d89956777438b6e605f49a439314fb52cef5be239475982df8104440cc291fb2",
+    "tests/verify_workspace_history.cjs": "93975c87bef4d70000f7c122516f0c196994d01d8815f8c01dfce16f3f15f236",
+    "scripts/run_browser_tests.py": "94c1e155572ae0fa134f8c30b94d2c18bb2d0e6643b4b8995dc85e4359520734",
+    "docs/workspaces/registration-performance.md": "470bf46f1a99a99799b393fdb0f5e25f4deb84dd5b067a323065fee516f11a93",
+    "docs/workspaces/registration-benchmark-20261030.json": "8ecb96d2781da0d2986b4cf9e67b4b5537228443e5627e01ba466d8c5e31b319",
+    "docs/workspaces/historical-project-runs.png": "a92969b39caefe4c4c8eb51462ab854c44642c6d2cff2fac0155e21c7091bbcb"
+  }
+}

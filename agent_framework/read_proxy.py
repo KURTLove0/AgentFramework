@@ -22,6 +22,10 @@ from .gateway import Gateway
 from .store import Store
 
 
+class NativeReadCancelled(PolicyDenied):
+    """A durable stop prevents more native work or delivery of its late result."""
+
+
 class ReadCapabilityProxy:
     def __init__(self, data_dir):
         self.data_dir = Path(data_dir).resolve()
@@ -42,7 +46,7 @@ class ReadCapabilityProxy:
             db.execute('INSERT INTO read_sessions VALUES(?,?,0)', (digest(token), canonical(data)))
         try:
             yield {'mcp_servers': [{'name': 'governed', 'transport': 'stdio', 'command': sys.executable,
-                    'args': [str(Path(__file__).resolve()), str(self.data_dir), token],
+                    'args': ['-I', str(Path(__file__).resolve()), str(self.data_dir), token],
                     'env_vars': [], 'url': '', 'bearer_env': '',
                     'tools': [NATIVE_NAMES[ref] for ref in refs], 'enabled': bool(refs)}]}
         finally:
@@ -61,6 +65,9 @@ class ReadCapabilityProxy:
         state = json.loads(run['state'])
         if state['status'] in TERMINAL or state['deadline'] <= time.time() or state['snapshot']['hash'] != scope['snapshot_hash']:
             raise PolicyDenied('native read session no longer applies')
+        cancellation=self.store.cancellation(scope['tenant_id'],scope['run_id'],db=db)
+        if cancellation and cancellation['pending']:
+            raise NativeReadCancelled('native read stopped by saved cancellation request')
         return scope, state
 
     def tools(self, token):
@@ -106,7 +113,7 @@ class ReadCapabilityProxy:
                 # Keep this derived observation local: the parent owns checkpoints.
                 discovered=set()
                 for manifest in self.store.contexts(state['tenant_id'],state['run_id']):
-                    if (manifest['phase']=='execute' and manifest['scope']['project_id']==state['task']['project_id']
+                    if (manifest['phase'] in ('execute','skill_activate','skill_resources') and manifest['scope']['project_id']==state['task']['project_id']
                         and digest({k:v for k,v in manifest.items() if k!='hash'})==manifest['hash']):
                         discovered.update(a['ref'] for a in manifest['selected'] if a['kind']=='KNOWLEDGE')
                 for item in self.store.evidence(state).values():

@@ -2,12 +2,45 @@
 import json
 import os
 import tempfile
+import threading
 import time
 from unittest.mock import patch
+from urllib.parse import urlsplit
 from agent_framework.llm import CodexTransport,CursorTransport,QoderTransport,ModelError
 from agent_framework.model_catalog import ModelCatalog
 from agent_framework.model_stream import PublicProgress
-from agent_framework.web import Application,WebServer
+from agent_framework.web import Application,Handler,WebServer
+
+stream_hold=threading.Event()
+stream_held=threading.Event()
+stream_fault=False
+stream_generation=0
+
+
+class StreamFixtureHandler(Handler):
+    def stream_task(self,app,identity):
+        self.stream_generation=stream_generation
+        if stream_fault:return self.reply(503,{'error':'Synthetic stream outage','code':'stream_capacity_full'})
+        return super().stream_task(app,identity)
+
+    def _stream_peer_closed(self):
+        return self.stream_generation!=stream_generation or super()._stream_peer_closed()
+
+    def dispatch(self,mutation=False):
+        global stream_fault,stream_generation
+        path=urlsplit(self.path).path
+        if path not in ('/__test/stream-hold','/__test/stream-release','/__test/stream-note','/__test/stream-state','/__test/stream-fault'):return super().dispatch(mutation)
+        self.guard(mutation)
+        if path.endswith('stream-state') and not mutation:return self.reply(200,{'held':stream_held.is_set(),'streams':self.server.application.stream_capacity.active,'stream_limit':self.server.application.stream_capacity.limit,'rejecting':stream_fault})
+        if not mutation:return self.reply(405,{'error':'POST required'})
+        data=self.read_json_body(path);app=self.server.application
+        if path.endswith('stream-hold'):stream_hold.set()
+        elif path.endswith('stream-release'):stream_hold.clear()
+        elif path.endswith('stream-fault'):stream_fault=bool(data['enabled']);stream_generation+=1
+        elif path.endswith('stream-note'):
+            state=app.control_store.load(app.tenant,data['run_id']);app.assert_run_access(state)
+            with app.control_store.transaction() as db:app.control_store.event(db,app.tenant,state['run_id'],'model.progress',{'kind':'status','text':data.get('text','已完成额外的公开校验')})
+        return self.reply(200,{'ok':True})
 
 
 def generate(transport,prompt,schema,config,timeout):
@@ -17,6 +50,11 @@ def generate(transport,prompt,schema,config,timeout):
         deadline=time.monotonic()+seconds
         while time.monotonic()<deadline:
             if callable(getattr(transport,'should_cancel',None)) and transport.should_cancel():raise ModelError('task_cancelled')
+            while stream_hold.is_set():
+                stream_held.set()
+                if callable(getattr(transport,'should_cancel',None)) and transport.should_cancel():raise ModelError('task_cancelled')
+                time.sleep(.02)
+            stream_held.clear()
             time.sleep(.02)
     p.feed({'type':'turn.started'})
     p.feed({'type':'stream_event','event':{'type':'content_block_delta','delta':{'type':'thinking_delta','thinking':'PRIVATE_STREAM_SENTINEL'}}})
@@ -37,7 +75,7 @@ if __name__=='__main__':
     root=tempfile.mkdtemp(prefix='task-stream-browser-',dir='/private/tmp')
     catalog={'models':[{'id':'stream-fixture','name':'Stream fixture','efforts':['low'],'default_effort':'low'}],'source':'isolated fixture','cached':False}
     with patch.object(ModelCatalog,'list',return_value=catalog),patch.object(CodexTransport,'generate',generate),patch.object(CursorTransport,'generate',generate),patch.object(QoderTransport,'generate',generate):
-        app=Application(root);server=WebServer(('127.0.0.1',int(os.environ.get('TASK_STREAM_PORT','8799'))),app);print('Fixture data: '+root,flush=True)
+        app=Application(root);server=WebServer(('127.0.0.1',int(os.environ.get('TASK_STREAM_PORT','8799'))),app);server.RequestHandlerClass=StreamFixtureHandler;print('Fixture data: '+root,flush=True)
         try:server.serve_forever()
         except KeyboardInterrupt:pass
-        finally:server.server_close();app.close()
+        finally:stream_hold.clear();server.server_close();app.close()

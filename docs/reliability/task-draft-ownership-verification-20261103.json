@@ -1,0 +1,271 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Protect independent server drafts from autosave and cleanup in every fresh task entry, preserving recovered submission ownership and conflict state before deciding whether a draft needs explicit adoption.",
+  "prior_behavior": "Fresh ordinary and agent-specific entries read a saved revision and then could overwrite that separate draft on first input. Reuse entry cleared pending-submission draft warnings after restoration.",
+  "frontend": {
+    "new_tests": 9,
+    "full": {
+      "command": "npm test",
+      "tests": 1035,
+      "passed": 1035,
+      "failed": 0,
+      "duration_ms": 12256.334,
+      "log": {
+        "path": "/private/tmp/af-task-draft-ownership-frontend-full.log",
+        "sha256": "d55ff5c1f2f3e85e99aa7cb73d4793d607bd0acb498e9dee02b8c5176ca10ae8"
+      }
+    },
+    "related": {
+      "tests": 65,
+      "passed": 65,
+      "failed": 0,
+      "duration_ms": 843.818292,
+      "log": {
+        "path": "/private/tmp/af-task-draft-ownership-related-verified.log",
+        "sha256": "8858b9c144b2e7660dacf00a9d0e5dbf4bd4a4a29ce8ccfcb5b35b9fd19eebaa"
+      }
+    },
+    "before": {
+      "tests": 9,
+      "passed": 2,
+      "failed": 7,
+      "log": {
+        "path": "/private/tmp/af-task-draft-ownership-before-verified.log",
+        "sha256": "13f269e22ad164758d7ddc16b57e56053d9d0c2fbc280552defe968d5a0b3037"
+      },
+      "source": {
+        "path": "/private/tmp/af-task-draft-ownership-original.js",
+        "sha256": "72bc14857d4e0c433aa92f41ae31f57eaf0a6453afc10bd20f98f745dabb56de"
+      },
+      "source_from": {
+        "path": "/private/tmp/af-task-editing-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+        "sha256": "9337ce11c2dcb4b36e9a37f386a08e9384efe71bb5d35b9242dfcb93e8e07839"
+      }
+    },
+    "coverage": [
+      "Ordinary and agent-specific fresh entries retain separate draft",
+      "Configuration detour keeps local and saved goals separate",
+      "Discard local settings without deleting separate server draft",
+      "Explicit adoption resumes autosave",
+      "Explicit replacement checks reviewed revision and retains input on conflict",
+      "Explicit resume and empty draft preserve normal autosave",
+      "Reuse entry restores pending request without erasing separate-draft decision",
+      "Owned unchanged recovered draft avoids a false separate-draft warning"
+    ]
+  },
+  "backend": {
+    "application_source_changed": false,
+    "full_suite_repeated": false,
+    "prior_verified_source": {
+      "path": "/private/tmp/af-task-editing-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "9337ce11c2dcb4b36e9a37f386a08e9384efe71bb5d35b9242dfcb93e8e07839"
+    },
+    "program_changes_since_prior_candidate": [
+      "agent_framework/webui/app.js"
+    ],
+    "reason": "Only frontend task preparation changed; browser journeys exercise the unchanged backend. No claim of a new full backend test run."
+  },
+  "browser": {
+    "passed_suites": {
+      "task-draft-ownership": {
+        "result": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/task-draft-ownership/results.json",
+          "sha256": "794fb233de5d14f61e8bb2f6f15546369c1a6ccd0121335bd43a9b8f9738d12f"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/results.json",
+          "sha256": "4f1804dbe1e3cfca78f43e823594ec8ed581e14aae79a991b900e2c24ffafbcd"
+        },
+        "checks": [
+          "普通新建与选定智能体后的输入不会覆盖另一项草稿；提示本页尚未保存，可核对原内容后选择",
+          "放弃未接管草稿的新任务只关闭本页设置，不删除原草稿；八种桌面布局的操作焦点与边界通过检查",
+          "从智能体入口新建可直接提交本页目标，任务创建不会清理或替换独立草稿",
+          "明确使用旧草稿后继续自动保存；明确替换仍核对版本，遇到另一页面更新时保留输入，重新核对后才保存",
+          "待核对提交从基于已有任务新建入口恢复时，原编号、本页编辑和独立草稿均保留，核对只打开已创建任务"
+        ],
+        "errors": [],
+        "layout_cases": 8,
+        "real_model_calls": 0,
+        "task_count": 2,
+        "task_post_count": 2
+      },
+      "task-drafts": {
+        "result": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/task-drafts/results.json",
+          "sha256": "7d85304aa2b0dd4fce667e36c0c18c8e8124ddb5b94fffd7badfdbc0233fec26"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/results.json",
+          "sha256": "4f1804dbe1e3cfca78f43e823594ec8ed581e14aae79a991b900e2c24ffafbcd"
+        },
+        "checks": [
+          "两页面保存冲突保留本页输入，核对后仍防止覆盖再次更新的草稿，显式选择才能替换设置",
+          "过期确认不能放弃新草稿，重新检查只读取内容，再次明确确认才会清理",
+          "提交过期草稿仍创建本页任务，同时保留其他页面的新草稿与界面回执",
+          "放弃已提交但回执丢失时保留输入，再次请求也不能清理后来创建的新草稿"
+        ],
+        "errors": []
+      },
+      "task-editing": {
+        "result": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/task-editing/results.json",
+          "sha256": "92a6ae4afed90e2f66a86bbfac6c70b1e2af680b7d062608b9eff157a7d4c246"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/results.json",
+          "sha256": "4f1804dbe1e3cfca78f43e823594ec8ed581e14aae79a991b900e2c24ffafbcd"
+        },
+        "checks": [
+          "回执未确认期间的新目标与智能体在刷新后还原；原提交和独立服务端草稿均保留，没有自动创建或替换草稿",
+          "明确采用服务端草稿只改变本页编辑；再次刷新后仍可用原编号核对并打开原任务",
+          "本机存储失败明确提示并保留当前输入；恢复可写后成功持久化，已归档智能体以不可用原选择显示",
+          "明确另建后仍需修正不可用智能体，完成选择才创建新任务；原任务与独立草稿继续保留"
+        ],
+        "errors": []
+      },
+      "task-submissions": {
+        "result": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/task-submissions/results.json",
+          "sha256": "b55f47f5fd8e8ab70c67b04a6bc5e6a1a503f246d39a13f7cbd00fc6eeb4b311"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/results.json",
+          "sha256": "4f1804dbe1e3cfca78f43e823594ec8ed581e14aae79a991b900e2c24ffafbcd"
+        },
+        "checks": [
+          "回执丢失后继续编辑不另建任务，核对并打开同一已受理记录",
+          "未受理时显式采用当前配置并保留目标，核对后再变化仍拒绝旧版本，重试编号不变",
+          "刷新后恢复待核对编号，读取不会提交，明确另建后才使用新编号创建任务",
+          "暂未找到之后原请求晚到受理，继续提交仍共用原编号，冲突后可查回原任务且不重复创建"
+        ],
+        "errors": []
+      },
+      "task-receipts": {
+        "result": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/task-receipts/results.json",
+          "sha256": "9f8c272e14b126d4cd5800cc135fe6d0d3086e65c4c9e05dd6e397f1ee375fea"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/results.json",
+          "sha256": "4f1804dbe1e3cfca78f43e823594ec8ed581e14aae79a991b900e2c24ffafbcd"
+        },
+        "checks": [
+          "服务端已受理但成功响应不完整时保留原编号；错误编号和空的核对响应均不会误认成功或未受理",
+          "合法只读回执找回已受理任务，后续输入保留，打开原任务不发送第二次创建请求",
+          "智能体版本不匹配的成功响应保留恢复记录，刷新后沿用同一编号重试且不重复创建",
+          "未找到任务时也核对返回的智能体身份，明确采用合法配置后仍沿用原编号提交"
+        ],
+        "errors": []
+      },
+      "task-reuse": {
+        "result": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/task-reuse/results.json",
+          "sha256": "088d0af569da3b1738e612fa207888cd5e83e4029b5dc6cb43a41bcdf54a4f31"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/results.json",
+          "sha256": "4f1804dbe1e3cfca78f43e823594ec8ed581e14aae79a991b900e2c24ffafbcd"
+        },
+        "checks": [
+          "任务对话入口带入初始目标和当前智能体版本，清楚说明范围与配置变化；已有设置草稿保持独立，准备过程不提交任务",
+          "明确开始后获得独立新任务、空对话历史和当前配置，保留来源链接；原任务、对话草稿及已有设置草稿均不变",
+          "原智能体归档后必须重新选择；可明确恢复旧草稿或保存复用设置，刷新恢复保留来源且不冒充历史配置版本",
+          "迟到配置不能覆盖新任务窗口；准备失败不打开空表单，解除故障后可重试；八种布局的焦点与边界通过检查"
+        ],
+        "errors": []
+      },
+      "journeys": {
+        "result": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/journeys/results.json",
+          "sha256": "66959ecfb57a6898c15349bf6b66e2de0971b8a861a5ce6195382bc0062118b5"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-draft-ownership-browser/results.json",
+          "sha256": "4f1804dbe1e3cfca78f43e823594ec8ed581e14aae79a991b900e2c24ffafbcd"
+        },
+        "checks": [
+          "空工作台引导创建智能体，无演示任务或固定执行链路",
+          "每日模板只填目标和智能体，派发后可明确开始，直接执行一轮",
+          "连续修改保留同一任务，手机可查看任务属性和导出完整对话",
+          "复盘采用最新修订结果，可直接沉淀并进入资料库",
+          "知识草稿、审核、发布和修订可连续完成，修订保留原发布版本",
+          "Skill 可编辑保存、发布和导出",
+          "通用工作流无固定目标或预授权；节点补充信息后自动使用最新结果继续",
+          "12 个模块在桌面、平板及手机深浅色下无页面横向溢出"
+        ],
+        "errors": []
+      }
+    },
+    "screenshots": [
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-draft-ownership-light.png",
+        "sha256": "c4fb9bcebbb2c65b219d915fe57e2e9a898f03d48e7d512fe98a6b9af083f6b1"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-draft-ownership-dark.png",
+        "sha256": "003bb403ac58e74b4250bb4955ececcc3e535db107e90afa1e1b6f56c9919558"
+      }
+    ],
+    "visual_review": "Inspected light/dark independent draft text, escaped goal, explicit choices and task footer. Eight desktop layouts cover 1024/1440 widths and normal/28px prompt text, keyboard focus and horizontal bounds. Existing desktop scope retained.",
+    "isolation": "Disposable project fixture with mock agents; deliberate concurrent draft writes and one dropped accepted-task HTTP receipt. Exactly two task POSTs create two tasks and preserve the independent draft. No real model calls."
+  },
+  "design_guidance": {
+    "skill": "/Users/kurt/.agents/skills/ui-ux-pro-max/SKILL.md",
+    "queries": [
+      "loading cancellation feedback --domain ux",
+      "error prevention confirmation --domain ux"
+    ],
+    "application": "Reused existing draft comparison and explicit choice controls. Checked existing live feedback, keyboard focus, reduced motion and desktop light/dark layouts; no new visual system or additional confirmation dialog introduced."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-task-draft-ownership-source-candidate-20261103",
+    "build_log": {
+      "path": "/private/tmp/af-task-draft-ownership-build.log",
+      "sha256": "b27b31d3f0c68df20a44a4292309cfc58750438cc1680cacc976333209f0040c"
+    },
+    "verification": {
+      "path": "/private/tmp/af-task-draft-ownership-package-check.json",
+      "sha256": "ecef31a9e77c3996bd6e9e5030012bf38d14173437a74414cbf92eb193ba8cbf"
+    },
+    "program_files": 166,
+    "bundle": {
+      "path": "/private/tmp/af-task-draft-ownership-source-candidate-20261103/agent-framework-1.3.0.tar.gz",
+      "sha256": "b6d4cf3541340e34f21ebe194cc56e47483ae80101a84f833ac5b8fca1683982"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-task-draft-ownership-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "e37758805660524e13752a86621bbe29ffed3cfa619bffaadb23ad0d02a0a542"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-task-draft-ownership-source-candidate-20261103/SHA256SUMS",
+      "sha256": "f3ec8e4e157d7e5c0e5f216e6e12a8cc3d2d87c91d13069db3b66531160330b9"
+    },
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/webui/app.js": "308f29f5fd1b4edd938c88624a1f67ff5eccab5d51092310378b8e1f06308952",
+    "agent_framework/webui/journeys.js": "a2c895775b3ac4ae89eec95e89423713f2c15502501cb1bca0a067be1b9129ee",
+    "agent_framework/webui/task_submission.js": "9502ccce5413af3b48c1873436d8816928d3c9bb055e87c011d57b3b3d9e00dd",
+    "tests/test_task_draft_ownership.js": "62cb6ff45df8eccc3f7acaf0672c84206a1886560ad43671aea40333ac1d1902",
+    "tests/test_journey_interactions.js": "b695eacb2f1ac3f54eb2c0f6b9bfbc874ac5d9041ed64b4f952eaa55b3be6980",
+    "tests/test_task_reuse_interactions.js": "a3393c893dc4777066e1f569a0a4df386b4461a699dddcdfcba0149e2a00fe7f",
+    "tests/test_task_submission_interactions.js": "4099633e1127cd570874d82c8ab548a38f1fa12e906f8be58cf96df00d98da30",
+    "tests/test_draft_interactions.js": "cb326c91ab29981782c00f37a2a89c1705cb85b82167921d27318a131348ae6f",
+    "tests/verify_task_draft_ownership.cjs": "1903be846ebab7cf211918f1daaa35b34a37148c11a0e2cc303739e5cab4b64a",
+    "tests/serve_project_review_fixture.py": "dddbd230fe87e39a8e28f71998597c645b1fbab0fb9da46aca882f561de23a2f",
+    "scripts/run_browser_tests.py": "4ba320ce27e454774ac6665b575aeb7c060b2ecea776ccdd437f63664a15329a",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "58ac9c75e250fe08f3e816f35d1a92b4e4482cc59c96fd99706fe4db38849690",
+    "design.md": "b47b59f86f97985910c66ce5c12017ebdc6fff0d3664e01cf32f276f4e2c4eed",
+    "docs/reliability/task-draft-ownership.md": "872d842b8b467830c80cfbbf0f1ed10f38e3a45b2ac916fbbeb60c5301f651a3"
+  },
+  "limits": [
+    "A fresh local form remains unsaved while the separate server draft awaits an explicit choice; existing unload warning still applies.",
+    "Tab-local editing recovery remains limited to a pending task submission; this change does not introduce multiple independent drafts.",
+    "No backend full-suite rerun or fresh installation; candidate remains unpublished at 1.3.0."
+  ]
+}

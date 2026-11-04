@@ -1,0 +1,231 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "One durable retry per failed turn, deduplicated across pages/processes with original content, explicit retry chains, read-only recovery after lost replies, preserved drafts and exported relationships.",
+  "before": {
+    "command": ".venv/bin/python -m unittest tests.test_turn_retries -v",
+    "tests": 3,
+    "passed": 0,
+    "errors": 3,
+    "duration_seconds": 0.192,
+    "note": "Initial new service/lookup tests failed because the retry operations did not exist; the old UI sent each retry through the ordinary new-message path with a fresh UUID.",
+    "log": {
+      "path": "/private/tmp/af-turn-retries-before.log",
+      "sha256": "b879c528b96433dd09e71cd47314ec5de3d58f3a12b16e002c9b1a99136ce7b7"
+    }
+  },
+  "frontend": {
+    "focused": {
+      "tests": 38,
+      "passed": 38,
+      "duration_ms": 628.84575,
+      "log": {
+        "path": "/private/tmp/af-turn-retries-frontend-focused.log",
+        "sha256": "47327a3746cfe4d7f1551e7297a6c32f8e0277949761976deec1d1e476d163da"
+      }
+    },
+    "final": {
+      "command": "node --test tests/test_*.js",
+      "tests": 824,
+      "passed": 824,
+      "failed": 0,
+      "duration_ms": 9162.561125,
+      "log": {
+        "path": "/private/tmp/af-turn-retries-frontend-final.log",
+        "sha256": "60707a0abc0bf17368cadc85b9dabc5f4c831d34ee850f25b69d7df3a9bf778a"
+      }
+    }
+  },
+  "backend": {
+    "initial_focused": {
+      "tests": 44,
+      "errors": 1,
+      "log": {
+        "path": "/private/tmp/af-turn-retries-backend-focused.log",
+        "sha256": "7130646f00586295a2e3c6e7d2d4a0447c048e2bd28b01ecaa5942a7d5795113"
+      },
+      "note": "New scope test referenced a workspace that had not been created. Fixed the fixture to register a second workspace before checking isolation; no production change for this error."
+    },
+    "focused": {
+      "command": ".venv/bin/python -m unittest tests.test_turn_retries tests.test_message_receipts tests.test_conversation_review tests.test_task_conversations -v",
+      "tests": 44,
+      "passed": 44,
+      "duration_seconds": 7.771,
+      "log": {
+        "path": "/private/tmp/af-turn-retries-backend-focused-final.log",
+        "sha256": "8474487df8fd1ed35c420f065d77129b8948aa3617608da362c351fd3516ebc6"
+      }
+    },
+    "full": {
+      "command": ".venv/bin/python -m unittest discover -s tests -p 'test_*.py'",
+      "tests": 1164,
+      "passed": 1164,
+      "duration_seconds": 208.255,
+      "log": {
+        "path": "/private/tmp/af-turn-retries-backend-full.log",
+        "sha256": "b8d3efaa3efc4bb1894da6ce6cb4275d72e933448a4aa62147fd89bdbc536c58"
+      },
+      "scope": "All existing backend tests and the initial 10 new retry tests. This run collected tests before the final Markdown relationship labels and their extra export regression were added; the final export module and all 11 retry tests were verified separately below."
+    },
+    "final_export_and_retry": {
+      "command": ".venv/bin/python -m unittest tests.test_turn_retries tests.test_exports -v",
+      "tests": 27,
+      "passed": 27,
+      "duration_seconds": 1.922,
+      "log": {
+        "path": "/private/tmp/af-turn-retries-export-focused.log",
+        "sha256": "278ee4456430a13fe065ce11531dcdc326c7efb42f8b2076c2c90bd9ca226e56"
+      }
+    }
+  },
+  "browser": {
+    "initial": {
+      "command": ".venv/bin/python scripts/run_browser_tests.py --suite turn-retries --suite task-messages --suite model-failure-messages --suite worker-recovery --output /private/tmp/af-turn-retries-browser-first",
+      "summary": {
+        "path": "/private/tmp/af-turn-retries-browser-first/results.json",
+        "sha256": "b917bad30c3ea629821710d3989b426c394a13489973e20dbc5c70aed77a382a"
+      },
+      "log": {
+        "path": "/private/tmp/af-turn-retries-browser-first.log",
+        "sha256": "75d2041426179a8538ead7e82a3dcb3d2e6dac45fbd5d82052438f6e0651d888"
+      }
+    },
+    "final_retry": {
+      "command": ".venv/bin/python scripts/run_browser_tests.py --suite turn-retries --output /private/tmp/af-turn-retries-browser-final",
+      "summary": {
+        "path": "/private/tmp/af-turn-retries-browser-final/results.json",
+        "sha256": "efc9cc51a31560030f1c7ff8608ddeb1780874ec0d248e9b968cca2abf834c60"
+      },
+      "log": {
+        "path": "/private/tmp/af-turn-retries-browser-final.log",
+        "sha256": "527281de18cdc6acbe5b4d0535f6d876ceeadc4d9154df196f36b83ef004ea03"
+      },
+      "note": "Repeated the new journey after adding source-round text to the recovery panel."
+    },
+    "passed_suites": {
+      "turn-retries": {
+        "result": {
+          "path": "/private/tmp/af-turn-retries-browser-final/turn-retries/results.json",
+          "sha256": "80ac557ae854fa6f268357f68584daab539ee71833a953bb8ca8ad26bd6c95d4"
+        },
+        "checks": [
+          "两个页面同时重试只新增一轮，再次失败从新轮次重试；原失败、关联和相同文字的未发送草稿均保留",
+          "重试来源与结果可双向定位，八组桌面主题和字号下入口可见，重绘保留按钮焦点",
+          "重试已受理但回执丢失时，刷新恢复原轮次，只读核对返回同一次结果且保留后续输入",
+          "未受理的重试遇到对话更新先拒绝，核对后沿用原轮次和原要求，后来输入不会混入"
+        ],
+        "errors": [],
+        "layout_cases": 8
+      },
+      "task-messages": {
+        "result": {
+          "path": "/private/tmp/af-turn-retries-browser-first/task-messages/results.json",
+          "sha256": "460d9fb35b0a99626a3e343704c8f0a1243f744c95189c5a81ba7892f72144d4"
+        },
+        "checks": [
+          "受理后丢失回执，修改文字与刷新均保留原发送编号；只读核对找回同一轮消息",
+          "核对区在八种桌面主题和文字布局下可到达；确认返回后仍保留后来编辑的文字",
+          "其他页面更新后先核对版本，核对后再变化仍拒绝；原请求晚到受理后同编号重试不增加轮次",
+          "核对读取失败保留原消息与恢复入口，不自动重发，也不把未知结果当作未受理",
+          "切换任务后晚到的核对结果不会覆盖当前对话，返回原任务仍可继续核对"
+        ],
+        "errors": [],
+        "layout_cases": 8
+      },
+      "model-failure-messages": {
+        "result": {
+          "path": "/private/tmp/af-turn-retries-browser-first/model-failure-messages/results.json",
+          "sha256": "396e0eb4d3753aede73884cb8703ed69de3d9d9d10216545f57f15b190728cf8"
+        },
+        "checks": [
+          "五类模型失败显示原因与恢复建议，原始错误码仍可从本轮记录读取，查看记录不提交任务",
+          "包含错误码字样的补充信息请求保留原文，未被误判为模型超时",
+          "刷新保留状态与草稿，明确重试仅新增一轮；深浅色、窄屏与放大文字下操作可见且可聚焦",
+          "存在尚未确认的业务写入时提示先人工核对，保留未决动作和唯一已创建草稿"
+        ],
+        "errors": [],
+        "layout_cases": 12
+      },
+      "worker-recovery": {
+        "result": {
+          "path": "/private/tmp/af-turn-retries-browser-first/worker-recovery/results.json",
+          "sha256": "e6205c44787b4f37023302a494418e9a68dc5786458af9a3016b3c87185983db"
+        },
+        "checks": [
+          "执行器意外退出后保留公开片段并显示原任务恢复入口，不自动重试或泄露异常参数",
+          "刷新后错误与片段仍可见，桌面深浅色布局完整",
+          "显式恢复继续同一轮，保留未发送补充、原配置、预算与授权；业务草稿只创建一次"
+        ],
+        "errors": [],
+        "layout_cases": 4
+      }
+    },
+    "screenshots": [
+      {
+        "path": "/private/tmp/af-turn-retries-browser-first/turn-retries/retry-chain-light.png",
+        "sha256": "3aacbde4f0edbcdf2d426ba1d57df6a4ab506948eb57722de5c317fc7d1d5956"
+      },
+      {
+        "path": "/private/tmp/af-turn-retries-browser-final/turn-retries/retry-chain-dark.png",
+        "sha256": "e281336f3da25a89895fc9d9a324077f21f33c2814d61cd896efd42ad171e8dc"
+      }
+    ],
+    "visual_review": "Inspected light and dark retry-chain screenshots. The new journey covers eight desktop theme/width/text-scale combinations and verifies focus survives an explicit rerender.",
+    "isolation": "Disposable databases and a synthetic model create actual runtime failures. No real model service or business system is called."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-turn-retries-source-candidate-20261103",
+    "build_log": {
+      "path": "/private/tmp/af-turn-retries-build.log",
+      "sha256": "f7072a8763dc5954faa56c252ce7648de8d004e7b023420b0d68a76768056ac7"
+    },
+    "verification": {
+      "path": "/private/tmp/af-turn-retries-package-check.json",
+      "sha256": "6da95680f3ef673585508dc5eba4b26250bd124203a73ecd4002a72f963eb746"
+    },
+    "bundle": {
+      "path": "/private/tmp/af-turn-retries-source-candidate-20261103/agent-framework-1.3.0.tar.gz",
+      "sha256": "2439c34296b529a7afd0bf90ce1a6d3c2e06a6083ee2371994bfd9983ea9ffe7"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-turn-retries-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "ce57f763320e31eecd045a19db77aea272093ae19c6a14efde2dc2eeb82383d5"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-turn-retries-source-candidate-20261103/SHA256SUMS",
+      "sha256": "a01c74bd91b216f81698a05bed6cd0e5301351e12f60c54a0c1ed58aa545bdd9"
+    },
+    "program_files": 143,
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/task_conversations.py": "24ce192851b189accc3da9128e4acc8b1ee34cb7d89a530ff973d019dfb2594b",
+    "agent_framework/web.py": "0800e8dc7029ab84d2dbc6726b481764fdab4409377216b349abbe1e5fafee4a",
+    "agent_framework/exports.py": "a9d8e5f28d35260e7688a4a7a42f534d47c25233d20a84c2fd7b3e73736f0527",
+    "agent_framework/webui/task_message.js": "12cccdd9383f533e73a1456402ae138daf9ccb3190590e40cff6359715e028c9",
+    "agent_framework/webui/task_conversation.js": "c77ae1baf421df4602780f9b8f85f47b3bfb8666986366da243d872b9e9bd9f0",
+    "tests/test_turn_retries.py": "00b6036e2774fab5d34548032d92300f01896861b999ad67510e85ee340f0241",
+    "tests/test_task_message_interactions.js": "d1c6b98a2f2ffa3aca8381064068cba82ff5ab8e7aabe0a80795bc699a87d170",
+    "tests/test_worker_interactions.js": "6a9f680895d678d4c313eb61d07c0dc57e03fb5ad57040352dd4e94ab6eab2dd",
+    "tests/serve_turn_retries_fixture.py": "12936f105a53152c0286889af31ad83001866d9b38a72c44a17ce9dbdfaaee55",
+    "tests/verify_turn_retries.cjs": "e645b58ae49d63414288696f43e75346d1c2a3923b91d8dcae2b567e347d0862",
+    "tests/verify_model_failure_messages.cjs": "c8771065004cd8d5752a0652290cd3a95ae846e8598c36076f79fb8e22b75d48",
+    "scripts/run_browser_tests.py": "343bebb5fc83f54cc8c7363f916e68d40245c0f688a12e235fdae75007af4ca9",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "75e9ebe1669f15963d50c5e4ecdb1de627716dd7fdd4f915fde05122603eb186",
+    "design.md": "ccd52ccb9e1d5976a0a46975a419effd2a80da49e4bc84cfc6f752a855716740",
+    "docs/reliability/turn-retries.md": "23fb695d52aee4e89740c48ca377cd9f05650a09488207325f99937b7a84ef07"
+  },
+  "limits": [
+    "Existing retries sent as ordinary messages before this increment are not retroactively inferred.",
+    "A retry appends a new turn using current conversation history and the original task configuration; it is not a rollback to old history.",
+    "Cancelled queued retries retain their association and cannot be revived by replay. Users can send a new message with revised requirements.",
+    "Worker interruption resumes the original run, while uncertain business operations continue to obey the reply gate.",
+    "Pending browser recovery depends on tab storage availability; saved server retries survive service restart.",
+    "The 27 final focused backend tests overlap the earlier full run; counts are not additive.",
+    "No schema migration, version bump or publication."
+  ]
+}

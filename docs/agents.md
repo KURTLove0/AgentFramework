@@ -45,7 +45,8 @@ P0A/P0B 已启用，详见 [实施与兼容策略](p0/implementation.md)。编�
 | 接口 | 行为 |
 | --- | --- |
 | `GET /api/runtime-config/models?provider=codex&refresh=1` | 获取 / 刷新 CLI 模型目录 |
-| `GET /api/agents` | 当前租户的 Agent 配置 |
+| `GET /api/agents` | 当前租户与工作空间的完整 Agent 配置 |
+| `GET /api/agents?view=catalog` | 目录配置及固定技能摘要，省略冻结文件正文；完整编辑与执行按 ID 读取 |
 | `POST /api/agents` | 创建，`revision: 0` |
 | `GET /api/agents/{id}` | 读取配置 |
 | `POST /api/agents/{id}/compile` | 使用当前 `revision` 编译并返回不可变快照 |
@@ -54,6 +55,8 @@ P0A/P0B 已启用，详见 [实施与兼容策略](p0/implementation.md)。编�
 | `POST /api/runs` | 可传 `agent_id`、`agent_revision`；真实模型需 `consent`，启用 MCP 需 `mcp_consent` |
 
 写接口沿用页面 CSRF 令牌、Host / Origin 校验与 JSON 请求限制。Agent 按租户隔离，归档配置不能用于新任务。任务引用形如 `agent-xxxxxxxxxxxxxxxx@3`，持久化完整 Agent 配置、模型、提示词协议和 Schema 摘要。
+
+目录视图字段、完整读取兼容性、性能对比及任务与工作流验收，见 [智能体目录按需读取](agent-catalog/implementation.md)。
 
 自定义 Agent 的提示词协议单独版本化：旧版本快照可以原样还原。v4 协议只允许受控原生读取；有副作用的能力统一通过业务 `ActionProposal` 提案。
 

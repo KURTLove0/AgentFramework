@@ -1159,6 +1159,21 @@ form>label {
   color:var(--muted);
   display:flex;
   justify-content:space-between}
+.command-dialog[open] {display:flex;flex-direction:column;max-height:calc(100dvh - 64px)}
+.command-input,.command-foot {flex-shrink:0}
+.command-input input {min-width:0}
+.command-status {padding:8px 20px;max-height:28dvh;overflow:auto;flex-shrink:0;overflow-wrap:anywhere}
+.command-status p {margin:4px 0;font-size:13px}
+#command-scope-note {color:var(--muted);font-size:12px}
+.command-read-error {border-top:1px solid var(--border);padding:8px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.command-read-error p {flex:1 1 220px;min-width:0;color:var(--red)}
+.command-read-error button {flex-shrink:0}
+.command-option span {white-space:normal;overflow-wrap:anywhere}
+.command-option svg {flex-shrink:0}
+#command-results {min-height:0;flex:1 1 auto}
+.command-foot {flex-wrap:wrap;gap:8px}
+.command-pagination {display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:100%}
+.command-pagination[hidden] {display:none}
 .toast {
   position:fixed;
   bottom:24px;
@@ -1693,3 +1708,56 @@ input,textarea,select {
 @media(max-width:1000px){.skill-catalog{grid-template-columns:minmax(0,1fr)}}@media(max-width:700px){.skill-editor-dialog{width:calc(100vw - 20px);padding:16px}.skill-meta-row{grid-template-columns:minmax(0,1fr);gap:4px}.skill-meta-row>.pill{justify-self:start;margin:0 0 12px}.skill-package-editor{grid-template-columns:minmax(0,1fr)}.skill-package-editor>aside{border-right:0;border-bottom:1px solid var(--border)}#skill-file-list{display:flex;gap:8px;overflow:auto}.skill-file-item{width:auto;min-width:130px}.skill-add-resource{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}.skill-add-resource label{grid-column:1/-1}.skill-add-resource .button{margin:0}.skill-package-editor>section{padding:14px}.skill-package-editor textarea{font-size:16px;min-height:340px}.skill-meta-row input,.skill-meta-row select{font-size:16px}.skill-catalog-summary a{margin:0}.skill-card{padding:20px}}
 @media(max-width:480px){.sidebar .brand{padding-right:0}.sidebar nav a{padding-inline:2px}.sidebar nav a svg{width:17px;height:17px}}
 .agent-skill-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.agent-skill-badges .pill{white-space:normal;overflow-wrap:anywhere;line-height:1.7;max-width:100%}
+.task-draft-comparison{white-space:pre-wrap;overflow-wrap:anywhere;max-height:180px;overflow:auto;margin:12px 0}
+#task-draft-status:not([hidden]){display:block}
+#task-draft-status p{margin:0 0 8px}
+#task-draft-status .toolbar{flex-wrap:wrap}
+#task-submission-status:not([hidden]){display:block;margin:16px 0 0}
+#task-submission-status p{margin:0 0 8px}
+#task-submission-status .toolbar{flex-wrap:wrap;gap:12px}
+#task-submission-status .task-draft-comparison{max-height:140px}
+#agent-save-recovery:not([hidden]){display:block;margin:16px 24px}
+#agent-save-recovery p{margin:0 0 10px}
+#agent-save-recovery .toolbar{flex-wrap:wrap}
+#skill-save-recovery:not([hidden]){display:block;margin:16px 0;overflow-wrap:anywhere}
+#skill-save-recovery p{margin:0 0 10px}
+#skill-save-recovery .toolbar{flex-wrap:wrap;gap:12px;margin-top:12px}
+#skill-save-recovery details{margin:10px 0}
+#skill-save-recovery ul{max-height:160px;overflow:auto;padding-left:24px}
+#skill-save-recovery .mono{font-size:13px}
+.agent-save-comparison{white-space:pre-wrap;overflow-wrap:anywhere;max-height:180px;overflow:auto;margin:12px 0}
+#asset-save-recovery:not([hidden]){display:block;min-width:0;overflow-wrap:anywhere}
+#asset-save-recovery p{margin:0 0 10px}
+#asset-save-recovery .toolbar{flex-wrap:wrap;gap:12px;margin-top:12px}
+#asset-save-recovery .toolbar button{white-space:normal;text-align:left}
+#hub-panel .asset-subtitle{font-size:13px;overflow-wrap:anywhere}
+.library-record-list [data-asset-history-ref][aria-current="true"]{border-left:3px solid var(--blue);padding-left:12px}
+.library-record-list [data-asset-history-ref]>.pill{margin-left:10px}
+.asset-version-content{max-height:240px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.7}
+#hub-panel .library-search-state{min-height:180px;padding:24px;overflow-wrap:anywhere}
+.library-search-state h2{margin:0 0 12px}
+.library-search-state p{font-size:14px;line-height:1.6}
+.library-search-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.library-memory-nav{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:20px 0}
+.library-memory-nav p{margin:0;font-size:14px;line-height:1.6}
+.library-memory-nav .library-search-actions{margin:0}
+.library-episodes summary,.library-memory-update{overflow-wrap:anywhere}
+.library-memory-update{padding:12px 16px;border:1px solid var(--border);border-radius:8px;font-size:14px;line-height:1.6}
+#library-memory-heading{scroll-margin-top:24px}
+#hub-panel>.resource-results{flex-wrap:wrap;overflow-wrap:anywhere}
+.flow-history-filters{display:flex;align-items:end;flex-wrap:wrap;gap:12px;margin:18px 0 12px}
+.flow-history-filters label{display:grid;gap:6px;min-width:0;flex:1 1 190px}
+.flow-history-filters label:first-child{flex:2 1 280px}
+.flow-history-filters input,.flow-history-filters select{width:100%;min-width:0}
+.flow-history-status{color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.flow-history-error{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0}
+.flow-history-error p{flex:1 1 100%;overflow-wrap:anywhere}
+.flow-history-pagination{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;margin-top:18px}
+
+.runtime-settings-recovery { margin-block: 1rem; min-width: 0; overflow-wrap: anywhere; }
+.runtime-settings-recovery details { margin-block: .75rem; }
+.runtime-settings-recovery summary { cursor: pointer; padding-block: .5rem; }
+.runtime-settings-recovery .toolbar { flex-wrap: wrap; gap: .5rem; margin-block: .75rem; }
+.runtime-settings-table { max-width: 100%; overflow: auto; }
+.runtime-settings-table table { width: 100%; }
+.runtime-settings-table td, .runtime-settings-table th { white-space: normal; overflow-wrap: anywhere; text-align: left; }

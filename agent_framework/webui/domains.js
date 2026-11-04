@@ -1,8 +1,8 @@
 'use strict';
-async function loadDomainCatalog(){
- const workspace=state.workspaceId,request=state.domainCatalogRequest||0;
- const data=await api('/api/agent-domains?include_archived=1');
- if(workspace!==state.workspaceId||request!==(state.domainCatalogRequest||0))return;
+async function loadDomainCatalog(current=()=>true,workspace=state.workspaceId){
+ const request=state.domainCatalogRequest||0;
+ const data=await api('/api/agent-domains?include_archived=1',undefined,15000,true,{workspace});
+ if(workspace!==state.workspaceId||request!==(state.domainCatalogRequest||0)||!current())return;
  state.domainCatalog=data.domains;syncAvailableDomains();
 }
 function domainSnapshot(domain){return Object.fromEntries(['id','revision','name','description','work_method'].map(key=>[key,domain[key]]));}
@@ -19,7 +19,7 @@ function filteredDomains(){
 }
 function domainManagementSession(){
  const session=state.domainManagementReturn,form=$('#agent-form');
- return session&&session.workspace===state.workspaceId&&session.agentId===(form.dataset.id||'')&&session.revision===Number(form.dataset.revision||0)?session:null;
+ return session?.scope&&agentSaveCurrent(session.scope)&&session.workspace===state.workspaceId&&session.agentId===(form.dataset.id||'')&&session.revision===Number(form.dataset.revision||0)?session:null;
 }
 function domainManagementBanner(){
  const session=domainManagementSession();
@@ -100,20 +100,19 @@ function confirmDomainArchive(identity){
  };dialog.showModal();dialog.querySelector('[data-close]')?.focus();
 }
 async function startDomainManagementFromAgent(){
- if(state.agentSaving||state.agentRoleLoading||state.agentDomainSaving||state.domainManagementOpening)return;
- state.domainManagementOpening=true;
+ const request=beginAgentManagementOpening('domains');if(!request)return;
  try{
-  const workspace=state.workspaceId;await loadDomainCatalog();if(workspace!==state.workspaceId||!$('#agent-dialog').open)return;
-  const form=$('#agent-form');state.domainManagementReturn={workspace,agentId:form.dataset.id||'',revision:Number(form.dataset.revision||0),name:$('#agent-name').value.trim()||'未命名智能体',section:state.agentConfigSection};
+  await loadDomainCatalog(()=>agentManagementOpeningCurrent(request),request.scope.workspace);if(!agentManagementOpeningCurrent(request))return;
+  const form=request.form;state.domainManagementReturn={scope:request.scope,workspace:request.scope.workspace,agentId:form.dataset.id||'',revision:Number(form.dataset.revision||0),name:$('#agent-name').value.trim()||'未命名智能体',section:state.agentConfigSection};
   $('#agent-dialog').close();navigate('domains');
- }catch(e){toast('无法打开处理领域管理：'+e.message);}finally{state.domainManagementOpening=false;}
+ }catch(e){if(agentManagementOpeningCurrent(request))toast('无法打开处理领域管理：'+e.message);}finally{finishAgentManagementOpening(request);}
 }
 async function useManagedDomain(identity=null){
  if(state.domainManagementReturning)return;
  const session=domainManagementSession();state.domainManagementReturning=true;
  try{
   if(session){
-   await loadAgentDomains();if(domainManagementSession()!==session)throw Error('编辑会话已变化，请重新打开智能体配置。');
+   const data=await api('/api/agent-domains',undefined,15000,true,{workspace:session.scope.workspace});if(domainManagementSession()!==session)throw Error('编辑会话已变化，请重新打开智能体配置。');state.agentDomains=data.domains;
    if(identity&&(!agentDomainChoice(identity)||(identity.startsWith('domain-')&&!state.agentDomains.some(d=>d.id===identity))))throw Error('该领域已归档或不可用，请刷新后重新选择。');
    $('#agent-dialog').showModal();state.domainManagementReturn=null;navigate('agents');selectAgentConfigSection(session.section||'identity');renderAgentDomainOptions();
    if(identity)await changeAgentDomain(identity,true);

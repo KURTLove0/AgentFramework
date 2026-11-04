@@ -1,0 +1,238 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Read-only, scoped bidirectional direct task provenance: source and direct reuse results including archives, latest conversation headers, stable insertion-order pagination, refresh/new-arrival notice, source-turn navigation and owned dialog reads preserving drafts.",
+  "prior_behavior": "New tasks linked back to source_run_id, but the original task had no reverse view of independent tasks created from it.",
+  "backend": {
+    "new_tests": 15,
+    "related": {
+      "tests": 39,
+      "passed": 39,
+      "duration_seconds": 3.222,
+      "log": {
+        "path": "/private/tmp/af-task-relations-backend-related.log",
+        "sha256": "43d8b13df8fefbf6af897641dd8d45aec3c0d648b6281685125fd7d383cb6f83"
+      }
+    },
+    "full": {
+      "command": ".venv/bin/python -m unittest discover -s tests -q",
+      "tests": 1321,
+      "passed": 1321,
+      "duration_seconds": 233.815,
+      "log": {
+        "path": "/private/tmp/af-task-relations-backend-full.log",
+        "sha256": "7283606fd147c145e24ec793bf0becbd2dff6b0cb2d7686bd16457af25f5ec35"
+      }
+    },
+    "coverage": [
+      "Direct-only source/result normalization including materialized source turns",
+      "Exclusion of ordinary followups and retries",
+      "Current name/archive/status, queued work and pending cancellation",
+      "Tenant, workspace, project and principal checks including actual source run",
+      "Unavailable source metadata omitted",
+      "Unregistered legacy roots",
+      "All 211 direct results paginated with equal timestamps",
+      "Backdated insertion excluded from existing range and counted separately",
+      "Malformed, cross-root and removed-anchor cursors",
+      "Bounded limits",
+      "One snapshot under concurrent writer",
+      "Header projection without Store.load/detail/catalog or dispatch",
+      "Read-only absent optional metadata tables",
+      "HTTP routes and bundled static module"
+    ],
+    "implementation": "TaskConversations.summary_states accepts an existing read connection. One relation request reads scope, rows, counts, source and current headers in the same SQLite snapshot. No schema change or execution dispatch."
+  },
+  "frontend": {
+    "new_tests": 14,
+    "related": {
+      "tests": 29,
+      "passed": 29,
+      "failed": 0,
+      "duration_ms": 476.447125,
+      "log": {
+        "path": "/private/tmp/af-task-relations-frontend-related.log",
+        "sha256": "28297d377e21f4959002567ff5e88fbd77e27832e41a720869374380af1f55d5"
+      }
+    },
+    "full": {
+      "command": "npm test",
+      "tests": 954,
+      "passed": 954,
+      "failed": 0,
+      "duration_ms": 11553.149667,
+      "log": {
+        "path": "/private/tmp/af-task-relations-frontend-full.log",
+        "sha256": "e192343e31ba247b5f5db35845f78af076b1a9073c7398ad9d8135a134ca9f15"
+      }
+    },
+    "coverage": [
+      "Current-root action, frozen workspace request and draft preservation",
+      "Duplicate read prevention and closable loading",
+      "More pages retain scroll/focus and show new arrivals",
+      "Explicit refresh replaces range",
+      "Source-turn deep links and text escaping",
+      "Unavailable metadata hidden",
+      "Initial versus subsequent-page errors",
+      "Same-cursor retry and explicit restart",
+      "403/404 content clearing",
+      "Invalid pagination rejected",
+      "Reopen and scope fencing",
+      "Lifecycle cleanup and delayed native close events"
+    ],
+    "final_change_after_full_suite": "Only relation link CSS color and underline were improved after full frontend tests; final browser relation flow and eight layouts verify that exact styling."
+  },
+  "browser": {
+    "passed_suites": {
+      "task-relations": {
+        "result": {
+          "path": "/private/tmp/af-task-relations-browser-verified/task-relations/results.json",
+          "sha256": "6db1b1b5ddb1fb182851f75c9be08fdb045095aa00ab2b2fc1b34a064bc08fac"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-relations-browser-verified/results.json",
+          "sha256": "808e7bec1ee82b15741f67c15f8844ae35c2a9eeea91dd4308e7793eb284405f"
+        },
+        "checks": [
+          "53 项直接关联完整跨三页显示，已归档来源与结果可见；后续轮次不重复列出，浏览不产生写入",
+          "分页期间的新任务有独立提示，刷新后进入新范围；两种主题、两种桌面宽度和 28px 字体的边界及焦点通过检查",
+          "首次失败与空结果区分，后续页失败保留已读记录并可重试，游标失效可直接从最新结果重读",
+          "来源链接定位原对话轮次且保留草稿；关闭和切换任务后迟到响应不能改写新窗口，不可访问来源不显示标识或名称"
+        ],
+        "errors": [],
+        "layout_cases": 8,
+        "enlarged_font_pixels": 28
+      },
+      "task-reuse": {
+        "result": {
+          "path": "/private/tmp/af-task-relations-browser-first/task-reuse/results.json",
+          "sha256": "fb1bc1174fd6e14ddb92cdeb6a7d4a174f07a46345bca6e22ebae36733b63331"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-relations-browser-first/results.json",
+          "sha256": "513f750126e7d91800637174474ce729c5920d726b9c1d518bcb4983ede642d1"
+        },
+        "checks": [
+          "任务对话入口带入初始目标和当前智能体版本，清楚说明范围与配置变化；已有设置草稿保持独立，准备过程不提交任务",
+          "明确开始后获得独立新任务、空对话历史和当前配置，保留来源链接；原任务、对话草稿及已有设置草稿均不变",
+          "原智能体归档后必须重新选择；可明确恢复旧草稿或保存复用设置，刷新恢复保留来源且不冒充历史配置版本",
+          "迟到配置不能覆盖新任务窗口；准备失败不打开空表单，解除故障后可重试；八种布局的焦点与边界通过检查"
+        ],
+        "errors": []
+      },
+      "task-exports": {
+        "result": {
+          "path": "/private/tmp/af-task-relations-browser-first/task-exports/results.json",
+          "sha256": "8a0d6c229fc2092ef066de445978eb6dcec6dbb2a0985c9e630cecc43a905a43"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-relations-browser-first/results.json",
+          "sha256": "513f750126e7d91800637174474ce729c5920d726b9c1d518bcb4983ede642d1"
+        },
+        "checks": [
+          "通过真实下载保存并离线校验完整任务包，含所有轮次和两次修改；排队、取消、未保存内容边界正确，两个草稿保留",
+          "下载失败后显示具体原因并保留明确重试入口，重试只下载一次且键盘焦点可继续操作",
+          "切换任务中止旧下载，迟到响应不会替新任务触发文件下载或成功提示",
+          "执行后重新下载包含真实采用的修改内容和完整执行记录；八种主题、宽度及正常/28px 字号检查通过，下载没有写请求"
+        ],
+        "errors": []
+      },
+      "run-history-restore": {
+        "result": {
+          "path": "/private/tmp/af-task-relations-browser-first/run-history-restore/results.json",
+          "sha256": "93fd0f8ca93d5c391d60ee675b6653076eac3d59bea86c3124dccfd938c72fdc"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-relations-browser-first/results.json",
+          "sha256": "513f750126e7d91800637174474ce729c5920d726b9c1d518bcb4983ede642d1"
+        },
+        "checks": [
+          "刷新第三页恢复搜索、状态、智能体、领域、日期、排序和分页栈，并重新读取服务端结果",
+          "恢复后的分页读取失败保留原条件和页码，显式重试返回原页",
+          "详情刷新后返回仍是原页，浏览器前进后退分别恢复各自列表条目的条件",
+          "浏览器拒绝保存时明确提示，当前查询仍可用，恢复保存后刷新采用最新条件",
+          "切换空间从空条件开始，返回原空间恢复原历史条目，查询未写入 URL",
+          "损坏的保存条件不会发起无效查询，新选条件会清除恢复提示；所有操作均为只读"
+        ],
+        "errors": []
+      }
+    },
+    "iterations": [
+      {
+        "result": {
+          "path": "/private/tmp/af-task-relations-browser-first/task-relations/results.json",
+          "sha256": "6db1b1b5ddb1fb182851f75c9be08fdb045095aa00ab2b2fc1b34a064bc08fac"
+        },
+        "note": "All functional checks passed initially. Visual inspection found title links too similar to plain text; semantic theme color and underline were added, then the complete relation journey and eight layout cases were repeated."
+      }
+    ],
+    "screenshots": [
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-relations-light.png",
+        "sha256": "49002838dcdacd00533f29fa1364099450678dc1f6d19a052f049ea6293abd56"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-relations-dark.png",
+        "sha256": "dd7075aea28df92f8e3bf59e46f24e391e8259f0b2ce398dd4cefd87c8f9e07a"
+      }
+    ],
+    "visual_review": "Inspected final light/dark dialogs, unmistakable source/result links, archive/current-state metadata, loaded count, escaped title, scroll area and fixed footer. Eight cases verify 1024/1440 widths, normal/28px text, focused visible source links and footer controls, viewport bounds and horizontal overflow.",
+    "isolation": "Disposable offline Mock fixture with 53 direct results and two-turn sources. Browser inserts the 54th through the task API, checks new-arrival notice and refresh, navigates to source turn while retaining the composer draft, injects 503/stale-cursor responses and delays a read across close/task change. Viewing alone issues no writes; no real model or business system."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-task-relations-source-candidate-20261103",
+    "build_log": {
+      "path": "/private/tmp/af-task-relations-build.log",
+      "sha256": "600f40a56dc6c158510a40b54b75912e1bbb9c91e5733a56bd8e6c11e87b6108"
+    },
+    "verification": {
+      "path": "/private/tmp/af-task-relations-package-check.json",
+      "sha256": "49a70947b4511a5ceaa256074388e618d44c26a85fba7b3af8aaa78e04d227c4"
+    },
+    "program_files": 163,
+    "bundle": {
+      "path": "/private/tmp/af-task-relations-source-candidate-20261103/agent-framework-1.3.0.tar.gz",
+      "sha256": "6d5b2fa2f958370e18d915b56f78f3824d77e902bf44c8cf5581724a383b63de"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-task-relations-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "6133581fbc870decb16f8802a4c38c73a11be6d8fbda0222fd33aa2ed2b179bd"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-task-relations-source-candidate-20261103/SHA256SUMS",
+      "sha256": "98b6fb81c5f4aace34eb2b9bbeb43947faaf99426fd3897996977f813de7f111"
+    },
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/task_relations.py": "19f694eb93647d08c1c0f1a9a747e6f9bd322f018a94dfa14505c57a202b1277",
+    "agent_framework/task_conversations.py": "b06d4576ce437fe1664febfc4b44dd1f7272592328f63f56979374faf384d3b4",
+    "agent_framework/web.py": "d76f0e6e753ab8eb494beb8b263a9fbb2ee158441ad9959b5e90b0af510589f8",
+    "agent_framework/webui/task_relations.js": "ba094d537c4a6f38de05a009c4d0fd6a20cf9677acb619a2bd6ceddf78125a9a",
+    "agent_framework/webui/task_reuse.js": "2483e4974697cb94dc52172f72728f250fcc627126dee9b455e11ef2974aa18c",
+    "agent_framework/webui/app.js": "d048047773a74cd65b2591524dc9fb9caeefd4ec254f1fb435eb0275438f2439",
+    "agent_framework/webui/task_conversation.css": "cadf2cbacfd7975f7530c649dafb2e68feaba3345d1176a53d027fc600be4d06",
+    "agent_framework/webui/index.html": "5ab6a0107e3bcfed3b457224b2ab80d2678985837298c864a9164d6f0193a498",
+    "tests/test_task_relations.py": "82bc884a4c5cefba04ceafaf00296462e4830a8dc8385085fdd30c6b3fd00deb",
+    "tests/test_task_relation_interactions.js": "e8adc2c4baa9157c30e33ece77054923fd7bc7cd19ef467e4ae7fce8fcff4b3e",
+    "tests/serve_task_relations_fixture.py": "827494cfd566e0bc6c7d863993c95dfb0c0bf239a89a347742957ef3995c8607",
+    "tests/verify_task_relations.cjs": "ea5c7b437d91fa08159e9495b4d581874af381a2ace3656202b36df17a360b02",
+    "scripts/run_browser_tests.py": "bc9da698536a14a6ed82d044694c1ef50ce318880f2271e7ecaad66a44698d0a",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "d92cb1cbadd1dbdae0bf30946457a4ff03c9fca92adba7c01ed42979d13e5965",
+    "design.md": "d489e02aba8ef883123b464ccfb84211fa485c8054f4a4f462b8554ab40660f4",
+    "docs/reliability/task-relations.md": "77e2527c39d9571e227c6b5af17cf33dfa364b0f87fbd8b17330470d19825dd8"
+  },
+  "limits": [
+    "Only direct parents/results; no recursive graph or full conversation cloning.",
+    "Metadata reflects each page read, without background polling. Refresh reloads the range.",
+    "Insertion-order cursors retain an upper bound, not a persistent cross-request database snapshot; changed/deleted anchor identities require refresh.",
+    "Queries project headers but still scan candidate run records. 211-result correctness is not a million-record performance guarantee.",
+    "Unavailable sources are hidden; existing direct source-ID links elsewhere retain their previous behavior.",
+    "Legacy read-only compatibility covers absent later optional name/archive tables, not databases lacking base conversation/cancellation structures.",
+    "Scope fencing ignores late responses; it does not guarantee cancellation of server-side read work.",
+    "Version remains 1.3.0. Candidate artifacts are local and unpublished; no fresh installation was repeated."
+  ]
+}

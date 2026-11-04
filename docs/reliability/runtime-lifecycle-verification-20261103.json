@@ -1,0 +1,303 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Reconnect runtime settings after a hidden document resumes, restore pending controls, preserve raw draft and immutable save identity, fence old operations, and avoid cached pagehide history mutations while retaining scroll positions.",
+  "frontend": {
+    "new_tests": 6,
+    "full": {
+      "command": "npm test",
+      "tests": 981,
+      "passed": 981,
+      "failed": 0,
+      "duration_ms": 12042.903792,
+      "log": {
+        "path": "/private/tmp/af-runtime-lifecycle-frontend-verified.log",
+        "sha256": "1fafa3bb5eee1e279dfcefcf33d607b2dad57566ed2d045cb78020b7351a758b"
+      }
+    },
+    "related": {
+      "tests": 27,
+      "passed": 27,
+      "failed": 0,
+      "duration_ms": 254.874375,
+      "log": {
+        "path": "/private/tmp/af-runtime-lifecycle-related.log",
+        "sha256": "89151459fba7739da4a7d088c2e33a2abe359a7c3f3a155b8176a466d2d1e0c0"
+      }
+    },
+    "before": {
+      "log": {
+        "path": "/private/tmp/af-runtime-lifecycle-before.log",
+        "sha256": "e37dece56fa0e6f57ea1f39c085944e0b6dbf25148c0589a4eb93eb50024dc1f"
+      },
+      "tests": 27,
+      "passed": 22,
+      "failed": 5
+    }
+  },
+  "backend": {
+    "application_source_changed": false,
+    "full_suite_repeated": false,
+    "prior_verified_source": {
+      "path": "/private/tmp/af-runtime-feedback-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "5e4444faa9053d721e6fa9eef88b494967cc66a4269eab8458429bfc3350bffa"
+    },
+    "program_changes_since_prior_candidate": [
+      "agent_framework/webui/app.js",
+      "agent_framework/webui/runtime_settings.js"
+    ],
+    "reason": "Frontend-only application changes; temporary HTTP fixtures exercise the unchanged backend."
+  },
+  "browser": {
+    "passed_suites": {
+      "runtime-lifecycle": {
+        "result": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-screenshots/runtime-lifecycle/results.json",
+          "sha256": "284df5dc8ac7df848dd36d3f32d03995f35afb36e708ddbcce2b2977a5cb3b10"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-screenshots/results.json",
+          "sha256": "e8d39a36e0929f88ccc76b4ed93ecb52a7db20ba3f124052c358a6b711cd7dac"
+        },
+        "checks": [
+          "独立 Chrome 的真实前进后退缓存恢复同一文档，保留输入，恢复后可明确保存；仅临时 HTML 允许缓存",
+          "浏览器重新加载式返回同样保留输入并可保存，返回本身不提交",
+          "保存中的生命周期恢复解除旧禁用状态，保留原编号；迟到回执不覆盖新输入，核对和后续保存均可继续",
+          "慢读取期间恢复会重新核对当前版本，旧读取不能回退冲突信息或覆盖输入",
+          "存储不可用时页面缓存仍可恢复内存草稿；其他页面不会误开配置编辑器，返回后可继续"
+        ],
+        "errors": [],
+        "real_cache_restore": {
+          "token": "5eeca4c7-6aad-4ebd-b99e-e21e7f69da54",
+          "pageshows": [
+            false,
+            true
+          ],
+          "timeout": "81",
+          "disabled": false,
+          "revision": 0,
+          "scroll": {
+            "top": 250,
+            "memory": 250,
+            "stored": 250
+          },
+          "navigation_type": "BackForwardCacheRestore",
+          "saved_revision": 1,
+          "chrome": {
+            "protocolVersion": "1.3",
+            "product": "Chrome/156.0.8078.80",
+            "revision": "@fb096c0011f9d50f0a264a9376420cdea9c421e3",
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+            "jsVersion": "15.6.75.27"
+          },
+          "diagnostics": [],
+          "method": "Independent temporary Chrome process, raw CDP navigation, identical document token and pageshow.persisted=true; synthetic HTML cache permission only."
+        },
+        "controlled_lifecycle_cases": [
+          "pending save",
+          "late read",
+          "storage failure",
+          "different route"
+        ]
+      },
+      "reading-interactions": {
+        "result": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-verified/reading-interactions/results.json",
+          "sha256": "43de8edc2aebf22f28de6131484bbf19426fcd148bd1fc1d8df0ad3ad07b88d4"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-verified/results.json",
+          "sha256": "a1ebd742f5602634534cc524ce71e1a61a4400291629a09fc32c9c6ae4c08b7e"
+        },
+        "checks": [
+          "后台同步期间保留已读记录并标注状态，主动翻页立即生效，旧同步回复不会把页面退回",
+          "重新搜索同一关键词会建立新的浏览起点，即使后台读取仍在进行也不会忽略操作",
+          "详情立即显示可关闭的等待窗口，关闭后可读另一条；旧回复不会重开或替换当前记录，关闭恢复原入口焦点",
+          "离开评测页会关闭只读详情，迟到失败不会弹出到新页面",
+          "读取已关闭记录的慢回复不会覆盖随后打开的设置，未保存输入与放弃确认仍有效",
+          "长读取错误在8组桌面深浅色和200%文字下可读，重试与关闭按钮可见，用户内容安全转义",
+          "恢复后重试仍读取原评测，成功后焦点回到记录正文；全部浏览、取消和重试没有提交写入"
+        ],
+        "errors": []
+      },
+      "run-history-restore": {
+        "result": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-verified/run-history-restore/results.json",
+          "sha256": "662e67092de963dace336d4b8503c6e8b04d3c41c1392159cf6bb6dd333ccb72"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-verified/results.json",
+          "sha256": "a1ebd742f5602634534cc524ce71e1a61a4400291629a09fc32c9c6ae4c08b7e"
+        },
+        "checks": [
+          "刷新第三页恢复搜索、状态、智能体、领域、日期、排序和分页栈，并重新读取服务端结果",
+          "恢复后的分页读取失败保留原条件和页码，显式重试返回原页",
+          "详情刷新后返回仍是原页，浏览器前进后退分别恢复各自列表条目的条件",
+          "浏览器拒绝保存时明确提示，当前查询仍可用，恢复保存后刷新采用最新条件",
+          "切换空间从空条件开始，返回原空间恢复原历史条目，查询未写入 URL",
+          "损坏的保存条件不会发起无效查询，新选条件会清除恢复提示；所有操作均为只读"
+        ],
+        "errors": []
+      },
+      "runtime-settings": {
+        "result": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-verified/runtime-settings/results.json",
+          "sha256": "0012028dac60ae7d7cfda3b0a4b6ab83b1e6cc3fd6535bd6d33dbf385d7d1893"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-verified/results.json",
+          "sha256": "a1ebd742f5602634534cc524ce71e1a61a4400291629a09fc32c9c6ae4c08b7e"
+        },
+        "checks": [
+          "未保存配置跨页面与刷新恢复，恢复过程只读取；全局配置草稿保留在当前标签页",
+          "提交已接受但回执丢失后，刷新保留原编号；只读核对确认 v1，不重复保存并恢复键盘焦点",
+          "未送达的保存沿用原内容和编号重试，核对期间的新输入独立保留",
+          "多页面配置冲突展示当前版本与保留输入，明确按新版本继续；浅深主题、两种桌面宽度及 28px 字号布局通过",
+          "原保存之后又有新配置时，准确区分已接受版本与当前版本，采用当前配置需明确操作",
+          "离开再返回后旧保存回执不覆盖新输入，慢配置读取期间的输入仍保留",
+          "迟到模型目录保留等待期间选择的模型和推理强度"
+        ],
+        "errors": []
+      },
+      "stream-lifecycle": {
+        "result": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-verified/stream-lifecycle/results.json",
+          "sha256": "9e3aaef108f43d181fd4286c9ecd34637bdd4ae38ffbfa09908bf1dab8ecea32"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-verified/results.json",
+          "sha256": "a1ebd742f5602634534cc524ce71e1a61a4400291629a09fc32c9c6ae4c08b7e"
+        },
+        "checks": [
+          "同源七个标签页最多占四条实时连接，超出连接明确返回暂满",
+          "连接暂满的标签页仍能普通读取、轮询进展，并保留草稿和光标",
+          "受控后台状态关闭所有真实连接，后台渲染和待重试计时器不重新占用名额",
+          "服务主动断开和连续拒绝触发递增重试，轮询保持可用，恢复后接回原任务",
+          "四条推送同时打开时停止立即可用，连接全部释放且未重发消息或重跑模型"
+        ],
+        "errors": []
+      }
+    },
+    "iterations": [
+      {
+        "log": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser/runtime-lifecycle.log",
+          "sha256": "7afa0a6a11ff0a53ebe53599243de96c7b22b993b387c781cd2e3fffda1c40c6"
+        },
+        "note": "Production no-store HTML prevented a real cache restore; the test-only HTML header override was added. Production headers were unchanged."
+      },
+      {
+        "log": {
+          "path": "/private/tmp/af-runtime-lifecycle-cache-browser/runtime-lifecycle.log",
+          "sha256": "297930d4aacb0ae45236189df8b15c99db585d28a430cd3bf7760d236e694e33"
+        },
+        "note": "Cacheable fixture still restored a new document."
+      },
+      {
+        "log": {
+          "path": "/private/tmp/af-runtime-lifecycle-diagnostic-browser/runtime-lifecycle.log",
+          "sha256": "659cb2268c729a45e56fcd3ccfeae4f4053a59ca3a22582a7bd21b59ddf85e87"
+        },
+        "note": "Playwright CDP diagnostics reported IgnoreEventAndEvict."
+      },
+      {
+        "log": {
+          "path": "/private/tmp/af-runtime-lifecycle-raw-browser/runtime-lifecycle.log",
+          "sha256": "548a74fcfbcf330e1f0a91979b9a8f445005bcc4c1efa963144453460d90d0b8"
+        },
+        "note": "Independent Chrome also reported IgnoreEventAndEvict, disproving attribution to Playwright alone."
+      },
+      {
+        "log": {
+          "path": "/private/tmp/af-runtime-lifecycle-commit-browser/runtime-lifecycle.log",
+          "sha256": "e0c3a47ac194f0b95c13e2309eaf33df702a06fee9fecd8dabed261e0695b9a9"
+        },
+        "note": "Waiting for committed navigation and idle model requests did not resolve eviction."
+      },
+      {
+        "log": {
+          "path": "/private/tmp/af-runtime-lifecycle-history-browser/runtime-lifecycle.log",
+          "sha256": "d79ec04902f8d43ab066d99bd9349a6d6c1d8ea0e863656c8c5700414a7f5a5a"
+        },
+        "note": "After cached pagehide stopped writing history, real cache restore and all behavioral assertions passed; an unused test init script raised crypto.randomUUID on about:blank and was removed."
+      },
+      {
+        "log": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-verified/runtime-lifecycle.log",
+          "sha256": "4abd5c6b670df6fb3cb235e918d31da2c13190e435ca6fb7a9758bb44ab5764f"
+        },
+        "note": "Real cache restore passed. Reload return committed before app scripts loaded; readiness predicate was guarded against undefined state. Four related suites passed."
+      },
+      {
+        "log": {
+          "path": "/private/tmp/af-runtime-lifecycle-browser-final/runtime-lifecycle.log",
+          "sha256": "cd08d05950d7b6fd2cbd335dfb51e4f85f276caa48604d9441d5780e3c39c2b0"
+        },
+        "note": "All recovery checks passed, including cache and reload scroll positions. Final screenshot iteration uses the actual appearance control to keep its label consistent."
+      }
+    ],
+    "screenshots": [
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/runtime-lifecycle-light.png",
+        "sha256": "afaceae32f13cb3c64388555608aaecfe5867e86c6649ff32232c6a929087383"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/runtime-lifecycle-dark.png",
+        "sha256": "452a55a298e9b1aa8786b00e49f3003b318e7f94a321b838ebd44693c9512071"
+      }
+    ],
+    "visual_review": "Light/dark recovery conflict states inspected; current version, preserved-input status, explicit adoption/rebase actions and disabled save are visible. Existing layout and theme styling unchanged.",
+    "isolation": "Temporary settings database and offline model directory. One owned independent headless Chrome profile uses raw CDP; Playwright covers controlled async cases and ordinary reload return. No actual model calls.",
+    "cache_policy": "Only the temporary fixture HTML uses private,max-age=0. Production and API no-store headers are unchanged. Actual cache restoration is proven for the idle-draft case; pending-save/read/storage/route branches use explicitly controlled PageTransitionEvents."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-runtime-lifecycle-source-candidate-20261103",
+    "build_log": {
+      "path": "/private/tmp/af-runtime-lifecycle-build.log",
+      "sha256": "ac1211dc1825993fa331b46499152c2d4754432ca6333e21945f94ee61a45949"
+    },
+    "verification": {
+      "path": "/private/tmp/af-runtime-lifecycle-package-check.json",
+      "sha256": "d26607bf8b0894efa4e8316ff4ec21ad7550a96cbcb5212fd12c915fe567bcdc"
+    },
+    "program_files": 165,
+    "bundle": {
+      "path": "/private/tmp/af-runtime-lifecycle-source-candidate-20261103/agent-framework-1.3.0.tar.gz",
+      "sha256": "127a6276084ab78c16f4cf00db0702ff13f6e22300131151248454c54556a6f8"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-runtime-lifecycle-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "d1a0434d6b074f94ba5605fa74bf66784230e44e25425a5dc7847ac9406a6631"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-runtime-lifecycle-source-candidate-20261103/SHA256SUMS",
+      "sha256": "506675c748984436686e8188ef33b8c4e286cdf8069b7375c06dec8d2a7704d5"
+    },
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/webui/app.js": "05e32bba8b4c7bb5f132567226871d84219568d77db80cd5d0eb15bce7eacb75",
+    "agent_framework/webui/runtime_settings.js": "4736e6b78b1b055b5eebbf64d9d1ac3a21bfb11893ea1d9597bdc7252b7072bc",
+    "agent_framework/webui/task_conversation.js": "278288a2fec9d2eff5459f548a7aaf485d79e09bb2531a9cf944ca19e30442f4",
+    "tests/test_runtime_settings_interactions.js": "bc75ceb27f2b9bbd685fb2ed65747d4b18882c59bc8adca38fc958799082dca5",
+    "tests/verify_runtime_lifecycle.cjs": "84a7873f00da6d461e3e54f1cb45cbc09288fddd65bbdc86a0b9720afa4ea981",
+    "tests/runtime_cache_probe.cjs": "9dc4f197432ff46b7c10aaf8749c22c60d17311a1274b663e297a413de5695ec",
+    "tests/serve_runtime_lifecycle_fixture.py": "83d305053c278a2ad1858cbe86ee6bb57d692976fde6b965d35aeb1d27ec2fce",
+    "tests/serve_runtime_settings_fixture.py": "e14136b483ed6a77239bd4fffb16e292b087ace80387afe00a8c47170cb4ed98",
+    "scripts/run_browser_tests.py": "7d8b3248bfb991e7524deb7c7d43d129c73481cb82eab4ff5cff35b0fdb7e7f5",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "da2aab352bdab6b67c3df694ad096e0265a5c73ea50b654ba67ff1dec26c735c",
+    "design.md": "6dd0d36596046595491e21633bacd2005f7b58889d4976487ee11ae8dc87c372",
+    "docs/reliability/runtime-lifecycle.md": "60a846add5956ec13608e2649a3c61cdbd30f505e156a3cfa4d9b3abcb19cff3"
+  },
+  "limits": [
+    "No guarantee that any browser will cache the production document.",
+    "Storage failure still risks losing an in-memory draft on reload or tab closure.",
+    "Late-read/write controlled lifecycle tests are not claimed as real BFCache navigation.",
+    "Backend full suite and fresh installation were not repeated; application Python source unchanged.",
+    "Version remains 1.3.0; candidate is local and unpublished."
+  ]
+}

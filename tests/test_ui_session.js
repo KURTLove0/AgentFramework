@@ -24,6 +24,7 @@ const stale = () => response(403, {error: '页面会话已失效，请刷新后�
 const session = () => response(200, {
   csrf_token: 'new-token',
   tenant: 'tenant-test',
+  principal: 'actor-test',
   workspace: {id: 'session-workspace'},
   version: 'session-version',
 });
@@ -37,6 +38,7 @@ async function scenario(name, responses, expression, verify) {
     workspaceId: 'workspace-alpha',
     meta: {
       tenant: 'tenant-test',
+      principal: 'actor-test',
       csrf_token: 'old-token',
       workspace: {id: 'workspace-alpha'},
       version: 'original-version',
@@ -181,6 +183,10 @@ async function main() {
       assert.equal(state.meta.csrf_token, 'old-token');
     });
 
+  await scenario('a trusted identity change stops replay and retains the original token',
+    [stale(),response(200,{csrf_token:'new-token',tenant:'tenant-test',principal:'another-actor'})],intent,
+    ({calls,error,state})=>{assert.equal(calls.length,2);assert.match(error.message,/服务身份已变化/);assert.equal(state.meta.csrf_token,'old-token');});
+
   await scenario('retry payload remains frozen if the caller mutates its object', [
     stale(),
     ({state}) => {
@@ -197,8 +203,11 @@ async function main() {
     assert.equal(JSON.parse(calls[2].body).goal, 'original');
   });
 
-  assert.equal(passed, 15);
-  console.log('\n15 isolated UI session checks passed. No network requests were made.');
+  await scenario('structured receipt lookup errors retain their code for absence checks',
+    [response(404,{error:'尚未找到 Skill 保存回执',code:'skill_save_not_found'})],"api('/api/skill-saves/unknown')",
+    ({calls,error})=>{assert.equal(calls.length,1);assert.equal(error.status,404);assert.equal(error.code,'skill_save_not_found');});
+  assert.equal(passed, 17);
+  console.log('\n17 isolated UI session checks passed. No network requests were made.');
 }
 
 main().catch(error => {

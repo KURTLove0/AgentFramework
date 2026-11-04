@@ -46,13 +46,13 @@ const editor=register('flow-editor-dialog','DIALOG'),editorForm=register('flow-e
 const nameField=register('flow-name','INPUT',editorForm),descriptionField=register('flow-description','TEXTAREA',editorForm),metadata=register('flow-metadata','DETAILS',editorForm),metadataSummary=register('metadata-summary');
 const saveButton=register('flow-save','BUTTON',editorForm),closeButton=register('flow-close','BUTTON',editor);closeButton.attributes['data-close']='';
 const confirmDialog=register('confirm-dialog','DIALOG'),confirmBack=register('confirm-back','BUTTON',confirmDialog),confirmClose=register('confirm-close','BUTTON',confirmDialog);confirmBack.attributes['data-close']='';confirmClose.attributes['data-close']='';
-for(const id of ['flow-editor-title','flow-editor-error','flow-designer-status','confirm-title','confirm-body','confirm-error','confirm-submit','flow-chat-agent','flow-chat-history','flow-chat-proposal','flow-chat-form','flow-chat-message','flow-chat-send','flow-chat-consent','flow-chat-consent-label','flow-chat-runtime','flow-chat-error','flow-start-form','flow-start-dialog','flow-start-summary','flow-start-error','flow-live-consent','flow-mcp-consent-label','flow-scenarios','flow-change','flow-grant','flow-consent','flow-mcp-consent'])register(id);
+for(const id of ['flow-start-fields-help','flow-start-title','flow-start-options','flow-start-storage','flow-start-recovery','flow-save-recovery','flow-editor-title','flow-editor-error','flow-designer-status','confirm-title','confirm-body','confirm-error','confirm-submit','flow-chat-agent','flow-chat-history','flow-chat-proposal','flow-chat-form','flow-chat-message','flow-chat-send','flow-chat-consent','flow-chat-consent-label','flow-chat-runtime','flow-chat-error','flow-start-form','flow-start-dialog','flow-start-summary','flow-start-error','flow-live-consent','flow-mcp-consent-label','flow-scenarios','flow-change','flow-grant','flow-consent','flow-mcp-consent'])register(id);
 for(const [key,id] of [['flowFit','fit'],['addFlowNode','add'],['flowBranch','branch']]){const b=register(id,'BUTTON',editorForm);b.dataset[key]='';}
 documentState={activeElement:null,addEventListener(type,fn,capture){if(!documentEvents.has(type))documentEvents.set(type,[]);documentEvents.get(type).push({fn,capture});}};
 const state={workspaceId:'workspace-test',meta:{tenant:'tenant-test'},agents:[{id:'agent-qa',name:'规范知识助手',revision:2,archived:false,runtime:'mock',definition:{domain_pack_ref:'knowledge-answer@1.0.0'}},{id:'agent-writer',name:'发布审核员',revision:3,archived:false,runtime:'mock',definition:{domain_pack_ref:'change-assessment@2.0.0'}}]};
-context=vm.createContext({console,document:documentState,window:{matchMedia:()=>({matches:mobileViewport}),localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},addEventListener(type,fn){if(!windowEvents.has(type))windowEvents.set(type,[]);windowEvents.get(type).push(fn);}},state,structuredClone,crypto:webcrypto,CSS:{escape:String},$:query,$$:queryAll,esc:x=>String(x??''),icon:()=>'',toast:message=>toastMessages.push(message),runtimeLabel:()=>'',time:()=>'',json:JSON.stringify,queueMicrotask});
-for(const file of ['workflows.js','workflow_designer.js'])vm.runInContext(fs.readFileSync(path.join(ROOT,'agent_framework/webui',file),'utf8'),context,{filename:file});
-const run=code=>vm.runInContext(code,context);context.originalLoadFlows=run('loadFlows');
+context=vm.createContext({console,document:documentState,window:{matchMedia:()=>({matches:mobileViewport}),localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},addEventListener(type,fn){if(!windowEvents.has(type))windowEvents.set(type,[]);windowEvents.get(type).push(fn);}},state,structuredClone,TextEncoder,sessionStorage:{getItem:()=>null,setItem(){},removeItem(){}},crypto:webcrypto,CSS:{escape:String},$:query,$$:queryAll,esc:x=>String(x??''),icon:()=>'',toast:message=>toastMessages.push(message),runtimeLabel:()=>'',time:()=>'',json:JSON.stringify,queueMicrotask});
+for(const file of ['workflows.js','workflow_designer.js','workflow_save.js','workflow_start.js','workflow_control.js','workflow_grant.js'])vm.runInContext(fs.readFileSync(path.join(ROOT,'agent_framework/webui',file),'utf8'),context,{filename:file});
+const run=code=>vm.runInContext(code,context);context.originalLoadFlows=run('loadFlows');context.hashStart=async fields=>require('node:crypto').createHash('sha256').update(JSON.stringify(Object.fromEntries(Object.keys(fields).sort().map(k=>[k,fields[k]])))).digest('hex');
 const definition={id:'workflow-test',revision:1,name:'模拟流程',description:'仅隔离测试',nodes:[{id:'knowledge',name:'查询规范',agent_id:'agent-qa',agent_revision:2,goal:'查询模拟规范',depends_on:[],retrieval:{query:'规范',top_k:3}},{id:'review',name:'评估变更',agent_id:'agent-writer',agent_revision:3,goal:'评估模拟变更',depends_on:['knowledge'],condition:{source:'knowledge',field:'citations_count',operator:'gte',value:1}}]};context.definition=definition;
 function reset(){storage.clear();toastMessages.length=0;mobileViewport=false;state.selected=null;state.flowFeedback=null;state.workspaceId='workspace-test';state.composing=false;viewport.scrollLeft=0;viewport.scrollTop=0;viewport.capture=null;confirmDialog.open=false;run('openVisualFlowEditor(definition)');}
 function pointer(type,target,x,y,extra={}){const event={target,pointerId:1,button:0,pointerType:'mouse',isPrimary:true,clientX:x,clientY:y,preventDefault(){this.prevented=true;},...extra};viewport.emit(type,event);return event;}
@@ -89,22 +89,61 @@ test('mobile dragging stays on canvas while zoom and locate return from properti
 test('mobile pane tabs support arrows and desktop always restores both panes',()=>{mobileViewport=true;run('openVisualFlowEditor(definition)');const pane=query('[data-flow-pane="canvas"]');key(pane,'ArrowRight');assert(viewport.hidden&&!inspector.hidden);assert.equal(query('[data-flow-pane="inspector"]').attributes['aria-selected'],'true');mobileViewport=false;for(const listener of windowEvents.get('resize')||[])listener();assert(!viewport.hidden&&!inspector.hidden);assert.equal(run('flowEditorIsDirty()'),false);});
 test('layout data never enters the workflow node API contract',()=>{run("flowMoveNode('knowledge',120,160)");const serial=plain(run('serializeFlowDesign()'));assert.deepEqual(serial,definition.nodes);assert(serial.every(n=>!('position'in n)&&!('positions'in n)&&!('x'in n)&&!('y'in n)));});
 test('saving disables canvas movement and user cancellation cannot discard the request',()=>{run('flowEditorSetSaving(true)');pointer('pointerdown',handle('knowledge'),100,100);assert.equal(run('flowPointer'),null);const before=run('JSON.stringify(flowPositions())');key(handle('knowledge'),'ArrowRight');assert.equal(run('JSON.stringify(flowPositions())'),before);run('requestFlowEditorClose()');assert(editor.open);assert(!confirmDialog.open);run('flowEditorSetSaving(false)');});
+function queuedDetail(queue={state:'QUEUED',reason:'start'},status='CREATED'){
+  return {run:{id:'flowrun-queued',name:'排队流程',status,created_at:1,snapshot:{definition},nodes:{knowledge:{status:'PENDING'},review:{status:status==='WAITING_AUTH'?'WAITING_AUTH':'PENDING'}}},queue,children:{review:{pending:{args_hash:'specific-proposal'}}},events:[],job:null};
+}
+test('queued workflow shows one contextual status and keeps cancel reachable',()=>{
+  context.queued=queuedDetail();const html=run('flowRunDetail(queued)');
+  assert(html.includes('排队中'));assert(html.includes('执行请求已保存，正在排队'));
+  assert.match(html,/data-resume-flow="flowrun-queued" disabled/);assert.match(html,/data-cancel-flow="flowrun-queued" >取消运行/);
+  assert(html.includes('role="status" aria-atomic="true"'));
+});
+test('queued grant displays its saved authorization and prevents repeated approval',()=>{
+  context.queued=queuedDetail({state:'QUEUED',reason:'grant'},'WAITING_AUTH');const html=run('flowRunDetail(queued)');
+  assert(html.includes('授权已保存，正在排队继续流程'));assert(!html.includes('等待写入授权'));
+  assert.match(html,/data-grant-flow="flowrun-queued" data-node="review" disabled>授权已保存/);
+});
+test('persisted enqueue error offers an explicit retry while retaining its grant',()=>{
+  context.queued=queuedDetail({state:'ERROR',reason:'grant',error:'工作流未能进入执行队列'},'WAITING_AUTH');const html=run('flowRunDetail(queued)');
+  assert(html.includes('等待重试'));assert(html.includes('点击“继续 / 恢复”重试'));assert(html.includes('工作流未能进入执行队列'));
+  assert.match(html,/data-resume-flow="flowrun-queued" >继续 \/ 恢复/);assert.match(html,/data-grant-flow="flowrun-queued" data-node="review" disabled/);
+});
+test('cancellation pending and queued history use accurate labels',()=>{
+  context.queued=queuedDetail({state:'QUEUED',reason:'cancel'});context.queued.run.cancel_requested=true;
+  const html=run('flowRunDetail(queued)');assert(html.includes('取消请求已保存'));assert.match(html,/data-cancel-flow="flowrun-queued" disabled>正在取消/);
+  context.directory={runs:[{...context.queued.run,queue:context.queued.queue}]};run('flowHistory().data={...directory,total:1,filtered_total:1,offset:0}');assert(run('flowRunDirectory(directory)').includes('正在取消'));
+  context.directory.runs[0].cancel_requested=false;assert(run('flowRunDirectory(directory)').includes('排队中'));
+});
+test('cancelling a waiting proposal removes the authorization invitation',()=>{
+  context.queued=queuedDetail({state:'QUEUED',reason:'cancel'},'WAITING_AUTH');context.queued.run.cancel_requested=true;
+  const html=run('flowRunDetail(queued)');assert(!html.includes('等待写入授权'));assert(html.includes('当前不接受新授权'));
+  assert.match(html,/data-grant-flow="flowrun-queued" data-node="review" disabled>授权已停用/);
+});
+test('cancellation enqueue errors keep authorization disabled and offer retry cancellation',()=>{
+  context.queued=queuedDetail({state:'ERROR',reason:'cancel',error:'取消队列暂不可用'},'WAITING_AUTH');context.queued.run.cancel_requested=true;
+  const html=run('flowRunDetail(queued)');assert(html.includes('点击“重试取消”继续处理'));
+  assert.match(html,/data-resume-flow="flowrun-queued" >重试取消/);assert.match(html,/data-grant-flow="flowrun-queued" data-node="review" disabled>授权已停用/);
+});
 test('dragging is included in the existing unsaved-close protection',()=>{run("flowMoveNode('knowledge',120,160);requestFlowEditorClose()");assert(editor.open&&confirmDialog.open);confirmDialog.close();assert(editor.open);assert.equal(run('flowPositions().knowledge.x'),120);run('requestFlowEditorClose()');registry.get('confirm-submit').onclick();assert(!editor.open&&!confirmDialog.open);});
 
 async function verifySaveContract(){
+  reset();run('flowDesign.nodes[0].agent_revision=1');
+  assert.throws(()=>run('serializeFlowDesign()'),/智能体已更新/);assert.equal(run('flowDesign.nodes[0].agent_revision'),1);
+  passed++;console.log('PASS saving never silently upgrades a node to a newer Agent revision');
   reset();context.savedRequests=[];
   run("flowMoveNode('knowledge',120,160);api=async(path,payload)=>{savedRequests.push({path,payload});return {...definition,revision:2}};loadFlows=async()=>{};render=()=>{}");
   const submit=editorForm.events.get('submit')[0].fn;
   await submit({target:editorForm,preventDefault(){}});
   const request=plain(context.savedRequests[0]);
   assert.equal(request.path,'/api/workflows/workflow-test');
-  assert.deepEqual(Object.keys(request.payload).sort(),['description','name','nodes','revision']);
+  assert.deepEqual(Object.keys(request.payload).sort(),['description','name','nodes','request_id','revision']);
+  assert.match(request.payload.request_id,/^save-/);
   assert.deepEqual(request.payload.nodes,definition.nodes);
   assert.equal(request.payload.revision,1);
   assert(!editor.open);
   assert.equal(run('flowEditorSaving'),false);
   assert.equal(JSON.parse(storage.get(run("flowLayoutKey('workflow-test')"))).knowledge.x,120);
-  passed++;console.log('PASS successful save keeps the original API contract and stores layout separately');
+  passed++;console.log('PASS successful save uses an idempotent request and stores layout separately');
   await verifyMutationRefreshSafety();
   console.log('\n'+passed+' isolated workflow interaction checks passed.');
 }
@@ -117,7 +156,7 @@ async function verifyMutationRefreshSafety(){
     run('loadFlows=originalLoadFlows;render=()=>{}');
     if(proposal){context.proposal=structuredClone(definition);delete context.proposal.id;delete context.proposal.revision;state.flowChat={id:'chat-preserved',messages:[],proposal:context.proposal};run('openVisualFlowEditor(proposal)');}
     context.postFailure=postFailure;context.partialGet=partialGet;context.fromProposal=proposal;
-    run("api=async(path,payload)=>{requests.push({path,payload});if(payload!==undefined){if(postFailure)throw Error('模拟写入响应未知');return {...definition,id:fromProposal?'workflow-from-chat':'workflow-test',revision:fromProposal?1:2};}if(partialGet&&path==='/api/workflows')return {workflows:[],runs:[]};throw Error('模拟列表GET失败');}");
+    run("api=async(path,payload)=>{requests.push({path,payload});if(payload!==undefined){if(postFailure)throw Error('模拟写入响应未知');return {...definition,id:fromProposal?'workflow-from-chat':'workflow-test',revision:fromProposal?1:2};}if(partialGet&&path==='/api/workflows?view=definitions')return {workflows:[],runs:[]};throw Error('模拟列表GET失败');}");
     await editorSubmit({target:editorForm,preventDefault(){}});
     return plain(context.requests);
   }
@@ -129,16 +168,22 @@ async function verifyMutationRefreshSafety(){
   passed++;console.log('PASS saving an adopted chat proposal survives a later partial refresh failure without duplicate creation');
   calls=await saveWithFailure({postFailure:true});
   assert.equal(calls.length,1);assert(editor.open);assert(!registry.get('flow-editor-error').hidden);assert.equal(state.flowFeedback,null);
+  const firstKey=calls[0].payload.request_id;
+  await editorSubmit({target:editorForm,preventDefault(){}});
+  assert.equal(context.requests[1].payload.request_id,firstKey);
+  nameField.value='修改后的流程';await editorSubmit({target:editorForm,preventDefault(){}});
+  assert.equal(context.requests.length,2);assert.equal(run('flowSaveEditor.attempt.key'),firstKey);
   passed++;console.log('PASS a failed or unknown POST keeps the editor open and never triggers a replay or follow-up refresh');
-  reset();state.view='workflows';state.flows={workflows:[structuredClone(definition)],runs:[]};context.requests=[];context.navigations=[];context.runReceipt={run:{id:'flowrun-created',name:'模拟运行',status:'CREATED',snapshot:{definition},nodes:{},created_at:1},children:{},events:[]};
-  const startForm=registry.get('flow-start-form');startForm.dataset={id:'workflow-test',revision:'1',requestId:'request-stable'};registry.get('flow-change').value='change-test';registry.get('flow-start-dialog').open=true;registry.get('flow-start-error').hidden=true;
-  run("loadFlows=originalLoadFlows;navigate=(view,id)=>{navigations.push({view,id});state.selected=id};api=async(path,payload)=>{requests.push({path,payload});if(payload!==undefined)return runReceipt;throw Error('模拟列表GET失败');}");
+  reset();state.view='workflows';state.flows={workflows:[structuredClone(definition)],runs:[]};context.requests=[];context.navigations=[];context.runReceipt={run:{id:'flowrun-created',name:'模拟运行',status:'CREATED',workflow_id:'workflow-test',request_hash:'fixture-hash',snapshot:{definition,revision:1},nodes:{},created_at:1},children:{},events:[]};
+  const startForm=registry.get('flow-start-form');startForm.dataset={id:'workflow-test',revision:'1',requestId:'request-stable'};registry.get('flow-change').value='change-test';registry.get('flow-start-dialog').open=true;registry.get('flow-start-error').hidden=true;run("flowStartEditor={...flowStartContext('workflow-test'),name:'模拟流程',ready:true};");
+  run("loadFlows=originalLoadFlows;navigate=(view,id)=>{navigations.push({view,id});state.selected=id};api=async(path,payload)=>{requests.push({path,payload});if(payload!==undefined){const fields={workflow_id:'workflow-test',...payload};runReceipt.run.request_hash=await hashStart(fields);return runReceipt;}throw Error('模拟列表GET失败');}");
   await startForm.events.get('submit')[0].fn({target:startForm,preventDefault(){}});
   assert.equal(context.requests.filter(c=>c.payload!==undefined).length,1);assert.equal(context.requests[0].payload.request_id,'request-stable');assert.equal(state.flowDetail.run.id,'flowrun-created');assert.equal(state.flows.runs[0].id,'flowrun-created');assert.equal(context.navigations[0].id,'flowrun-created');assert(!registry.get('flow-start-dialog').open);assert(registry.get('flow-start-error').hidden);assert(toastMessages.at(-1).includes('运行已创建'));
   passed++;console.log('PASS start success preserves the single created run and stable request identity when refresh fails');
   reset();state.view='workflows';state.flows={workflows:[structuredClone(definition)],runs:[]};context.requests=[];
   run("loadFlows=originalLoadFlows;api=async(path,payload)=>{requests.push({path,payload});if(payload!==undefined)return runReceipt;throw Error('模拟列表GET失败');}");
-  await click('grantFlow','flowrun-created',{node:'review'});
+  state.selected='flowrun-created';state.flowDetail=context.runReceipt;
+  await click('grantFlow','flowrun-created',{node:'review',proposalToken:'a'.repeat(64)});
   assert.equal(context.requests.filter(c=>c.payload!==undefined).length,1);assert.equal(context.requests[0].payload.node_id,'review');assert.equal(state.flowDetail.run.id,'flowrun-created');assert(toastMessages.at(-1).includes('已授权此提案'));assert(state.flowFeedback.refreshError);
   passed++;console.log('PASS granted run receipt remains successful when the subsequent GET fails');
   reset();state.view='workflows';state.flows={workflows:[structuredClone(definition)],runs:[]};context.requests=[];

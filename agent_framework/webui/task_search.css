@@ -1,0 +1,13 @@
+.task-activity-heading .task-search-toggle {display:inline-flex; align-items:center; gap:6px; min-height:36px; padding:4px 8px; font-size:12px; margin-left:8px; flex:none}
+.task-search-toggle svg {width:14px; height:14px}
+.task-search-panel {width:calc(100% - 56px); max-width:var(--chat-reading-width,800px); align-self:center; flex:none; margin:8px 0 0; padding:12px 14px; border:1px solid var(--border); border-radius:10px; background:var(--subtle)}
+.task-search-controls {display:flex; align-items:flex-end; gap:12px; flex-wrap:wrap}
+.task-search-controls label {flex:1 1 160px; min-width:0; font-size:12px; margin:0}
+.task-search-controls input {width:100%; min-width:0; margin-top:4px}
+.task-search-actions {display:flex; gap:6px; flex-wrap:wrap; align-items:center}
+.task-search-actions button {min-height:36px; padding:6px 10px; font-size:12px; white-space:nowrap}
+#content #task-search-status {margin:8px 0 0; font-size:12px; line-height:1.5; color:var(--muted); overflow-wrap:anywhere}
+.task-search-current-message {outline:2px solid var(--control-focus); outline-offset:5px; border-radius:4px}
+::highlight(task-search-matches) {background-color:var(--amber-soft); color:var(--amber)}
+::highlight(task-search-current) {background-color:var(--action); color:var(--color-accent-ink)}
+@media(max-width:1100px){.task-search-panel {padding:10px;}.task-search-controls {gap:8px;}.task-search-actions {gap:4px;}}

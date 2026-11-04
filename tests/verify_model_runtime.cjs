@@ -2,6 +2,7 @@
 // Only run against serve_model_execution_fixture.py; never against daily data.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {chromium}=require('playwright');
+const {waitFor}=require('./browser_poll.cjs');
 const base=process.env.MODEL_RUNTIME_TEST_URL;if(!base)throw Error('Set MODEL_RUNTIME_TEST_URL to a disposable fixture service.');
 const output=process.env.MODEL_RUNTIME_OUTPUT||'/private/tmp/model-runtime-results';fs.mkdirSync(output,{recursive:true});
 (async()=>{
@@ -9,7 +10,7 @@ const output=process.env.MODEL_RUNTIME_OUTPUT||'/private/tmp/model-runtime-resul
  page.on('pageerror',e=>errors.push(e.message));const pass=text=>{checks.push(text);console.log('PASS '+text);};
  const call=(url,data)=>page.evaluate(({url,data})=>api(url,data),{url,data});
  const start=async(agent,goal)=>{await page.evaluate(id=>newTask({agentId:id}),agent.id);await page.locator('#create-dialog[open]').waitFor();await page.locator('#task-goal').fill(goal);const response=page.waitForResponse(r=>r.url().endsWith('/api/tasks')&&r.request().method()==='POST');await page.locator('#create-form button[type=submit]').click();const result=await response;assert.equal(result.status(),202,await result.text());await page.locator('#create-dialog').waitFor({state:'hidden'});return(await result.json()).run.run_id;};
- const waitStatus=async(id,status)=>{await page.waitForFunction(async({id,status})=>(await api('/api/runs/'+id)).run.status===status,{id,status});await page.waitForFunction(({id,status})=>state.detail?.run.run_id===id&&state.detail.run.status===status,{id,status});};
+ const waitStatus=async(id,status)=>{await waitFor(async()=>(await call('/api/runs/'+id)).run.status===status,'Run did not reach '+status);await page.waitForFunction(({id,status})=>state.detail?.run.run_id===id&&state.detail.run.status===status,{id,status});};
  try{
   await page.goto(base);await page.waitForFunction(()=>state.meta);
   const domain=(await call('/api/agent-definition-default?domain=knowledge-answer%401.0.0')).definition;
@@ -21,7 +22,7 @@ const output=process.env.MODEL_RUNTIME_OUTPUT||'/private/tmp/model-runtime-resul
   await waitStatus(id,'SUCCEEDED');await page.locator('.task-chat-answer').waitFor();assert((await page.locator('.task-chat-answer').innerText()).includes('客户回访邮件'));assert.equal(await page.locator('.task-chat-answer img').count(),0);assert.equal(await page.evaluate(()=>window.__runtimeXss),undefined);
   const detail=await call('/api/runs/'+id);assert.equal(detail.run.model_calls,1);assert.deepEqual(detail.run.plan,[]);assert.equal(detail.run.task.execution_mode,'conversation');assert.deepEqual([...new Set(detail.events.filter(e=>e.kind==='model.requested').map(e=>e.data.phase))],['execute']);assert.doesNotMatch(JSON.stringify(detail.events),/PRIVATE_RUNTIME/);assert.equal(detail.external.drafts.length,0);pass('普通任务只有一次直接执行调用，结束后展示完整结果，输出被安全展示');
   await page.locator('.task-turn-progress>summary').click();assert((await page.locator('.task-turn-progress').innerText()).includes('已按任务要求完成交付'));await page.reload();await page.locator('.task-chat-answer').waitFor();await page.locator('.task-turn-progress>summary').click();assert((await page.locator('.task-turn-progress').innerText()).includes('正在整理可直接使用的内容'));
-  await page.locator('.task-thread-properties [data-chat-inspect-run]').click();await page.locator('#task-chat-run-dialog[open]').waitFor();assert(await page.locator('.runtime-audit').isVisible());assert.equal(await page.locator('.runtime-audit').getAttribute('open'),null);await page.locator('#task-chat-run-dialog .dialog-foot [data-close]').click();pass('刷新后可回看同一次运行，完整记录折叠保存，过程摘要没有丢失');
+  await page.locator('[data-chat-properties]').click();await page.locator('.task-thread-properties [data-chat-inspect-run]').click();await page.locator('#task-chat-run-dialog[open]').waitFor();assert(await page.locator('.runtime-audit').isVisible());assert.equal(await page.locator('.runtime-audit').getAttribute('open'),null);await page.locator('#task-chat-run-dialog .dialog-foot [data-close]').click();pass('刷新后可回看同一次运行，完整记录折叠保存，过程摘要没有丢失');
   await page.locator('.task-turn-progress>summary').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('.task-turn-progress').evaluate(e=>e.open),false);await page.keyboard.press('Enter');assert(await page.locator('.task-turn-progress').evaluate(e=>e.open));pass('运行过程支持键盘展开与收起');
   const layouts=[];
   for(const theme of ['light','dark'])for(const viewport of [{width:1440,height:1000},{width:768,height:1024},{width:375,height:812},{width:812,height:375}]){
@@ -35,7 +36,7 @@ const output=process.env.MODEL_RUNTIME_OUTPUT||'/private/tmp/model-runtime-resul
   // Old workflow data remains readable without the old four-stage progress bar.
   const oldAgent=await call('/api/agents',{name:'历史知识岗位',description:'旧流程兼容',runtime:'mock',model:'builtin',options:{},prompt:'根据原文回答。',skills:[],mcp_servers:[],definition:domain,revision:0});
   const old=await call('/api/runs',{agent_id:oldAgent.id,agent_revision:1,goal:'变更评估的风险规则是什么？',start:true,grant:false});
-  await page.evaluate(id=>navigate('workbench',id),old.run.run_id);await waitStatus(old.run.run_id,'SUCCEEDED');assert.equal(await page.locator('.phase-bar').count(),0);await page.locator('.task-thread-properties [data-chat-inspect-run]').click();await page.locator('#task-chat-run-dialog[open]').waitFor();assert(await page.locator('.runtime-feed').isVisible());await page.locator('#task-chat-run-dialog .dialog-foot [data-close]').click();pass('历史任务继续保留原执行记录，展示也不再套固定阶段条');
+  await page.evaluate(id=>navigate('workbench',id),old.run.run_id);await waitStatus(old.run.run_id,'SUCCEEDED');assert.equal(await page.locator('.phase-bar').count(),0);await page.locator('[data-chat-properties]').click();await page.locator('.task-thread-properties [data-chat-inspect-run]').click();await page.locator('#task-chat-run-dialog[open]').waitFor();assert(await page.locator('.runtime-feed').isVisible());await page.locator('#task-chat-run-dialog .dialog-foot [data-close]').click();pass('历史任务继续保留原执行记录，展示也不再套固定阶段条');
   assert.deepEqual(errors,[]);fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({checks,errors,layouts},null,2));
  }catch(error){await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});fs.writeFileSync(path.join(output,'failure.json'),JSON.stringify({checks,errors,error:error.message},null,2));throw error;}finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1});

@@ -1,4 +1,5 @@
 """Evidence-based job evaluations. Frozen jobs, never the current edited profile."""
+import base64
 import json
 import time
 
@@ -22,6 +23,8 @@ def schema(db):
             tenant TEXT, project TEXT, principal TEXT, id TEXT, evaluation_id TEXT,
             data TEXT, acknowledged REAL, created REAL,
             PRIMARY KEY(tenant,id), UNIQUE(tenant,evaluation_id));
+        CREATE INDEX IF NOT EXISTS agent_alert_scope ON agent_alerts(tenant,project,principal,acknowledged);
+        CREATE INDEX IF NOT EXISTS agent_evaluation_scope ON agent_evaluations(tenant,project,principal,run_id);
     ''')
 
 
@@ -250,6 +253,10 @@ class AgentEvaluations:
                 'alerts': alerts, 'open_alert_count': open_alerts,
                 'report_count': len(latest), 'limit': 200}
 
+    def page(self, **options):
+        from .evaluation_catalog import page
+        return page(self, **options)
+
     def get(self, identity):
         with self.store.connect() as db:
             row = db.execute('SELECT data FROM agent_evaluations WHERE tenant=? AND project=? AND principal=? AND id=?',
@@ -273,12 +280,46 @@ class AgentEvaluations:
             value.update(score=None,verdict='SIMULATED',historical_score=report['score'],dimensions=[],reasons=['历史离线演示不计入质量评分'])
         return value
 
+    def alert_page(self,status='open',*,agent_id=None,limit=50,cursor=None):
+        """A scoped inbox, independent of the legacy overview's recent-200 list."""
+        from .structured import parse_json
+        if not isinstance(status,str) or status not in ('open','acknowledged','all'):raise ValueError('未知提醒状态')
+        if agent_id is not None:agent_id=identifier(agent_id)
+        if type(limit) is not int:
+            if not isinstance(limit,str) or not limit.isascii() or not limit.isdigit() or len(limit)>2:raise ValueError('提醒分页大小须为 1–50')
+            limit=int(limit)
+        if not 1<=limit<=50:raise ValueError('提醒分页大小须为 1–50')
+        signature=digest([*self.scope,status,agent_id,limit]);before=None
+        if cursor is not None:
+            try:
+                if not isinstance(cursor,str) or not cursor or len(cursor)>2048:raise ValueError()
+                value=parse_json(base64.b64decode(cursor+'='*(-len(cursor)%4),altchars=b'-_',validate=True).decode())
+                if (not isinstance(value,dict) or set(value)!={'v','before','query'} or type(value['v']) is not int or value['v']!=1
+                        or type(value['before']) is not int or not 1<=value['before']<=9223372036854775807 or value['query']!=signature):raise ValueError()
+                before=value['before']
+            except (ValueError,TypeError,UnicodeError,OverflowError):raise ValueError('提醒分页位置无效或条件已变化，请返回最新提醒') from None
+        where='tenant=? AND project=? AND principal=?';params=list(self.scope)
+        with self.store.read_snapshot() as db:
+            agents=[{'id':row['agent_id'],'name':row['agent_name']} for row in db.execute("SELECT json_extract(data,'$.agent_id') AS agent_id,json_extract(data,'$.agent_name') AS agent_name,MAX(rowid) FROM agent_alerts WHERE "+where+' GROUP BY agent_id',params)]
+            if agent_id is not None:where+=" AND json_extract(data,'$.agent_id')=?";params.append(agent_id)
+            counts={'open':0,'acknowledged':0,'all':0}
+            for row in db.execute('SELECT acknowledged IS NULL AS pending,COUNT(*) AS n FROM agent_alerts WHERE '+where+' GROUP BY pending',params):
+                counts['open' if row['pending'] else 'acknowledged']=row['n'];counts['all']+=row['n']
+            if status!='all':where+=' AND acknowledged IS '+('NULL' if status=='open' else 'NOT NULL')
+            if before is not None:where+=' AND rowid<?';params.append(before)
+            rows=db.execute('SELECT rowid,data,acknowledged,created FROM agent_alerts WHERE '+where+' ORDER BY rowid DESC LIMIT ?',(*params,limit+1)).fetchall()
+            more=len(rows)>limit;rows=rows[:limit]
+            alerts=[{**json.loads(row['data']),'acknowledged_at':row['acknowledged'],'created_at':row['created']} for row in rows]
+        next_cursor=base64.urlsafe_b64encode(canonical({'v':1,'before':rows[-1]['rowid'],'query':signature}).encode()).decode().rstrip('=') if more else None
+        return {'alerts':alerts,'counts':counts,'agents':agents,'status':status,'agent_id':agent_id,'limit':limit,'has_more':more,'next_cursor':next_cursor}
+
     def acknowledge(self, identity):
         with self.store.transaction() as db:
             row = db.execute('SELECT * FROM agent_alerts WHERE tenant=? AND project=? AND principal=? AND id=?',
                              (*self.scope, identifier(identity))).fetchone()
             if not row:
                 raise KeyError('alert unavailable')
-            db.execute('UPDATE agent_alerts SET acknowledged=COALESCE(acknowledged,?) WHERE tenant=? AND id=?',
-                       (time.time(), self.app.tenant, identity))
-        return {'id': identity, 'acknowledged': True}
+            acknowledged=row['acknowledged'] if row['acknowledged'] is not None else time.time()
+            db.execute('UPDATE agent_alerts SET acknowledged=? WHERE tenant=? AND id=?',
+                       (acknowledged, self.app.tenant, identity))
+        return {'id': identity, 'acknowledged': True,'acknowledged_at':acknowledged}

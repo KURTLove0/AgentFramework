@@ -1,0 +1,678 @@
+{
+  "date": "2026-11-02",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Explain common model failures, preserve human guidance and original diagnostics, offer read-only run inspection beside explicit retry, and prioritize review of unresolved business effects",
+  "skill": {
+    "name": "ui-ux-pro-max",
+    "path": "/Users/kurt/.agents/skills/ui-ux-pro-max/SKILL.md",
+    "query": "error message recovery action --domain ux",
+    "applied": "Clear recovery steps and accessible feedback; retained existing desktop/web patterns and diagnostic dialog"
+  },
+  "before_tests": {
+    "command": "node --test tests/test_model_failure_messages.js",
+    "observed": "Raw model code, substring misclassification of ordinary guidance, and missing diagnostic shortcut caused all three initial cases to fail.",
+    "tests": 3,
+    "passed": 0,
+    "failed": 3,
+    "duration_ms": 253.271125,
+    "log": "/private/tmp/af-model-failure-messages-before.log",
+    "sha256": "31a8cbb4c4eec9e9f959175c3969d1900bda1d6ee7bc43deb6a897a8ed56db68"
+  },
+  "focused": {
+    "command": "node --test tests/test_model_failure_messages.js tests/test_worker_interactions.js tests/test_cancellation_interactions.js tests/test_run_inspector_interactions.js",
+    "tests": 36,
+    "passed": 36,
+    "failed": 0,
+    "duration_ms": 855.614917,
+    "log": "/private/tmp/af-model-failure-messages-focused-first.log",
+    "sha256": "aec6e8d7d8d94314690f25b900c0e77a538360df5589ad89a7429b5852959908"
+  },
+  "expanded": {
+    "command": "node --test tests/test_model_failure_messages.js",
+    "note": "Eight cases before the additional business-effect review regression.",
+    "tests": 8,
+    "passed": 8,
+    "failed": 0,
+    "duration_ms": 237.835,
+    "log": "/private/tmp/af-model-failure-messages-expanded.log",
+    "sha256": "539ef890fbfd0e637bdc337d5d8bf2dc75ab9f6f52f1dde162ffec4683b881d7"
+  },
+  "review_boundary_before": {
+    "command": "node --test tests/test_model_failure_messages.js",
+    "observed": "The ninth case showed that a cognition deadline in NEEDS_REVIEW still suggested resubmission. The final implementation gives review-first guidance for that state.",
+    "tests": 9,
+    "passed": 8,
+    "failed": 1,
+    "duration_ms": 246.788041,
+    "log": "/private/tmp/af-model-failure-messages-review-before.log",
+    "sha256": "34d4314ad15c90f53aa6774784f07bd50c3d42f3a08e323c465f1f8dc6370e86"
+  },
+  "frontend_initial": {
+    "command": "node --test tests/test_*.js",
+    "note": "Passed before adding the review-state branch and ninth regression.",
+    "tests": 795,
+    "passed": 795,
+    "failed": 0,
+    "duration_ms": 8960.651833,
+    "log": "/private/tmp/af-model-failure-messages-frontend-full.log",
+    "sha256": "d252eabfe8e3d5a9a3430db223590b109519be412949ca142f0cbafaa00cb14a"
+  },
+  "frontend": {
+    "command": "node --test tests/test_*.js",
+    "new_regressions": 9,
+    "tests": 796,
+    "passed": 796,
+    "failed": 0,
+    "duration_ms": 8595.653459,
+    "log": "/private/tmp/af-model-failure-messages-frontend-final.log",
+    "sha256": "d131d7eefecdf98376647b2b18185392bb98921a1f132f915d80d5d22d2fdb66"
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests",
+    "passed": 1144,
+    "seconds": 205.496,
+    "log": "/private/tmp/af-model-failure-messages-backend-full.log",
+    "sha256": "e5b6d2715295e61af8cb130aaf7564f7c1f5af2a09b17ff51edcf52cac705336"
+  },
+  "browser": {
+    "commands": [
+      ".venv/bin/python scripts/run_browser_tests.py --suite model-failure-messages --suite process-cleanup --suite run-inspector --suite conversations --output /private/tmp/af-model-failure-messages-browser-first",
+      ".venv/bin/python scripts/run_browser_tests.py --suite model-failure-messages --output /private/tmp/af-model-failure-messages-browser-second",
+      ".venv/bin/python scripts/run_browser_tests.py --suite model-failure-messages --output /private/tmp/af-model-failure-messages-browser-final"
+    ],
+    "fixture_correction": {
+      "problem": "The first browser test waited only for FAILED and read the previous task while the next task was opening.",
+      "correction": "Wait for both the current goal and expected status; final verification also adds an actual simulated write left DISPATCHED and marked NEEDS_REVIEW.",
+      "result": "/private/tmp/af-model-failure-messages-browser-first/model-failure-messages/failure.json",
+      "sha256": "d31492c66af279331102ef1c58537bd1e4d6cd4a64e488d0dd91cfc75c814c34"
+    },
+    "prior_pass_before_review_case": {
+      "result": "/private/tmp/af-model-failure-messages-browser-second/model-failure-messages/results.json",
+      "sha256": "779c82b587ac8b633c588f665fcc17a9dc1f1739bc2feaa72c60cbb4cb9e3418"
+    },
+    "suites": [
+      {
+        "suite": "model-failure-messages",
+        "result": "/private/tmp/af-model-failure-messages-browser-final/model-failure-messages/results.json",
+        "sha256": "4a26749ef196679438de3f5c13fd2f844f126f1d4e8a3d0491df51e3738492f3",
+        "result_data": {
+          "checks": [
+            "五类模型失败显示原因与恢复建议，原始错误码仍可从本轮记录读取，查看记录不提交任务",
+            "包含错误码字样的补充信息请求保留原文，未被误判为模型超时",
+            "刷新保留状态与草稿，明确重试仅新增一轮；深浅色、窄屏与放大文字下操作可见且可聚焦",
+            "存在尚未确认的业务写入时提示先人工核对，保留未决动作和唯一已创建草稿"
+          ],
+          "errors": [],
+          "observed": [
+            {
+              "title": "模型提前结束",
+              "code": "incomplete_model_turn",
+              "status": "FAILED",
+              "task_id": "task-e56154b5a33bffedc8b60a5052b14d9c",
+              "original_diagnostic_retained": true
+            },
+            {
+              "title": "运行时启动失败",
+              "code": "cursor_unavailable",
+              "status": "FAILED",
+              "task_id": "task-de5b22aa52cd1439f709feecbe885e25",
+              "original_diagnostic_retained": true
+            },
+            {
+              "title": "需要登录运行时",
+              "code": "qoder_auth_required",
+              "status": "FAILED",
+              "task_id": "task-7f118687ca806efcb705518d53eeaa92",
+              "original_diagnostic_retained": true
+            },
+            {
+              "title": "任务执行期限到期",
+              "code": "task_deadline",
+              "status": "EXPIRED",
+              "task_id": "task-39883671285115f5953f6a529bf42cec",
+              "original_diagnostic_retained": true
+            },
+            {
+              "title": "未知模型故障",
+              "code": "future_provider_failure_v2",
+              "status": "FAILED",
+              "task_id": "task-a697d53607a83fcbf7fab811fe8c946c",
+              "original_diagnostic_retained": true
+            },
+            {
+              "title": "需要补充运行材料",
+              "code": null,
+              "status": "WAITING_INPUT",
+              "task_id": "task-f6f502c03bc73227f3f3da8477761812",
+              "original_diagnostic_retained": true
+            }
+          ],
+          "layouts": [
+            {
+              "theme": "light",
+              "width": 1440,
+              "scale": 1,
+              "bounds": {
+                "focused": true,
+                "root": 1440,
+                "width": 1440,
+                "left": 591,
+                "right": 687,
+                "top": 654.4375,
+                "bottom": 691.234375,
+                "height": 36.796875,
+                "scroll": 758,
+                "client": 758
+              }
+            },
+            {
+              "theme": "light",
+              "width": 1440,
+              "scale": 2,
+              "bounds": {
+                "focused": true,
+                "root": 1440,
+                "width": 1440,
+                "left": 591,
+                "right": 687,
+                "top": 654.4375,
+                "bottom": 691.234375,
+                "height": 36.796875,
+                "scroll": 758,
+                "client": 758
+              }
+            },
+            {
+              "theme": "light",
+              "width": 375,
+              "scale": 1,
+              "bounds": {
+                "focused": true,
+                "root": 375,
+                "width": 375,
+                "left": 186,
+                "right": 294,
+                "top": 696.71875,
+                "bottom": 740.71875,
+                "height": 44,
+                "scroll": 275,
+                "client": 275
+              }
+            },
+            {
+              "theme": "light",
+              "width": 375,
+              "scale": 2,
+              "bounds": {
+                "focused": true,
+                "root": 375,
+                "width": 375,
+                "left": 186,
+                "right": 294,
+                "top": 696.71875,
+                "bottom": 740.71875,
+                "height": 44,
+                "scroll": 275,
+                "client": 275
+              }
+            },
+            {
+              "theme": "light",
+              "width": 320,
+              "scale": 1,
+              "bounds": {
+                "focused": true,
+                "root": 320,
+                "width": 320,
+                "left": 80,
+                "right": 188,
+                "top": 767.109375,
+                "bottom": 811.109375,
+                "height": 44,
+                "scroll": 220,
+                "client": 220
+              }
+            },
+            {
+              "theme": "light",
+              "width": 320,
+              "scale": 2,
+              "bounds": {
+                "focused": true,
+                "root": 320,
+                "width": 320,
+                "left": 80,
+                "right": 188,
+                "top": 767.109375,
+                "bottom": 811.109375,
+                "height": 44,
+                "scroll": 220,
+                "client": 220
+              }
+            },
+            {
+              "theme": "dark",
+              "width": 1440,
+              "scale": 1,
+              "bounds": {
+                "focused": true,
+                "root": 1440,
+                "width": 1440,
+                "left": 591,
+                "right": 687,
+                "top": 654.4375,
+                "bottom": 691.234375,
+                "height": 36.796875,
+                "scroll": 758,
+                "client": 758
+              }
+            },
+            {
+              "theme": "dark",
+              "width": 1440,
+              "scale": 2,
+              "bounds": {
+                "focused": true,
+                "root": 1440,
+                "width": 1440,
+                "left": 591,
+                "right": 687,
+                "top": 654.4375,
+                "bottom": 691.234375,
+                "height": 36.796875,
+                "scroll": 758,
+                "client": 758
+              }
+            },
+            {
+              "theme": "dark",
+              "width": 375,
+              "scale": 1,
+              "bounds": {
+                "focused": true,
+                "root": 375,
+                "width": 375,
+                "left": 186,
+                "right": 294,
+                "top": 696.71875,
+                "bottom": 740.71875,
+                "height": 44,
+                "scroll": 275,
+                "client": 275
+              }
+            },
+            {
+              "theme": "dark",
+              "width": 375,
+              "scale": 2,
+              "bounds": {
+                "focused": true,
+                "root": 375,
+                "width": 375,
+                "left": 186,
+                "right": 294,
+                "top": 696.71875,
+                "bottom": 740.71875,
+                "height": 44,
+                "scroll": 275,
+                "client": 275
+              }
+            },
+            {
+              "theme": "dark",
+              "width": 320,
+              "scale": 1,
+              "bounds": {
+                "focused": true,
+                "root": 320,
+                "width": 320,
+                "left": 80,
+                "right": 188,
+                "top": 767.109375,
+                "bottom": 811.109375,
+                "height": 44,
+                "scroll": 220,
+                "client": 220
+              }
+            },
+            {
+              "theme": "dark",
+              "width": 320,
+              "scale": 2,
+              "bounds": {
+                "focused": true,
+                "root": 320,
+                "width": 320,
+                "left": 80,
+                "right": 188,
+                "top": 767.109375,
+                "bottom": 811.109375,
+                "height": 44,
+                "scroll": 220,
+                "client": 220
+              }
+            }
+          ],
+          "task_posts": 6,
+          "retry_posts": 1,
+          "review_run": "run-25b627e17db74e61",
+          "unresolved_write_preserved": true,
+          "business_drafts": 1
+        }
+      },
+      {
+        "suite": "process-cleanup",
+        "result": "/private/tmp/af-model-failure-messages-browser-first/process-cleanup/results.json",
+        "sha256": "16419aa82f99d7ca1f503dc9423f3613dffa2fd7b676d97c6843c107222a23dd",
+        "result_data": {
+          "checks": [
+            "真实模型进程提前退出后保留原始模型错误，退出码与管道收尾完整，未误报执行器中断",
+            "刷新保留公开片段、失败记录与未发送草稿，不自动再调用模型",
+            "显式重试新增一轮并仅执行一次，原失败轮次与草稿保持不变"
+          ],
+          "errors": [],
+          "model_error": "incomplete_model_turn",
+          "child_exit_code": 23,
+          "pipes_closed": true,
+          "model_calls": 2,
+          "task_posts": 1,
+          "retry_posts": 1
+        }
+      },
+      {
+        "suite": "run-inspector",
+        "result": "/private/tmp/af-model-failure-messages-browser-first/run-inspector/results.json",
+        "sha256": "0aa10d82fa8ca498ea1239d62a74caf1c15cee5763abf927d2a9c7fb81e3712d",
+        "result_data": {
+          "checks": [
+            "读取失败在原窗口内可重试；刷新失败保留原记录和读取时间，并明确标注保留内容",
+            "浅深主题、1024/1440 宽度及两倍文字下，重试入口可聚焦、可到达且无横向溢出",
+            "下载绑定刚刚查看的轮次与工作空间，实际记录包校验通过且属于第二轮运行",
+            "慢读取期间关闭窗口并切换任务，旧响应不会重新打开窗口或覆盖当前任务",
+            "访问失效时移除旧内容与下载；真实切换空间后，原空间的迟到读取不能恢复窗口"
+          ],
+          "errors": [],
+          "layouts": [
+            {
+              "theme": "light",
+              "width": 1024,
+              "scale": 1,
+              "bounds": {
+                "left": 227,
+                "right": 317,
+                "top": 913.796875,
+                "bottom": 957.796875,
+                "root": 1024,
+                "width": 1024,
+                "dialogScroll": 618,
+                "dialogClient": 618,
+                "font": 14,
+                "focused": true
+              }
+            },
+            {
+              "theme": "light",
+              "width": 1024,
+              "scale": 2,
+              "bounds": {
+                "left": 227,
+                "right": 373,
+                "top": 994.015625,
+                "bottom": 1058.015625,
+                "root": 1024,
+                "width": 1024,
+                "dialogScroll": 618,
+                "dialogClient": 618,
+                "font": 28,
+                "focused": true
+              }
+            },
+            {
+              "theme": "light",
+              "width": 1440,
+              "scale": 1,
+              "bounds": {
+                "left": 435,
+                "right": 525,
+                "top": 913.796875,
+                "bottom": 957.796875,
+                "root": 1440,
+                "width": 1440,
+                "dialogScroll": 618,
+                "dialogClient": 618,
+                "font": 14,
+                "focused": true
+              }
+            },
+            {
+              "theme": "light",
+              "width": 1440,
+              "scale": 2,
+              "bounds": {
+                "left": 435,
+                "right": 581,
+                "top": 994.015625,
+                "bottom": 1058.015625,
+                "root": 1440,
+                "width": 1440,
+                "dialogScroll": 618,
+                "dialogClient": 618,
+                "font": 28,
+                "focused": true
+              }
+            },
+            {
+              "theme": "dark",
+              "width": 1024,
+              "scale": 1,
+              "bounds": {
+                "left": 227,
+                "right": 317,
+                "top": 913.796875,
+                "bottom": 957.796875,
+                "root": 1024,
+                "width": 1024,
+                "dialogScroll": 618,
+                "dialogClient": 618,
+                "font": 14,
+                "focused": true
+              }
+            },
+            {
+              "theme": "dark",
+              "width": 1024,
+              "scale": 2,
+              "bounds": {
+                "left": 227,
+                "right": 373,
+                "top": 994.015625,
+                "bottom": 1058.015625,
+                "root": 1024,
+                "width": 1024,
+                "dialogScroll": 618,
+                "dialogClient": 618,
+                "font": 28,
+                "focused": true
+              }
+            },
+            {
+              "theme": "dark",
+              "width": 1440,
+              "scale": 1,
+              "bounds": {
+                "left": 435,
+                "right": 525,
+                "top": 913.796875,
+                "bottom": 957.796875,
+                "root": 1440,
+                "width": 1440,
+                "dialogScroll": 618,
+                "dialogClient": 618,
+                "font": 14,
+                "focused": true
+              }
+            },
+            {
+              "theme": "dark",
+              "width": 1440,
+              "scale": 2,
+              "bounds": {
+                "left": 435,
+                "right": 581,
+                "top": 994.015625,
+                "bottom": 1058.015625,
+                "root": 1440,
+                "width": 1440,
+                "dialogScroll": 618,
+                "dialogClient": 618,
+                "font": 28,
+                "focused": true
+              }
+            }
+          ],
+          "download": {
+            "run_id": "turn-bbce1d21d29ca3897aa7d060063b15e9",
+            "workspace": "workspace-default",
+            "verified": true
+          }
+        }
+      },
+      {
+        "suite": "conversations",
+        "result": "/private/tmp/af-model-failure-messages-browser-first/conversations/results.json",
+        "sha256": "44525228cef394895467dd29773cb3d548cc65f55efd60f2bfcbe4170741f088",
+        "result_data": {
+          "checks": [
+            "任务页以对话为主，任务信息按需展开，执行过程与结果保留在同一活动流",
+            "运行刷新不清空草稿、不移动输入光标，中文输入法确认不会误发送",
+            "发送失败原地保留输入可重试，后续回复带有前文，任务数量保持一个",
+            "刷新可恢复整段对话和未发送草稿，无需新建任务",
+            "阅读历史时新回复不会抢滚动位置，可一键回到最新消息",
+            "运行中可依次补充消息，重复点击只发送一次，排队消息可取消",
+            "停止本轮保留记录，已明确排队的下一轮继续执行，取消排队的内容不会发送",
+            "不同任务的草稿相互独立，切回后仍可继续",
+            "智能体追问可以直接在原任务回答，继续使用同一对话上下文",
+            "失败可在任务内重试或继续补充，旧错误与原始输入保留",
+            "每轮可以查看真实执行记录，完整对话可导出",
+            "桌面、平板、手机及横屏可用，发送按钮不被遮挡，支持换行和减少动态效果"
+          ],
+          "errors": [],
+          "layouts": [
+            {
+              "theme": "light",
+              "width": 1440,
+              "height": 1000
+            },
+            {
+              "theme": "light",
+              "width": 768,
+              "height": 1024
+            },
+            {
+              "theme": "light",
+              "width": 375,
+              "height": 812
+            },
+            {
+              "theme": "light",
+              "width": 320,
+              "height": 812
+            },
+            {
+              "theme": "light",
+              "width": 812,
+              "height": 375
+            },
+            {
+              "theme": "dark",
+              "width": 1440,
+              "height": 1000
+            },
+            {
+              "theme": "dark",
+              "width": 768,
+              "height": 1024
+            },
+            {
+              "theme": "dark",
+              "width": 375,
+              "height": 812
+            },
+            {
+              "theme": "dark",
+              "width": 320,
+              "height": 812
+            },
+            {
+              "theme": "dark",
+              "width": 812,
+              "height": 375
+            }
+          ]
+        }
+      }
+    ],
+    "screenshots": [
+      {
+        "file": "/private/tmp/af-model-failure-messages-browser-final/model-failure-messages/failure-dark-1440.png",
+        "sha256": "64d8c0498fda785c18fc0b31602074ceba10768bbfca90842892ff57294f5fc6",
+        "visually_inspected": true
+      },
+      {
+        "file": "/private/tmp/af-model-failure-messages-browser-final/model-failure-messages/failure-light-375.png",
+        "sha256": "7900deb0b1493762e4eab6b04a39f2206ffc1703b18a1e0bd9e4dd2e12c66991",
+        "visually_inspected": true
+      },
+      {
+        "file": "/private/tmp/af-model-failure-messages-browser-final/model-failure-messages/review-before-retry.png",
+        "sha256": "f368e07b14911ae0b2c0bad27aa9228b19c801351121d73f0a3c8d05665c362c",
+        "visually_inspected": true
+      }
+    ]
+  },
+  "candidate": {
+    "command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-model-failure-messages-source-candidate-20261102",
+    "directory": "/private/tmp/af-model-failure-messages-source-candidate-20261102",
+    "build": {
+      "log": "/private/tmp/af-model-failure-messages-candidate-build.log",
+      "sha256": "3e9d0b67c8721a1c939987098d0e70599785ae84effb0c6f887fed465841fa4c"
+    },
+    "verification": {
+      "result": "/private/tmp/af-model-failure-messages-candidate-verification.json",
+      "sha256": "94a66081886f050d1d6cac582b9e9126e05119cbfc757e71baaec5bc275f115d"
+    },
+    "package_files_verified": 143,
+    "source_and_wheel_match": true,
+    "bundle_wheel_match": true,
+    "inner_and_outer_checksums_verified": true,
+    "fresh_environment_install_rerun": false,
+    "published": false,
+    "artifacts": {
+      "/private/tmp/af-model-failure-messages-source-candidate-20261102/agent-framework-1.3.0.tar.gz": "00fec36be655ae5996f1d69e3e6786b5060cf0ce9d7115decb6b73b3d4d8eb07",
+      "/private/tmp/af-model-failure-messages-source-candidate-20261102/bounded_agent_mvp-1.3.0-py3-none-any.whl": "c160c62b1acbae91a4196c3f4c2d233eab6929714a0907154380149ebc1fd668"
+    }
+  },
+  "source_sha256": {
+    "agent_framework/webui/run_view.js": "d06c3a246cccec9c03bb1bc05536d45bf13009ec7bac2ae0fd093eab7d219df6",
+    "agent_framework/webui/task_conversation.js": "0c0334ba16d970cbc79ba1c8e0c30d30c9a7487b04a5dff1579a1e776c73460d",
+    "agent_framework/webui/task_conversation.css": "b00f5c42d4c623c7de9fae79585dad10fbcbe49e3904eb5c4de92b4f5a00ba87",
+    "tests/test_model_failure_messages.js": "5a848b5c64aa42e38ce3ee9aa6964ac78dcb7dd5c89c049bdeaaa153f9d45bf7",
+    "tests/serve_model_failure_messages_fixture.py": "9020fdbe3aebf4d81748bdf34901ab2bad41c8a2be8b75d449d613ec73f9084b",
+    "tests/verify_model_failure_messages.cjs": "d546d3870c5edbd96526732375f064b5a087cb14eb9eca758c4627c5618ae63e",
+    "scripts/run_browser_tests.py": "1ae07be3519260c0697f6256aacec8427989562553e66a04cb7bfd52f30e5169",
+    "README.md": "4650902fbdc108d881b0743c2c881ae99824577c737a1f54547ff4c32e02c131",
+    "design.md": "0037aa931653ad5cadd34fd45b671d8006ef8d4869fc190b80851fa82fec5b71",
+    "docs/reliability/model-failure-messages.md": "48229d9f3546aabfb69ce85299b6237af768929e3514e9fd508da57a074d0920"
+  },
+  "boundaries": [
+    "Presentation-only: stored errors, events, state, exports, cancellation and retry protocols are unchanged.",
+    "Complete known codes or the explicit host cognition-failure prefix are interpreted; ordinary human guidance containing code words stays intact.",
+    "Unknown cognition failures do not invent a network or authentication cause.",
+    "NEEDS_REVIEW cognition failures guide users to inspect existing effects instead of suggesting immediate retry or resubmission.",
+    "The new record shortcut uses the existing read-only inspector; the retry still explicitly creates one new turn.",
+    "The final browser fixture retains one actual simulated draft and one DISPATCHED action after a write crash; viewing guidance does not reconcile or recreate it.",
+    "Responsive checks cover 12 theme/width/text-scale combinations and reduced motion; text-scale overrides target the error component, not a full operating-system accessibility audit.",
+    "No real model service, production data, new permission, protocol version change, fresh-environment install or publication."
+  ]
+}

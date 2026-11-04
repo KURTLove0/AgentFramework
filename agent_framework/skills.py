@@ -21,6 +21,10 @@ MAX_FILE=96_000
 SPEC='https://agentskills.io/specification'
 
 
+class SkillSaveReceiptNotFound(KeyError):
+    pass
+
+
 def valid_name(name):
     return (isinstance(name,str) and 1<=len(name)<=64 and name==name.strip() and not name.startswith('-')
             and not name.endswith('-') and '--' not in name and all(c.islower() or c.isdigit() or c=='-' for c in name))
@@ -154,6 +158,10 @@ class SkillRegistry:
             db.executescript('''CREATE TABLE IF NOT EXISTS skill_heads(tenant TEXT,workspace TEXT,id TEXT,name TEXT,revision INTEGER,version INTEGER,archived INTEGER,builtin INTEGER,updated REAL,PRIMARY KEY(tenant,workspace,id),UNIQUE(tenant,workspace,name));
             CREATE TABLE IF NOT EXISTS skill_versions(tenant TEXT,workspace TEXT,id TEXT,version INTEGER,status TEXT,hash TEXT,data TEXT,created REAL,PRIMARY KEY(tenant,workspace,id,version));
             CREATE TABLE IF NOT EXISTS skill_events(tenant TEXT,workspace TEXT,id TEXT,seq INTEGER,kind TEXT,data TEXT,created REAL,PRIMARY KEY(tenant,workspace,id,seq));''')
+            db.execute('''CREATE TABLE IF NOT EXISTS skill_save_requests(
+                tenant TEXT,workspace TEXT,principal TEXT,request_id TEXT,request_hash TEXT,
+                skill_id TEXT,version INTEGER,revision INTEGER,warnings TEXT,created REAL,
+                PRIMARY KEY(tenant,workspace,principal,request_id))''')
         self.seed()
 
     def _event(self,db,identity,kind,data):
@@ -176,43 +184,117 @@ class SkillRegistry:
                 self._event(db,identity,'seeded',{'version':1,'hash':package['hash']})
 
     def list(self):
-        with self.store.connect() as db:ids=[r[0] for r in db.execute('SELECT id FROM skill_heads WHERE tenant=? AND workspace=? ORDER BY builtin,updated DESC',self.scope)]
-        return [self.get(i,include_files=False) for i in ids]
+        with self.store.read_snapshot() as db:
+            versions=self._version_summaries(db)
+            rows=db.execute('''SELECT h.id,h.name,h.revision,h.archived,h.builtin,
+                v.version AS selected_version,v.status,v.hash,v.data FROM skill_heads h
+                LEFT JOIN skill_versions v ON v.tenant=h.tenant AND v.workspace=h.workspace AND v.id=h.id AND v.version=h.version
+                WHERE h.tenant=? AND h.workspace=? ORDER BY h.builtin,h.updated DESC,h.id''',self.scope)
+            # Iterate selected packages instead of retaining every file body in a
+            # second in-memory catalog. Historical reads contain metadata only.
+            return [self._record(row,versions.get(row['id'],[]),False) for row in rows]
 
-    def get(self,identity,version=None,include_files=True):
-        identifier(identity)
-        if version is not None and (type(version) is not int or version<1):raise ValueError('Skill 版本无效')
-        with self.store.connect() as db:
-            head=db.execute('SELECT * FROM skill_heads WHERE tenant=? AND workspace=? AND id=?',(*self.scope,identity)).fetchone()
-            if not head:raise KeyError('Skill outside workspace')
-            versions=db.execute('SELECT version,status,hash,created,data FROM skill_versions WHERE tenant=? AND workspace=? AND id=? ORDER BY version DESC',(*self.scope,identity)).fetchall()
-            row=db.execute('SELECT * FROM skill_versions WHERE tenant=? AND workspace=? AND id=? AND version=?',(*self.scope,identity,version or head['version'])).fetchone()
-            if not row:raise KeyError('Skill version not found')
+    def _version_summaries(self,db,identity=None):
+        clause=' AND v.id=?' if identity is not None else ''
+        args=(*self.scope,identity) if identity is not None else self.scope
+        rows=db.execute('''SELECT v.id,v.version,v.status,v.hash,v.created,
+            json_extract(v.data,'$.metadata') AS metadata FROM skill_versions v
+            JOIN skill_heads h ON h.tenant=v.tenant AND h.workspace=v.workspace AND h.id=v.id
+            WHERE v.tenant=? AND v.workspace=?'''+clause+' ORDER BY v.id,v.version DESC',args)
+        result={}
+        for row in rows:
+            result.setdefault(row['id'],[]).append({key:row[key] for key in ('version','status','hash','created')}|
+                {'metadata':json.loads(row['metadata'])})
+        return result
+
+    @staticmethod
+    def _record(row,versions,include_files):
+        if row['selected_version'] is None:raise KeyError('Skill version not found')
         package=json.loads(row['data']);validate_frozen(package)
         if package['hash']!=row['hash']:raise ValueError('Skill 版本摘要不匹配')
-        out={'id':identity,'name':head['name'],'revision':head['revision'],'version':row['version'],'status':row['status'],'archived':bool(head['archived']),'builtin':bool(head['builtin']),
-             'metadata':package['metadata'],'hash':row['hash'],'versions':[{k:v[k] for k in ('version','status','hash','created')}|{'metadata':json.loads(v['data'])['metadata']} for v in versions],
+        out={'id':row['id'],'name':row['name'],'revision':row['revision'],'version':row['selected_version'],
+             'status':row['status'],'archived':bool(row['archived']),'builtin':bool(row['builtin']),
+             'metadata':package['metadata'],'hash':row['hash'],'versions':versions,
              'files':[{'path':p,'size':v['size'],'hash':v['hash'],'encoding':v['encoding']} for p,v in package['files'].items()]}
         if include_files:out['package']=package
         return out
 
-    def save(self,data,identity=None):
+    def get(self,identity,version=None,include_files=True):
+        identifier(identity)
+        if version is not None and (type(version) is not int or version<1):raise ValueError('Skill 版本无效')
+        with self.store.read_snapshot() as db:
+            return self._read(db,identity,version,include_files)
+
+    def _read(self,db,identity,version=None,include_files=True):
+        row=db.execute('''SELECT h.id,h.name,h.revision,h.archived,h.builtin,
+            v.version AS selected_version,v.status,v.hash,v.data FROM skill_heads h
+            LEFT JOIN skill_versions v ON v.tenant=h.tenant AND v.workspace=h.workspace AND v.id=h.id
+            AND v.version=COALESCE(?,h.version) WHERE h.tenant=? AND h.workspace=? AND h.id=?''',(version,*self.scope,identity)).fetchone()
+        if not row:raise KeyError('Skill outside workspace')
+        if row['selected_version'] is None:raise KeyError('Skill version not found')
+        return self._record(row,self._version_summaries(db,identity).get(identity,[]),include_files)
+
+    def _assert_workspace_active(self,db):
+        if db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='workspaces'").fetchone():
+            from .workspaces import assert_workspace_active
+            assert_workspace_active(db,*self.scope)
+
+    def _save_receipt(self,db,request_id,principal,request_hash=None):
+        receipt=db.execute('SELECT * FROM skill_save_requests WHERE tenant=? AND workspace=? AND principal=? AND request_id=?',
+            (*self.scope,principal,request_id)).fetchone()
+        if not receipt:return None
+        if request_hash is not None and receipt['request_hash']!=request_hash:raise ConfigConflict('此保存编号已用于另一份 Skill 内容，请先核对保存结果')
+        return {**self._read(db,receipt['skill_id'],receipt['version']), 'warnings':json.loads(receipt['warnings']),
+            'save_receipt':{'request_id':request_id,'revision':receipt['revision'],'version':receipt['version'],'at':receipt['created'],'replayed':True}}
+
+    def save_request(self,request_id,*,principal):
+        identifier(request_id);identifier(principal)
+        with self.store.read_snapshot() as db:
+            self._assert_workspace_active(db);receipt=self._save_receipt(db,request_id,principal)
+            if receipt is None:raise SkillSaveReceiptNotFound('Skill save receipt not found')
+            return receipt
+
+    def save(self,data,identity=None,*,request_id=None,principal=None):
+        data=deepcopy(data)
         if not isinstance(data,dict) or set(data)!={'folder','files','revision'}:raise ValueError('Skill 保存需要 folder、files、revision')
         if type(data['revision']) is not int or data['revision']<0:raise ValueError('Skill 修订号无效')
+        if identity is not None:identifier(identity)
+        request_hash=None
+        if request_id is not None:
+            identifier(request_id);identifier(principal);request_hash=digest({'skill_id':identity,'data':data})
+        with self.store.read_snapshot() as db:
+            self._assert_workspace_active(db)
+            if request_id is not None:
+                receipt=self._save_receipt(db,request_id,principal,request_hash)
+                if receipt:return receipt
         package,warnings=normalize_package(data['folder'],data['files']);prior=self.get(identity) if identity else None
         if prior and (prior['builtin'] or prior['archived']):raise ValueError('内置或已归档 Skill 不能编辑，请复制为新 Skill')
         if prior and prior['name']!=package['name']:raise ValueError('Skill 名称用于包标识，编辑时不能更改；请复制创建')
-        identity=identity or 'skill-'+uuid4().hex[:16];now=time.time()
+        creating=identity is None;identity=identity or 'skill-'+uuid4().hex[:16];now=time.time()
         with self.store.transaction() as db:
+            self._assert_workspace_active(db)
+            if request_id is not None:
+                receipt=self._save_receipt(db,request_id,principal,request_hash)
+                if receipt:return receipt
             head=db.execute('SELECT * FROM skill_heads WHERE tenant=? AND workspace=? AND id=?',(*self.scope,identity)).fetchone()
+            if not head and not creating:raise KeyError('Skill outside workspace')
             if (head['revision'] if head else 0)!=data['revision']:raise ConfigConflict('Skill 已更新，请重新加载')
+            if head and (head['archived'] or head['builtin']):raise ConfigConflict('内置或已归档 Skill 不能编辑，请复制为新 Skill')
             collision=db.execute('SELECT id FROM skill_heads WHERE tenant=? AND workspace=? AND name=?',(*self.scope,package['name'])).fetchone()
             if collision and collision[0]!=identity:raise ConfigConflict('当前空间已有同名 Skill')
             version=(head['version'] if head else 0)+1
             db.execute('INSERT OR REPLACE INTO skill_heads VALUES(?,?,?,?,?,?,?,?,?)',(*self.scope,identity,package['name'],data['revision']+1,version,0,0,now))
             db.execute('INSERT INTO skill_versions VALUES(?,?,?,?,?,?,?,?)',(*self.scope,identity,version,'DRAFT',package['hash'],canonical(package),now))
             self._event(db,identity,'saved',{'version':version,'hash':package['hash']})
-        return {**self.get(identity),'warnings':warnings}
+            receipt=None
+            if request_id is not None:
+                db.execute('INSERT INTO skill_save_requests VALUES(?,?,?,?,?,?,?,?,?,?)',(*self.scope,principal,request_id,request_hash,identity,version,data['revision']+1,canonical(warnings),now))
+                receipt={'request_id':request_id,'revision':data['revision']+1,'version':version,'at':now,'replayed':False}
+            history=[{'version':version,'status':'DRAFT','hash':package['hash'],'created':now,'metadata':package['metadata']},*((prior or {}).get('versions',[]))]
+            row={'id':identity,'name':package['name'],'revision':data['revision']+1,'selected_version':version,'status':'DRAFT','archived':0,'builtin':0,'hash':package['hash'],'data':canonical(package)}
+            result={**self._record(row,history,True),'warnings':warnings}
+            if receipt is not None:result['save_receipt']=receipt
+            return result
 
     def lifecycle(self,identity,revision,operation,version=None):
         current=self.get(identity,version)
@@ -221,6 +303,7 @@ class SkillRegistry:
         if operation not in ('publish','withdraw','archive','restore'):raise ValueError('Skill 操作无效')
         if operation in ('publish','withdraw') and (current['archived'] or current['status']!=('DRAFT' if operation=='publish' else 'PUBLISHED')):raise ConfigConflict('Skill 当前状态不允许此操作')
         with self.store.transaction() as db:
+            self._assert_workspace_active(db)
             cur=db.execute('UPDATE skill_heads SET revision=revision+1,archived=?,updated=? WHERE tenant=? AND workspace=? AND id=? AND revision=?',
                            (int(operation=='archive' or current['archived'] and operation!='restore'),time.time(),*self.scope,identity,revision))
             if cur.rowcount!=1:raise ConfigConflict('Skill 已更新，请重新加载')

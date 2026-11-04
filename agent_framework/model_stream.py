@@ -1,16 +1,15 @@
 """Bounded CLI stream collection and public progress, never private reasoning."""
 import io
 import json
-import os
-import queue
 import re
-import signal
 import subprocess
-import threading
+import sys
 import time
 
 from .agent_extensions import allowed_mcp_call
 from .model_output_stream import ReplyStream
+from .processes import stop_process_group, finish_process
+from .process_pipes import ProcessPipes
 
 LIMIT=8*1024*1024
 
@@ -114,36 +113,22 @@ class PublicProgress:
 
 def collect(process,prompt,timeout,provider,callback=None,profile=None,cancel=None):
     """Drain both pipes while the child is running; bound memory and terminate on error."""
-    if callback is None or not isinstance(getattr(process,'stdout',None),io.TextIOBase):
+    if not isinstance(getattr(process,'stdout',None),io.TextIOBase):
         return process.communicate(prompt,timeout=timeout)
     from .llm import ModelError
-    events=queue.Queue(maxsize=64);stop=threading.Event();readers=[]
-    def put(item):
-        while not stop.is_set():
-            try:events.put(item,timeout=.1);return
-            except queue.Full:pass
-    def read(name,pipe):
-        try:
-            while not stop.is_set():
-                chunk=pipe.readline(65536)
-                if not chunk:break
-                put((name,chunk))
-        except (OSError,ValueError):pass
-        finally:put((name,None))
-    def write():
-        try:process.stdin.write(prompt);process.stdin.flush();process.stdin.close()
-        except (OSError,ValueError):pass
+    pipes=None
     deadline=time.monotonic()+timeout;stdout=[];stderr=[];size=0;error_size=0;done=set();pending=''
-    progress=PublicProgress(provider,callback,profile)
-    for name in ('stdout','stderr'):
-        thread=threading.Thread(target=read,args=(name,getattr(process,name)),daemon=True);thread.start();readers.append(thread)
-    writer=threading.Thread(target=write,daemon=True);writer.start()
+    progress=PublicProgress(provider,callback,profile) if callback is not None else None
     try:
+        pipes=ProcessPipes(process);pipes.queue_input(prompt,close=True)
         while len(done)<2 or process.poll() is None:
             if callable(cancel) and cancel():raise ModelError('task_cancelled')
             if time.monotonic()>=deadline:raise ModelError('model_timeout')
-            try:name,chunk=events.get(timeout=min(.1,max(.001,deadline-time.monotonic())))
-            except queue.Empty:progress.flush();continue
+            event=pipes.receive(min(.05,max(.001,deadline-time.monotonic())))
+            if event is None:
+                if progress:progress.flush()
+                continue
+            name,chunk=event
             if chunk is None:done.add(name);continue
             if name=='stderr':
                 error_size+=len(chunk.encode())
@@ -151,31 +136,20 @@ def collect(process,prompt,timeout,provider,callback=None,profile=None,cancel=No
                 continue
             size+=len(chunk.encode())
             if size>LIMIT:raise ModelError('invalid_model_envelope')
-            stdout.append(chunk);pending+=chunk
+            stdout.append(chunk)
+            if progress is None:continue
+            pending+=chunk
             while '\n' in pending:
                 line,pending=pending.split('\n',1)
                 try:event=json.loads(line)
                 except ValueError:continue
                 progress.feed(event)
-        if pending:
+        if progress and pending:
             try:progress.feed(json.loads(pending))
             except ValueError:pass
-        progress.flush()
+        if progress:progress.flush()
         try:process.wait(timeout=max(.001,deadline-time.monotonic()))
         except subprocess.TimeoutExpired as exc:raise ModelError('model_timeout') from exc
         return ''.join(stdout),''.join(stderr)
     finally:
-        stop.set()
-        if process.poll() is None:
-            try:os.killpg(process.pid,signal.SIGTERM)
-            except ProcessLookupError:pass
-            try:process.wait(timeout=1)
-            except subprocess.TimeoutExpired:
-                try:os.killpg(process.pid,signal.SIGKILL)
-                except ProcessLookupError:pass
-                process.wait(timeout=1)
-        for thread in readers:thread.join(timeout=1)
-        writer.join(timeout=1)
-        for pipe in (process.stdin,process.stdout,process.stderr):
-            try:pipe.close()
-            except (OSError,ValueError):pass
+        finish_process(process,pipes,sys.exception(),stop=stop_process_group)

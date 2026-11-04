@@ -1,0 +1,151 @@
+{
+  "date": "2026-11-02",
+  "status": "source-improvement-complete-not-published",
+  "version": "1.3.0",
+  "scope": "Bounded execution hints, durable workflow errors and bounded failure fallbacks reconciled against later durable recovery",
+  "before": {
+    "tests": 3,
+    "failed": 3,
+    "log": "/private/tmp/af-job-history-before.log"
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests",
+    "passed": 1021,
+    "seconds": 184.485,
+    "log": "/private/tmp/af-job-history-backend-reconciled.log",
+    "sha256": "59d83f5010523b0891a9dbc0db96fe9fdbf5541391a56bf7b7449f624089bc78"
+  },
+  "focused": {
+    "command": ".venv/bin/python -m unittest tests.test_job_history",
+    "passed": 17,
+    "log": "/private/tmp/af-job-history-reconciled.log",
+    "sha256": "0ac5ecca73af1fd531fcdf678d41c5780545864d0921555fb4a16aae8d4646fb"
+  },
+  "frontend": {
+    "command": "node --test tests/test_*.js",
+    "passed": 776,
+    "duration_ms": 8600.825542,
+    "log": "/private/tmp/af-job-history-frontend-final.log",
+    "sha256": "59b8556e016206be64a56f80a1c2b79c6de0d0ff9b547fe15b4de2480df7536f",
+    "rerun_after_backend_only_reconciliation": false
+  },
+  "browser": {
+    "command": ".venv/bin/python scripts/run_browser_tests.py --suite workflow-queue --suite streaming --suite cancellations --output /private/tmp/af-job-history-browser-reconciled",
+    "suites": [
+      {
+        "suite": "workflow-queue",
+        "result": "/private/tmp/af-job-history-browser-reconciled/workflow-queue/results.json",
+        "sha256": "d39cf2fcd41bba9c1c7c830310a76e1b83e6ce1f77c11801eb607091144fd3b6",
+        "checks": [
+          "拥堵时启动返回已接受，关闭表单并显示排队，刷新保留同一运行",
+          "排队中取消请求被保留，容量恢复后结束，未启动业务节点",
+          "拥堵时授权和续跑一起保存，刷新保留授权，深浅主题与桌面窗口显示正常",
+          "容量恢复后自动继续原节点，草稿创建一次，排队状态清除"
+        ],
+        "layouts": 0,
+        "errors": []
+      },
+      {
+        "suite": "streaming",
+        "result": "/private/tmp/af-job-history-browser-reconciled/streaming/results.json",
+        "sha256": "94cf07a117cba4a09eaec158a0a59f4418b4f56cd9ac140f9a00b05ce8f1b074",
+        "checks": [
+          "公开摘要在任务仍运行时逐段增长，通过持续连接显示",
+          "回答正文在最终结果保存之前连续增长，未泄露协议 JSON 或转义字符",
+          "逐段更新保持输入框节点、草稿和光标位置",
+          "流连接暂不可用时，同一检查点和时间戳的迟到轮询不会覆盖新增公开过程，正文、输入焦点与光标保留",
+          "同一数据位置的完整轮次详情可恢复，重连推送保留匹配的操作信息",
+          "刷新后立即重放已生成片段，并继续接收同一轮回答",
+          "生成结束无重复正文，Unicode 正确，隐藏思考与 HTML 执行内容不会泄露",
+          "连接中断后能继续接收输出，未重新调用模型或重复追加",
+          "停止生成会保留已显示片段，并明确标记本轮未完成",
+          "生成失败保留正文片段和错误信息，未把片段伪装为最终结果",
+          "桌面、平板和手机深浅色显示正常，输入和发送操作保持可用"
+        ],
+        "layouts": 8,
+        "errors": []
+      },
+      {
+        "suite": "cancellations",
+        "result": "/private/tmp/af-job-history-browser-reconciled/cancellations/results.json",
+        "sha256": "f68b82f9ff3e5551085dd8400a9baa37088a515f8754fb5de3b53860d7faba5f",
+        "checks": [
+          "停止返回已保存请求，清楚显示正在停止并保留片段及排队消息，不提前显示已停止",
+          "执行器内存记录消失后刷新仍显示同一停止请求，输入草稿与桌面深浅色布局保留",
+          "停止当前轮次后继续明确排队的下一轮，不重复调用模型，不丢失未发送草稿",
+          "停止处理失败跨刷新保留，显式重试后结束原任务并保留同一请求历史",
+          "停止重试已完成但响应丢失时，只读核对替换旧的停止中状态，明确显示已结束且不重复提交"
+        ],
+        "layouts": 8,
+        "errors": []
+      }
+    ]
+  },
+  "load": {
+    "command": ".venv/bin/python tests/measure_job_history.py --output /private/tmp/af-job-history-load-reconciled.json",
+    "result": "/private/tmp/af-job-history-load-reconciled.json",
+    "sha256": "960b2340529a78c6da5551f430a7ad5825ee779213f8b763af0fe410087fb61f",
+    "measurements": {
+      "tasks": 384,
+      "worker_errors_saved": 384,
+      "stop_errors_saved": 384,
+      "history_limit_per_executor": 128,
+      "samples": [
+        {
+          "tasks": 128,
+          "execution_hints": 128,
+          "stop_hints": 128,
+          "snapshot_hints": 128,
+          "snapshot_mean_ms": 0.05757125007221475
+        },
+        {
+          "tasks": 256,
+          "execution_hints": 128,
+          "stop_hints": 128,
+          "snapshot_hints": 128,
+          "snapshot_mean_ms": 0.06394750002073124
+        },
+        {
+          "tasks": 384,
+          "execution_hints": 128,
+          "stop_hints": 128,
+          "snapshot_hints": 128,
+          "snapshot_mean_ms": 0.06855250001535751
+        }
+      ],
+      "oldest_detail_readable": true,
+      "seconds": 8.25493679200008,
+      "workload": "real temporary task records; executor submissions deliberately rejected; no model calls"
+    },
+    "timing_note": "Synthetic isolated workload; observational timings, not a service latency guarantee"
+  },
+  "candidate": {
+    "command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-job-history-source-candidate-final-20261102",
+    "directory": "/private/tmp/af-job-history-source-candidate-final-20261102",
+    "package_files_verified": 138,
+    "source_and_wheel_match": true,
+    "bundle_wheel_match": true,
+    "inner_and_outer_checksums_verified": true,
+    "fresh_environment_install_rerun": false,
+    "published": false,
+    "artifacts": {
+      "/private/tmp/af-job-history-source-candidate-final-20261102/agent-framework-1.3.0.tar.gz": "4006f38eba42669fcce9cfb28bf98a809f7583e3b9b91742c744eb3fa68d1b9e",
+      "/private/tmp/af-job-history-source-candidate-final-20261102/bounded_agent_mvp-1.3.0-py3-none-any.whl": "f0f7943a05a176d4b9fa377664cdebec9ecf12c055e84a99538555ac70d80c92"
+    }
+  },
+  "source_sha256": {
+    "agent_framework/web.py": "e1abba4f7747753eed666b0589db1930e6a4fcdf0e89ebf14905ad12d2f9bfce",
+    "agent_framework/task_conversations.py": "4646fcf956938ee17ec41559c5bd32b74d59464b1d14e5faac3ec475416ee2fb",
+    "agent_framework/workflows.py": "12fc9b997a0a853cc8b6559e8602635741b33589700fbc7eb28cfd25e91fe61a",
+    "tests/test_job_history.py": "18031921c8e45ef39d838efaa211d6d4379713ba6efdfc1ec8b80ef1ef25a6b2",
+    "tests/measure_job_history.py": "30b0025e3d6300b606ecf8907c55709b20a9653f0169e7494233217af3823e27",
+    "README.md": "7377e19415b66222556e1bd9f954adf27c2015ae525e2d266d04aed31586af0d",
+    "design.md": "b8ccd954aa2c5bc89dc00072878571b79c02cc85a03e328a3338ada01bc366d9",
+    "docs/reliability/job-history.md": "6fc99f7bc18394b0063a6b53c19687c0587abac2d8e6e0a77476798bccddb05f"
+  },
+  "boundaries": [
+    "Bounds local execution hint caches, not database history or whole-process memory.",
+    "Unpersisted failure fallbacks are process-local; loss of both persistence and process is outside this guarantee.",
+    "SSE admission limits, execution concurrency and database schemas were not changed."
+  ]
+}

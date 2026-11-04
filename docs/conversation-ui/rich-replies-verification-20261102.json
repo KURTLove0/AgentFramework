@@ -1,0 +1,240 @@
+{
+  "date": "2026-11-02",
+  "status": "source_and_candidate_verified_not_published",
+  "release_version_unchanged": "1.3.0",
+  "scope": "Structured Markdown task replies, code-only copying, safe rendering and persistent reading position through streamed and full reply updates",
+  "checks": {
+    "frontend": {
+      "command": "npm test",
+      "tests": 684,
+      "new_tests": 15,
+      "passed": true,
+      "seconds": 7.950684167,
+      "log": "/private/tmp/af-reply-markdown-ui-verified.log"
+    },
+    "backend": {
+      "command": "PYTHONPATH=tests .venv/bin/python -m unittest tests.test_task_conversations tests.test_streaming_tasks tests.test_codex_stream tests.test_web tests.test_release_delivery",
+      "tests": 70,
+      "passed": true,
+      "seconds": 19.937,
+      "log": "/private/tmp/af-reply-markdown-backend-verified.log"
+    },
+    "browser": [
+      {
+        "suite": "reply-markdown",
+        "passed": true,
+        "exit_code": 0,
+        "result_file": "/private/tmp/af-reply-markdown-browser-complete/reply-markdown/results.json",
+        "log": "/private/tmp/af-reply-markdown-browser-complete/reply-markdown.log",
+        "checks": [
+          "真实流式回复渲染表格、引用和嵌套列表；复制保留缩进换行，后续输出保留原代码节点、横向位置和焦点",
+          "表格支持键盘横向阅读，完整刷新和最终结果保留阅读位置；HTML 不执行、危险地址不导航、外部图片不自动请求",
+          "复制完整回复仍保留原始 Markdown；代码复制权限失败时原代码保留并给出就地提示",
+          "明暗主题四种桌面宽度、1024px 属性栏展开和放大文字时，宽表格与代码均留在回复内，复制入口可操作",
+          "刷新后由已持久化结果恢复表格与代码，全部资源本地加载，复制内容保持一致"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "conversation-ui",
+        "passed": true,
+        "exit_code": 0,
+        "result_file": "/private/tmp/af-reply-markdown-browser-final/conversation-ui/results.json",
+        "log": "/private/tmp/af-reply-markdown-browser-final/conversation-ui.log",
+        "checks": [
+          "任务信息默认收起，展开与关闭保留原输入框、草稿和可访问状态",
+          "四种桌面宽度与深浅主题中正文行宽、右侧提问、代码块和底部操作保持清晰可用",
+          "任务对话在 200% 文字下仍可输入和发送，无页面横向溢出",
+          "发送失败保留原消息与后续输入，核对后按原编号重试，明确发送后续要求仍留在同一对话",
+          "工作流设计使用统一消息与输入样式，提案独立审查，仍可进入画布编辑新智能体"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "conversation-details",
+        "passed": true,
+        "exit_code": 0,
+        "result_file": "/private/tmp/af-reply-markdown-browser-final/conversation-details/results.json",
+        "log": "/private/tmp/af-reply-markdown-browser-final/conversation-details.log",
+        "checks": [],
+        "errors": []
+      }
+    ],
+    "browser_commands": [
+      ".venv/bin/python scripts/run_browser_tests.py --suite reply-markdown --suite conversation-ui --suite conversation-details --output /private/tmp/af-reply-markdown-browser-final",
+      ".venv/bin/python scripts/run_browser_tests.py --suite reply-markdown --output /private/tmp/af-reply-markdown-browser-complete"
+    ],
+    "layouts": [
+      {
+        "theme": "light",
+        "width": 1024,
+        "pageOverflow": false,
+        "tableOverflow": true,
+        "focusable": true,
+        "right": 963,
+        "viewport": 1024
+      },
+      {
+        "theme": "light",
+        "width": 1280,
+        "pageOverflow": false,
+        "tableOverflow": true,
+        "focusable": true,
+        "right": 1160,
+        "viewport": 1280
+      },
+      {
+        "theme": "light",
+        "width": 1440,
+        "pageOverflow": false,
+        "tableOverflow": true,
+        "focusable": true,
+        "right": 1240,
+        "viewport": 1440
+      },
+      {
+        "theme": "light",
+        "width": 1920,
+        "pageOverflow": false,
+        "tableOverflow": true,
+        "focusable": true,
+        "right": 1480,
+        "viewport": 1920
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "pageOverflow": false,
+        "tableOverflow": true,
+        "focusable": true,
+        "right": 963,
+        "viewport": 1024
+      },
+      {
+        "theme": "dark",
+        "width": 1280,
+        "pageOverflow": false,
+        "tableOverflow": true,
+        "focusable": true,
+        "right": 1160,
+        "viewport": 1280
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "pageOverflow": false,
+        "tableOverflow": true,
+        "focusable": true,
+        "right": 1240,
+        "viewport": 1440
+      },
+      {
+        "theme": "dark",
+        "width": 1920,
+        "pageOverflow": false,
+        "tableOverflow": true,
+        "focusable": true,
+        "right": 1480,
+        "viewport": 1920
+      }
+    ],
+    "additional_layouts": [
+      "1024px with task properties expanded",
+      "1280px with all reply descendants, including code and copy controls, at 200% font size"
+    ],
+    "external_requests": [],
+    "visual_review": [
+      "docs/conversation-ui/rich-reply-table-light.png",
+      "docs/conversation-ui/rich-reply-code-dark.png",
+      "docs/conversation-ui/rich-reply-200-percent.png"
+    ],
+    "syntax": true,
+    "diff_check": true
+  },
+  "candidate": {
+    "command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-reply-markdown-source-candidate-20261102",
+    "log": "/private/tmp/af-reply-markdown-build.log",
+    "bundle": "/private/tmp/af-reply-markdown-source-candidate-20261102/agent-framework-1.3.0.tar.gz",
+    "bundle_sha256": "53583cfcf3eaa7c6039e4ab50676f9dc35c67ac0617fc710d8f26c68b712662b",
+    "wheel": "/private/tmp/af-reply-markdown-source-candidate-20261102/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+    "wheel_sha256": "4bfd7e99baa2f89c8a1f4771b2bd98a12f8daaf3f2f9137bb8a2c3e3648e8d92",
+    "source_files_verified": 133,
+    "all_packaged_source_matches_current_tree": true,
+    "fresh_install_verified_this_round": false
+  },
+  "dependency": {
+    "name": "markdown-it",
+    "version": "15.0.3",
+    "registry": "https://registry.npmjs.org/markdown-it/15.0.3",
+    "tarball": "https://registry.npmjs.org/markdown-it/-/markdown-it-15.0.3.tgz",
+    "integrity": "sha512-+Az7Ojz3iRGu8KYMvJ6xVhvrxP3eE+vEtJX75Ow88XBpcQNV/0lGX5ZynIIBftREo4DC2jsveAMDaeltmm8QvQ==",
+    "bundled_dependencies": [
+      {
+        "name": "entities",
+        "version": "8.1.0",
+        "license": "BSD-2-Clause",
+        "integrity": "sha512-kxL7msIffSuh9aaFAMD7rxAIuTRMAHMeBtgHW2yUdWw732ZNh4MehkF2gdjvtdmikkaIP9bFDDJOPlsvm7avrA=="
+      },
+      {
+        "name": "linkify-it",
+        "version": "6.1.0",
+        "license": "MIT",
+        "integrity": "sha512-wJ/TwpSDTLepCrQoYWYIExIKg5Zchex2Nn5yk2mFnB+6PtdkHtyLx742md9csRjjOnGkKIS/RrbY7l8D6gT9Vw=="
+      },
+      {
+        "name": "mdurl",
+        "version": "2.1.0",
+        "license": "MIT",
+        "integrity": "sha512-1+HBaOx0zi/dQWht8rNv9MYf9qqpqL/kxI0hXImU6Y547zM6Sni8BQibt7ifgMcYtQg41ao3Ivd6cnSM86inpg=="
+      },
+      {
+        "name": "punycode.js",
+        "version": "2.3.1",
+        "license": "MIT",
+        "integrity": "sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA=="
+      },
+      {
+        "name": "uc.micro",
+        "version": "3.0.0",
+        "license": "MIT",
+        "integrity": "sha512-U3PppEkleoTnIfi8BozMx3yju3qc/L6SwqWo2Sw+54PX+PX0q9I+r1Um5HCmqD7n9VDX5/v3vQH/AjA6deDdtw=="
+      }
+    ],
+    "upstream_file": "package/dist/browser/markdown-it.umd.min.js",
+    "upstream_file_sha256": "391f2aa638e75e6c7859d0a5c5650ef0956722a45998f17e05b83bc655778e1e",
+    "vendored_file": "agent_framework/webui/markdown-it-15.0.3.min.js",
+    "vendored_sha256": "758061fd114ea825a7864ad8a4aeffa4ab97233b1ff9924f51e9bb635c0776f2",
+    "modifications": [
+      "One final LF added; all upstream JavaScript bytes otherwise unchanged."
+    ],
+    "licenses": "agent_framework/webui/MARKDOWN-IT-LICENSE.txt"
+  },
+  "constraints": [
+    "No external model calls; all browser task results are generated by isolated fixtures.",
+    "Raw HTML is disabled; only explicit absolute HTTP/HTTPS links navigate; images are not fetched automatically.",
+    "No syntax highlighting, math, diagram or task-checkbox plugins.",
+    "Reading positions are page-session state and are not persisted across browser reload.",
+    "No version bump, deployment, published artifact replacement or git commit."
+  ],
+  "files": {
+    "agent_framework/webui/markdown-it-15.0.3.min.js": "758061fd114ea825a7864ad8a4aeffa4ab97233b1ff9924f51e9bb635c0776f2",
+    "agent_framework/webui/MARKDOWN-IT-LICENSE.txt": "869b3482be5073dd75775389288dd1c53fa7698c3c817f262822bafaf978c89c",
+    "agent_framework/webui/reply_markdown.js": "dd2c3eaae45390a42ac3edf06175f3620b0224ad7ba01db02bd5a4f164424652",
+    "agent_framework/webui/reply_markdown.css": "c298dc68cea193530e0f973d6e51771e784c4ad34315c33022ee77e48faa681b",
+    "agent_framework/webui/task_conversation.js": "062a8f69a32b0b609c15e04c73947d85fee012caddc7555a58a4308dd415e388",
+    "agent_framework/webui/index.html": "5743b834e08216092089ddae784f991b2136a4e9b747a5a6a1a1058bebd764c4",
+    "agent_framework/web.py": "d6373621230a21f091b13a06f39e32132999f0aa41a479829004c3d732161973",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "scripts/run_browser_tests.py": "860f46874bcf5b80dabe848c51f4e85f631d807caa9df6bf3f40750e139df127",
+    "tests/serve_reply_markdown_fixture.py": "497c6a6cfdf22f8a833dee2068662051bdee1d98766f6205d35fc9a65338c9c4",
+    "tests/verify_reply_markdown.cjs": "a25800b9143160ab6448324fc6e823a3cb24f62ca157553124dd330da771f90f",
+    "tests/test_reply_markdown.js": "ce8446c578c159f452ec8ab38c3dd17b3418954edc40f9991e976297874df5f8",
+    "docs/conversation-ui/markdown-vendor.json": "e8b6eee15443cf0809e1f224bbbda0afdcd80aa90f15278f15fb55a309a708f5",
+    "docs/conversation-ui/rich-replies.md": "ccb12a4fd03596cbf8c1e7147ea8fe05ba72048338ce67e14470e08b55933a05",
+    "README.md": "29d8170c722e201f55ae0cab42ff3c51815a2c7ed57184313fec072ed40bab51",
+    "design.md": "9370737eeb8bea1e91299736603f87932a8e2ff7cf828559366fd526f0adfec4",
+    "docs/conversation-ui/rich-reply-table-light.png": "26e45d6de035a5b04e8db0104d918138c18202cff5a7311067309355d81a0dab",
+    "docs/conversation-ui/rich-reply-code-dark.png": "b7283ef658dcfe082a66b689975472a09e4b369d563d32fb033802e53ffc9d56",
+    "docs/conversation-ui/rich-reply-200-percent.png": "384a2171ef1c417fd432142eafe824097756af71a4c269ea73a6ff6477390207"
+  }
+}

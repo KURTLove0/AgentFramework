@@ -1,6 +1,7 @@
-import io
 import json
+from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -14,7 +15,7 @@ class ModelCatalogTests(unittest.TestCase):
 
     def test_cursor_cli_output_and_cache_are_authoritative(self):
         output='Available models\nauto - Auto (default)\nmodel-a - Model A\nmodel-b-high - Model B High\nTip: use --model <id>\n'
-        with patch('agent_framework.model_catalog.subprocess.run',return_value=subprocess.CompletedProcess([],0,output,'')) as run:
+        with patch('agent_framework.model_catalog.run_directory_command',return_value=subprocess.CompletedProcess([],0,output,'')) as run:
             first=self.catalog.list('cursor');second=self.catalog.list('cursor')
             self.assertEqual(run.call_count,1)
             self.assertEqual(run.call_args.args[0],['cursor-agent','models'])
@@ -37,18 +38,22 @@ class ModelCatalogTests(unittest.TestCase):
     def test_codex_model_list_handshake_pagination_and_efforts(self):
         rows=[{'id':1,'result':{}},{'id':2,'result':{'data':[{'id':'model-a','model':'model-a','displayName':'A','supportedReasoningEfforts':[{'reasoningEffort':'high'}]}],'nextCursor':'page2'}},
               {'id':3,'result':{'data':[{'id':'model-b','model':'model-b','displayName':'B'}],'nextCursor':None}}]
-        class Pipe(io.StringIO):
-            def close(self):self.saved=self.getvalue();super().close()
-        class Process:
-            pid=123456
-            stdin=Pipe();stdout=io.StringIO('\n'.join(json.dumps(r) for r in rows)+'\n')
-            def wait(self,timeout=None):return 0
-        process=Process()
-        with patch('agent_framework.model_catalog.subprocess.Popen',return_value=process) as popen,patch('agent_framework.model_catalog.os.killpg'):
+        trace=Path(self.tmp.name)/'requests.jsonl';original=subprocess.Popen
+        script='''import json,sys
+rows=iter(%r)
+for line in sys.stdin:
+ with open(%r,'a') as trace:trace.write(line)
+ request=json.loads(line)
+ if 'id' in request:print(json.dumps(next(rows)),flush=True)
+'''%(rows,str(trace))
+        def launch(command,**kwargs):
+            self.assertEqual(command[:3],['codex','app-server','--stdio'])
+            return original([sys.executable,'-u','-c',script],**kwargs)
+        with patch('agent_framework.model_discovery.subprocess.Popen',launch):
             models=self.catalog.list('codex')['models']
         self.assertEqual([m['id'] for m in models],['model-a','model-b'])
         self.assertEqual(models[0]['efforts'],['high'])
-        sent=[json.loads(line) for line in process.stdin.saved.splitlines()]
+        sent=[json.loads(line) for line in trace.read_text().splitlines()]
         self.assertEqual([d['method'] for d in sent],['initialize','initialized','model/list','model/list'])
         self.assertEqual(sent[-1]['params']['cursor'],'page2')
         self.assertFalse(any(d['method'].startswith('thread/') for d in sent))

@@ -1,0 +1,324 @@
+{
+  "date": "2026-11-04",
+  "version": "1.3.0",
+  "status": "verified-candidate-not-published",
+  "scope": "Index direct task provenance by tenant and source run; retain scope, cursor, snapshot and legacy read-only behavior.",
+  "application_changes": [
+    "Store creates a partial JSON source index for valid JSON records only; malformed records remain untouched for existing scoped diagnostics.",
+    "Relation candidates are restricted to the authorized root and its registered turns, retaining all prior ownership and independent-root checks."
+  ],
+  "baseline_regressions": {
+    "pre_optimization": {
+      "tests": 16,
+      "failures": 2,
+      "log": {
+        "path": "/private/tmp/af-task-relations-index-baseline-tests-20261104.log",
+        "sha256": "cb04f66e77458ee3d6946f632eb43820bcecd86c6b547ff7cee7806386c080c1"
+      }
+    },
+    "initial_index_malformed_json": {
+      "tests": 11,
+      "errors": 3,
+      "log": {
+        "path": "/private/tmp/af-task-relations-index-malformed-baseline-20261104.log",
+        "sha256": "3c281316344c92953ac3bcc3fe064ef00df1f303b86adfc3d1cfa453eb43443d"
+      }
+    },
+    "initial_full_backend": {
+      "tests": 1404,
+      "errors": 2,
+      "duration_seconds": 251.737,
+      "log": {
+        "path": "/private/tmp/af-task-relations-index-backend-full-20261104.log",
+        "sha256": "a329327973b7ec17077f2bb31b5069a9fb5bd3d34d91640c2d6f556c1e538a0c"
+      }
+    },
+    "resolution": "The initial source index evaluated malformed JSON. Its final predicate indexes only json_valid(state), preserving malformed records and existing scoped diagnostics."
+  },
+  "backend": {
+    "new_tests": 3,
+    "updated_tests": 1,
+    "task_relation_tests_including_http": 18,
+    "compatibility": {
+      "tests": 26,
+      "passed": 26,
+      "duration_seconds": 1.856,
+      "log": {
+        "path": "/private/tmp/af-task-relations-index-compatibility-20261104.log",
+        "sha256": "0edd39a64df717dae2526de94910c8f96aa2f1010c80c1fadea9499ff4e01d64"
+      }
+    },
+    "full": {
+      "tests": 1404,
+      "passed": 1404,
+      "duration_seconds": 237.436,
+      "command": ".venv/bin/python -m unittest discover -s tests -v",
+      "log": {
+        "path": "/private/tmp/af-task-relations-index-backend-final-20261104.log",
+        "sha256": "958515cf7197eec9316408fdd4779b18cf84123be85e768bd48b1237fe88a465"
+      }
+    },
+    "coverage": [
+      "Unrelated multi-turn history does not proportionally increase candidate-query VM work",
+      "Unregistered legacy source roots retain children",
+      "Writable upgrade preserves raw run rows and pre-upgrade pagination cursors",
+      "Foreign malformed JSON does not block index creation; current-tenant diagnostics still fail explicitly",
+      "Read-only databases without the new index or optional metadata tables remain readable without schema writes",
+      "Existing scope, 211-item pagination, new arrivals, malformed cursors, concurrent snapshot, source turn and status tests"
+    ]
+  },
+  "benchmark": {
+    "before": {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-relations-index-benchmark-before-20261104.json",
+      "sha256": "3faf274175bad340e3a4cefb62339d942f049e979830f4f766403de476bb82bf"
+    },
+    "after": {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-relations-index-benchmark-after-20261104.json",
+      "sha256": "9c4c099ffea6af091dd42f145b4faa190e9d890c0960e1cfdf55b51f8373ddbe"
+    },
+    "synthetic_tasks": 600,
+    "turns_per_task": 3,
+    "execution_records": 1800,
+    "related_tasks": 4,
+    "body_bytes_per_turn": 32768,
+    "audit_records_per_turn": 3,
+    "repetitions": 5,
+    "median_seconds_before": 0.07698933299980126,
+    "median_seconds_after": 0.002696625015232712,
+    "median_reduction_percent": 96.49740436738207,
+    "sqlite_instructions_approx_before": 128900,
+    "sqlite_instructions_approx_after": 40100,
+    "candidate_instructions_approx_before": 90900,
+    "candidate_instructions_approx_after": 2000,
+    "bound_parameter_plan_uses_tenant_and_source_index": true,
+    "limitations": [
+      "Local synthetic service-layer read; excludes seed time, HTTP and browser rendering",
+      "Approximate SQLite instruction counts sampled every 100 instructions",
+      "Summary aggregation still queries historical turns; whole request is not constant-work",
+      "Baseline loaded frozen pre-change modules without modifying the working tree"
+    ]
+  },
+  "browser": {
+    "source_suites": [
+      {
+        "suite": "task-relations",
+        "checks": 4,
+        "layouts": 8,
+        "result": {
+          "path": "/private/tmp/af-task-relations-index-browser-final-20261104/task-relations/results.json",
+          "sha256": "6db1b1b5ddb1fb182851f75c9be08fdb045095aa00ab2b2fc1b34a064bc08fac"
+        }
+      },
+      {
+        "suite": "task-reuse",
+        "checks": 4,
+        "layouts": 8,
+        "result": {
+          "path": "/private/tmp/af-task-relations-index-browser-final-20261104/task-reuse/results.json",
+          "sha256": "8be2fa1692b1df268fb32395ed916729e792fc9c1d0d9dc100eecf2c8cb4567d"
+        }
+      }
+    ],
+    "source_checks": 8,
+    "source_layouts": 16,
+    "errors": [],
+    "inspected_images": [
+      {
+        "path": "/private/tmp/af-task-relations-index-browser-final-20261104/task-relations/task-relations-light.png",
+        "sha256": "df886345f04ee86f8c46acc35538541d06b6d0f7932e7949bc4b7feba7aa0eab"
+      },
+      {
+        "path": "/private/tmp/af-task-relations-index-browser-final-20261104/task-reuse/task-reuse-dark.png",
+        "sha256": "9dc19488df97e68728bcbb8ea1b9851987d0aa72475ce9e78f4e5dccbe4d4b59"
+      }
+    ],
+    "full_frontend_unit_suite_rerun": false,
+    "reason": "No frontend application files changed; source and installed browser flows were verified."
+  },
+  "candidate": {
+    "bundle": {
+      "path": "/private/tmp/af-task-relations-index-candidate-20261104/agent-framework-1.3.0.tar.gz",
+      "sha256": "eabeb1695a7120471f607c41aa6969e3951bf7292bae174eb878ce0276e1d6ef"
+    },
+    "manifest": {
+      "application_files": 167,
+      "all_match_working_tree": true,
+      "changed_from_task_organization_candidate": [
+        "agent_framework/store.py",
+        "agent_framework/task_relations.py"
+      ],
+      "bundle_companions_match": 4,
+      "historical_dist_checksums_unchanged": 6,
+      "artifact_sha256": "eabeb1695a7120471f607c41aa6969e3951bf7292bae174eb878ce0276e1d6ef"
+    },
+    "installed_report": {
+      "path": "/private/tmp/af-task-relations-index-installed-20261104.json",
+      "sha256": "282f7677c067148e9fdba17bc0504b0f3b2cf691ac7b519df89f6a26288ef70e"
+    },
+    "fresh_offline_install": true,
+    "modules": {
+      "version": "1.3.0",
+      "modules": 85,
+      "yaml_version": "6.0.3"
+    },
+    "ui_resources_matching_wheel": 71,
+    "restarts": [
+      {
+        "draft_state": "saved",
+        "draft_revision": 3,
+        "new_process_session": true,
+        "graceful_shutdown": true,
+        "settings_revision": 2,
+        "settings_and_receipts_preserved": true,
+        "agent_and_receipt_preserved": true,
+        "task_history_and_receipt_preserved": true,
+        "task_count_after_replay": 2,
+        "simulated_drafts_after_replay": 1
+      },
+      {
+        "draft_state": "discarded",
+        "draft_revision": 4,
+        "new_process_session": true,
+        "graceful_shutdown": true,
+        "settings_revision": 2,
+        "settings_and_receipts_preserved": true,
+        "agent_and_receipt_preserved": true,
+        "task_history_and_receipt_preserved": true,
+        "task_count_after_replay": 2,
+        "simulated_drafts_after_replay": 1
+      }
+    ],
+    "backup_restore": {
+      "installed_cli": true,
+      "contents": {
+        "version": 1,
+        "counts": {
+          "execution_records": 2,
+          "conversations": 1,
+          "agents": 1,
+          "workspaces": 1,
+          "workflows": 0,
+          "workflow_runs": 0,
+          "runtime_configurations": 1,
+          "saved_task_drafts": 0,
+          "business_drafts": 1
+        },
+        "workspaces": {
+          "total": 1,
+          "offset": 0,
+          "limit": 100,
+          "has_more": false,
+          "next_offset": null,
+          "items": [
+            {
+              "tenant": "delivery-tenant",
+              "id": "workspace-default",
+              "project_id": "project-demo",
+              "name": "默认工作空间",
+              "deleted": false
+            }
+          ]
+        }
+      },
+      "original_databases_unchanged": true,
+      "existing_target_rejected_unchanged": true,
+      "restored_server_started": true,
+      "settings_drafts_history_receipts_and_replays_preserved": true,
+      "browser_uses_restored_data": true
+    },
+    "installed_browser_suites": [
+      {
+        "suite": "task_submissions",
+        "results": "/private/tmp/af-task-relations-index-installed-20261104-browser/results.json",
+        "checks": 4,
+        "layouts": 0,
+        "result": {
+          "path": "/private/tmp/af-task-relations-index-installed-20261104-browser/results.json",
+          "sha256": "b91445135fedf1229e83651a4bac0506afe4e5dc205569d33c1d27eb4d214c18"
+        }
+      },
+      {
+        "suite": "task_opening",
+        "results": "/private/tmp/af-task-relations-index-installed-20261104-browser/task-opening/results.json",
+        "checks": 4,
+        "layouts": 8,
+        "result": {
+          "path": "/private/tmp/af-task-relations-index-installed-20261104-browser/task-opening/results.json",
+          "sha256": "f3130d2a565f4e2e5ac0a47b3baec70388e011aa0e33a25b29e56e031cf7ce62"
+        }
+      },
+      {
+        "suite": "task_names",
+        "results": "/private/tmp/af-task-relations-index-installed-20261104-browser/task-names/results.json",
+        "checks": 7,
+        "layouts": 10,
+        "fixture_tasks": 4,
+        "result": {
+          "path": "/private/tmp/af-task-relations-index-installed-20261104-browser/task-names/results.json",
+          "sha256": "d520b11d82703fe7e0396a49db7be45d8f9e250ebe15bfa93bfd5f0c1bb64a4e"
+        }
+      },
+      {
+        "suite": "task_archive",
+        "results": "/private/tmp/af-task-relations-index-installed-20261104-browser/task-archive/results.json",
+        "checks": 7,
+        "layouts": 8,
+        "fixture_tasks": 4,
+        "result": {
+          "path": "/private/tmp/af-task-relations-index-installed-20261104-browser/task-archive/results.json",
+          "sha256": "0a9d734a65e56356ad8c6a105aa7247ef75b1e6ca6d3e2cd79370204e5620f3d"
+        }
+      },
+      {
+        "suite": "task_favorites",
+        "results": "/private/tmp/af-task-relations-index-installed-20261104-browser/task-favorites/results.json",
+        "checks": 7,
+        "layouts": 24,
+        "fixture_tasks": 51,
+        "result": {
+          "path": "/private/tmp/af-task-relations-index-installed-20261104-browser/task-favorites/results.json",
+          "sha256": "f20dd050185023ddd10ef275e30031de550086f76a048aadd0c4f76c00556528"
+        }
+      },
+      {
+        "suite": "chat_drafts",
+        "results": "/private/tmp/af-task-relations-index-installed-20261104-browser/chat-drafts/results.json",
+        "checks": 13,
+        "layouts": 10,
+        "result": {
+          "path": "/private/tmp/af-task-relations-index-installed-20261104-browser/chat-drafts/results.json",
+          "sha256": "798309f82d064d6029cc46197f82a718f4633146cc11d17e09085b63ba031d8b"
+        }
+      }
+    ],
+    "installed_browser_checks": 42,
+    "installed_browser_layouts": 60
+  },
+  "source_files": [
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/agent_framework/store.py",
+      "sha256": "b698ab588ae8ca3cbe2d4a31b4b6c852a8d0d8b4c5af9e9fd635c838c1a200d3"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/agent_framework/task_relations.py",
+      "sha256": "c2ce7d9268fce69d7655420a8cd152e8755fd585d712813de589b0ca7ae8d736"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/tests/test_task_relations.py",
+      "sha256": "12bd9cd4b600df3adbe88deabbda55caf407fb6a1b64007978aa3bd19c1d05e0"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/scripts/benchmark_task_relations.py",
+      "sha256": "5a9d81200c5f84d691c6baefeadfba7fc7ecb1bce77cfd9bf1b70f15a5a190d9"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-relations.md",
+      "sha256": "47cd08269921a682b58404c95e4ebc89fe3b7db62b9bfa0bd226f3590fdbc4d1"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/README.md",
+      "sha256": "53c58adaea94a5a114c13c73c0ff2e8257329ab531b1e5afd735a5c5e2aec988"
+    }
+  ],
+  "data_scope": "Temporary isolated synthetic data and mock runtime only; no real models or business systems; no deployment."
+}

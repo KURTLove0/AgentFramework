@@ -411,6 +411,7 @@ class LLMPlanner:
         self.provider=next(key for key,kind in CONFIG_TYPES.items() if isinstance(config,kind))
         self.transport = transport or TRANSPORT_TYPES[self.provider](agent_profile)
         self.observer = None
+        self.prepare_context = None
 
     def schemas(self):
         if self.execution_mode in ('direct','conversation'):
@@ -542,14 +543,18 @@ In the returned plan, use null tool_ref for advisory steps about native MCP work
         schema = self.schemas()[phase]
         feedback = None
         for attempt in range(1, self.config.max_attempts + 1):
+            if self.prepare_context:context=self.prepare_context(phase,context,attempt)
             remaining = context["state"]["deadline"] - time.time()
             if remaining <= 0:
                 raise ModelError("task_deadline")
             prompt = self.system_prompt() + "\n" + canonical({"phase": phase, "context": self._context(context),
                                                 "schema": schema, "format_feedback": feedback})
             if self.observer:
-                self.observer("model.requested", {"phase": phase, "attempt": attempt, "model": self.config.model,
-                                                   "prompt_hash": digest(prompt), "schema_hash": digest(schema)})
+                event={"phase": phase, "attempt": attempt, "model": self.config.model,
+                       "prompt_hash": digest(prompt), "schema_hash": digest(schema)}
+                if context.get('context_manifest'):
+                    event.update(context_manifest_id=context['context_manifest']['id'],context_manifest_hash=context['context_manifest']['hash'])
+                self.observer("model.requested", event)
             started = time.monotonic()
             raw=None
             try:
@@ -581,7 +586,8 @@ In the returned plan, use null tool_ref for advisory steps about native MCP work
                     raise ModelError("invalid_structured_output") from exc
             except ModelError as exc:
                 if self.observer:
-                    self.observer("model.failed", {"phase": phase, "attempt": attempt, "code": exc.code})
+                    self.observer("model.failed", {"phase": phase, "attempt": attempt, "code": exc.code,
+                        **({'cleanup_failure':exc.cleanup_failure} if getattr(exc,'cleanup_failure',None) else {})})
                 # Network/auth/timeouts are explicit failures, never a silent MockPlanner fallback.
                 raise
 

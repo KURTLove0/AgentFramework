@@ -66,8 +66,9 @@ def save(library,access,ref,data):
     item=next((a for a in assertions(asset['content']) if a['path']==data['path']),None)
     if not item or data['source_ref'] not in item['source_refs']:raise ValueError('证据来源必须属于选定断言的引用')
     with library.store.transaction() as db:
-        if not sources_current(library,access,asset):raise ConfigConflict('来源已失效，请基于当前资料重新生成本体')
-        source=library.get(access,data['source_ref'])
+        library.assert_writable(db,access)
+        if not sources_current(library,access,asset,db=db):raise ConfigConflict('来源已失效，请基于当前资料重新生成本体')
+        source=library.get(access,data['source_ref'],db=db)
         text=source['content'].get('text',source['content'].get('lesson',canonical(source['content'])))
         start=text.find(data['quote'])
         if start<0:raise ValueError('证据片段必须逐字出现在冻结来源原文中')

@@ -45,7 +45,8 @@ def main(argv=None):
         task_file.write_text(json.dumps(task.to_dict(), ensure_ascii=False, indent=2) + "\n")
         crash_exit = None
         if scenario == "crash-after-write":
-            base = [sys.executable, "-m", "agent_framework", "--data-dir", str(directory),
+            from .processes import module_command
+            base = [*module_command('agent_framework'), "--data-dir", str(directory),
                     "--lease-seconds", "0.8", "--tool-timeout", "0.3"]
             if config:
                 base.extend(["--planner", "codex", "--model", config.model, "--reasoning-effort", config.reasoning_effort])

@@ -9,7 +9,9 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from .contracts import TERMINAL, canonical, digest, identifier
 from .runtime_config import ConfigConflict
+from .workspaces import assert_workspace_active
 
+AUTO_START = {'CREATED', 'RUNNING', 'RECONCILING', 'VERIFYING'}
 DEFAULT = {'revision': 0, 'enabled': False, 'timezone': 'Asia/Shanghai',
            'daily_time': '09:00', 'auto_start': False, 'tasks': []}
 TASK_FIELDS = {'agent_id', 'agent_revision', 'goal', 'change_id', 'grant', 'consent', 'mcp_consent'}
@@ -87,6 +89,7 @@ class WorkspaceScheduler:
                 raise ValueError('每日计划包含重复任务')
             seen.add(key)
         with self.store.transaction() as db:
+            assert_workspace_active(db,self.app.tenant,self.app.workspace['id'])
             row = db.execute('SELECT data FROM workspace_schedules WHERE tenant=? AND workspace=? AND principal=?', self.scope).fetchone()
             revision = json.loads(row[0])['revision'] if row else 0
             if revision != data['revision']:
@@ -98,8 +101,12 @@ class WorkspaceScheduler:
 
     def plans(self):
         with self.store.connect() as db:
-            rows = db.execute('SELECT data FROM workspace_daily_plans WHERE tenant=? AND workspace=? AND principal=? ORDER BY day DESC LIMIT 60', self.scope).fetchall()
-        plans = [json.loads(r[0]) for r in rows]
+            rows = db.execute('''SELECT data FROM workspace_daily_plans WHERE tenant=? AND workspace=? AND principal=?
+                AND (id IN (SELECT id FROM workspace_daily_plans WHERE tenant=? AND workspace=? AND principal=? ORDER BY day DESC LIMIT 60)
+                     OR json_extract(data,'$.dispatch.state') IN ('PENDING','FAILED')) ORDER BY day DESC''', self.scope+self.scope).fetchall()
+        return self._with_run_status([json.loads(r[0]) for r in rows])
+
+    def _with_run_status(self, plans):
         for plan in plans:
             for item in plan['items']:
                 if item.get('run_id'):
@@ -115,6 +122,9 @@ class WorkspaceScheduler:
         if not row:
             raise KeyError('daily plan unavailable')
         return json.loads(row[0])
+
+    def detail(self, identity):
+        return self._with_run_status([self.get(identity)])[0]
 
     def overview(self, now=None):
         now = time.time() if now is None else now
@@ -136,11 +146,11 @@ class WorkspaceScheduler:
         day = local.date().isoformat()
         with self.store.connect() as db:
             prior = db.execute('SELECT data FROM workspace_daily_plans WHERE tenant=? AND workspace=? AND principal=? AND day=?', (*self.scope, day)).fetchone()
-        states=self.app.accessible_run_states()
         if prior:
             old_plan = json.loads(prior[0])
-            if old_plan['schedule_revision'] == config['revision'] or any(i.get('run_id') for i in old_plan['items']):
-                return old_plan
+            with self.store.connect() as db:
+                if old_plan['schedule_revision'] == config['revision'] or self._frozen(db,old_plan):return old_plan
+        states=self.app.accessible_run_states(compact=True)
         states = [s for s in states if s['task']['project_id'] == self.app.workspace['project_id'] and s['task']['principal'] == self.app.principal]
         pending = [s for s in states if s['status'] not in TERMINAL]
         items = []
@@ -167,36 +177,74 @@ class WorkspaceScheduler:
                 'history_counts': {'total': len(states), 'pending': len(pending), 'succeeded': sum(s['status'] == 'SUCCEEDED' for s in states)},
                 'error': None}
         with self.store.transaction() as db:
+            assert_workspace_active(db,self.app.tenant,self.app.workspace['id'])
+            current=db.execute('SELECT data FROM workspace_schedules WHERE tenant=? AND workspace=? AND principal=?',self.scope).fetchone()
+            if (json.loads(current[0])['revision'] if current else 0)!=config['revision']:
+                raise ConfigConflict('生成期间计划配置已变化，请重新生成')
             # Rebuild an unsubmitted preview after editing settings; submitted plans stay frozen.
-            if prior:
+            current=db.execute('SELECT data FROM workspace_daily_plans WHERE tenant=? AND workspace=? AND principal=? AND day=?',(*self.scope,day)).fetchone()
+            if current and self._frozen(db,json.loads(current[0])):return json.loads(current[0])
+            if prior and current:
                 db.execute('DELETE FROM workspace_daily_plans WHERE tenant=? AND workspace=? AND principal=? AND day=? AND owner IS NULL AND data=?',
                            (*self.scope, day, prior[0]))
             db.execute('INSERT OR IGNORE INTO workspace_daily_plans VALUES(?,?,?,?,?,?,NULL,0,?)',
                        (*self.scope, day, plan['id'], canonical(plan), now))
         return self.get(plan['id'])
 
-    def dispatch(self, identity):
-        config = self.settings()
-        plan = self.get(identity)
-        if config['revision'] != plan['schedule_revision']:
-            raise ConfigConflict('配置已变化，此计划已冻结；请在下一日使用新配置，或先处理今日已派发任务')
+    def _run_id(self,plan,item):
+        return 'run-daily-' + digest([*self.scope, plan['id'], item['id']])[:24]
+
+    def _frozen(self,db,plan):
+        if plan.get('dispatch',{}).get('state') in {'PENDING','FAILED'} or any(i.get('run_id') for i in plan['items']):return True
+        # Older versions could crash after submitting a run but before recording
+        # its ID in the plan. Such a plan must never acquire a different goal.
+        ids=[self._run_id(plan,item) for item in plan['items']]
+        return bool(ids and db.execute('SELECT 1 FROM runs WHERE tenant_id=? AND id IN ('+','.join('?' for _ in ids)+') LIMIT 1',
+                                      (self.app.tenant,*ids)).fetchone())
+
+    def _check_run(self,item,run):
+        task=run['task'];profile=run['snapshot'].get('agent_profile',{})
+        expected=item['task']
+        if (task['project_id']!=self.app.workspace['project_id'] or task['principal']!=self.app.principal
+            or task['goal']!=expected['goal'] or profile.get('id')!=expected['agent_id']
+            or profile.get('revision')!=expected['agent_revision']
+            or (expected.get('execution_mode')=='conversation')!=(task.get('execution_mode')=='conversation')
+            or (expected.get('execution_mode')!='conversation' and task['change_id']!=expected['change_id'])):
+            raise ConfigConflict('已保存的任务与计划模板不匹配，请查看原任务并人工处理，不能自动改写或重新创建')
+        self.app.assert_run_access(run)
+
+    def dispatch(self, identity, *, recover=False):
         # A short durable claim serializes dispatch across tabs, scheduler ticks and processes.
         owner = uuid4().hex
         with self.store.transaction() as db:
+            assert_workspace_active(db,self.app.tenant,self.app.workspace['id'])
+            row=db.execute('SELECT data FROM workspace_daily_plans WHERE tenant=? AND workspace=? AND principal=? AND id=?',(*self.scope,identifier(identity))).fetchone()
+            if not row:raise KeyError('daily plan unavailable')
+            plan=json.loads(row[0])
+            config=db.execute('SELECT data FROM workspace_schedules WHERE tenant=? AND workspace=? AND principal=?',self.scope).fetchone()
+            revision=json.loads(config[0])['revision'] if config else 0
+            accepted=plan.get('dispatch',{}).get('state') in {'PENDING','FAILED'} or (plan.get('error') and self._frozen(db,plan))
+            if revision!=plan['schedule_revision'] and not accepted:
+                raise ConfigConflict('配置已变化，此计划已冻结；请在下一日使用新配置，或先处理今日已派发任务')
+            if recover and plan.get('dispatch',{}).get('state')!='PENDING':return plan
             changed = db.execute('UPDATE workspace_daily_plans SET owner=?,lease_until=? WHERE tenant=? AND workspace=? AND principal=? AND id=? AND (owner IS NULL OR lease_until<?)',
                                  (owner, time.time() + 120, *self.scope, identity, time.time())).rowcount
             if not changed:
                 raise ConfigConflict('每日计划正在派发，请稍后刷新')
-            plan = json.loads(db.execute('SELECT data FROM workspace_daily_plans WHERE tenant=? AND id=?', (self.app.tenant, identity)).fetchone()[0])
+            plan['dispatch']={**plan.get('dispatch',{}),'state':'PENDING','requested_at':plan.get('dispatch',{}).get('requested_at',time.time())}
+            plan['error']=None
+            db.execute('UPDATE workspace_daily_plans SET data=? WHERE tenant=? AND id=?',(canonical(plan),self.app.tenant,identity))
         try:
+            pending=False;queued=False
             for item in plan['items']:
                 if item['status'] in ('SKIPPED', 'BLOCKED'):
                     continue
-                run_id = 'run-daily-' + digest([*self.scope, identity, item['id']])[:24]
+                self._save_claim(plan,owner)
+                run_id = self._run_id(plan,item)
                 # A crash after submission but before linking recovers this exact run.
                 try:
                     existing = self.store.load(self.app.tenant, run_id)
-                    self.app.assert_run_access(existing)
+                    self._check_run(item,existing)
                     item.update(run_id=run_id, status='DISPATCHED', reason=None)
                 except KeyError:
                     if item.get('run_id'):
@@ -204,8 +252,8 @@ class WorkspaceScheduler:
                     try:
                         self.validate_task(item['task'])
                         # Recheck after preview: a manual task may have appeared in the meantime.
-                        pending=self.app.accessible_run_states()
-                        matching = next((s for s in pending if s['status'] not in TERMINAL and
+                        pending_states=self.app.accessible_run_states(compact=True)
+                        matching = next((s for s in pending_states if s['status'] not in TERMINAL and
                                          s['task']['project_id'] == self.app.workspace['project_id'] and
                                          s['task']['principal'] == self.app.principal and
                                          s['snapshot'].get('agent_profile', {}).get('id') == item['task']['agent_id'] and
@@ -224,14 +272,28 @@ class WorkspaceScheduler:
                 self._save_claim(plan, owner)
                 if item.get('run_id') and plan['auto_start']:
                     state = self.store.load(self.app.tenant, run_id)
+                    cancellation=self.store.cancellation(self.app.tenant,run_id)
+                    if cancellation and cancellation['pending']:continue
                     # Never silently resume an authorization/input wait or a failed job.
-                    if state['status'] in {'CREATED', 'RUNNING', 'RECONCILING', 'VERIFYING'} and not self.app.lease(run_id)['active'] and not (self.app.job(run_id) or {}).get('active'):
-                        self.app.schedule(run_id)
-            plan['status'] = 'PARTIAL' if any(i['status'] == 'BLOCKED' for i in plan['items']) else 'DISPATCHED'
+                    if state['status'] in AUTO_START:
+                        pending=True
+                        job=self.app.job(run_id) or {}
+                        if recover and (state.get('interruption') or job.get('state') in {'ERROR','CRASHED'}):
+                            raise RuntimeError('任务工作进程已中断，请检查原任务后重试派发；已保存的任务会继续复用')
+                        if not self.app.lease(run_id)['active'] and not job.get('active'):
+                            try:
+                                if recover:self.app.schedule(run_id,automatic=True)
+                                else:self.app.schedule(run_id)
+                            except Exception as exc:
+                                if getattr(exc,'status',None) not in {409,429,503}:raise
+                                queued=True
+            plan['status'] = 'QUEUED' if queued else 'PARTIAL' if any(i['status'] == 'BLOCKED' for i in plan['items']) else 'DISPATCHED'
+            plan['dispatch']['state']='PENDING' if pending else 'COMPLETE'
             plan['error'] = None
             self._save_claim(plan, owner)
         except Exception as exc:
             plan['error'] = str(exc)[:300]
+            plan['dispatch'].update(state='FAILED',failed_at=time.time(),last_error=plan['error'])
             self._save_claim(plan, owner)
             raise
         finally:
@@ -249,10 +311,21 @@ class WorkspaceScheduler:
 
 def tick(app, now=None):
     """Only today's occurrence catches up. Missed days never produce a task storm."""
+    if app.closed:return
     now = time.time() if now is None else now
     with app.runtime().store.connect() as db:
+        pending=db.execute('''SELECT workspace,id FROM workspace_daily_plans WHERE tenant=? AND principal=?
+            AND json_extract(data,'$.dispatch.state')='PENDING' ORDER BY created,id''',(app.tenant,app.principal)).fetchall()
         rows = db.execute('SELECT workspace,data FROM workspace_schedules WHERE tenant=? AND principal=?', (app.tenant, app.principal)).fetchall()
+    # Accepted work survives a midnight, disabling future occurrences, and a
+    # configuration change. This never creates an occurrence for a missed day.
+    for row in pending:
+        if app.closed:return
+        try:WorkspaceScheduler(app.scoped(row['workspace'])).dispatch(row['id'],recover=True)
+        except (KeyError,ConfigConflict):continue
+        except Exception:logging.getLogger(__name__).exception('Daily workspace recovery failed for %s',row['workspace'])
     for row in rows:
+        if app.closed:return
         config = json.loads(row['data'])
         if not config['enabled']:
             continue
@@ -263,7 +336,7 @@ def tick(app, now=None):
             scoped = app.scoped(row['workspace'])
             service = WorkspaceScheduler(scoped)
             plan = service.generate(now)
-            if plan['schedule_revision'] == config['revision']:
+            if plan['schedule_revision'] == config['revision'] and not plan.get('dispatch'):
                 service.dispatch(plan['id'])
         except (KeyError, ConfigConflict):
             continue

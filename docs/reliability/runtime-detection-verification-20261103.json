@@ -1,0 +1,253 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Bounded CLI version-probe process lifetime and output; per-editor/provider UI state, response validation, lifecycle ownership and concurrent-save disabled-state reconciliation.",
+  "prior_behavior": "Unbounded subprocess.run capture and no owned process group; one shared button could keep another provider blocked, present stale errors or unlock controls during a save.",
+  "backend": {
+    "new_tests": 12,
+    "full": {
+      "command": ".venv/bin/python -m unittest discover -s tests",
+      "tests": 1383,
+      "passed": 1383,
+      "duration_seconds": 239.149,
+      "log": {
+        "path": "/private/tmp/af-runtime-detection-backend-full-verified.log",
+        "sha256": "89fe0f486c809c2607bbdec88a0967e13d4887b411b69c7f2fd2d97493607723"
+      }
+    },
+    "related": {
+      "tests": 12,
+      "passed": 12,
+      "duration_seconds": 1.501,
+      "log": {
+        "path": "/private/tmp/af-runtime-detection-backend-related-verified.log",
+        "sha256": "b506216f04a1a50a31c8e0364d0a620e0cabb3867b896f36369bea000480464e"
+      }
+    },
+    "initial_full": {
+      "tests": 1382,
+      "passed": 1382,
+      "duration_seconds": 239.996,
+      "log": {
+        "path": "/private/tmp/af-runtime-detection-backend-full.log",
+        "sha256": "0d06ebc8878dd195420a0d3063f6dacbd68787b3ea1b7880d11bf22bdf68754f"
+      }
+    },
+    "final_review_fix": "Track only the version probe own primary exception so an unrelated handled caller exception cannot absorb cleanup failure; covered by a new regression test and final full rerun.",
+    "expected_failure_logs": "Cleanup PermissionError messages are deliberate synthetic failures asserted by the tests.",
+    "coverage": [
+      "Fixed version commands and closed input without prompts",
+      "Silent, continuous-output and closed-output/live-process deadlines",
+      "Combined stdout/stderr cap and invalid encoding",
+      "Split Unicode and CRLF, 160-character version limit",
+      "Failed output never exposed, explicit retry succeeds",
+      "Exited leader with pipe-holding child terminated",
+      "Cleanup denial remains failure and retains original timeout",
+      "Startup/pipe initialization cleanup and no reader-thread leaks"
+    ]
+  },
+  "frontend": {
+    "new_tests": 8,
+    "full": {
+      "command": "npm test",
+      "tests": 989,
+      "passed": 989,
+      "failed": 0,
+      "duration_ms": 11997.191458,
+      "log": {
+        "path": "/private/tmp/af-runtime-detection-frontend-full.log",
+        "sha256": "d72fba0414d63abb97f14460c1cc992e3b879a78dd9777e5c943eed0d494daef"
+      }
+    },
+    "related": {
+      "tests": 35,
+      "passed": 35,
+      "failed": 0,
+      "duration_ms": 463.756583,
+      "log": {
+        "path": "/private/tmp/af-runtime-detection-frontend-related.log",
+        "sha256": "8f8b17b3c163792f90d85fdc39a34725c9f82b4539af4a13ce35ce5f71d6368b"
+      }
+    },
+    "before": {
+      "log": {
+        "path": "/private/tmp/af-runtime-detection-before.log",
+        "sha256": "03774c652f866448a6f076fa31e09c68bcf0dad6f5863582e7dee9f1f9fd9928"
+      },
+      "tests": 8,
+      "passed": 1,
+      "failed": 7
+    },
+    "coverage": [
+      "Provider-specific pending/success/failure and independent switching",
+      "Same-editor duplicate requests suppressed",
+      "Both detection/save completion orders preserve disabled state",
+      "Detached/old owner results discarded",
+      "Mismatched and malformed responses fail with retry",
+      "Workspace, principal and hidden-document guards",
+      "Save prevents new detection"
+    ]
+  },
+  "browser": {
+    "passed_suites": {
+      "runtime-detection": {
+        "result": {
+          "path": "/private/tmp/af-runtime-detection-browser-verified/runtime-detection/results.json",
+          "sha256": "bc79bbb3fa79abf6b232c5a7a81fe49ff4688aa8677d364fb33a99159d6bc2b5"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-runtime-detection-browser-verified/results.json",
+          "sha256": "a58046b270e1c6eb46b1e480553bc146239ada1f0e2265fe77cc11137107dc89"
+        },
+        "checks": [
+          "真实版本检测超时后可重试；切换运行时可独立检测，旧失败留在原运行时且不改变配置输入",
+          "明确重试可以恢复；在本次编辑中切换运行时会保留各自检测结果",
+          "重复点击不重复启动；检测与保存无论先后完成，都保持正确的禁用状态和忙碌提示",
+          "离开再返回或受控页面恢复会解除旧检测状态；旧回复不能覆盖新结果，恢复本身不启动 CLI",
+          "不匹配响应与请求失败明确提示且可重试；错误安全显示，8组桌面主题、宽度和字号检查通过"
+        ],
+        "errors": [],
+        "layout_cases": 8
+      },
+      "runtime-lifecycle": {
+        "result": {
+          "path": "/private/tmp/af-runtime-detection-browser/runtime-lifecycle/results.json",
+          "sha256": "7b42e8e5306dee7ce2797a226174ecadcc97f8fa13de68b58d171c6f2cf857d8"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-runtime-detection-browser/results.json",
+          "sha256": "2a5cdbd9767e8e8f8ea0e2e239632582619c19b347c0fe96748eb16e4e269e1a"
+        },
+        "checks": [
+          "独立 Chrome 的真实前进后退缓存恢复同一文档，保留输入，恢复后可明确保存；仅临时 HTML 允许缓存",
+          "浏览器重新加载式返回同样保留输入并可保存，返回本身不提交",
+          "保存中的生命周期恢复解除旧禁用状态，保留原编号；迟到回执不覆盖新输入，核对和后续保存均可继续",
+          "慢读取期间恢复会重新核对当前版本，旧读取不能回退冲突信息或覆盖输入",
+          "存储不可用时页面缓存仍可恢复内存草稿；其他页面不会误开配置编辑器，返回后可继续"
+        ],
+        "errors": []
+      },
+      "runtime-settings": {
+        "result": {
+          "path": "/private/tmp/af-runtime-detection-browser/runtime-settings/results.json",
+          "sha256": "9a031a6d0912a33c26981150126cfcd672739761e8c18caee7b8ee65e827dd89"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-runtime-detection-browser/results.json",
+          "sha256": "2a5cdbd9767e8e8f8ea0e2e239632582619c19b347c0fe96748eb16e4e269e1a"
+        },
+        "checks": [
+          "未保存配置跨页面与刷新恢复，恢复过程只读取；全局配置草稿保留在当前标签页",
+          "提交已接受但回执丢失后，刷新保留原编号；只读核对确认 v1，不重复保存并恢复键盘焦点",
+          "未送达的保存沿用原内容和编号重试，核对期间的新输入独立保留",
+          "多页面配置冲突展示当前版本与保留输入，明确按新版本继续；浅深主题、两种桌面宽度及 28px 字号布局通过",
+          "原保存之后又有新配置时，准确区分已接受版本与当前版本，采用当前配置需明确操作",
+          "离开再返回后旧保存回执不覆盖新输入，慢配置读取期间的输入仍保留",
+          "迟到模型目录保留等待期间选择的模型和推理强度"
+        ],
+        "errors": []
+      },
+      "model-discovery": {
+        "result": {
+          "path": "/private/tmp/af-runtime-detection-browser/model-discovery/results.json",
+          "sha256": "142151a489baeb4292bc1ee020c7555e08e57f7c32019eac0bf3bad5f4a778bf"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-runtime-detection-browser/results.json",
+          "sha256": "2a5cdbd9767e8e8f8ea0e2e239632582619c19b347c0fe96748eb16e4e269e1a"
+        },
+        "checks": [
+          "Codex 查询持续通知时，Cursor 目录仍可先完成，配置页保持可操作",
+          "查询超时返回可重试提示，原模型选择与未保存超时参数保持不变",
+          "刷新失败保留原目录和本页选择，服务端有效缓存可读，浅深色错误提示布局正常",
+          "显式重试可恢复模型目录，切换页面后编辑继续保留，全程未保存配置或创建任务"
+        ],
+        "errors": []
+      }
+    },
+    "screenshots": [
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/runtime-detection-light.png",
+        "sha256": "1765aa276390df65e376ca94f1481bddea3d2798108948f75442f665b1190451"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/runtime-detection-dark.png",
+        "sha256": "f0e475c0b431875aa52567f9635e43b996bdb068c4633bc9dce434126143624b"
+      }
+    ],
+    "visual_review": "Inspected light/dark timeout feedback with matching provider name, available retry button and preserved input. Eight layout/focus cases passed at desktop widths and normal/28px status text.",
+    "isolation": "Temporary application database, synthetic model directory and real disposable Python CLI substitutes; actual version timeout, controlled delayed HTTP replies and page lifecycle events. No real model calls.",
+    "iterations": []
+  },
+  "design_guidance": {
+    "skill": "/Users/kurt/.agents/skills/ui-ux-pro-max/SKILL.md",
+    "query": "loading asynchronous status feedback --domain ux",
+    "matched": "Feedback / Loading Indicators (All platforms)",
+    "application": "Provider-specific feedback, accessible busy state, stable controls and clear retry. Existing desktop visual style retained."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-runtime-detection-source-candidate-20261103-verified",
+    "build_log": {
+      "path": "/private/tmp/af-runtime-detection-build-verified.log",
+      "sha256": "fa546d88a40ded3c4a75acf294ae10447076d0c306099a93a3b4341dc176cb46"
+    },
+    "verification": {
+      "path": "/private/tmp/af-runtime-detection-package-check.json",
+      "sha256": "c75e2300ff5b2e301b45715782ad2fe6193d92b4a1446a067dafda67af825e1c"
+    },
+    "program_files": 166,
+    "program_changes_since_prior_candidate": [
+      "agent_framework/runtime_config.py",
+      "agent_framework/runtime_detection.py",
+      "agent_framework/webui/app.js",
+      "agent_framework/webui/runtime_settings.js"
+    ],
+    "prior_candidate": {
+      "path": "/private/tmp/af-runtime-lifecycle-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "d1a0434d6b074f94ba5605fa74bf66784230e44e25425a5dc7847ac9406a6631"
+    },
+    "bundle": {
+      "path": "/private/tmp/af-runtime-detection-source-candidate-20261103-verified/agent-framework-1.3.0.tar.gz",
+      "sha256": "fd01b2cf3a733aba79226a88ff0b2d7b8e8ff42583f0410530a5b4fcd2d57d22"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-runtime-detection-source-candidate-20261103-verified/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "9d6a1e0891e1f0f6336fc4979fad78004232ccd1c07947b2fc2f145c8d0004dc"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-runtime-detection-source-candidate-20261103-verified/SHA256SUMS",
+      "sha256": "426dacb9dcf6355ab4fb4e274ecd30f10354810c0a7f5d2b6c3b0b01c16b778c"
+    },
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/runtime_detection.py": "65c0c208f3d002e1ce4ef576d3da34b0cf12e851ec2a0ae29471b0ac42e17977",
+    "agent_framework/runtime_config.py": "cd86146d9caf1c4f74f93596f29702ee2ed55c2e3c92e156da2ee17e90090592",
+    "agent_framework/process_pipes.py": "06995f21334e58286bfe6393b5c022f92518db5d960fa7141970faee36f332b4",
+    "agent_framework/processes.py": "07d43b478737d5371c83734f02efd2061abf843c50c136c6238b2dbb84625f68",
+    "agent_framework/webui/app.js": "72bc14857d4e0c433aa92f41ae31f57eaf0a6453afc10bd20f98f745dabb56de",
+    "agent_framework/webui/runtime_settings.js": "b9bdbe8942409d98fbf2aebd4ad0b47096fa915823079d6d887fd950410c979d",
+    "tests/test_runtime_detection.py": "c10f1e51bbb432df671a683744398b2eace7ffe3ef7eb563a0e9a32e3ed36c31",
+    "tests/test_runtime_detection_interactions.js": "cf0d24214d672aefc4ea60e7fcb0887c063f8ea0d3f02a81167d600611e8d4af",
+    "tests/test_runtime_config.py": "a8fcda3408fc35a872ceaf34ecb74db9c59a985f54937ffceaea9dcd8f6d444b",
+    "tests/test_qoder_runtime.py": "2dae50deff4360dd91b015d1bdd7b41f61c3133b030fe6400df19762412cf6dc",
+    "tests/serve_runtime_detection_fixture.py": "641b5625a05ebd919d2f4e238ed005183072d3a72672d11e8bb61d7d7281d3da",
+    "tests/verify_runtime_detection.cjs": "9da9fe566fef5d8d5f903a9f4c2df415e60098c2e93ddc1d70253e48c5d93ea1",
+    "scripts/run_browser_tests.py": "cda56aab7eb987e6852f1e03351d5ef2b83ae34a0e64c5c00afc220c0240b30a",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "a36d49a8852eef1f7f9c3c752b62a71a7a1c93ff6741e303f68ef9980486c3aa",
+    "design.md": "297bd0fc95969afb897d62c6c6edf26e32a5323ea2cbec233ac46c51c5f5a240",
+    "docs/reliability/runtime-detection.md": "9a42a40f60315d5b93c9641bfbba68f665228c84b6f7cf002d70ad33e213ff18"
+  },
+  "limits": [
+    "Version detection does not verify account login or model permission.",
+    "Read deadline excludes bounded process-group cleanup time.",
+    "Leaving the editor discards UI ownership without cancelling the bounded server probe.",
+    "Detection results are editor-local, not persisted across navigation.",
+    "Controlled page lifecycle events in the new suite are separate from real cache-return coverage in the lifecycle regression.",
+    "Version remains 1.3.0; local candidate unpublished and fresh installation not repeated."
+  ]
+}

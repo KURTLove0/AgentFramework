@@ -32,6 +32,26 @@ class OperationsTests(unittest.TestCase):
         self.scheduler = WorkspaceScheduler(self.app)
         self.evaluations = AgentEvaluations(self.app)
 
+    def test_role_settings_receipt_is_the_committed_revision(self):
+        registry = self.app.agents
+        original_save = registry.save
+        config = registry.evaluation_settings(self.agent['id'])['config']
+        config['threshold'] = 91
+
+        def save_then_edit(data, identity):
+            saved = original_save(data, identity)
+            changed = deepcopy(data)
+            changed['revision'] = saved['revision']
+            changed['evaluation_config']['threshold'] = 97
+            original_save(changed, identity)
+            return saved
+
+        with patch.object(registry, 'save', side_effect=save_then_edit):
+            receipt = registry.save_evaluation_settings(self.agent['id'], {'revision': 1, 'config': config})
+        self.assertEqual((receipt['revision'], receipt['config']['threshold']), (2, 91))
+        current = registry.evaluation_settings(self.agent['id'])
+        self.assertEqual((current['revision'], current['config']['threshold']), (3, 97))
+
     def task(self, **kw):
         return dict(agent_id=self.agent['id'], agent_revision=self.agent['revision'], goal='评估每日变更并创建草稿',
                     change_id='change-daily-001', grant=False, consent=False, mcp_consent=False) | kw
@@ -120,6 +140,18 @@ class OperationsTests(unittest.TestCase):
         self.assertEqual(result['status'], 'PARTIAL')
         self.assertEqual(result['items'][0]['status'], 'BLOCKED')
         self.assertEqual(self.app.runs()['counts']['total'], 0)
+
+    def test_daily_plan_detail_includes_live_run_status_without_rewriting_plan(self):
+        self.scheduler.save(self.config())
+        plan = self.scheduler.dispatch(self.scheduler.generate()['id'])
+        before = self.scheduler.get(plan['id'])
+        detail = self.scheduler.detail(plan['id'])
+        self.assertEqual(detail['items'][0]['run_status'], 'CREATED')
+        self.assertEqual(self.scheduler.get(plan['id']), before)
+        other = Application(self.tmp.name, principal='someone-else')
+        self.addCleanup(other.close)
+        with self.assertRaises(KeyError):
+            WorkspaceScheduler(other).detail(plan['id'])
 
     def test_daily_tick_due_timezone_dedup_and_skips_unfinished_duplicates(self):
         self.scheduler.save(self.config(enabled=True))
@@ -272,3 +304,21 @@ class OperationsHTTPTests(unittest.TestCase):
         self.assertEqual(self.request('/api/evaluation-policy',{'revision':0,'threshold':80,'window_days':30,'automatic':True})[0],200)
         self.assertEqual(self.request('/api/evaluation-policy',{'revision':0,'threshold':80,'window_days':30,'automatic':True})[0],409)
         self.assertEqual(self.request('/api/agent-alerts/alert-missing/acknowledge',{})[0],404)
+
+    def test_policy_recovery_read_is_small_and_does_not_evaluate_history(self):
+        saved = {'revision': 0, 'threshold': 91, 'window_days': 14, 'automatic': False}
+        status, receipt = self.request('/api/evaluation-policy', saved)
+        self.assertEqual(status, 200)
+        with patch.object(AgentEvaluations, 'overview', side_effect=AssertionError('full history read')):
+            status, current = self.request('/api/evaluation-policy', token=False)
+        self.assertEqual(status, 200)
+        self.assertEqual(current, receipt)
+        self.assertEqual(set(current), {'revision', 'threshold', 'window_days', 'automatic'})
+
+    def test_daily_plan_read_route_returns_only_requested_private_plan(self):
+        status, plan = self.request('/api/daily-plans/generate', {})
+        self.assertEqual(status, 200)
+        status, detail = self.request('/api/daily-plans/' + plan['id'], token=False)
+        self.assertEqual(status, 200)
+        self.assertEqual(detail, plan)
+        self.assertEqual(self.request('/api/daily-plans/plan-missing')[0], 404)

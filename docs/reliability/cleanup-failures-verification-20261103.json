@@ -1,0 +1,294 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Single-thread nonblocking subprocess pipe ownership; preserve primary model/cancellation/lease failures, close local resources independently of denied termination, and expose unconfirmed cleanup without claiming a live child stopped.",
+  "before": {
+    "tests": 3,
+    "errors": 3,
+    "duration_seconds": 0.05,
+    "log": {
+      "path": "/private/tmp/af-cleanup-failures-before.log",
+      "sha256": "656514050751f704bd102474a4d4243c256608fab21bc9a57d8407b251b6c3b2"
+    },
+    "note": "Injected termination denial replaced the primary exception or skipped pipe closure in each baseline."
+  },
+  "diagnosis": {
+    "isolated_samples": 60,
+    "ready_samples": 30,
+    "permission_failures": 0,
+    "result": {
+      "path": "/private/tmp/af-cleanup-probe.json",
+      "sha256": "505c9f0b6da718ee2d9bd0ee73390fc9fb3fa95b48cb60e15d2914f6ca427c30"
+    },
+    "probe": {
+      "path": "/private/tmp/af-cleanup-probe.py",
+      "sha256": "7ca1f7797f12cc98d8bb63fb6418720f2c12041082fa650c33d45bfc962d18dc"
+    },
+    "note": "The previous intermittent process-group permission failure did not recur in this measurement. Its unique operating-system cause is not established."
+  },
+  "backend": {
+    "related": {
+      "tests": 69,
+      "passed": 69,
+      "duration_seconds": 12.004,
+      "log": {
+        "path": "/private/tmp/af-cleanup-failures-related-verified.log",
+        "sha256": "11c9598421a575adc14da63d5bd81544bc4852d2bc0c2ce53649805344d0ea4b"
+      }
+    },
+    "final_cleanup": {
+      "tests": 27,
+      "passed": 27,
+      "duration_seconds": 2.841,
+      "log": {
+        "path": "/private/tmp/af-cleanup-failures-final-focused.log",
+        "sha256": "4fa425653dde4203198ac6f67e3521a1299cd06e147818ec9995850c006d26a2"
+      }
+    },
+    "full": {
+      "command": ".venv/bin/python -m unittest discover -s tests -p 'test_*.py'",
+      "tests": 1201,
+      "passed": 1201,
+      "duration_seconds": 207.907,
+      "log": {
+        "path": "/private/tmp/af-cleanup-failures-backend-verified.log",
+        "sha256": "2e2dbb8ce9ad199e80428e5b5db2574f09ba445caf59422f3a286dcc60355595"
+      }
+    },
+    "initial_full": {
+      "tests": 1201,
+      "errors": 1,
+      "duration_seconds": 208.49,
+      "log": {
+        "path": "/private/tmp/af-cleanup-failures-backend-full.log",
+        "sha256": "93d88795a3b463b5551b0a53c257f2c666eade0223c06a2bfec28f2a91d54550"
+      },
+      "note": "The existing workflow descendant test body passed, but its registered cleanup directly called killpg and raised PermissionError. This run is retained as failed."
+    },
+    "fixture_corrections": [
+      {
+        "log": {
+          "path": "/private/tmp/af-cleanup-failures-related.log",
+          "sha256": "3018318bad876a4c16224f94cf3bf6f3cc2f4c5bf4e8f19005ecc5499e803585"
+        },
+        "note": "The initial runtime injection patched only codex_stream cleanup, while the legacy planner selects model_stream. Patch both scoped cleanup aliases for this test."
+      },
+      {
+        "source": "tests/test_workflow_model_cancellation.py",
+        "note": "Use bounded stop_process_group for teardown. Add child readiness handshake and explicitly wait for leader exit before testing descendant cleanup, exact primary timeout, absent cleanup failure, closed pipes and elapsed time. Genuine termination denial still fails."
+      },
+      {
+        "sources": [
+          "tests/test_cleanup_failures.py",
+          "tests/test_process_cleanup.py"
+        ],
+        "note": "Use the same bounded stop_process_group in real-process test teardown instead of a raw duplicate killpg."
+      }
+    ]
+  },
+  "frontend": {
+    "focused": {
+      "tests": 10,
+      "passed": 10,
+      "failed": 0,
+      "duration_ms": 251.281208,
+      "log": {
+        "path": "/private/tmp/af-cleanup-failures-frontend-focused.log",
+        "sha256": "7ac3f3ab76a143344763f2837754086a8ddcb6024cb7bf5092534f33e3de1d3e"
+      }
+    },
+    "full": {
+      "command": "node --test tests/test_*.js",
+      "tests": 847,
+      "passed": 847,
+      "failed": 0,
+      "duration_ms": 10052.774125,
+      "log": {
+        "path": "/private/tmp/af-cleanup-failures-frontend-full.log",
+        "sha256": "ec521f2515794e94dca2f575655a81bfe44f44ffc4cc834293651605125c875a"
+      }
+    }
+  },
+  "browser": {
+    "passed_suites": {
+      "cleanup-failures": {
+        "result": {
+          "path": "/private/tmp/af-cleanup-failures-browser-first/cleanup-failures/results.json",
+          "sha256": "1833ad0aa6e60ef36a3cc3047d7cfa34d2ff58ff2dccdd5eca863077a6f75307"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-cleanup-failures-browser-first/results.json",
+          "sha256": "9dfd418486d7c4801c19547d8be8bdf6ff726332fe71f7774de0e3ab75f9954c"
+        },
+        "checks": [
+          "模型超时与清理拒绝分别记录：原错误保留，管道已关闭，仍存活的测试进程未被误报为已停止",
+          "刷新保留清理待检查提示、原错误、生成片段和草稿，不自动重试",
+          "测试中显式修复运行环境后重试一次，新轮次成功且历史失败与草稿继续保留"
+        ],
+        "errors": [],
+        "observations": {
+          "primary_error": "model_timeout",
+          "cleanup_failure": {
+            "confirmed": false,
+            "kind": "PermissionError",
+            "pid": 81913,
+            "pipes_closed": true
+          },
+          "live_child_before_operator_cleanup": {
+            "running": true,
+            "pipes_closed": true
+          },
+          "writes": [
+            "/api/tasks",
+            "/__test/cleanup-failures",
+            "/api/tasks/task-99ae6a7564df49713ba91acf655f8170/messages/1/retry"
+          ]
+        }
+      },
+      "process-cleanup": {
+        "result": {
+          "path": "/private/tmp/af-cleanup-failures-browser-final/process-cleanup/results.json",
+          "sha256": "16419aa82f99d7ca1f503dc9423f3613dffa2fd7b676d97c6843c107222a23dd"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-cleanup-failures-browser-final/results.json",
+          "sha256": "ad1f116affa190b1056b8c3d55586ad0a9f4055469b63c867cd5db255aa9772b"
+        },
+        "checks": [
+          "真实模型进程提前退出后保留原始模型错误，退出码与管道收尾完整，未误报执行器中断",
+          "刷新保留公开片段、失败记录与未发送草稿，不自动再调用模型",
+          "显式重试新增一轮并仅执行一次，原失败轮次与草稿保持不变"
+        ],
+        "errors": []
+      },
+      "codex-rpc-writes": {
+        "result": {
+          "path": "/private/tmp/af-cleanup-failures-browser-first/codex-rpc-writes/results.json",
+          "sha256": "c27ea03cfbec5bebf1cc843f0e95c55a276ca586dc08f580661d190b3d3ddf69"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-cleanup-failures-browser-first/results.json",
+          "sha256": "9dfd418486d7c4801c19547d8be8bdf6ff726332fe71f7774de0e3ab75f9954c"
+        },
+        "checks": [
+          "长输入发送受阻时可停止，刷新保留草稿，后续明确发送的消息只执行一次",
+          "发送期间租约失效后及时中断，显式恢复继续同一任务和原配置",
+          "发送阶段计入模型超时，失败后没有自动格式重试或残留子进程"
+        ],
+        "errors": []
+      },
+      "cognition-lease-loss": {
+        "result": {
+          "path": "/private/tmp/af-cleanup-failures-browser-first/cognition-lease-loss/results.json",
+          "sha256": "34a68b8dec59767144f84a0e2f4a225d0bbdcf7494659eced7ab73f530333fb5"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-cleanup-failures-browser-first/results.json",
+          "sha256": "9dfd418486d7c4801c19547d8be8bdf6ff726332fe71f7774de0e3ab75f9954c"
+        },
+        "checks": [
+          "静默调用失去租约后 5 秒内退出，任务显示中断，没有误写用户停止请求",
+          "刷新保留中断状态与草稿，等待显式恢复，没有自动发起新模型调用",
+          "显式恢复继续同一轮和原配置、期限与授权，最终草稿只创建一次"
+        ],
+        "errors": []
+      },
+      "workflow-model-cancellation": {
+        "result": {
+          "path": "/private/tmp/af-cleanup-failures-browser-first/workflow-model-cancellation/results.json",
+          "sha256": "874d8021b733187a2fe43a3146c04a31f6e2c55554861a98b3db01e97b9e25b3"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-cleanup-failures-browser-first/results.json",
+          "sha256": "9dfd418486d7c4801c19547d8be8bdf6ff726332fe71f7774de0e3ab75f9954c"
+        },
+        "checks": [
+          "旧式任务在真实本机子进程中执行 plan 阶段，没有公开进度回调",
+          "60 秒模型等待在停止后 5 秒内结束，子进程已退出，没有额外模型请求或业务动作",
+          "刷新保留已停止状态和未发送草稿，没有重复提交停止请求"
+        ],
+        "errors": []
+      }
+    },
+    "first_runner": {
+      "path": "/private/tmp/af-cleanup-failures-browser-first/results.json",
+      "sha256": "9dfd418486d7c4801c19547d8be8bdf6ff726332fe71f7774de0e3ab75f9954c"
+    },
+    "fixture_correction": {
+      "failed_result": {
+        "path": "/private/tmp/af-cleanup-failures-browser-first/process-cleanup/failure.json",
+        "sha256": "939184ae0bc67e7975f5d92134a80df4f4bce982fc44bc6f96dae83fa7304eee"
+      },
+      "note": "The old verifier counted /messages, while fixed-turn retries now use /messages/1/retry. Corrected the request counter and repeated the suite; no production behavior changed for this assertion."
+    },
+    "screenshots": [
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/cleanup-unconfirmed.png",
+        "sha256": "b916c4f295fa4a0fa403c7fd5cd305d63ab0a95cb716c6e9f4ab63276d0fbb82"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/cleanup-retry.png",
+        "sha256": "5376d3b949c30c3647456306d8530545015fa40b6a1fa1ff383c07757db2a536"
+      }
+    ],
+    "visual_review": "Inspected the original timeout plus cleanup warning and the successful explicit retry retaining the historical failure and draft.",
+    "isolation": "Disposable databases, synthetic models and temporary owned process groups; no real model service or business system is called."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-cleanup-failures-source-candidate-20261103",
+    "build_log": {
+      "path": "/private/tmp/af-cleanup-failures-build.log",
+      "sha256": "8f18a73f5b9021fcd54d93c248d40a3e992bbdb846b014484c1fc850e912ed9f"
+    },
+    "verification": {
+      "path": "/private/tmp/af-cleanup-failures-package-check.json",
+      "sha256": "ba56edcc1db5e6d79f75c5ce355b70ec848d33ede9ba18cfe4ac86e01f38ac87"
+    },
+    "program_files": 148,
+    "bundle": {
+      "path": "/private/tmp/af-cleanup-failures-source-candidate-20261103/agent-framework-1.3.0.tar.gz",
+      "sha256": "73f290d1fc1603017cd523ec61173deb273c3414ad05b50ee14cdd7bd5eb5173"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-cleanup-failures-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "83c8676d3ecb2ad9c2c1bc015ce5580f71a97d1cf25246a4ced8c5b6abb23fb7"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-cleanup-failures-source-candidate-20261103/SHA256SUMS",
+      "sha256": "35c4dc5c1774f3274cc111b470ab2ed3aaf8befb0c08f984bf4b4170f6e4e03b"
+    },
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/process_pipes.py": "06995f21334e58286bfe6393b5c022f92518db5d960fa7141970faee36f332b4",
+    "agent_framework/processes.py": "07d43b478737d5371c83734f02efd2061abf843c50c136c6238b2dbb84625f68",
+    "agent_framework/codex_stream.py": "9fdfc09c596113d4c5c6aa43a128f92966d56799461c7d4589ce79a6e347bd0b",
+    "agent_framework/model_stream.py": "a60d13be2ec827d39bf719b0f4449506cc954cd0cb10f1352eea8c7ea5b29733",
+    "agent_framework/llm.py": "9f8433717aa77458a3ebed104cc1a9790e5903385026021a703db775bf7a0b43",
+    "agent_framework/runtime.py": "0846777865390797a4fcd688e9eb505e28aacdcb0c7b860b80cf459bd4846658",
+    "agent_framework/webui/run_view.js": "6547642f37c459ea9cfc8ee6d1ed9963b72eac84879798f1509dd012d46ea728",
+    "tests/test_cleanup_failures.py": "e21b596fffe091bae997b0c038438318350eef8cf5e68d6aa2b2e338f63f727d",
+    "tests/test_process_cleanup.py": "82b8d920b05e4a267c80451a48d8a0ab51b789b30fe62a6e6d1c2a3da2a888b6",
+    "tests/test_workflow_model_cancellation.py": "e2f799cee69f81236e43af6135e08e47f091717d056c1621abb7fedc99282934",
+    "tests/test_model_failure_messages.js": "442cf678ed81f0fe816104eea644423b2dfad885eaba1c867ee1bbd0f8fbd332",
+    "tests/serve_cleanup_failures_fixture.py": "1ab1c8451cf065633ee3a24f73814c7be7544695637c80856135d271464ce79b",
+    "tests/verify_cleanup_failures.cjs": "cbdebadabdcfa392db233cada3aad6fac7329672300cbe94bf0f3b46a0e26340",
+    "tests/verify_process_cleanup.cjs": "14c1082cdc4fd53c9a51144d5ac78108f2b4c6ed8234ca0902c371d2ec544cdc",
+    "scripts/run_browser_tests.py": "ba0db45ca8799f9bfa511ac8f4054dd33e851f264e898a79ece5fccf7f544f01",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "41d553708c63bb35a5bf6870453373b0fc16dbda65b04329689f87f52fd9f5e0",
+    "design.md": "8663c0b01b16a01c701ca1386f2927414cfccb3c6eddee8f69354cbb5f286824",
+    "docs/reliability/cleanup-failures.md": "92b26cab47bca75eee46c5f53afa1b7e818d3dc63bcb88327aeeb1a485669c3a"
+  },
+  "limits": [
+    "Denied termination may leave a real process alive. Closed local pipes and confirmed process exit are separate observations; the browser fixture explicitly verifies the alive-child case.",
+    "Persisted cleanup metadata describes the end of that call. It is not a live process monitor, and the saved PID is never used as future signal authority.",
+    "Only ProcessLookupError from signal-0 confirms an absent group after denied termination; a successful probe or permission denial does not.",
+    "The original intermittent operating-system cause remains unproven. Deterministic injection verifies the failure boundary without hiding genuine permission denial.",
+    "Focused and full regression counts overlap and must not be added.",
+    "No version bump, publication or repeated fresh installation."
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "recorded_on": "2026-10-30",
+  "python": "3.14.3",
+  "command": ".venv/bin/python scripts/benchmark_agents.py --compare",
+  "timing": "Query, decode and canonical response serialization, with decode/query instrumentation; excludes fixture creation and network transfer",
+  "agents": 100,
+  "skills_per_agent": 4,
+  "reference_bytes_per_skill": 49152,
+  "catalog_matches_projection": true,
+  "algorithms": {
+    "full": {
+      "median_seconds": 0.1219,
+      "measurements": [
+        {
+          "seconds": 0.121458,
+          "selects": 1,
+          "python_json_input_bytes": 20088880,
+          "python_json_decodes": 100,
+          "returned": 100,
+          "response_bytes": 20097966,
+          "response_sha256": "02517aac5d937bc83d600aabc136e1884765f0ff9633116e118ead75a0aba325"
+        },
+        {
+          "seconds": 0.12253,
+          "selects": 1,
+          "python_json_input_bytes": 20088880,
+          "python_json_decodes": 100,
+          "returned": 100,
+          "response_bytes": 20097966,
+          "response_sha256": "02517aac5d937bc83d600aabc136e1884765f0ff9633116e118ead75a0aba325"
+        },
+        {
+          "seconds": 0.1219,
+          "selects": 1,
+          "python_json_input_bytes": 20088880,
+          "python_json_decodes": 100,
+          "returned": 100,
+          "response_bytes": 20097966,
+          "response_sha256": "02517aac5d937bc83d600aabc136e1884765f0ff9633116e118ead75a0aba325"
+        }
+      ]
+    },
+    "catalog": {
+      "median_seconds": 0.028828,
+      "measurements": [
+        {
+          "seconds": 0.029528,
+          "selects": 1,
+          "python_json_input_bytes": 261880,
+          "python_json_decodes": 200,
+          "returned": 100,
+          "response_bytes": 274866,
+          "response_sha256": "a829acd8d1f5be04293ca6390f7131bf87e39fb8e9bcb6bf86d08eb9ea528ca9"
+        },
+        {
+          "seconds": 0.028828,
+          "selects": 1,
+          "python_json_input_bytes": 261880,
+          "python_json_decodes": 200,
+          "returned": 100,
+          "response_bytes": 274866,
+          "response_sha256": "a829acd8d1f5be04293ca6390f7131bf87e39fb8e9bcb6bf86d08eb9ea528ca9"
+        },
+        {
+          "seconds": 0.026677,
+          "selects": 1,
+          "python_json_input_bytes": 261880,
+          "python_json_decodes": 200,
+          "returned": 100,
+          "response_bytes": 274866,
+          "response_sha256": "a829acd8d1f5be04293ca6390f7131bf87e39fb8e9bcb6bf86d08eb9ea528ca9"
+        }
+      ]
+    }
+  }
+}

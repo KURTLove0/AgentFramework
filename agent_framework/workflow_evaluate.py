@@ -32,7 +32,7 @@ def main(argv=None):
     flows=app.workflows();w=flows.save(reply['proposal']|{'revision':0});nodes=w['nodes'];write_node=nodes[1]['id']
     s=flows.start(w['id'],{'revision':w['revision'],'grant':False,'scenarios':{write_node:'response-lost'},'request_id':'demo-auth-and-lost'})
     r=flows.execute(s['id']);record('authorization-stops-write-node',r['status']=='WAITING_AUTH' and not app.runtime().external.stats(app.tenant,r['nodes'][write_node]['run_id'])['drafts'])
-    flows.grant(r['id'],write_node);r=flows.execute(r['id']);child=r['nodes'][write_node]['run_id'];stats=app.runtime().external.stats(app.tenant,child)
+    flows.grant(r['id'],write_node,app.flow_detail(r['id'])['children'][write_node]['proposal_token']);r=flows.execute(r['id']);child=r['nodes'][write_node]['run_id'];stats=app.runtime().external.stats(app.tenant,child)
     record('response-lost-verified-one-draft',r['status']=='SUCCEEDED' and len(stats['drafts'])==stats['calls']['report.draft.create@1.0.0']==1,run_id=r['id'],child=child)
     downstream=app.runtime().store.result(app.tenant,child)
     record('upstream-artifact-delivered-with-hash',bool(downstream['task']['workflow_inputs']) and downstream['task']['workflow_inputs'][0]['content_hash']==digest(downstream['task']['workflow_inputs'][0]['artifact']))

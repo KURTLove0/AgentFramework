@@ -1,0 +1,451 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Hold accepted followups while the root has unresolved actions; gate new acceptance and child creation in their committing transactions; preserve receipts, cancellation, drafts, review status and read-only inspection.",
+  "skill": {
+    "name": "ui-ux-pro-max",
+    "path": "/Users/kurt/.agents/skills/ui-ux-pro-max/SKILL.md",
+    "query": "disabled action explain recovery --domain ux",
+    "applied": "Explain disabled actions and next steps using existing controls and styles."
+  },
+  "backend_before": {
+    "command": ".venv/bin/python -m unittest tests.test_conversation_review -v",
+    "tests": 9,
+    "duration_seconds": 2.456,
+    "passed": false,
+    "path": "/private/tmp/af-conversation-review-before.log",
+    "sha256": "5d8487c7386519f5be8a6cf51e4aa386149a6808840e317a80964f984f9e56a0",
+    "failures": 6,
+    "errors": 0,
+    "observation": "Actual exhausted write readback did not block new messages or queued followups; stale parent state and restart handoff bypassed the intended hold."
+  },
+  "frontend_before": {
+    "command": "node --test tests/test_conversation_review.js",
+    "tests": 4,
+    "pass": 1,
+    "fail": 3,
+    "duration_ms": 254.99375,
+    "path": "/private/tmp/af-conversation-review-ui-before.log",
+    "sha256": "f598de1f3bfe2ba270758fc97cac5ddc49cb8780ab389a773f541ebae9971925"
+  },
+  "backend_focused": {
+    "command": ".venv/bin/python -m unittest tests.test_conversation_review tests.test_message_receipts tests.test_conversation_handoff tests.test_conversation_projection tests.test_task_conversations -v",
+    "tests": 63,
+    "duration_seconds": 7.294,
+    "passed": true,
+    "path": "/private/tmp/af-conversation-review-focused-final.log",
+    "sha256": "4e6c08ac49e8d50c72bb0b20d3a00d30636d70a9d853184fff2b5f54ef3beba6"
+  },
+  "frontend_focused": {
+    "command": "node --test tests/test_conversation_review.js tests/test_model_failure_messages.js tests/test_cancellation_interactions.js tests/test_run_inspector_interactions.js",
+    "tests": 38,
+    "pass": 38,
+    "fail": 0,
+    "duration_ms": 831.6065,
+    "path": "/private/tmp/af-conversation-review-ui-focused.log",
+    "sha256": "d6c2412980cb886d61d9c04ab7ef41dfffdd8cb02fa10787e460aeff773c1808"
+  },
+  "boundary_regression": {
+    "command": ".venv/bin/python -m unittest tests.test_conversation_review tests.test_workspace_deletion tests.test_workflow_start_recovery -v",
+    "tests": 36,
+    "duration_seconds": 6.136,
+    "passed": true,
+    "path": "/private/tmp/af-conversation-review-boundaries.log",
+    "sha256": "fc1f9ec29ecd6ef84758e0971c2a897fb309966433670449e15150a0dc08d32b"
+  },
+  "backend_initial_full": {
+    "command": ".venv/bin/python -m unittest discover -s tests -p 'test_*.py'",
+    "tests": 1154,
+    "duration_seconds": 210.172,
+    "passed": false,
+    "path": "/private/tmp/af-conversation-review-backend-full.log",
+    "sha256": "879aedb74afeef327d1d2886d610cfd3ce9d0bf60f50a8d4dcfb9d18bb7c49ce",
+    "failures": 1,
+    "errors": 1,
+    "observation": "Old workspace-deletion injection assumed registration occurred outside the append transaction; updated to delete after the root read and before transaction acquisition. Independent workflow recovery advanced a queued receipt during an HTTP read-only test; disabled only that test fixture recovery, preserving the strict queued-state assertion."
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests -p 'test_*.py'",
+    "tests": 1154,
+    "duration_seconds": 204.99,
+    "passed": true,
+    "path": "/private/tmp/af-conversation-review-backend-final.log",
+    "sha256": "08fa4adfc9d19372d7a0bcc4bbd23af2ec3a30810a0ac406da8f6cec124d891d"
+  },
+  "frontend": {
+    "command": "node --test tests/test_*.js",
+    "tests": 800,
+    "pass": 800,
+    "fail": 0,
+    "duration_ms": 9258.455833,
+    "path": "/private/tmp/af-conversation-review-frontend-full.log",
+    "sha256": "b72f9bb00182992dab1da777160eff292dab09c7606c6f719019bced45cb341e"
+  },
+  "limits": [
+    "Isolated simulated business systems; no production data or live model calls.",
+    "Conversation followups are read-only; evidence shows an inconsistent hold bypass, not a demonstrated duplicate business write.",
+    "No new manual adjudication endpoint or forced resolution of unresolved actions.",
+    "No publication or fresh environment installation; candidate verified against saved source."
+  ],
+  "browser": {
+    "command": ".venv/bin/python scripts/run_browser_tests.py --suite conversation-review --suite task-permissions --suite model-failure-messages --suite conversations --output /private/tmp/af-conversation-review-browser",
+    "summary": {
+      "results": [
+        {
+          "suite": "conversation-review",
+          "passed": true,
+          "exit_code": 0
+        },
+        {
+          "suite": "task-permissions",
+          "passed": true,
+          "exit_code": 0
+        },
+        {
+          "suite": "model-failure-messages",
+          "passed": true,
+          "exit_code": 0
+        },
+        {
+          "suite": "conversations",
+          "passed": true,
+          "exit_code": 0
+        }
+      ]
+    },
+    "summary_file": {
+      "path": "/private/tmp/af-conversation-review-browser/results.json",
+      "sha256": "aeb9c069151d32f486a5d5a5c214f27db9ffa34a20d1e85de799300075ed0091"
+    },
+    "log": {
+      "path": "/private/tmp/af-conversation-review-browser.log",
+      "sha256": "b1ddb76d7d4bb9c195b1b5a71c05d01a4470ef402111b488a801fed0c1819fb6"
+    },
+    "suites": {
+      "conversation-review": {
+        "file": {
+          "path": "/private/tmp/af-conversation-review-browser/conversation-review/results.json",
+          "sha256": "9694a9c279855a08923fd71eb2072d7ed8b5bd876a198c123617b57a0ac80cf9"
+        },
+        "checks": [
+          "真实业务写入回读失败后，原任务保持待核对，已接收消息可见、暂停，诊断入口只读",
+          "刷新保留未发送草稿与排队消息；新消息受阻，同一提交回执仍可读取，取消后重复提交不会复活消息",
+          "待授权对话保留具体操作的确认入口和排队取消入口；12 种深浅色、宽度与文字大小组合无横向溢出"
+        ],
+        "errors": []
+      },
+      "task-permissions": {
+        "file": {
+          "path": "/private/tmp/af-conversation-review-browser/task-permissions/results.json",
+          "sha256": "c0778f23c9e79b03c0da19b5c98cac5576ae9bd9604027983bac781fda77616e"
+        },
+        "checks": [
+          "普通任务只提交已审查提案的标记，内容变化时拒绝旧授权并保留原窗口",
+          "确认与核对入口在浅深主题、1024/1440 宽度及两倍文字下可聚焦并可到达",
+          "重新审查才采用新提案；响应丢失后只读核对，撤销后旧回执不能重新授权",
+          "队列满时受理授权并保存继续请求；真实服务重启后无需重提，容量恢复只创建一份草稿",
+          "执行器失败保留已接受授权和明确重试入口，继续执行不重新授权",
+          "较早授权回执晚到时，不关闭后来任务的取消窗口，也不覆盖当前任务"
+        ],
+        "errors": []
+      },
+      "model-failure-messages": {
+        "file": {
+          "path": "/private/tmp/af-conversation-review-browser/model-failure-messages/results.json",
+          "sha256": "a756f476d3f500a8cc2c4470517691e47048d87cccac6c0119f1633305d9db02"
+        },
+        "checks": [
+          "五类模型失败显示原因与恢复建议，原始错误码仍可从本轮记录读取，查看记录不提交任务",
+          "包含错误码字样的补充信息请求保留原文，未被误判为模型超时",
+          "刷新保留状态与草稿，明确重试仅新增一轮；深浅色、窄屏与放大文字下操作可见且可聚焦",
+          "存在尚未确认的业务写入时提示先人工核对，保留未决动作和唯一已创建草稿"
+        ],
+        "errors": []
+      },
+      "conversations": {
+        "file": {
+          "path": "/private/tmp/af-conversation-review-browser/conversations/results.json",
+          "sha256": "44525228cef394895467dd29773cb3d548cc65f55efd60f2bfcbe4170741f088"
+        },
+        "checks": [
+          "任务页以对话为主，任务信息按需展开，执行过程与结果保留在同一活动流",
+          "运行刷新不清空草稿、不移动输入光标，中文输入法确认不会误发送",
+          "发送失败原地保留输入可重试，后续回复带有前文，任务数量保持一个",
+          "刷新可恢复整段对话和未发送草稿，无需新建任务",
+          "阅读历史时新回复不会抢滚动位置，可一键回到最新消息",
+          "运行中可依次补充消息，重复点击只发送一次，排队消息可取消",
+          "停止本轮保留记录，已明确排队的下一轮继续执行，取消排队的内容不会发送",
+          "不同任务的草稿相互独立，切回后仍可继续",
+          "智能体追问可以直接在原任务回答，继续使用同一对话上下文",
+          "失败可在任务内重试或继续补充，旧错误与原始输入保留",
+          "每轮可以查看真实执行记录，完整对话可导出",
+          "桌面、平板、手机及横屏可用，发送按钮不被遮挡，支持换行和减少动态效果"
+        ],
+        "errors": []
+      }
+    },
+    "review": {
+      "layouts": [
+        {
+          "theme": "light",
+          "width": 1440,
+          "scale": 1,
+          "bounds": {
+            "focus": true,
+            "left": 1168,
+            "right": 1240,
+            "top": 748.4375,
+            "bottom": 785.234375,
+            "height": 36.796875,
+            "width": 1440,
+            "scroll": 1440
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "scale": 2,
+          "bounds": {
+            "focus": true,
+            "left": 1168,
+            "right": 1240,
+            "top": 748.4375,
+            "bottom": 785.234375,
+            "height": 36.796875,
+            "width": 1440,
+            "scroll": 1440
+          }
+        },
+        {
+          "theme": "light",
+          "width": 375,
+          "scale": 1,
+          "bounds": {
+            "focus": true,
+            "left": 262,
+            "right": 342,
+            "top": 771.109375,
+            "bottom": 815.109375,
+            "height": 44,
+            "width": 375,
+            "scroll": 375
+          }
+        },
+        {
+          "theme": "light",
+          "width": 375,
+          "scale": 2,
+          "bounds": {
+            "focus": true,
+            "left": 262,
+            "right": 342,
+            "top": 771.109375,
+            "bottom": 815.109375,
+            "height": 44,
+            "width": 375,
+            "scroll": 375
+          }
+        },
+        {
+          "theme": "light",
+          "width": 320,
+          "scale": 1,
+          "bounds": {
+            "focus": true,
+            "left": 53.328125,
+            "right": 133.328125,
+            "top": 771.0625,
+            "bottom": 815.0625,
+            "height": 44,
+            "width": 320,
+            "scroll": 320
+          }
+        },
+        {
+          "theme": "light",
+          "width": 320,
+          "scale": 2,
+          "bounds": {
+            "focus": true,
+            "left": 53.328125,
+            "right": 133.328125,
+            "top": 771.0625,
+            "bottom": 815.0625,
+            "height": 44,
+            "width": 320,
+            "scroll": 320
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "scale": 1,
+          "bounds": {
+            "focus": true,
+            "left": 1168,
+            "right": 1240,
+            "top": 748.4375,
+            "bottom": 785.234375,
+            "height": 36.796875,
+            "width": 1440,
+            "scroll": 1440
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "scale": 2,
+          "bounds": {
+            "focus": true,
+            "left": 1168,
+            "right": 1240,
+            "top": 748.4375,
+            "bottom": 785.234375,
+            "height": 36.796875,
+            "width": 1440,
+            "scroll": 1440
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 375,
+          "scale": 1,
+          "bounds": {
+            "focus": true,
+            "left": 262,
+            "right": 342,
+            "top": 771.109375,
+            "bottom": 815.109375,
+            "height": 44,
+            "width": 375,
+            "scroll": 375
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 375,
+          "scale": 2,
+          "bounds": {
+            "focus": true,
+            "left": 262,
+            "right": 342,
+            "top": 771.109375,
+            "bottom": 815.109375,
+            "height": 44,
+            "width": 375,
+            "scroll": 375
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 320,
+          "scale": 1,
+          "bounds": {
+            "focus": true,
+            "left": 53.328125,
+            "right": 133.328125,
+            "top": 771.0625,
+            "bottom": 815.0625,
+            "height": 44,
+            "width": 320,
+            "scroll": 320
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 320,
+          "scale": 2,
+          "bounds": {
+            "focus": true,
+            "left": 53.328125,
+            "right": 133.328125,
+            "top": 771.0625,
+            "bottom": 815.0625,
+            "height": 44,
+            "width": 320,
+            "scroll": 320
+          }
+        }
+      ],
+      "receipt": {
+        "task_id": "run-798c9efc56ba41d0",
+        "request_id": "c7254089-60a2-4d6e-8e1b-67e7faf9fcdf",
+        "content": "请在确认原结果后继续整理",
+        "turn": 2,
+        "run_id": "turn-2d5ceb09018cfd3ccd0d9b7b88c69419",
+        "accepted_at": 1793674504.196809
+      },
+      "root": "run-798c9efc56ba41d0",
+      "authorization": "run-1511145dfe5c4cc7",
+      "unresolved_action": "NEEDS_REVIEW",
+      "business_drafts": 1,
+      "business_create_calls": 1,
+      "original_model_calls": 0
+    },
+    "screenshots": [
+      {
+        "path": "/private/tmp/af-conversation-review-browser/conversation-review/held-queue-dark-1440.png",
+        "sha256": "2df19eebd799cd396ffeed061d8f1ef72f10c4c216a4ee0705a9c2ea22205da0"
+      },
+      {
+        "path": "/private/tmp/af-conversation-review-browser/conversation-review/held-queue-dark-375.png",
+        "sha256": "e5a1fa457d872e6033ae84ee9bd4a66e92d8dd19db1295b72e53423f5890cfc2"
+      },
+      {
+        "path": "/private/tmp/af-conversation-review-browser/conversation-review/held-queue-light-1440.png",
+        "sha256": "64fe0078e338d6929a3158f304dbc14855d53e0df93221e9959941e5354082db"
+      },
+      {
+        "path": "/private/tmp/af-conversation-review-browser/conversation-review/held-queue-light-375.png",
+        "sha256": "c93915d5355e691f87a8b7f48e632ab64e576583a203299b4d12fb1c2513f789"
+      }
+    ],
+    "visually_inspected": [
+      "held-queue-light-375.png",
+      "held-queue-dark-1440.png"
+    ]
+  },
+  "candidate": {
+    "package_files": 143,
+    "source_and_wheel_match": true,
+    "bundled_wheel_matches": true,
+    "inner_and_outer_checksums_verified": true,
+    "published": false,
+    "fresh_install_performed": false,
+    "artifacts": [
+      {
+        "path": "/private/tmp/af-conversation-review-source-candidate-20261103/agent-framework-1.3.0.tar.gz",
+        "sha256": "de6e110dc3123dde23e000896cad22a9ceb937136cf5b367818c227cefa0e328"
+      },
+      {
+        "path": "/private/tmp/af-conversation-review-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+        "sha256": "f8438bcfa2cc39dda76ad40276cd3d36e08602acfd28c33d4f2d731f56546caf"
+      }
+    ],
+    "verification": {
+      "path": "/private/tmp/af-conversation-review-candidate-verification.json",
+      "sha256": "84449ffdf979d9e2c0444cf80f3f2c1df62aea56bb1e6836c7dbd71368899957"
+    },
+    "build_log": {
+      "path": "/private/tmp/af-conversation-review-candidate-build.log",
+      "sha256": "553cb76d0cb55238da6cc34c214b3c6f101331d13ad8f97c7d76e57dfcb17fd6"
+    },
+    "command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-conversation-review-source-candidate-20261103"
+  },
+  "source_sha256": {
+    "agent_framework/task_conversations.py": "4958e3a4b181a3a6a0aa3a57a839adba19b10ae431c03833d303a1e3f42cd4e9",
+    "agent_framework/webui/run_view.js": "2751ed9fcf325bd817b763834fd0cd714e2f81f809e5b8a108e2e6c7b8b5cabd",
+    "agent_framework/webui/task_conversation.js": "7d786ba8ef22c92afd75e191652a961242df64a7f2f1fcb84cf37e4334d6dbcb",
+    "tests/test_conversation_review.py": "32a5b1f2d78ec543c9e6f8f9ec3923ee36a02c972fcc31d7a11d10586fc22e91",
+    "tests/test_conversation_review.js": "f1fc9d44454be287681f303c000277d902b8d4bd256b779a5980fb6434c855d1",
+    "tests/serve_conversation_review_fixture.py": "a3ac6e6918a37c75a5f4c9f4cfbe1584f17ca2a702ecb01f36dae72c876e28d8",
+    "tests/verify_conversation_review.cjs": "e6f7d13f9a5ea9e5974b0eabe34dc54c5c77a6dc415263491231a9b9b509c1ed",
+    "tests/test_workspace_deletion.py": "e267c86004df2ca2286a6bccf26129a5c0bc8c3f0b9b6c2d5a01127f54e7cd15",
+    "tests/test_workflow_start_recovery.py": "30b51eb86fa109a6e2e2f91d99d3ca64877933affa06173e9808fa46e9811f54",
+    "scripts/run_browser_tests.py": "a083e5cbac2b8478f27a2d88a8db266d7f130abfef0424d4139ef5c244993cfe",
+    "README.md": "eb6ed8fadba7268c7fda431ea13cb91634d73fc413de1e5d7a3c2a7f42127299",
+    "design.md": "4f7a17b0ae2bb17f70f436e4cd4af42c99bd319aff4dc11fd7e80f11a83e0035",
+    "docs/reliability/conversation-review.md": "4f3bfd9f141897457ff31d33d2f04d6c18af780602a8628ab1828557b77da266"
+  }
+}

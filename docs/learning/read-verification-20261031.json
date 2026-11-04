@@ -1,0 +1,207 @@
+{
+  "recorded_on": "2026-10-31",
+  "scope": "Current source; proposal and ontology read ownership, cancellation, replacement confirmation, keyboard focus and validation ownership. No release rebuild or publishing.",
+  "regression_evidence": {
+    "old_validation_response_reproduced": true,
+    "log": "/private/tmp/af-learning-validation-read-baseline-20261031.log",
+    "failure": "An old successful validation response replaced the new session report for identical content"
+  },
+  "ui": {
+    "command": "npm test",
+    "tests": 213,
+    "failed": 0,
+    "passed": true,
+    "new_independent_test_cases": 16,
+    "new_validation_scenarios_in_existing_script": 3,
+    "log": "/private/tmp/af-learning-read-final-ui-20261031.log"
+  },
+  "browser": {
+    "command": ".venv/bin/python scripts/run_browser_tests.py --suite learning-reads --suite ontology --suite audit-fixes --suite legacy-modules --output /private/tmp/af-learning-read-browser-20261031",
+    "final_recheck_command": ".venv/bin/python scripts/run_browser_tests.py --suite learning-reads --output /private/tmp/af-learning-read-reviewed-browser-20261031",
+    "suites": [
+      {
+        "suite": "learning-reads",
+        "passed": true,
+        "exit_code": 0,
+        "log": "/private/tmp/af-learning-read-reviewed-browser-20261031/learning-reads.log",
+        "checks": [
+          "慢读取冻结编辑与写入，保留关闭入口；取消等待并继续编辑后，旧回复不覆盖输入或切换空间",
+          "读取失败保留未保存内容并恢复操作，不把读取错误当作未知写入",
+          "采用已存提案前明确确认；继续编辑保留输入，接受替换后采用保存版本，全程无写入或模型重放",
+          "其他页面修订本体后，四种桌面场景均先确认替换；拒绝保留原输入，接受后采用 v2 且不产生额外版本",
+          "初次加载可以关闭并重开；旧加载失败不会替换新窗口或清除新输入"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "ontology",
+        "passed": true,
+        "exit_code": 0,
+        "log": "/private/tmp/af-learning-read-browser-20261031/ontology.log",
+        "checks": [
+          "isolated-mock-fixture",
+          "add-instance-preserves-disclosure",
+          "server-error-expands-and-focuses-field",
+          "error-summary-is-keyboard-target",
+          "edit-clears-stale-error",
+          "successful-validation-retains-input-and-focus",
+          "full-editor-update-retains-disclosures-and-values",
+          "property-update-retains-focus-and-values",
+          "desktop-keyboard-focus-with-text-growth",
+          "revision-preserves-existing-save-contract",
+          "populated-ontology-layouts"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "audit-fixes",
+        "passed": true,
+        "exit_code": 0,
+        "log": "/private/tmp/af-learning-read-browser-20261031/audit-fixes.log",
+        "checks": [
+          "Failed generation can be repaired, validated, deposited and published without another generation",
+          "Assertion evidence rejects invented quotations and stores exact offsets with human review",
+          "Assertion evidence dialog fits mobile and desktop in both themes",
+          "JSON-LD download contains the reviewed quotation and source hash",
+          "Withdrawing a replacement does not silently roll back; explicit activation restores the chosen version",
+          "Offline ordinary tasks show no quality score in the evaluation UI",
+          "Expired ontology explains its state and offers no browsing or activation action"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "legacy-modules",
+        "passed": true,
+        "exit_code": 0,
+        "log": "/private/tmp/af-learning-read-browser-20261031/legacy-modules.log",
+        "checks": [
+          "agent-task",
+          "knowledge-publish",
+          "knowledge-revise",
+          "grounded-result",
+          "skill-lifecycle",
+          "skill-import-withdraw",
+          "workflow-run",
+          "workflow-chat",
+          "daily-plan",
+          "evaluation-loop",
+          "retrospective",
+          "ontology-loop"
+        ],
+        "errors": []
+      }
+    ],
+    "read_result": {
+      "checks": [
+        "慢读取冻结编辑与写入，保留关闭入口；取消等待并继续编辑后，旧回复不覆盖输入或切换空间",
+        "读取失败保留未保存内容并恢复操作，不把读取错误当作未知写入",
+        "采用已存提案前明确确认；继续编辑保留输入，接受替换后采用保存版本，全程无写入或模型重放",
+        "其他页面修订本体后，四种桌面场景均先确认替换；拒绝保留原输入，接受后采用 v2 且不产生额外版本",
+        "初次加载可以关闭并重开；旧加载失败不会替换新窗口或清除新输入"
+      ],
+      "errors": [],
+      "layouts": [
+        {
+          "theme": "light",
+          "width": 1024,
+          "bounds": {
+            "left": 202,
+            "right": 822,
+            "top": 393.296875,
+            "bottom": 606.6875,
+            "width": 1024,
+            "height": 1000,
+            "scroll": 618,
+            "client": 618
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "bounds": {
+            "left": 410,
+            "right": 1030,
+            "top": 393.296875,
+            "bottom": 606.6875,
+            "width": 1440,
+            "height": 1000,
+            "scroll": 618,
+            "client": 618
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "bounds": {
+            "left": 202,
+            "right": 822,
+            "top": 393.296875,
+            "bottom": 606.6875,
+            "width": 1024,
+            "height": 1000,
+            "scroll": 618,
+            "client": 618
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "bounds": {
+            "left": 410,
+            "right": 1030,
+            "top": 393.296875,
+            "bottom": 606.6875,
+            "width": 1440,
+            "height": 1000,
+            "scroll": 618,
+            "client": 618
+          }
+        }
+      ],
+      "proposalWritesFromPage": 0,
+      "workspace": "workspace-b80431b2a103416b",
+      "ontology": "learned-3e15bef1d2e3a53219843eea@1",
+      "newer": "learned-3e15bef1d2e3a53219843eea@2"
+    },
+    "desktop_focus_cases": 8,
+    "screenshots": [
+      "docs/learning/replacement-dark.png",
+      "docs/learning/replacement-light.png"
+    ],
+    "focus_check": "After the confirmation close event resolves, declining replacement restores focus to the original read control"
+  },
+  "backend": {
+    "rerun_this_iteration": false,
+    "prior_verification": "docs/workspaces/asset-write-verification-20261031.json",
+    "prior_tests": 719,
+    "unchanged_verified_python_files": [
+      "agent_framework/knowledge.py",
+      "agent_framework/ontology.py",
+      "agent_framework/ontology_evidence.py",
+      "agent_framework/experience.py",
+      "agent_framework/web.py"
+    ]
+  },
+  "boundaries": [
+    "Cancelling a read ignores its later reply; it does not promise to stop the server request",
+    "Writes retain their existing pending and unknown-receipt handling",
+    "A failed read preserves the existing uncertainty state",
+    "Replacing edited generation instructions or output requires explicit confirmation",
+    "Unchanged ontology versions preserve local content and update saved metadata",
+    "No reload action creates an asset version or replays a model call",
+    "Unsaved edits still do not persist across a browser refresh"
+  ],
+  "source_sha256": {
+    "agent_framework/webui/learning.js": "340a52c9c16f64f8d74e1fc07cb5986a47b0dc04e4a4e7bf4b2fe2c262885c9c",
+    "agent_framework/webui/ontology_model.js": "2512c41c82589dc965580eefe7ec71848775f344827728341d40e593a53da57e",
+    "agent_framework/webui/workspaces.js": "9ad766cf439ada8004bb5bf1b83bcce27b96f14d3cd15e51988b10c07ebe5978",
+    "tests/test_learning_interactions.js": "7f3b7de99e424a065e7f4fcbe86a4226a0695bae71c9dcebaf635c3b58e0f490",
+    "tests/test_ontology_model_interactions.js": "7f18447479d4a5014a2fd4d1c106c84797687c48dad37fca5102c85761576679",
+    "tests/test_resource_interactions.js": "3d675b37c62145f2667a80eb3cdd01c937e94734424ec03784e5cdca4e85c7e6",
+    "tests/verify_learning_reads.cjs": "bd702a821858ebfd25abcf4d48e99f76a2a65c4b4b4f83bbbb4d4f31ba4f6831",
+    "scripts/run_browser_tests.py": "7dfd0bc4e314bfdd544af7addc79c02465793cf23b86253a09c49dca26654c30",
+    "docs/learning/read-consistency.md": "84b53b12b243ca68c94fe409a00953e136d2ae77b04b42e60043bd57b52f91fd",
+    "docs/learning/replacement-dark.png": "b9cc1b67b568f2371a0444b9c4c049f2bd96424bd95fc349b0392de1cf98f0cf",
+    "docs/learning/replacement-light.png": "19c38a3e8d361364ba1f40de81929534d17d66c1cc799a5d5aff7334e23664d3"
+  }
+}

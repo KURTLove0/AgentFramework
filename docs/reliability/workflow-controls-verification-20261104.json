@@ -1,0 +1,441 @@
+{
+  "date": "2026-11-04",
+  "scope": "Current source; no release candidate rebuilt; synthetic fixtures only",
+  "baseline": {
+    "report": "/private/tmp/af-workflow-controls-baseline-20261104/workflow-controls/failure.json",
+    "observed": "A rerender must keep the pending resume disabled",
+    "page_errors": []
+  },
+  "unit": {
+    "new_control_tests": 22,
+    "targeted_tests": 57,
+    "targeted_log": "/private/tmp/af-workflow-controls-unit-20261104.log",
+    "final_control_log": "/private/tmp/af-workflow-controls-unit-final-20261104.log"
+  },
+  "frontend": {
+    "passed": 1213,
+    "duration_ms": 13916.432042,
+    "log": "/private/tmp/af-workflow-controls-frontend-20261104.log",
+    "note": "Full run before final feedback wording adjustment; all 22 affected tests and new browser suite rerun afterwards"
+  },
+  "backend": {
+    "passed": 84,
+    "seconds": 25.95,
+    "log": "/private/tmp/af-workflow-controls-backend-20261104.log",
+    "modules": [
+      "tests.test_web",
+      "tests.test_workflows",
+      "tests.test_workflow_grants",
+      "tests.test_release_delivery"
+    ]
+  },
+  "browser": {
+    "workflow-controls": {
+      "report": "/private/tmp/af-workflow-controls-browser-final-20261104/workflow-controls/results.json",
+      "checks": [
+        "恢复请求处理中重绘及合成重复点击均不重复提交，响应丢失后保留核对入口且仍可取消",
+        "只读核对找回已经保存的恢复派发，复用原节点且不新增授权或写入",
+        "取消响应丢失及核对失败保留停止意图提示，不重复取消，也不能趁未知状态新增授权",
+        "核对入口支持键盘、浅深主题、1024/1440 窗口及两倍文字，读取成功后显示已保存的取消",
+        "离开运行后返回的旧恢复回执不替换另一条记录、不显示错误提示、不抢走焦点",
+        "错配回执被拒绝，明确读取后恢复操作入口；原取消最终完成且没有创建草稿"
+      ],
+      "errors": [],
+      "layouts": [
+        {
+          "theme": "light",
+          "width": 1024,
+          "scale": 1,
+          "bounds": {
+            "left": 290,
+            "right": 436,
+            "top": 372.96875,
+            "bottom": 416.96875,
+            "font": 14,
+            "focused": true,
+            "scroll": 688,
+            "client": 688,
+            "root": 1024,
+            "width": 1024
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1024,
+          "scale": 2,
+          "bounds": {
+            "left": 290,
+            "right": 548,
+            "top": 516.4375,
+            "bottom": 577.625,
+            "font": 28,
+            "focused": true,
+            "scroll": 688,
+            "client": 688,
+            "root": 1024,
+            "width": 1024
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "scale": 1,
+          "bounds": {
+            "left": 310,
+            "right": 456,
+            "top": 372.96875,
+            "bottom": 416.96875,
+            "font": 14,
+            "focused": true,
+            "scroll": 1084,
+            "client": 1084,
+            "root": 1440,
+            "width": 1440
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "scale": 2,
+          "bounds": {
+            "left": 310,
+            "right": 568,
+            "top": 474.84375,
+            "bottom": 536.03125,
+            "font": 28,
+            "focused": true,
+            "scroll": 1084,
+            "client": 1084,
+            "root": 1440,
+            "width": 1440
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "scale": 1,
+          "bounds": {
+            "left": 290,
+            "right": 436,
+            "top": 372.96875,
+            "bottom": 416.96875,
+            "font": 14,
+            "focused": true,
+            "scroll": 688,
+            "client": 688,
+            "root": 1024,
+            "width": 1024
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "scale": 2,
+          "bounds": {
+            "left": 290,
+            "right": 548,
+            "top": 516.4375,
+            "bottom": 577.625,
+            "font": 28,
+            "focused": true,
+            "scroll": 688,
+            "client": 688,
+            "root": 1024,
+            "width": 1024
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "scale": 1,
+          "bounds": {
+            "left": 310,
+            "right": 456,
+            "top": 372.96875,
+            "bottom": 416.96875,
+            "font": 14,
+            "focused": true,
+            "scroll": 1084,
+            "client": 1084,
+            "root": 1440,
+            "width": 1440
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "scale": 2,
+          "bounds": {
+            "left": 310,
+            "right": 568,
+            "top": 474.84375,
+            "bottom": 536.03125,
+            "font": 28,
+            "focused": true,
+            "scroll": 1084,
+            "client": 1084,
+            "root": 1440,
+            "width": 1440
+          }
+        }
+      ],
+      "posts": [
+        {
+          "url": "/api/workflow-runs/flowrun-de01f0ec78e29908f7e58d85/resume",
+          "body": {}
+        },
+        {
+          "url": "/api/workflow-runs/flowrun-de01f0ec78e29908f7e58d85/cancel",
+          "body": {}
+        },
+        {
+          "url": "/api/workflow-runs/flowrun-f1dd5fd94099ca46fe159df8/resume",
+          "body": {}
+        },
+        {
+          "url": "/api/workflow-runs/flowrun-7931e96c651629e574639040/cancel",
+          "body": {}
+        }
+      ],
+      "runs": [
+        "flowrun-de01f0ec78e29908f7e58d85",
+        "flowrun-f1dd5fd94099ca46fe159df8",
+        "flowrun-7931e96c651629e574639040"
+      ]
+    },
+    "workflow-queue": {
+      "report": "/private/tmp/af-workflow-controls-browser-20261104/workflow-queue/results.json",
+      "checks": [
+        "拥堵时启动返回已接受，关闭表单并显示排队，刷新保留同一运行",
+        "排队中取消请求被保留，容量恢复后结束，未启动业务节点",
+        "拥堵时授权和续跑一起保存，刷新保留授权，深浅主题与桌面窗口显示正常",
+        "容量恢复后自动继续原节点，草稿创建一次，排队状态清除"
+      ],
+      "errors": [],
+      "cancelled": "flowrun-2b4f901f526aca06f6030d42",
+      "granted": "flowrun-fdbef003f37d14844629e1e3"
+    },
+    "workflow-sync": {
+      "report": "/private/tmp/af-workflow-controls-browser-20261104/workflow-sync/results.json",
+      "checks": [
+        "后台旧目录晚于归档回执和新目录返回，缓存与页面仍保持已归档",
+        "新目录读取失败后，旧读取的成功响应不能清除失败说明或撤销已接受的归档",
+        "旧详情晚于取消回执返回，取消提示和禁用按钮保持正确，排队节点未启动",
+        "读取旧运行期间切换记录，旧请求失败不会覆盖新运行详情或显示过期错误",
+        "两个取消请求均按原记录收尾，没有创建业务节点任务",
+        "授权已接受但回执延迟，取消的新回执先到后，旧授权回执不能回退状态或提示",
+        "取消请求已经保存后，实际 HTTP 授权接口拒绝新增授权，取消队列保持原意",
+        "队列释放后按取消请求结束原节点，已接受的早期授权没有产生草稿"
+      ],
+      "errors": [],
+      "workflow": "workflow-fe96cc390320475c",
+      "runs": [
+        "flowrun-fad490c11e35b810363ab43f",
+        "flowrun-be4f517fdfe3383e5d049413",
+        "flowrun-3a604b7a02681f28be85f499"
+      ],
+      "grantRevision": 12,
+      "cancelRevision": 13
+    },
+    "workflow-grants": {
+      "report": "/private/tmp/af-workflow-controls-browser-20261104/workflow-grants/results.json",
+      "checks": [
+        "点击时冻结原提案，提交前提案变化会拒绝授权，不创建草稿或派发",
+        "授权失败的核对入口在浅深主题、1024/1440 宽度与两倍文字下可聚焦且无横向溢出",
+        "明确核对只读取并显示新提案，用户重新审查前不自动授权",
+        "授权已受理但响应丢失后，只读核对找回排队状态，不重复提交",
+        "重放已接受的提案回执不增加授权事件，取消后也不会覆盖取消派发"
+      ],
+      "errors": [],
+      "layouts": [
+        {
+          "theme": "light",
+          "width": 1024,
+          "scale": 1,
+          "bounds": {
+            "left": 314,
+            "right": 474,
+            "top": 866.53125,
+            "bottom": 910.53125,
+            "font": 14,
+            "focused": true,
+            "scroll": 690,
+            "client": 690,
+            "root": 1024,
+            "width": 1024
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1024,
+          "scale": 2,
+          "bounds": {
+            "left": 314,
+            "right": 600,
+            "top": 673.75,
+            "bottom": 734.9375,
+            "font": 28,
+            "focused": true,
+            "scroll": 690,
+            "client": 690,
+            "root": 1024,
+            "width": 1024
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "scale": 1,
+          "bounds": {
+            "left": 334,
+            "right": 494,
+            "top": 711.4375,
+            "bottom": 755.4375,
+            "font": 14,
+            "focused": true,
+            "scroll": 1086,
+            "client": 1086,
+            "root": 1440,
+            "width": 1440
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "scale": 2,
+          "bounds": {
+            "left": 334,
+            "right": 620,
+            "top": 674.171875,
+            "bottom": 735.359375,
+            "font": 28,
+            "focused": true,
+            "scroll": 1086,
+            "client": 1086,
+            "root": 1440,
+            "width": 1440
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "scale": 1,
+          "bounds": {
+            "left": 314,
+            "right": 474,
+            "top": 711.53125,
+            "bottom": 755.53125,
+            "font": 14,
+            "focused": true,
+            "scroll": 690,
+            "client": 690,
+            "root": 1024,
+            "width": 1024
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "scale": 2,
+          "bounds": {
+            "left": 314,
+            "right": 600,
+            "top": 806.75,
+            "bottom": 867.9375,
+            "font": 28,
+            "focused": true,
+            "scroll": 690,
+            "client": 690,
+            "root": 1024,
+            "width": 1024
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "scale": 1,
+          "bounds": {
+            "left": 334,
+            "right": 494,
+            "top": 711.4375,
+            "bottom": 755.4375,
+            "font": 14,
+            "focused": true,
+            "scroll": 1086,
+            "client": 1086,
+            "root": 1440,
+            "width": 1440
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "scale": 2,
+          "bounds": {
+            "left": 334,
+            "right": 620,
+            "top": 674.171875,
+            "bottom": 735.359375,
+            "font": 28,
+            "focused": true,
+            "scroll": 1086,
+            "client": 1086,
+            "root": 1440,
+            "width": 1440
+          }
+        }
+      ],
+      "posts": [
+        {
+          "node_id": "review",
+          "proposal_token": "dccdf377195598f2986782accaec12a241c20b7c4780624d97c189e14116d87d"
+        },
+        {
+          "node_id": "review",
+          "proposal_token": "da86b01534cab37f076a2da0c708b3f831a77f3f06b280319f01d0884986940f"
+        },
+        {
+          "node_id": "review",
+          "proposal_token": "da86b01534cab37f076a2da0c708b3f831a77f3f06b280319f01d0884986940f"
+        },
+        {
+          "node_id": "review",
+          "proposal_token": "da86b01534cab37f076a2da0c708b3f831a77f3f06b280319f01d0884986940f"
+        }
+      ],
+      "run": "flowrun-e90cbbf591066b0e84baf654"
+    }
+  },
+  "browser_checks_total": 23,
+  "source_sha256": {
+    "agent_framework/webui/workflow_control.js": "5b68f98326fa4fe4473370501ba2293c874a808487ace1fc35933bf4aa063d2a",
+    "agent_framework/webui/workflows.js": "7f20c3dec1a0a0af2789fde565f0e7b953510aef74014d51af3cb2c612693117",
+    "agent_framework/webui/workflow_grant.js": "c1e4d925247f35dc38d8b7b963ffe7e34640062672c951399823166b33c335d6",
+    "agent_framework/webui/index.html": "a43c414470e6c10566dbc3d6ca37c02fc9396963c14d95b1a646c0fd5350e04b",
+    "agent_framework/webui/hig.css": "df1092edd53f56c33f46459e120545781184e28f3d2730e3d78132eb80e27a66",
+    "agent_framework/web.py": "56f2600022bca417d39e50e5c8575efa4e54be14ce37b19dc6837095c83ab44a",
+    "tests/test_workflow_control_interactions.js": "8526288d101b6d7c3115aaaf746e7d0200e3f7079e032fa34a76e9216830a218",
+    "tests/verify_workflow_controls.cjs": "0f1b8f12e59037983791ce5a417311feaedbe07457061d912fe96be323220bd6"
+  },
+  "screenshots": {
+    "light": {
+      "path": "workflow-controls-light.png",
+      "width": 1024,
+      "height": 1100,
+      "text_scale": 2,
+      "sha256": "b31c907dde9ef820f4c42970f1b4a767b134e251e91889a9688dc618dde2390c"
+    },
+    "dark": {
+      "path": "workflow-controls-dark.png",
+      "width": 1024,
+      "height": 1100,
+      "text_scale": 2,
+      "sha256": "357f8a1ada4afd29a9497ca3fbb8992501d483786a441d34c2a648f70df1376f"
+    }
+  },
+  "limitations": [
+    "Operation feedback is page-memory only, not persisted across browser reloads.",
+    "Review reads current state; it does not establish that an earlier request was never executed.",
+    "This change does not alter backend dispatch, cancellation, lease or authorization semantics."
+  ]
+}

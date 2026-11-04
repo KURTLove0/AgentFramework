@@ -1,0 +1,287 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Search saved user messages and reply bodies across accessible tasks, alongside existing header matches. Return bounded original-text snippets and exact turn/role links; preserve pagination, filters, drafts, history and scope. Global all-results navigation clears an inherited favorites filter.",
+  "prior_behavior": "Application.runs searched only initial goals, display names, IDs, scenarios and agent names. An isolated existing three-turn task returned zero matches for both its third user message and saved reply text.",
+  "backend": {
+    "new_tests": 13,
+    "related": {
+      "tests": 29,
+      "passed": 29,
+      "duration_seconds": 2.644,
+      "log": {
+        "path": "/private/tmp/af-task-text-search-backend-related.log",
+        "sha256": "5f26adda03b7de27138f86380f7f353bc0baa093a316bfa165545995dda4a76c"
+      }
+    },
+    "full": {
+      "command": ".venv/bin/python -m unittest discover -s tests -p 'test_*.py'",
+      "tests": 1281,
+      "passed": 1281,
+      "duration_seconds": 233.434,
+      "log": {
+        "path": "/private/tmp/af-task-text-search-backend-full.log",
+        "sha256": "ca73d73c053f9a4b25e052c6f822092b1d813a0fd87279f8ed938c6abab4a706"
+      }
+    },
+    "coverage": [
+      "Followup and reply-only matches map to the root and exact turn",
+      "One task per result and filtering before pagination",
+      "Existing header matches avoid body reads",
+      "content/answer/section reply forms",
+      "Literal symbols and Unicode lowercase expansion",
+      "Bounded original-text excerpts",
+      "Edited and cancelled queued messages",
+      "Archive and favorite scopes",
+      "Principal/workspace/tenant/child ownership",
+      "No audit/actions/detail hydration",
+      "Readonly legacy root",
+      "One snapshot across batches",
+      "Malformed legacy report tolerance",
+      "HTTP and static resource"
+    ],
+    "initial_fixture_corrections": {
+      "log": {
+        "path": "/private/tmp/af-task-text-search-backend-focused.log",
+        "sha256": "0b73b4dde8f0b78dfd43869f27c45cb0bd762f3c0d644cc4099f9cc312f22a0a"
+      },
+      "note": "Initial test setup used a plural archive module name, allowed edit-triggered dispatch before queue cancellation, and expected a corrupt foreign child to be silently omitted. The tests now hold dispatch and expect the existing catalog authorization denial, while checking direct body projection exclusion separately."
+    }
+  },
+  "frontend": {
+    "new_tests": 13,
+    "related": {
+      "tests": 67,
+      "passed": 67,
+      "failed": 0,
+      "duration_ms": 852.27725,
+      "log": {
+        "path": "/private/tmp/af-task-text-search-frontend-related.log",
+        "sha256": "82278fe453581517e0c8ab278f0f27592fa26a1f123cbc3888135aa9f192b76c"
+      }
+    },
+    "full": {
+      "command": "npm test",
+      "tests": 914,
+      "passed": 914,
+      "failed": 0,
+      "duration_ms": 10963.238125,
+      "log": {
+        "path": "/private/tmp/af-task-text-search-frontend-full.log",
+        "sha256": "43c4023866ddc6594b5fd3138c85703fa1b548e30a5a64ca7131285b4ab46f66"
+      }
+    },
+    "coverage": [
+      "Safe snippet rendering",
+      "Search query absent from deep links",
+      "Exact role and turn selection",
+      "One focus application per route",
+      "Reload without private query persistence",
+      "Changed text and missing turn feedback",
+      "Route and identity ownership",
+      "Abandoned navigation cleanup",
+      "Invalid links",
+      "One row action",
+      "Global body-hit summary and navigation",
+      "Clearing old favorites on global all-results navigation"
+    ],
+    "ordering": "All application JavaScript passed the full run. Subsequent application changes were confined to snippet CSS, verified by the final browser journey."
+  },
+  "browser": {
+    "passed_suites": {
+      "task-text-search": {
+        "result": {
+          "path": "/private/tmp/af-task-text-search-browser-verified/task-text-search/results.json",
+          "sha256": "a2a0023d3f071c106991aa26d5f7743477d7dbf82fb0c9c4a0047cb0099df0a4"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-text-search-browser-verified/results.json",
+          "sha256": "c9873291b89f94b063fda0f4e4e60b8647b33dff6d2fbe2a3ce41226b1a904a8"
+        },
+        "checks": [
+          "标题未命中时仍找到后续回复；键盘打开精确轮次并高亮，刷新保留轮次定位，返回恢复搜索条件与草稿",
+          "104 条正文匹配可完整翻过三页；收藏和归档筛选有效，全局查看全部清除旧收藏条件并纳入归档匹配",
+          "全局搜索可直接定位排队要求；消息修改后旧词不再匹配，新词立即可检索",
+          "符号按字面查找、命中片段按纯文本显示；八种主题、窗口和字号布局通过焦点、控件边界与正文溢出检查",
+          "迟到的旧正文搜索不覆盖新查询；切换空间清空私有查询，搜索和定位本身没有写请求"
+        ],
+        "errors": [],
+        "layout_cases": 8,
+        "enlarged_font_pixels": 28,
+        "matched_text_visible": true
+      },
+      "commands": {
+        "result": {
+          "path": "/private/tmp/af-task-text-search-browser-first/commands/results.json",
+          "sha256": "0c51af6d850e2760713e4d719701f5d37a88e1a4ce9bdf2d1632fbc349ff0326"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-text-search-browser-first/results.json",
+          "sha256": "30edd9307959f86141f07c72cc13dcf538bd54e2e4fe7725c1ff7b95c958964d"
+        },
+        "checks": [
+          "慢工作流读取和技能故障不遮挡31个智能体结果，结果可完整翻页，失败资源可以单独重试",
+          "关闭再打开保留关键词、所选结果与结果页，键盘选择仍指向同一对象",
+          "新查询立即清除旧查询结果，迟到的历史搜索回复不会回退当前结果",
+          "正文命中的资料即使标题不含关键词也能显示，并打开准确资料卡片",
+          "工作流搜索定位并展开对应定义，查看过程不会打开编辑器或启动运行",
+          "251条历史运行可进入完整筛选列表，最早记录可通过关键词直接打开",
+          "技能结果打开只读包内容，切换空间后搜索只返回当前空间可访问的资源",
+          "长错误安全转义，部分失败不会伪装成无结果；8组桌面深浅色与200%文字布局保持可读、重试可达",
+          "故障恢复后保留输入与焦点，中文输入期间回车不会误打开结果，所有搜索与浏览均未提交写入"
+        ],
+        "errors": []
+      },
+      "run-history-restore": {
+        "result": {
+          "path": "/private/tmp/af-task-text-search-browser-first/run-history-restore/results.json",
+          "sha256": "8a72b67f5c052c9df703c86fb9a70e29a362b9020fc35fb87194697fb2f12ef1"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-text-search-browser-first/results.json",
+          "sha256": "30edd9307959f86141f07c72cc13dcf538bd54e2e4fe7725c1ff7b95c958964d"
+        },
+        "checks": [
+          "刷新第三页恢复搜索、状态、智能体、领域、日期、排序和分页栈，并重新读取服务端结果",
+          "恢复后的分页读取失败保留原条件和页码，显式重试返回原页",
+          "详情刷新后返回仍是原页，浏览器前进后退分别恢复各自列表条目的条件",
+          "浏览器拒绝保存时明确提示，当前查询仍可用，恢复保存后刷新采用最新条件",
+          "切换空间从空条件开始，返回原空间恢复原历史条目，查询未写入 URL",
+          "损坏的保存条件不会发起无效查询，新选条件会清除恢复提示；所有操作均为只读"
+        ],
+        "errors": []
+      },
+      "task-search": {
+        "result": {
+          "path": "/private/tmp/af-task-text-search-browser-first/task-search/results.json",
+          "sha256": "d5b6f806f8f9fc175f10aa5e89a526cc9feefdbd813de9cc082e118e45480dd2"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-text-search-browser-first/results.json",
+          "sha256": "30edd9307959f86141f07c72cc13dcf538bd54e2e4fe7725c1ff7b95c958964d"
+        },
+        "checks": [
+          "真实分段回复、最终结果替换均保留查找位置、横向阅读和草稿；高亮后的代码复制仍逐字一致",
+          "可跨强调标签和表格定位字面文本，排除复制按钮与运行摘要；中文确认不触发导航或发送，Esc 关闭并归还焦点",
+          "新轮次自动更新匹配数并保留当前结果，多轮对话支持双向循环定位与重绘后的焦点保留；超过 500 处明确提示缩小范围",
+          "缺少浏览器高亮 API 时仍可定位并标出消息，提示说明兼容性，不产生写请求",
+          "明暗主题四种桌面宽度、任务属性展开和 200% 查找文字下，查找控件与消息输入可访问",
+          "待执行查找不会串入其他任务；返回保留本任务查询，刷新清除临时查询而保留消息草稿"
+        ],
+        "errors": []
+      }
+    },
+    "iterations": [
+      {
+        "result": {
+          "path": "/private/tmp/af-task-text-search-browser-first/task-text-search/failure.json",
+          "sha256": "d51e3f52d0d856febd6a373b91fd6c56b3b38e66e21e73f42de1f4ce8204e197"
+        },
+        "note": "The new verifier accessed runHistory before initial page loading created it; its readiness condition now requires the object to exist. The three existing regression suites passed in the same run."
+      },
+      {
+        "result": {
+          "path": "/private/tmp/af-task-text-search-browser-second/task-text-search/failure.json",
+          "sha256": "40bc0be8633aa41f1a0869daa75a954cb737134f4ed83b9815dcc7d08e63e8ed"
+        },
+        "note": "The verifier tried to find an exact standalone text node for a command option whose accessible name also includes help text. It now locates the actual option by role/name."
+      },
+      {
+        "result": {
+          "path": "/private/tmp/af-task-text-search-browser-third/task-text-search/results.json",
+          "sha256": "4b4dba426d5b7a8a94250185f4b04580037d2015e93d053eb52c2825596810ba"
+        },
+        "screenshot": {
+          "path": "/private/tmp/af-task-text-search-browser-third/task-text-search/task-text-search-light.png",
+          "sha256": "ca062587ae8bb655d027ef20610e2123b3798d18a18e9a335792bb771cc28fbf"
+        },
+        "note": "Functional assertions passed, but visual review found multiline context hiding the matched phrase in an inner scroll region. The excerpt now wraps normally without a height clamp; width is bounded to preserve neighboring table columns. Final browser assertions also require the actual mark to be visible."
+      }
+    ],
+    "screenshots": [
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-text-search-light.png",
+        "sha256": "8b17f026fe30f0309afd7a2673ef7e216c64451a542e01d1b49ca1b8fda6eda9"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-text-search-dark.png",
+        "sha256": "dc6f255f77b54e1c49c748cfaef94faa12f4119bec1a2e7e3dac06f45e59fff8"
+      }
+    ],
+    "visual_review": "Inspected final light/dark task results, highlighted literal search phrase, role/round label, neighboring status and execution columns, keyboard focus and naturally wrapped snippets. Eight final layout cases verify real 28px text, viewport bounds, no horizontal excerpt overflow and visible matched text.",
+    "isolation": "105 temporary synthetic tasks with Mock runtime snapshots. Tests traverse all 104 active matches across three pages, include the archived match via global search, verify favorite filtering, edit one held queue message, restore a draft and history, reload a role/turn deep link, delay a real HTTP response and switch workspace. Search/navigation requests are read-only; the single POST is the explicitly tested synthetic queued-message edit."
+  },
+  "measurement": {
+    "result": {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-text-search-measurement.json",
+      "sha256": "34b786f4aef207401615925058c03f47a61fab616a2506a913ee8cc54c1f3d1a"
+    },
+    "script": {
+      "path": "/private/tmp/af-task-text-search-measure.py",
+      "sha256": "20349a5eba0f87240ed00cae8f978d963945459bf56fda2d12927a5966e3a874"
+    },
+    "log": {
+      "path": "/private/tmp/af-task-text-search-measure.log",
+      "sha256": "34b786f4aef207401615925058c03f47a61fab616a2506a913ee8cc54c1f3d1a"
+    },
+    "note": "80 tasks, 320 turns, 32768-byte reply padding per turn and audit padding per event. Four measured queries took 0.0789–0.1439 seconds; 50 saved-reply hits returned 57376 bytes. Single-machine observations, not a production capacity guarantee."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-task-text-search-source-candidate-verified-20261103",
+    "build_log": {
+      "path": "/private/tmp/af-task-text-search-build-verified.log",
+      "sha256": "256184aea9b856ea43939507c573d04b99f1093a31ac63280107ef72a599296e"
+    },
+    "verification": {
+      "path": "/private/tmp/af-task-text-search-package-check.json",
+      "sha256": "500081cd37d62826762fc3e3e71468dadfdf771788f333b4e53e80951ae6ae4e"
+    },
+    "program_files": 158,
+    "bundle": {
+      "path": "/private/tmp/af-task-text-search-source-candidate-verified-20261103/agent-framework-1.3.0.tar.gz",
+      "sha256": "a483ac86fa9fc9d03932fdd16622f9e4e1400b9ac59d2b76796bebadaafdb2bf"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-task-text-search-source-candidate-verified-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "87646605659058fdd615916b882c4b5f45397c0d66d9c512898aedb4f46bc1d9"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-task-text-search-source-candidate-verified-20261103/SHA256SUMS",
+      "sha256": "618d98213fb6ab61697e596c8bca2ac3b317b3ec9099c00d60da99f7a4a9a7bf"
+    },
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/task_text_search.py": "380f3db43e77efc8b3a87a6eba65133800a820b4ed35c320fffce03e3fe642f9",
+    "agent_framework/run_catalog.py": "5d04f3a08851e79465f4bf7e384a3e2a203f695d3c6e14968be98028a8cbaafe",
+    "agent_framework/web.py": "2b6073aee5bfe55f3c40756407b4818c780e39e521a9429a713f5c6889bda6e2",
+    "agent_framework/webui/task_text_search.js": "972db59ec49ff465298d863d8814362a017ea820cf841bd6db665e005e38bb5f",
+    "agent_framework/webui/app.js": "7f65b477ffb9a884f6d624cdccb8d7455b6e66403e32c0c060218e512a4c3e6c",
+    "agent_framework/webui/commands.js": "d285da271974cd58501f99506fcfe87419b46e4a96c348858c68b2196ba4ce76",
+    "agent_framework/webui/index.html": "00bbf2ecea45080181e449be0bfb0d778231ef9386fc83903b5df151b2caecf1",
+    "agent_framework/webui/task_conversation.css": "0f13cc0ad9d65a9fa314fef52448a01a0677c0e34fefc82775deaa0648e4f131",
+    "tests/test_task_text_search.py": "f2a2a4b71f96b89a19cc041ee20f10d3ca40dfa7cd96a19a4c00b31188f19ba2",
+    "tests/test_task_text_search_interactions.js": "7a1276cb66f15486060498924b177a4d07a146526365586021437a8c5ed4ac6c",
+    "tests/test_command_interactions.js": "986b1d2781485d7a3ae09bfffc0ea96de7fa72915a0d27be5778ea7530b26bcc",
+    "tests/serve_task_text_search_fixture.py": "4c70d3c1b2bbbea1b6fcc14377ee7753258d9145738ae591003c39a7b0deb318",
+    "tests/verify_task_text_search.cjs": "7220e690e81bc9c553f9534ff095b1582595094a9dada7d5df849a8a2f45d217",
+    "scripts/run_browser_tests.py": "5ba820063d4c32c847e710611401a198da30f577535b4eaeb91b06db8676fbf5",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "928b25f8298b044e4257aed71c45f817351aa97eec50e9e16e6442c56c499687",
+    "design.md": "77e6409c41274dd90bd191c0d6d1f9c51cd62dc4270a84edc3f2865c02887a30",
+    "docs/reliability/task-text-search.md": "cde56555eb73b8087b755cab4c12131faa559c41387e3d6c76d5463ec7a9484a"
+  },
+  "limits": [
+    "Cross-task body search covers saved current user messages and report content, answer or section bodies. In-progress previews, audit/process text, source citation details, configuration and old edit versions are excluded.",
+    "Header matches retain precedence. Each body-only matching task exposes its earliest matching message, not a count of every occurrence.",
+    "Literal source-text matching is not semantic retrieval or Markdown rendering. A visible phrase crossing markup may not match; navigation still locates the round if a stored-source match is not found by the in-dialog visible-text highlighter.",
+    "Body reads are on demand, batched in one snapshot, with no new persistent index. Catalog headers and body projection retain their existing separate read phases; no whole-catalog cross-request snapshot guarantee is added.",
+    "The workbench recent-task filter remains local to summaries. Full body search is in the task list and global search.",
+    "The deep link stores task, turn and role but not the private search query. Reload restores the message position, not the previous highlight query.",
+    "Desktop visual coverage is 1024/1440 widths with normal and enlarged snippet/input text, not all-device or uniform page zoom coverage.",
+    "Full and focused test counts overlap. Version remains 1.3.0; no publication or repeated fresh installation."
+  ]
+}

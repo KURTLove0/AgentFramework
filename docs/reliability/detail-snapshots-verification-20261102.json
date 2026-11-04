@@ -1,0 +1,152 @@
+{
+  "date": "2026-11-02",
+  "status": "source-improvement-complete-not-published",
+  "version": "1.3.0",
+  "scope": "Consistent task detail snapshots, stop review freshness, and durable pending-stop checks before retrospective generation",
+  "before": {
+    "snapshots": {
+      "tests": 3,
+      "failed": 3,
+      "log": "/private/tmp/af-detail-snapshot-before.log"
+    },
+    "frontend": {
+      "tests": 20,
+      "failed": 2,
+      "log": "/private/tmp/af-detail-snapshot-ui-before.log"
+    },
+    "pending_stop_generation": {
+      "tests": 2,
+      "failed": 2,
+      "log": "/private/tmp/af-detail-snapshot-learning-before.log"
+    }
+  },
+  "initial_full_regression": {
+    "tests": 998,
+    "failures": 2,
+    "errors": 1,
+    "log": "/private/tmp/af-detail-snapshot-backend-final.log",
+    "resolution": [
+      "Daily cancellation test now waits for asynchronous completion.",
+      "Old conversation retry mock replaced with a real worker completing during a read snapshot.",
+      "Retrospective generation now rejects durable pending cancellation without relying on process-local jobs; separate deterministic tests cover pending stop and completed fact changes."
+    ]
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests",
+    "passed": 1000,
+    "seconds": 167.142,
+    "log": "/private/tmp/af-detail-snapshot-backend-complete.log"
+  },
+  "focused_backend": {
+    "command": "PYTHONPATH=tests .venv/bin/python -m unittest test_detail_snapshot test_streaming_tasks test_daily_recovery test_learning_acceptance",
+    "passed": 56,
+    "log": "/private/tmp/af-detail-snapshot-regressions.log"
+  },
+  "frontend": {
+    "command": "node --test tests/test_*.js",
+    "passed": 729,
+    "duration_ms": 8147.597625,
+    "log": "/private/tmp/af-detail-snapshot-frontend-complete.log"
+  },
+  "browser": {
+    "commands": [
+      ".venv/bin/python scripts/run_browser_tests.py --suite cancellations --suite task-permissions --suite conversation-details --output /private/tmp/af-detail-snapshot-browser-final",
+      ".venv/bin/python scripts/run_browser_tests.py --suite cancellations --output /private/tmp/af-detail-snapshot-browser-complete"
+    ],
+    "suites": [
+      {
+        "suite": "cancellations",
+        "results": "/private/tmp/af-detail-snapshot-browser-complete/cancellations/results.json",
+        "sha256": "10f4be79a1aa9c4ddc1babd34c3cb44c530b680fafa22b95feb8992c6cdbc81f",
+        "checks": [
+          "停止返回已保存请求，清楚显示正在停止并保留片段及排队消息，不提前显示已停止",
+          "执行器内存记录消失后刷新仍显示同一停止请求，输入草稿与桌面深浅色布局保留",
+          "停止当前轮次后继续明确排队的下一轮，不重复调用模型，不丢失未发送草稿",
+          "停止处理失败跨刷新保留，显式重试后结束原任务并保留同一请求历史",
+          "停止重试已完成但响应丢失时，只读核对替换旧的停止中状态，明确显示已结束且不重复提交"
+        ],
+        "layouts": 8,
+        "records": 0,
+        "probes": 0,
+        "errors": [],
+        "issues": []
+      },
+      {
+        "suite": "task-permissions",
+        "results": "/private/tmp/af-detail-snapshot-browser-final/task-permissions/results.json",
+        "sha256": "a11857285f5e0ee922e076fa9bcce993e19888aa27e6ee19a05508ca79779432",
+        "checks": [
+          "普通任务只提交已审查提案的标记，内容变化时拒绝旧授权并保留原窗口",
+          "确认与核对入口在浅深主题、1024/1440 宽度及两倍文字下可聚焦并可到达",
+          "重新审查才采用新提案；响应丢失后只读核对，撤销后旧回执不能重新授权",
+          "队列满时受理授权并保存继续请求；真实服务重启后无需重提，容量恢复只创建一份草稿",
+          "执行器失败保留已接受授权和明确重试入口，继续执行不重新授权",
+          "较早授权回执晚到时，不关闭后来任务的取消窗口，也不覆盖当前任务"
+        ],
+        "layouts": 8,
+        "records": 0,
+        "probes": 0,
+        "errors": [],
+        "issues": []
+      },
+      {
+        "suite": "conversation-details",
+        "results": "/private/tmp/af-detail-snapshot-browser-final/conversation-details/results.json",
+        "sha256": "97a1b0b0c6d7c3f808f26adc932e2c5fcafe0886196c343b20faf11f649daeaf",
+        "checks": null,
+        "layouts": 0,
+        "records": 17,
+        "probes": 4,
+        "errors": [],
+        "issues": []
+      }
+    ],
+    "final_cancellation_screenshots_reviewed": [
+      "/private/tmp/af-detail-snapshot-browser-complete/cancellations/review-completed-light-1440.png",
+      "/private/tmp/af-detail-snapshot-browser-complete/cancellations/review-completed-dark-1024.png"
+    ],
+    "note": "The final cancellation rerun covers the completed-stop button label. Permission and conversation-detail regression results precede that label-only change."
+  },
+  "candidate": {
+    "directory": "/private/tmp/af-detail-snapshot-source-candidate-final-20261102",
+    "package_files": 137,
+    "source_wheel_hashes_match": true,
+    "bundled_wheel_matches": true,
+    "artifacts": [
+      {
+        "path": "/private/tmp/af-detail-snapshot-source-candidate-final-20261102/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+        "sha256": "4c7d69d5eb85ec508db9988c04da284596f47e3615c55a17b4112557194a4782"
+      },
+      {
+        "path": "/private/tmp/af-detail-snapshot-source-candidate-final-20261102/agent-framework-1.3.0.tar.gz",
+        "sha256": "3aff185df51324c304a2f5f4c6669241de27a63dd9b376bbb8acbaa6814af312"
+      }
+    ],
+    "fresh_environment_install_tested": false,
+    "published": false,
+    "build_log": "/private/tmp/af-detail-snapshot-build-final.log"
+  },
+  "limits": [
+    "One control-database snapshot per HTTP detail response; external mock-business statistics remain independently read.",
+    "Process-local hints are sampled before the durable read; lease/permission expiry uses the observation clock.",
+    "SSE is independently delivered; no cross-request or cross-system atomicity claim.",
+    "Synthetic services only; no real model calls or production data; no deployment or version change."
+  ],
+  "source_sha256": {
+    "agent_framework/web.py": "88ef81324b0fc027442084a052a57dae7ff35166b5551f3c39323331adfeec95",
+    "agent_framework/task_conversations.py": "3fb027253578ea29791edb71de3073a5d0bad229484b80c5c80ba052db494029",
+    "agent_framework/learning.py": "548699227edd223df1b3d9016d0e3f4c8ff0844b49253782c6f8a9474ee47d3f",
+    "agent_framework/webui/run_action.js": "83b1abd6a320e923c8d365f694707b0c4fa575e50a3c3aa188d594ffc786c208",
+    "agent_framework/webui/app.js": "15543cdcba20a96c6abb2d7172c5ca77d5baf4ede0e5cc5cf5a41df4870890e7",
+    "agent_framework/webui/task_conversation.js": "fc40ae17457aba9aaeb4452f6428771fe2fba3c4f40d2e9b93dce9be56062891",
+    "tests/test_detail_snapshot.py": "a2d7198bfd24afe6d72caf65c6dfe15f84e6cd18aa41c0217fe3d4daf071a788",
+    "tests/test_run_action_interactions.js": "fc9e40af35ef7422ff6c5caa85739fedc61c0dd0a419f029e3293c46c59f3b1b",
+    "tests/test_streaming_tasks.py": "3d92c9ecc408f1aa76432a4dbe4d478454534a187c9b4bb645cbe347b89a439a",
+    "tests/test_daily_recovery.py": "3014a795afdd1af4254e90a062af81d9f285ce7a9f80572ce4426bc82cf7ba54",
+    "tests/test_learning_acceptance.py": "f1b5ba4145d1bc7f79436d1f4dad5298912e130130429a910648b2209163f429",
+    "tests/verify_cancellation.cjs": "53dd6f02181d9056b16efdd03a4897fb48031729a2c7cbe68d53a1a37b4904fe",
+    "docs/reliability/detail-snapshots.md": "93eb9e340b2a8f71c9a02f4c01080719687e9129c8e96a8dfa3c3239ae157282",
+    "README.md": "fa28fc799b9a019b2d04391b5e2093d553786971bf625ae14ea3d42573c2ffbb",
+    "design.md": "074cc5160414532c8ddc7a3ad1206510df8b6f47f3b1d2418c261324e7aa0b69"
+  }
+}

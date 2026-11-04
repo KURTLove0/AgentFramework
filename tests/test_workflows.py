@@ -25,6 +25,10 @@ def definition(profiles):
     return dict(name='协作流程',description='Agent 依赖闭环',revision=0,nodes=[dict(id='n'+str(i),name=p['name'],agent_id=p['id'],agent_revision=p['revision'],goal='评估模拟变更，参考上游证据并遵守本岗位验收标准',depends_on=[] if i==0 else ['n'+str(i-1)]) for i,p in enumerate(profiles)])
 
 
+def grant_token(app,identity,node):
+    return app.flow_detail(identity)['children'][node]['proposal_token']
+
+
 class WorkflowTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
@@ -62,9 +66,9 @@ class WorkflowTests(unittest.TestCase):
         w=self.f.save(definition([self.p,self.p]));s=self.f.start(w['id'],{'revision':1,'grant':False});r=self.f.execute(s['id'])
         self.assertEqual(r['status'],'WAITING_AUTH');self.assertIsNone(r['nodes']['n1']['run_id'])
         self.assertEqual(self.app.runtime().external.stats(self.app.tenant,r['nodes']['n0']['run_id'])['drafts'],[])
-        pending=self.f.grant(s['id'],'n0');self.assertTrue(pending['args_hash'])
+        pending=self.f.grant(s['id'],'n0',grant_token(self.app,s['id'],'n0'));self.assertTrue(pending['args_hash'])
         r=self.f.execute(s['id']);self.assertEqual(r['status'],'WAITING_AUTH');self.assertEqual(r['nodes']['n0']['status'],'SUCCEEDED')
-        self.f.grant(s['id'],'n1');self.assertEqual(self.f.execute(s['id'])['status'],'SUCCEEDED')
+        self.f.grant(s['id'],'n1',grant_token(self.app,s['id'],'n1'));self.assertEqual(self.f.execute(s['id'])['status'],'SUCCEEDED')
 
     def test_failed_acceptance_blocks_downstream(self):
         s=self.start([self.p,self.p],scenarios={'n0':'tampered-draft'});r=self.f.execute(s['id'])
@@ -201,7 +205,7 @@ class WorkflowHTTPTests(unittest.TestCase):
     def test_chat_save_run_grant_and_scoped_detail_routes(self):
         for bad in ({'agent_id':{},'message':'test'},{'agent_id':self.p['id'],'message':'test','consent':'yes'},{'agent_id':self.p['id'],'message':'test','id':'chat-test','revision':True}):
             self.assertEqual(self.request('/api/workflow-chat',bad)[0],400)
-        status,chat=self.request('/api/workflow-chat',{'agent_id':self.p['id'],'message':'先评估岗位'})
+        status,chat=self.request('/api/workflow-chat',{'request_id':'design-http','agent_id':self.p['id'],'agent_revision':1,'message':'先评估岗位','consent':False})
         self.assertEqual(status,200);self.assertEqual(self.request('/api/workflows')[1]['workflows'],[])
         status,w=self.request('/api/workflows',chat['proposal']|{'revision':0});self.assertEqual(status,201)
         status,d=self.request('/api/workflows/'+w['id']+'/start',{'revision':1,'request_id':'same-request'});self.assertEqual(status,202);run=d['run']['id']
@@ -212,7 +216,7 @@ class WorkflowHTTPTests(unittest.TestCase):
             time.sleep(.02)
         self.assertEqual(d['run']['status'],'WAITING_AUTH')
         node=next(iter(d['run']['nodes']));self.assertTrue(d['children'][node]['pending']['args_hash'])
-        self.assertEqual(self.request('/api/workflow-runs/'+run+'/grant',{'node_id':node})[0],202)
+        self.assertEqual(self.request('/api/workflow-runs/'+run+'/grant',{'node_id':node,'proposal_token':d['children'][node]['proposal_token']})[0],202)
         while time.monotonic()<deadline:
             d=self.request('/api/workflow-runs/'+run)[1]
             if d['run']['status']=='SUCCEEDED':break

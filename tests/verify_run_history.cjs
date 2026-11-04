@@ -1,0 +1,44 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),{chromium}=require('playwright'),H=require('./ui95_helpers.cjs');
+const base=process.env.RUN_HISTORY_URL,out=process.env.RUN_HISTORY_OUTPUT;if(!base||!out)throw Error('Run run-history suite.');fs.mkdirSync(out,{recursive:true});
+const gate=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
+(async()=>{
+ const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'}),checks=[],errors=[],writes=[],layouts=[];
+ page.setDefaultTimeout(15000);page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST')writes.push(new URL(r.url()).pathname);});
+ const fixture=JSON.parse(fs.readFileSync(path.join(out,'fixture.json'),'utf8')),pass=message=>{checks.push(message);console.log('PASS '+message);};
+ const ready=async()=>{await page.waitForFunction(()=>state.view==='runs'&&!state.selected&&!state.busy&&state.runHistory?.data&&!state.runHistory.pending&&!state.runHistory.error&&state.runHistory.dataPath===runsRequest());await H.settled(page);};
+ const rows=()=>page.locator('.run-list-panel tbody tr'),ids=()=>rows().evaluateAll(nodes=>nodes.map(n=>n.dataset.run));
+ const search=async query=>{await page.locator('#run-search').fill(query);await page.waitForFunction(query=>state.search===query&&!state.runHistory.pending&&state.runHistory.dataPath===runsRequest()&&!state.runHistory.error,query);};
+ const pattern=base+'/api/runs?**';
+ const checkRecoveryFocus=async()=>{const buttons=page.locator('.run-list-panel [data-run-history]');for(let index=0;index<await buttons.count();index++){const button=buttons.nth(index),label=await button.innerText();await button.focus();await page.evaluate(()=>render());assert(await button.evaluate(node=>document.activeElement===node),'列表重绘应保留焦点：'+label);}};
+ try{
+  process.env.AGENT_UI_BASE_URL=base;await page.goto(base+'?workspace_id='+fixture.workspace+'#/runs');await ready();assert.equal(await rows().count(),50);assert.equal(await page.evaluate(()=>state.runPage.filtered_total),137);
+  await page.locator('#run-sort').selectOption('created_asc');await ready();const all=[];
+  for(let i=0;i<3;i++){all.push(...await ids());if(i<2){await page.locator('[data-run-page=next]').click();await ready();}}
+  assert.deepEqual(all,fixture.roots);assert(await page.locator('[data-run-page=next]').isDisabled());const cursor=await page.evaluate(()=>state.runCursor),lastIds=await ids();await rows().first().locator('.task-link').click();await page.locator('#run-detail').waitFor();await page.goBack();await ready();assert.equal(await page.evaluate(()=>state.runCursor),cursor);assert.deepEqual(await ids(),lastIds);pass('137 条历史运行可完整翻完三页，进入详情再返回保留原页与排序');
+
+  await search('历史目标-0001');await page.waitForFunction(()=>!state.busy);const started=gate(),release=gate(),finished=gate();let held=false;
+  await page.route(pattern,async route=>{const q=new URL(route.request().url()).searchParams;if(q.get('search')==='历史目标-0001'&&!held){held=true;const response=await route.fetch();started.resolve();await release.promise;await route.fulfill({response});finished.resolve();return;}return route.continue();});
+  await page.evaluate(()=>{refresh();});await started.promise;assert(await page.evaluate(()=>state.busy));await search('历史目标-0136');assert.deepEqual(await ids(),['history-0136']);assert.equal(await page.locator('#run-search').inputValue(),'历史目标-0136');release.resolve();await finished.promise;await page.unroute(pattern);await ready();assert.deepEqual(await ids(),['history-0136']);pass('后台慢请求不阻塞新关键词，迟到的旧结果不会覆盖新查询');
+
+  await page.route(pattern,route=>new URL(route.request().url()).searchParams.get('search')==='不会匹配'?route.fulfill({status:503,json:{error:'暂时离线'}}):route.continue());await page.locator('#run-search').fill('不会匹配');await page.locator('.run-history-error').waitFor();assert.equal(await rows().count(),0);assert(!(await page.locator('.run-list-panel').innerText()).includes('没有匹配的运行'));await checkRecoveryFocus();await page.locator('[data-run-history=restore]').click();assert.equal(await page.locator('#run-search').inputValue(),'历史目标-0136');assert.deepEqual(await ids(),['history-0136']);assert((await page.locator('.run-history-status').innerText()).includes('上次成功'));await page.unroute(pattern);pass('新条件读取失败不伪装为空结果，可恢复上次成功的关键词和结果');
+  await search('');await ready();
+
+  const pageStarted=gate(),pageRelease=gate(),pageFinished=gate();let pageReads=0;
+  await page.route(pattern,async route=>{if(new URL(route.request().url()).searchParams.has('cursor')){pageReads++;pageStarted.resolve();await pageRelease.promise;await route.fulfill({status:503,json:{error:'分页读取中断'}});pageFinished.resolve();return;}return route.continue();});
+  await page.locator('[data-run-page=next]').click();await pageStarted.promise;await page.evaluate(()=>{changeRunPage('next');changeRunPage('next');});assert.equal(await page.evaluate(()=>state.runCursorStack.length),1);assert.equal(pageReads,1);pageRelease.resolve();await pageFinished.promise;await page.locator('.run-history-error').waitFor();assert.equal(await rows().count(),0);assert.equal(await page.evaluate(()=>state.runCursorStack.length),1);await page.unroute(pattern);await page.locator('.run-history-error [data-run-history=retry]').click();await ready();assert.deepEqual(await ids(),fixture.roots.slice(50,100));pass('连续翻页只推进一次，读取失败保留目标页并可准确重试');
+
+  const longError='<script>读取失败</script> '+('历史服务暂不可用 '.repeat(8))+'x'.repeat(200);await page.route(pattern,route=>route.fulfill({status:503,json:{error:longError}}));await page.locator('.run-list-heading [data-run-history=retry]').click();await page.locator('.run-history-error').waitFor();assert.deepEqual(await ids(),fixture.roots.slice(50,100));assert((await page.locator('.run-history-status').innerText()).includes('上次读取'));assert.equal(await page.locator('.run-history-error script').count(),0);
+  await checkRecoveryFocus();
+  let css='';await page.route(base+'/__run-history-text.css?**',route=>route.fulfill({contentType:'text/css',body:css}));
+  for(const theme of ['light','dark'])for(const width of [1024,1440])for(const scale of [1,2]){
+   await page.setViewportSize({width,height:1000});await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);const retry=page.locator('.run-history-error [data-run-history=retry]'),baseline=await retry.evaluate(e=>parseFloat(getComputedStyle(e).fontSize));
+   if(scale===2){css='.run-list-panel *{font-size:'+(baseline*2)+'px!important;line-height:1.5!important}';await page.evaluate(url=>new Promise((resolve,reject)=>{const el=document.createElement('link');el.id='run-history-scale';el.rel='stylesheet';el.href=url;el.onload=()=>resolve();el.onerror=()=>reject(Error('scale unavailable'));document.head.append(el);}),base+'/__run-history-text.css?case='+layouts.length);}
+   await retry.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await retry.focus();await H.settled(page);const bounds=await retry.evaluate(button=>{const r=button.getBoundingClientRect();return {root:document.documentElement.scrollWidth,width:innerWidth,focused:document.activeElement===button,top:r.top,bottom:r.bottom,font:parseFloat(getComputedStyle(button).fontSize)};});assert(bounds.root<=width+1);assert(bounds.focused);assert(bounds.top>=0&&bounds.bottom<=1000);if(scale===2)assert(bounds.font>=baseline*1.9);layouts.push({theme,width,scale,bounds});if(width===1440&&scale===1){await page.locator('.run-list-panel').evaluate(e=>e.scrollIntoView({block:'start'}));await page.screenshot({path:path.join(out,'run-history-'+theme+'.png'),animations:'disabled'});}await page.evaluate(()=>document.getElementById('run-history-scale')?.remove());
+  }pass('本页刷新失败保留并标注原结果，长错误在八组桌面主题与字号下可读，键盘焦点可见');
+  await page.unroute(pattern);await page.locator('[data-run-history=first]').click();await ready();assert.deepEqual(await ids(),fixture.roots.slice(0,50));assert.equal(await page.evaluate(()=>state.runCursorStack.length),0);await search('确实没有这项任务');assert.equal(await rows().count(),0);assert((await page.locator('.run-list-panel').innerText()).includes('没有匹配的运行'));pass('可从失败页返回第一页，只有成功读取后才显示真正的空结果');
+
+  await H.switchSpace(page,fixture.other_workspace);await H.nav(page,'runs');await ready();assert.equal(await page.locator('#run-search').inputValue(),'');assert.equal(await rows().count(),0);assert.equal(await page.evaluate(()=>state.runHistory.lastSuccess.data.filtered_total),0);assert.equal(writes.length,0);assert.deepEqual(errors,[]);pass('切换空间清空原查询与结果，所有历史浏览和恢复操作均为只读');
+  fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({checks,layouts,errors,writes},null,2));
+ }finally{await browser.close();}
+})().catch(error=>{console.error(error);process.exitCode=1;});

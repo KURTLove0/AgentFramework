@@ -1,0 +1,96 @@
+{
+  "recorded_on": "2026-10-30",
+  "scope": "Current source; temporary data and synthetic runtimes; full default API and execution profiles retained",
+  "baseline_new_tests": {
+    "tests": 9,
+    "failures": 1,
+    "errors": 7,
+    "passed": 1
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests -q",
+    "tests": 646,
+    "seconds": 152.504,
+    "passed": true,
+    "new_catalog_checks": 9
+  },
+  "ui": {
+    "command": "npm test",
+    "tests": 151,
+    "failed": 0,
+    "passed": true,
+    "new_catalog_checks": 3
+  },
+  "browser": {
+    "command": ".venv/bin/python scripts/run_browser_tests.py --suite agent-catalog --suite multica --suite agent-saves --suite workflow-agents --suite task-submissions --suite workflow-sync --suite legacy-modules",
+    "suites": [
+      {
+        "suite": "agent-catalog",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "multica",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "agent-saves",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "workflow-agents",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "task-submissions",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "workflow-sync",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "legacy-modules",
+        "passed": true,
+        "exit_code": 0
+      }
+    ],
+    "catalog": {
+      "checks": [
+        "实际目录请求使用轻量视图，未传输技能资源正文；原完整列表仍返回全部冻结资源",
+        "按绑定技能名称可搜索智能体，轻量详情继续显示第一版方法，不漂移到技能库第二版",
+        "打开编辑器按需读取完整配置，保存仍保留原技能资源与摘要，目录标记没有进入配置",
+        "从轻量目录选择智能体后，任务在服务端冻结完整第一版资源并执行完成",
+        "工作流候选使用轻量目录，启动时仍冻结完整智能体和技能资源，节点执行完成"
+      ],
+      "errors": [],
+      "catalogReadCount": 12,
+      "fullBytes": 51210,
+      "catalogBytes": 1612
+    },
+    "reviewed": "pinned-method-catalog.png",
+    "full_frozen_resources_verified_in": [
+      "Agent editor GET and save response",
+      "Task execution snapshot",
+      "Workflow node profile snapshot"
+    ]
+  },
+  "benchmark": "benchmark-20261030.json",
+  "sha256": {
+    "agent_framework/agents.py": "b13b7826082818dded1c5cf3de844f6d4ea4c23a4995307e619609614e36e372",
+    "agent_framework/web.py": "fdc6e09712b77410764c04933ece3cdd691b6ca36540384df40e6d5ba5d93594",
+    "scripts/benchmark_agents.py": "8909e573454291923ff23d90925e2c23f4129850eca3f15701f6fe70f517c02d",
+    "tests/test_agent_catalog.py": "796ee5d81d57b144fbf2d580b90ebf09cfc039ee71308fa88a6a04fbb66a3930",
+    "tests/verify_agent_catalog.cjs": "1486e6e08feedd9b8475fc12d71b5a6485c8088fa3eb494d0742e628e5e75150"
+  },
+  "limits": [
+    "Catalog summaries are not complete or executable Skill packages",
+    "SQLite still reads JSON to project metadata; the benchmark does not measure disk IO or network time",
+    "Directory pagination and general server-side full-profile consumers are outside this change"
+  ]
+}

@@ -1,0 +1,23 @@
+/* Rich replies stay inside the conversation reading column. */
+.task-chat-answer .reply-table-scroll {max-width:100%; overflow:auto; margin:16px 0; border:1px solid var(--border); border-radius:10px; overscroll-behavior-x:contain}
+.task-chat-answer .reply-table-scroll table {border-collapse:collapse; width:max-content; min-width:100%; margin:0; font-size:inherit; line-height:1.65}
+.task-chat-answer .reply-table-scroll :is(th,td) {padding:10px 14px; min-width:9ch; max-width:36ch; border:0; border-bottom:1px solid var(--border); vertical-align:top; white-space:normal; overflow-wrap:anywhere; font-size:inherit; line-height:inherit}
+.task-chat-answer .reply-table-scroll th {background:var(--subtle); color:var(--ink); font-weight:600; text-transform:none; letter-spacing:normal}
+.task-chat-answer .reply-table-scroll tr:last-child td {border-bottom:0}
+.task-chat-answer .reply-table-scroll tbody tr:hover {background:transparent}
+.task-chat-answer blockquote {margin:16px 0; padding:1px 16px; border-left:3px solid var(--border); color:var(--muted)}
+.task-chat-answer blockquote>:first-child {margin-top:8px}
+.task-chat-answer blockquote>:last-child {margin-bottom:8px}
+.task-chat-answer hr {border:0; border-top:1px solid var(--border); margin:22px 0}
+#content .task-chat-answer h6 {font-size:var(--type-body); font-weight:600; line-height:1.5; margin:16px 0 8px}
+.task-chat-answer .reply-code-block {max-width:100%; min-width:0; margin:16px 0; overflow:hidden; border:1px solid var(--border); border-radius:10px; background:var(--subtle)}
+.task-chat-answer .reply-code-header {display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:40px; padding:4px 12px; border-bottom:1px solid var(--border); color:var(--muted)}
+.task-chat-answer .reply-code-language {font-family:var(--mono); font-size:12px; overflow-wrap:anywhere}
+.task-chat-answer .reply-code-header button {padding:6px 8px; min-height:36px; font-size:12px; color:var(--blue); flex:none}
+.task-chat-answer .reply-code-block pre {margin:0; border:0; border-radius:0; max-width:100%; overflow:auto; white-space:pre; overscroll-behavior-x:contain; padding:14px 16px}
+.task-chat-answer .reply-code-block code {font-family:var(--mono); white-space:pre; overflow-wrap:normal; word-break:normal}
+#content .task-chat-answer .reply-copy-status {font-size:12px; color:var(--muted); margin:0; padding:6px 14px 10px}
+.task-chat-answer .reply-select-code {margin:0 12px 10px;min-height:36px;max-width:calc(100% - 24px);white-space:normal}
+.task-chat-answer .reply-plain-fallback {white-space:pre-wrap; overflow-wrap:anywhere}
+.task-chat-answer :is(.reply-table-scroll,.reply-code-block pre):focus-visible {outline:2px solid var(--control-focus); outline-offset:-3px}
+.task-chat-answer a {overflow-wrap:anywhere}

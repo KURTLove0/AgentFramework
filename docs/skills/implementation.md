@@ -21,6 +21,8 @@ python3 -m agent_framework serve --port 8787
 
 内置 `release-risk-analysis`、`source-grounded-answer` 已提供标准 `SKILL.md` 与独立参考文件，支持查看、导出、复制；系统内置包只读。岗位领域的固定执行方法属于原有领域契约，继续保留以兼容历史任务。
 
+创建和编辑草稿现支持持久保存回执：回复丢失后重试同一提交不会新增第二个包或版本。核对期间保留本页文件，支持查看已保存版本与本页差异，再明确保存后续修改、加载已保存版本或将归档包另存。使用边界和当前源码验收见 [Skill 保存回执与文件恢复](../reliability/skill-saves.md)。
+
 ## 格式与互操作
 
 ```text
@@ -77,6 +79,7 @@ metadata:
 | --- | --- |
 | `GET/POST /api/skills` | 元数据目录 / 创建草稿 |
 | `GET/POST /api/skills/:id` | 读取指定版本 / 保存新版本 |
+| `GET /api/skill-saves/:request_id` | 查询当前租户、空间和操作人的已接受保存回执 |
 | `POST /api/skills/validate` | 校验标准包 |
 | `POST /api/skills/import` | 导入标准 ZIP |
 | `GET /api/skills/:id/export?version=1` | 导出指定版本 ZIP |
@@ -87,6 +90,8 @@ metadata:
 | Agent 的 `skill_bindings` | `{skill_id, version, enabled}` 数组 |
 
 配置按租户和工作空间隔离。同名包可在不同空间分别管理；未发布版本不能绑定。包内容冻结在已有 Agent 与任务中，撤回不会删除这些审计内容。
+
+创建和保存新版本可提供可选 `request_id`。同编号、目标与参数重试返回原保存版本和 `save_receipt`，不同参数复用编号返回 409。回执中的 `revision`、`version` 分别是接受时修订号和内容版本；顶层修订号与归档状态反映当前包头。未找到回执的 404 包含 `code: "skill_save_not_found"`，不能把所有 404 都当作原请求未接受。旧客户端不带编号时保持原接口；ZIP 导入、迁移及生命周期操作没有新增同编号重试保证。
 
 ## 验证结果
 

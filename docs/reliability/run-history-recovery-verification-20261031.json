@@ -1,0 +1,217 @@
+{
+  "recorded_on": "2026-10-31",
+  "scope": "Current source: independent task history reads, pending/error/result states, original-page retries, prior-query restoration, paging suppression and scope/route/request ownership guards. Backend history query and cursor protocol unchanged. Existing release artifacts unchanged.",
+  "baseline": {
+    "tests": 3,
+    "failed": 3,
+    "log": "/private/tmp/af-run-history-baseline-20261031.log",
+    "cases": [
+      "new query blocked by full-page busy state",
+      "repeated next advances cursor stack twice",
+      "failed query retains incompatible old rows"
+    ]
+  },
+  "backend": {
+    "passed": true,
+    "tests": 38,
+    "seconds": 14.904,
+    "command": ".venv/bin/python -m unittest tests.test_run_catalog tests.test_web",
+    "log": "/private/tmp/af-run-history-backend-20261031.log",
+    "coverage": "Existing run query, pagination, conversation summaries and actual HTTP/static routes. Static response coverage now includes /run_history.js. No backend data-query semantics changed."
+  },
+  "ui": {
+    "passed": true,
+    "tests": 438,
+    "seconds": 5.371255667000001,
+    "new_cases": 21,
+    "command": "npm test",
+    "log": "/private/tmp/af-run-history-ui-20261031.log"
+  },
+  "browser": [
+    {
+      "suite": "run-history",
+      "passed": true,
+      "exit_code": 0,
+      "details": "/private/tmp/af-run-history-browser-20261031/run-history/results.json",
+      "checks": [
+        "137 条历史运行可完整翻完三页，进入详情再返回保留原页与排序",
+        "后台慢请求不阻塞新关键词，迟到的旧结果不会覆盖新查询",
+        "新条件读取失败不伪装为空结果，可恢复上次成功的关键词和结果",
+        "连续翻页只推进一次，读取失败保留目标页并可准确重试",
+        "本页刷新失败保留并标注原结果，长错误在八组桌面主题与字号下可读，键盘焦点可见",
+        "可从失败页返回第一页，只有成功读取后才显示真正的空结果",
+        "切换空间清空原查询与结果，所有历史浏览和恢复操作均为只读"
+      ],
+      "errors": [],
+      "writes": [],
+      "layouts_count": 8
+    },
+    {
+      "suite": "run-filters",
+      "passed": true,
+      "exit_code": 0,
+      "details": "/private/tmp/af-run-history-browser-20261031/run-filters/results.json",
+      "checks": [
+        "Default layout shows search, status and sort; advanced filters expand by keyboard and keep their state on refresh; empty lists hide pagination",
+        "Real cursor pagination shows 50 plus 2 saved records, without duplicates, and returns to the same first page",
+        "Agent and domain controls send real combined API filters, show their count and removable chips, retain values on refresh, and clear without losing focus or sort",
+        "Search and status compose correctly; zero matches show a recovery action and a quiet 0-record count without a pager",
+        "Invalid date ranges are explained at the field and preserved on refresh; only validated ranges reach the API and correction clears the error",
+        "Long selected names, filter chips, menus and single-line pagination fit five viewport sizes in light and dark themes"
+      ],
+      "errors": [],
+      "layouts_count": 10
+    },
+    {
+      "suite": "journeys",
+      "passed": true,
+      "exit_code": 0,
+      "details": "/private/tmp/af-run-history-browser-integration-20261031/journeys/results.json",
+      "checks": [
+        "空工作台引导创建智能体，无演示任务或固定执行链路",
+        "每日模板只填目标和智能体，派发后可明确开始，直接执行一轮",
+        "连续修改保留同一任务，手机可查看任务属性和导出完整对话",
+        "复盘采用最新修订结果，可直接沉淀并进入资料库",
+        "知识草稿、审核、发布和修订可连续完成，修订保留原发布版本",
+        "Skill 可编辑保存、发布和导出",
+        "通用工作流无固定目标或预授权；节点补充信息后自动使用最新结果继续",
+        "12 个模块在桌面、平板及手机深浅色下无页面横向溢出"
+      ],
+      "errors": [],
+      "layouts_count": 120
+    },
+    {
+      "suite": "commands",
+      "passed": true,
+      "exit_code": 0,
+      "details": "/private/tmp/af-run-history-browser-integration-20261031/commands/results.json",
+      "checks": [
+        "慢工作流读取和技能故障不遮挡31个智能体结果，结果可完整翻页，失败资源可以单独重试",
+        "关闭再打开保留关键词、所选结果与结果页，键盘选择仍指向同一对象",
+        "新查询立即清除旧查询结果，迟到的历史搜索回复不会回退当前结果",
+        "正文命中的资料即使标题不含关键词也能显示，并打开准确资料卡片",
+        "工作流搜索定位并展开对应定义，查看过程不会打开编辑器或启动运行",
+        "251条历史运行可进入完整筛选列表，最早记录可通过关键词直接打开",
+        "技能结果打开只读包内容，切换空间后搜索只返回当前空间可访问的资源",
+        "长错误安全转义，部分失败不会伪装成无结果；8组桌面深浅色与200%文字布局保持可读、重试可达",
+        "故障恢复后保留输入与焦点，中文输入期间回车不会误打开结果，所有搜索与浏览均未提交写入"
+      ],
+      "errors": [],
+      "writes": [],
+      "layouts_count": 8
+    },
+    {
+      "suite": "control-routes",
+      "passed": true,
+      "exit_code": 0,
+      "details": "/private/tmp/af-run-history-browser-integration-20261031/control-routes/results.json",
+      "errors": [],
+      "violations": {
+        "overflow": [],
+        "radius": [],
+        "size": [],
+        "focus": [],
+        "popovers": [],
+        "menu": [],
+        "commandFocus": []
+      },
+      "records_count": 170,
+      "focus_count": 360,
+      "popovers_count": 20
+    }
+  ],
+  "checks": {
+    "syntax": [
+      "node --check agent_framework/webui/app.js",
+      "node --check agent_framework/webui/run_history.js"
+    ],
+    "diff": "git diff --check",
+    "visual_review": [
+      "1440 light",
+      "1440 dark"
+    ],
+    "fixture": {
+      "runs": 137,
+      "pages": 3,
+      "writes": 0,
+      "layouts": 8
+    },
+    "integration_note": "The first integration command used the nonexistent command-search suite name and exited at argument validation. The corrected commands suite, journeys and control-routes all passed."
+  },
+  "limitations": [
+    "History still reflects live backend records; cursor traversal is not a transaction-wide frozen snapshot.",
+    "Last successful query and result exist only in browser memory and are not restored after a full reload.",
+    "The workbench recent-run preview retains its existing local filtering; these changes apply to the full run history directory.",
+    "This slice validates 1024/1440 desktop widths, light/dark themes and 200% text; existing integration suites also retain their earlier viewport coverage."
+  ],
+  "files": [
+    {
+      "path": "agent_framework/web.py",
+      "sha256": "62c0b8b49e3bb754e6dd33604fcc6bf8e8f49a5f15a50bb1e6403f2a8e247ff6"
+    },
+    {
+      "path": "agent_framework/webui/app.js",
+      "sha256": "d75ee7a2a18d5210c69c674b9aeaa6269d60bccd8242f8a1a3d2962b597d88c8"
+    },
+    {
+      "path": "agent_framework/webui/run_history.js",
+      "sha256": "e486d2eaf868df16171122d0e07bb956e92bf70a8ecd4f1778d7897c158e2f1f"
+    },
+    {
+      "path": "agent_framework/webui/index.html",
+      "sha256": "8d75ec88181954b8c97b0384850cd0a331bc753d7aa49069f73df7b00daf6b84"
+    },
+    {
+      "path": "agent_framework/webui/hig.css",
+      "sha256": "9d9df46b74a16b18723684f92abdf9dbbdc365c643955b6824b920f6dd7601a6"
+    },
+    {
+      "path": "tests/test_run_history_interactions.js",
+      "sha256": "a88ce04dd6c6ad9d5bc0abc45a89abcc53332da6f222fb5241651a2eaaae7b0a"
+    },
+    {
+      "path": "tests/test_journey_interactions.js",
+      "sha256": "0458b5b6da4fde3a8f048a558a379ccdf83c7bebc11d927b5c6f3ee4e662eb1b"
+    },
+    {
+      "path": "tests/test_web.py",
+      "sha256": "49f6ed1f3526372efa7df42db3cdc9e94c42db19a86f684b713bd9d18162d73f"
+    },
+    {
+      "path": "tests/serve_run_history_fixture.py",
+      "sha256": "55b10b929e810bb1a67e84a9d99c3da8794c7c5200a3ceb028dbeaf57f214f1f"
+    },
+    {
+      "path": "tests/verify_run_history.cjs",
+      "sha256": "beda06a75b01d858af0f40a5555ba2934e5e1e7b0309f9c10c0cd77d130a60ac"
+    },
+    {
+      "path": "scripts/run_browser_tests.py",
+      "sha256": "59d01444278d6886da3ee31b6e19c8182a5f9a73be9682ffd4bca27e3d6343ac"
+    },
+    {
+      "path": "docs/reliability/run-history-recovery.md",
+      "sha256": "6cacf0ab4252173e71b4caf7a0df0d5e6f0ee5a9df4fa302fd5fb341dbd58379"
+    },
+    {
+      "path": "docs/reliability/run-history-light.png",
+      "sha256": "b6997b7cf79fb52a45311fedfab917b7cca2950fdf9d8a82fccd67b3d61cb942"
+    },
+    {
+      "path": "docs/reliability/run-history-dark.png",
+      "sha256": "ad8eff5d8bef272f23a2f3bbac739e26d9fb2883237603027403b0f1d3fc064e"
+    },
+    {
+      "path": "docs/history-performance/implementation.md",
+      "sha256": "fbff4916ba5f3caeb9fa9f19e03bf0fac81c8ac8f2f427b39702b9a61b3d28cd"
+    },
+    {
+      "path": "README.md",
+      "sha256": "08994ba954d56be32b84942f7c2800715c0b8238743d873904f71f7e8a3915b4"
+    },
+    {
+      "path": "design.md",
+      "sha256": "659b43ea51879e45ca41a4ca7301c2c4d8aaa491269b01723f7e59565119f9de"
+    }
+  ]
+}

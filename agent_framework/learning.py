@@ -4,6 +4,8 @@ No historical task is executed, granted or modified by this module. Unknown mode
 requests remain failed/pending under their original request id, never replayed.
 """
 from copy import deepcopy
+from contextlib import ExitStack
+import base64
 import json
 import time
 from uuid import uuid4
@@ -13,6 +15,8 @@ from .contracts import PolicyDenied, canonical, digest, identifier, TERMINAL
 from .knowledge import SPACE, insert_asset
 from .runtime_config import ConfigConflict
 from .structured import obj, parse_json, validate
+from .learning_generation import GENERATION_SECONDS, LearningGenerationExpired, projection
+from . import learning_writes
 
 TEXT = {'type':'string','minLength':1,'maxLength':2000}
 LONG = {'type':'string','minLength':1,'maxLength':12000}
@@ -40,7 +44,13 @@ def schema(store):
             tenant TEXT, workspace TEXT, principal TEXT, id TEXT, request_id TEXT,
             purpose TEXT, source_id TEXT, revision INTEGER, status TEXT, data TEXT,
             PRIMARY KEY(tenant,id), UNIQUE(tenant,workspace,principal,request_id));
-            CREATE INDEX IF NOT EXISTS learning_source_scope ON learning_proposals(tenant,workspace,principal,purpose,source_id);''')
+            CREATE INDEX IF NOT EXISTS learning_source_scope ON learning_proposals(tenant,workspace,principal,purpose,source_id);
+            CREATE INDEX IF NOT EXISTS learning_history_scope ON learning_proposals(tenant,workspace,principal);
+            CREATE INDEX IF NOT EXISTS learning_history_purpose ON learning_proposals(tenant,workspace,principal,purpose);
+            CREATE TABLE IF NOT EXISTS learning_write_requests (
+                tenant TEXT, workspace TEXT, principal TEXT, request_id TEXT,
+                request_hash TEXT, result TEXT, result_hash TEXT, proposal_id TEXT,
+                PRIMARY KEY(tenant,workspace,principal,request_id));''')
 
 
 def agent_generate(app, profile, purpose, context, output_schema, consent, offline):
@@ -77,12 +87,33 @@ class Learning:
 
     def _scope(self):return (self.app.tenant,self.app.workspace['id'],self.app.principal)
 
+    def _assert_workspace_active(self,db=None):
+        from .workspaces import assert_workspace_active
+        with self.store.read_snapshot(db) as current:
+            assert_workspace_active(current,self.app.tenant,self.app.workspace['id'])
+
     def get(self,identity):
         identifier(identity)
-        with self.store.connect() as db:
-            row=db.execute('SELECT * FROM learning_proposals WHERE tenant=? AND workspace=? AND principal=? AND id=?',(*self._scope(),identity)).fetchone()
+        with self.store.read_snapshot() as db:return self._get(db,identity)
+
+    def _get(self,db,identity):
+        row=db.execute('SELECT * FROM learning_proposals WHERE tenant=? AND workspace=? AND principal=? AND id=?',(*self._scope(),identity)).fetchone()
         if not row:raise KeyError('复盘或生成记录不在当前可访问范围')
+        return self._record(row)
+
+    def get_by_request(self,request_id):
+        """Read one accepted request, independent of directory pagination."""
+        identifier(request_id)
+        with self.store.read_snapshot() as db:
+            row=db.execute('SELECT * FROM learning_proposals WHERE tenant=? AND workspace=? AND principal=? AND request_id=?',(*self._scope(),request_id)).fetchone()
+            if not row:raise KeyError('复盘或生成请求不在当前可访问范围')
+            return self._record(row)
+
+    @staticmethod
+    def _record(row):
         value={**json.loads(row['data']),'id':row['id'],'revision':row['revision'],'status':row['status'],'purpose':row['purpose']}
+        claim=value.pop('generation_claim',None)
+        value.update(projection(value['status'],claim.get('expires_at') if isinstance(claim,dict) else None,value.get('created_at')))
         if value['status']=='FAILED':
             value['repairable']=False
             if value['purpose']=='ontology' and value.get('rejected_output'):
@@ -95,6 +126,7 @@ class Learning:
 
     def repair(self,identity,data):
         """Create one editable draft from a failed result, without another model call."""
+        self._assert_workspace_active()
         prior=self.get(identity)
         if not isinstance(data,dict) or set(data)!={'revision'} or type(data['revision']) is not int or data['revision']!=prior['revision']:raise ConfigConflict('生成记录已变化，请重新加载')
         if not prior.get('repairable'):raise ConfigConflict('此记录没有可在编辑器修复的结构化结果，请重新生成')
@@ -103,24 +135,49 @@ class Learning:
         value.update(request_id='repair-'+identity,request_hash=digest(['repair',identity,prior['revision']]),
                      repair_of=identity,created_at=time.time(),output=deepcopy(prior['rejected_output']),error=None,receipt=None)
         with self.store.transaction() as db:
+            self._assert_workspace_active(db)
             existing=db.execute('SELECT id FROM learning_proposals WHERE tenant=? AND workspace=? AND principal=? AND id=?',(*self._scope(),repaired)).fetchone()
             if not existing:
                 self.assert_sources(db,prior)
                 db.execute('INSERT INTO learning_proposals VALUES(?,?,?,?,?,?,?,?,?,?)',(*self._scope(),repaired,value['request_id'],prior['purpose'],'',1,'DRAFT',canonical(value)))
-        return self.get(repaired)
+            return self._get(db,repaired)
 
     def list(self,run_id=None,purpose=None):
+        """Retain the original bounded list contract for service callers."""
+        return self.page(run_id,purpose,limit=200)['proposals']
+
+    def page(self,run_id=None,purpose=None,*,limit=200,cursor=None):
         if run_id is not None:self.run_context(run_id)
         if purpose is not None and purpose not in {'retrospective','ontology'}:raise ValueError('未知生成类型')
+        if type(limit) is not int:
+            if not isinstance(limit,str) or not limit.isascii() or not limit.isdigit() or len(limit)>3:raise ValueError('历史记录分页大小须为 1–200')
+            limit=int(limit)
+        if not 1<=limit<=200:raise ValueError('历史记录分页大小须为 1–200')
+        signature=digest([*self._scope(),run_id,purpose]);before=None
+        if cursor not in (None,''):
+            try:
+                if not isinstance(cursor,str) or len(cursor)>2048:raise ValueError()
+                value=parse_json(base64.b64decode(cursor+'='*(-len(cursor)%4),altchars=b'-_',validate=True).decode('utf-8'))
+                if (not isinstance(value,dict) or set(value)!={'v','before','query'} or type(value['v']) is not int or value['v']!=1
+                        or type(value['before']) is not int or not 1<=value['before']<=9223372036854775807 or value['query']!=signature):raise ValueError()
+                before=value['before']
+            except (ValueError,TypeError,UnicodeError,OverflowError):raise ValueError('历史记录分页游标无效或条件已变化，请重新打开记录列表') from None
         where='tenant=? AND workspace=? AND principal=?';params=list(self._scope())
-        if run_id is not None:where+=' AND source_id=?';params.append(run_id)
+        if run_id is not None:where+=" AND source_id=? AND json_extract(data,'$.run_id')=?";params.extend([run_id,run_id])
         if purpose is not None:where+=' AND purpose=?';params.append(purpose)
-        with self.store.connect() as db:
-            rows=db.execute('SELECT id FROM learning_proposals WHERE '+where+' ORDER BY rowid DESC LIMIT 200',params).fetchall()
-        values=[self.get(r['id']) for r in rows]
-        keys=('id','revision','status','purpose','request_id','run_id','agent_revision','runtime','created_at','error')
-        return [{**{k:v.get(k) for k in keys},'agent':{'name':v['agent']['name']}} for v in values
-                if (run_id is None or v.get('run_id')==run_id) and (purpose is None or v['purpose']==purpose)]
+        if before is not None:where+=' AND rowid<?';params.append(before)
+        with self.store.read_snapshot() as db:
+            rows=db.execute('''SELECT rowid AS history_rowid,id,revision,status,purpose,request_id,
+                json_extract(data,'$.run_id') AS run_id,json_extract(data,'$.agent_revision') AS agent_revision,
+                json_extract(data,'$.runtime') AS runtime,json_extract(data,'$.created_at') AS created_at,
+                json_extract(data,'$.error') AS error,json_extract(data,'$.agent.name') AS agent_name,
+                json_extract(data,'$.generation_claim.expires_at') AS generation_deadline
+                FROM learning_proposals WHERE '''+where+' ORDER BY rowid DESC LIMIT ?',(*params,limit+1)).fetchall()
+        more=len(rows)>limit;rows=rows[:limit];next_cursor=None
+        if more:next_cursor=base64.urlsafe_b64encode(canonical({'v':1,'before':rows[-1]['history_rowid'],'query':signature}).encode()).decode().rstrip('=')
+        proposals=[{**{k:row[k] for k in row.keys() if k not in {'history_rowid','agent_name','generation_deadline'}},'agent':{'name':row['agent_name']},
+                    **projection(row['status'],row['generation_deadline'],row['created_at'])} for row in rows]
+        return {'proposals':proposals,'has_more':more,'next_cursor':next_cursor}
 
     def run_context(self,run_id):
         detail=self.app.detail(identifier(run_id));run=detail['run']
@@ -130,7 +187,7 @@ class Learning:
             detail=conversation['current'];run=detail['run']
             if conversation['active'] or conversation['queued_count']:raise ConfigConflict('请等待本轮对话结束后复盘')
         if run['task']['principal']!=self.app.principal:raise PolicyDenied('只能复盘本人运行记录')
-        if detail['job'] and detail['job']['active'] or run['status'] in {'CREATED','RUNNING','VERIFYING','RECONCILING'}:
+        if (run.get('cancellation') or {}).get('pending') or detail['job'] and detail['job']['active'] or run['status'] in {'CREATED','RUNNING','VERIFYING','RECONCILING'}:
             raise ConfigConflict('请等待运行暂停或结束后复盘')
         facts={'run_id':run['run_id'],'goal':conversation['goal'] if whole else run['task']['goal'],'status':run['status'],'checks':run['checks'],
                'steps':run['steps'],'replans':run['replans'],'report':run['report'],
@@ -170,7 +227,8 @@ class Learning:
         instruction=data.get('instruction','请基于来源生成可审阅的总结。')
         if not isinstance(instruction,str) or not 1<=len(instruction.strip())<=2000:raise ValueError('请填写 1–2000 字生成要求')
         request_hash=digest(data)
-        with self.store.connect() as db:
+        with self.store.read_snapshot() as db:
+            self._assert_workspace_active(db)
             prior=db.execute('SELECT id,data FROM learning_proposals WHERE tenant=? AND workspace=? AND principal=? AND request_id=?',(*self._scope(),request)).fetchone()
         if prior:
             if json.loads(prior['data'])['request_hash']!=request_hash:raise ConfigConflict('请求标识已用于其他内容，请发起新的生成')
@@ -191,29 +249,52 @@ class Learning:
         value={'request_id':request,'request_hash':request_hash,'run_id':context.get('run_id'),'source_context':context,'source_hash':context['source_hash'],
                'agent':{'id':p['id'],**public_agent_context(p)},'agent_revision':p['revision'],'runtime':p['runtime'],
                'model':p['model'],'model_options':deepcopy(p['options']),'output_schema_hash':digest(shape),'generator_ref':'governed-learning@1.0.0','instruction':instruction,
-               'created_at':time.time(),'output':None,'receipt':None,'error':None}
-        with self.store.transaction() as db:
-            existing=db.execute('SELECT id,data FROM learning_proposals WHERE tenant=? AND workspace=? AND principal=? AND request_id=?',(*self._scope(),request)).fetchone()
-            if existing:
-                if json.loads(existing['data'])['request_hash']!=request_hash:raise ConfigConflict('请求标识已用于其他内容')
-                return self.get(existing['id'])
-            db.execute('INSERT INTO learning_proposals VALUES(?,?,?,?,?,?,?,?,?,?)',(*self._scope(),identity,request,purpose,context.get('run_id',''),1,'GENERATING',canonical(value)))
-        output=None
-        try:
-            output,usage=agent_generate(self.app,p,purpose,context,shape,data.get('consent',False),offline)
-            if purpose=='ontology' and data.get('operational'):
-                from .ontology_model import normalize_generated
-                output=normalize_generated(output)
-            value['generation']=usage
-            self.validate_output(purpose,output,context)
-            value.update(output=output,generation=usage)
-            with self.store.transaction() as db:db.execute('UPDATE learning_proposals SET status=?,revision=2,data=? WHERE tenant=? AND id=?',('DRAFT',canonical(value),self.app.tenant,identity))
-        except Exception as exc:
-            value['error']=str(exc)[:1000]
-            if output is not None and len(canonical(output).encode())<=256000:value['rejected_output']=output
-            with self.store.transaction() as db:db.execute('UPDATE learning_proposals SET status=?,revision=2,data=? WHERE tenant=? AND id=?',('FAILED',canonical(value),self.app.tenant,identity))
-            raise
-        return self.get(identity)
+               'created_at':time.time(),'output':None,'receipt':None,'error':None,'operational':bool(data.get('operational',False))}
+        with ExitStack() as generation:
+            with self.store.transaction() as db:
+                self._assert_workspace_active(db)
+                existing=db.execute('SELECT id,data FROM learning_proposals WHERE tenant=? AND workspace=? AND principal=? AND request_id=?',(*self._scope(),request)).fetchone()
+                if existing:
+                    if json.loads(existing['data'])['request_hash']!=request_hash:raise ConfigConflict('请求标识已用于其他内容')
+                    return self._get(db,existing['id'])
+                self.app.agents.assert_submission_current(db,p)
+                try:self.assert_sources(db,{**value,'purpose':purpose})
+                except (KeyError,ValueError,PolicyDenied) as error:
+                    if isinstance(error,ConfigConflict):raise
+                    raise ConfigConflict('生成来源在提交期间已变化或不可访问，请重新核对后生成') from None
+                generation.enter_context(self.app.proposal_capacity.reserve())
+                value['generation_claim']={'owner':uuid4().hex,'expires_at':time.time()+GENERATION_SECONDS}
+                db.execute('INSERT INTO learning_proposals VALUES(?,?,?,?,?,?,?,?,?,?)',(*self._scope(),identity,request,purpose,context.get('run_id',''),1,'GENERATING',canonical(value)))
+            output=None
+            try:
+                output,usage=agent_generate(self.app,p,purpose,context,shape,data.get('consent',False),offline)
+                if purpose=='ontology' and data.get('operational'):
+                    from .ontology_model import normalize_generated
+                    output=normalize_generated(output)
+                value['generation']=usage
+                self.validate_output(purpose,output,context)
+                value.update(output=output,generation=usage)
+                # This result belongs to an already accepted request. Preserve it
+                # even if the workspace or its live configuration changed meanwhile.
+                with self.store.transaction() as db:
+                    self._fence_generation(db,identity,value['generation_claim'])
+                    db.execute('UPDATE learning_proposals SET status=?,revision=2,data=? WHERE tenant=? AND id=?',('DRAFT',canonical(value),self.app.tenant,identity))
+                    return self._get(db,identity)
+            except LearningGenerationExpired:
+                raise
+            except Exception as exc:
+                value['error']=str(exc)[:1000]
+                if output is not None and len(canonical(output).encode())<=256000:value['rejected_output']=output
+                with self.store.transaction() as db:
+                    self._fence_generation(db,identity,value['generation_claim'])
+                    db.execute('UPDATE learning_proposals SET status=?,revision=2,data=? WHERE tenant=? AND id=?',('FAILED',canonical(value),self.app.tenant,identity))
+                raise
+
+    def _fence_generation(self,db,identity,claim):
+        row=db.execute('SELECT status,revision,data FROM learning_proposals WHERE tenant=? AND workspace=? AND principal=? AND id=?',(*self._scope(),identity)).fetchone()
+        current=json.loads(row['data']).get('generation_claim') if row else None
+        if not row or row['status']!='GENERATING' or row['revision']!=1 or current!=claim or claim['expires_at']<=time.time():
+            raise LearningGenerationExpired('本次生成处理权已失效，请核对原请求；迟到结果未保存')
 
     @staticmethod
     def validate_output(purpose,output,context):
@@ -233,21 +314,27 @@ class Learning:
             if item['kind']=='EXPERIENCE' and not context['experience_allowed']:raise ValueError('经验沉淀需要已归档的终态运行')
 
     def save(self,identity,data):
-        if not isinstance(data,dict) or set(data)!={'revision','output'}:raise ValueError('保存需要当前版本与完整提案')
-        prior=self.get(identity)
+        data,key,request,accepted,prior=learning_writes.prepare(self,identity,data,'save')
+        if accepted:return accepted
         if type(data['revision']) is not int or data['revision']!=prior['revision'] or prior['status']!='DRAFT':raise ConfigConflict('提案已更新或已沉淀，请重新加载')
         self.validate_output(prior['purpose'],data['output'],prior['source_context'])
         value={k:v for k,v in prior.items() if k not in ('id','revision','status','purpose')};value['output']=data['output']
         with self.store.transaction() as db:
+            self._assert_workspace_active(db)
+            if key:
+                accepted=learning_writes.read(self,db,key,request)
+                if accepted:return accepted
             cursor=db.execute('UPDATE learning_proposals SET revision=revision+1,data=? WHERE tenant=? AND id=? AND revision=? AND status=?',(canonical(value),self.app.tenant,identity,prior['revision'],'DRAFT'))
             if cursor.rowcount!=1:raise ConfigConflict('提案已被其他页面更新')
-        return self.get(identity)
+            return learning_writes.finish(self,db,identity,key,request)
 
     def deposit(self,identity,data):
-        if not isinstance(data,dict) or set(data)!={'revision','item_ids'}:raise ValueError('沉淀需要当前版本与选定条目')
-        prior=self.get(identity);selected=data['item_ids']
+        data,key,request,accepted,prior=learning_writes.prepare(self,identity,data,'deposit')
+        if accepted:return accepted
+        selected=data['item_ids']
         if not isinstance(selected,list) or not selected or any(not isinstance(x,str) for x in selected) or len(selected)!=len(set(selected)):raise ValueError('请至少选择一个不同的沉淀条目')
         if prior['status']=='DEPOSITED':
+            if key:raise ConfigConflict('提案已沉淀，请核对原请求或查看已存回执')
             if sorted(selected)!=prior['receipt']['item_ids']:raise ConfigConflict('此提案已按其他选项沉淀，请查看回执')
             return prior
         if type(data['revision']) is not int or data['revision']!=prior['revision'] or prior['status']!='DRAFT':raise ConfigConflict('提案已更新或未生成完成')
@@ -265,11 +352,16 @@ class Learning:
         if not set(selected)<=set(items):raise ValueError('选中了未知沉淀条目')
         now=time.time();assets=[]
         with self.store.transaction() as db:
+            self._assert_workspace_active(db)
+            if key:
+                accepted=learning_writes.read(self,db,key,request)
+                if accepted:return accepted
             row=db.execute('SELECT revision,status,data FROM learning_proposals WHERE tenant=? AND id=?',(self.app.tenant,identity)).fetchone()
             if row['status']=='DEPOSITED':
+                if key:raise ConfigConflict('提案已沉淀，请核对原请求或查看已存回执')
                 receipt=json.loads(row['data'])['receipt']
                 if sorted(selected)!=receipt['item_ids']:raise ConfigConflict('此提案已按其他选项沉淀')
-                return self.get(identity)
+                return self._get(db,identity)
             if row['revision']!=prior['revision'] or row['status']!='DRAFT':raise ConfigConflict('提案已被其他页面更新')
             # Recheck current source inside the write transaction (including withdrawal).
             self.assert_sources(db,prior)
@@ -299,7 +391,7 @@ class Learning:
             value={k:v for k,v in prior.items() if k not in ('id','revision','status','purpose')}
             value['receipt']={'item_ids':sorted(selected),'assets':assets,'deposited_at':now}
             db.execute("UPDATE learning_proposals SET status='DEPOSITED',revision=revision+1,data=? WHERE tenant=? AND id=?",(canonical(value),self.app.tenant,identity))
-        return self.get(identity)
+            return learning_writes.finish(self,db,identity,key,request)
 
     def assert_sources(self,db,proposal):
         context=proposal['source_context']

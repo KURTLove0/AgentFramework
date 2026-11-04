@@ -1,0 +1,254 @@
+{
+  "date": "2026-11-02",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Rebuild governed model context before every schema attempt and Skill phase, linking each request to its phase-correct audited manifest",
+  "before_tests": {
+    "command": ".venv/bin/python -m unittest tests.test_model_context_refresh",
+    "failed": 2,
+    "observed": "Withdrawn optional knowledge and historical source bodies were reused during schema retries",
+    "log": "/private/tmp/af-model-context-refresh-before.log",
+    "sha256": "7aa23ba28ac8e1f758a8ea2ebed6704a39088e7432ba7cb9002d627181b3f424"
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests",
+    "passed": 1102,
+    "seconds": 202.401,
+    "new_tests": 12,
+    "log": "/private/tmp/af-model-context-refresh-backend-full.log",
+    "sha256": "cf40b63a172428156646cf4bb30e228af35deb6d2439475a1f4617d6f4d99e3d"
+  },
+  "frontend": {
+    "command": "node --test tests/test_*.js",
+    "passed": 787,
+    "duration_ms": 9170.465833,
+    "log": "/private/tmp/af-model-context-refresh-frontend-full.log",
+    "sha256": "4a804c33a110777d4cb894143fcb086ca29db737fbca89544d377e71e88a09f2"
+  },
+  "focused": {
+    "command": ".venv/bin/python -m unittest tests.test_model_context_refresh tests.test_llm tests.test_model_execution tests.test_skill_packages tests.test_streaming_tasks tests.test_history_dependencies tests.test_source_exposure",
+    "passed": 95,
+    "seconds": 18.115,
+    "log": "/private/tmp/af-model-context-refresh-focused-third.log",
+    "sha256": "86ae20a3006a71b8bdfc6fa650b978080fe773ad9bb8c7c20757f6704249a39f"
+  },
+  "intermediate_findings": [
+    {
+      "kind": "test-scenario-correction",
+      "problem": "Two required-source tests incorrectly assumed normal conversations pin critical knowledge as required. Existing policy deliberately treats conversation knowledge as optional.",
+      "correction": "Exercise the real legacy workflow with its frozen required-source binding; production binding policy unchanged.",
+      "log": "/private/tmp/af-model-context-refresh-focused-final.log",
+      "sha256": "f0b4ee4bc25ac5ccb078ba3ba4314a6fa5920d8e6b3fafeca6cc5db47ab1a2ed"
+    },
+    {
+      "kind": "compatibility-fix",
+      "problem": "Changing manifest phase names from execute to actual Skill phases made already supplied knowledge unavailable to authorized native reads.",
+      "correction": "Recognize verified Skill phase selections in native discovery while retaining capability, policy, scope, lease and budget checks.",
+      "before_failed": 1,
+      "log": "/private/tmp/af-model-context-refresh-skill-read-before.log",
+      "sha256": "6228ead24073a464efeb6256238432d770a3be5dfacf5bfc5f82614e6b879074"
+    },
+    {
+      "kind": "browser-test-wait-correction",
+      "problem": "A promise-valued API predicate did not wait for the actual model request; subsequent fixture/page reads occurred too early.",
+      "correction": "Use existing browser_poll.waitFor for API conditions and fixture task identity.",
+      "attempt_logs": [
+        {
+          "file": "/private/tmp/af-model-context-refresh-browser-first/model-context-refresh.log",
+          "sha256": "5e175bc942f129554ffe89ad8a81bdd2d18d105b272397ecbe7c34a492b8f49d"
+        },
+        {
+          "file": "/private/tmp/af-model-context-refresh-browser-second/model-context-refresh.log",
+          "sha256": "be9f6634248654518d791165d9e8dc3b97a5291e9da37610f187861bf9dd3ddc"
+        }
+      ],
+      "final_log": {
+        "file": "/private/tmp/af-model-context-refresh-browser-third/model-context-refresh.log",
+        "sha256": "d17283b5cd567a6e31fe014a6b14b11614fa93c73c05d3e70a39a78fe84da327"
+      }
+    }
+  ],
+  "browser": {
+    "commands": [
+      ".venv/bin/python scripts/run_browser_tests.py --suite model-context-refresh --suite history-dependencies --suite source-exposure --suite streaming --output /private/tmp/af-model-context-refresh-browser-first",
+      ".venv/bin/python scripts/run_browser_tests.py --suite model-context-refresh --output /private/tmp/af-model-context-refresh-browser-third"
+    ],
+    "suites": [
+      {
+        "suite": "model-context-refresh",
+        "result": "/private/tmp/af-model-context-refresh-browser-third/model-context-refresh/results.json",
+        "sha256": "5bc741a3d999f5c3abd09219129c57937112659b5b6581313ad8170a83607935",
+        "result_data": {
+          "checks": [
+            "首次请求期间撤回资料并刷新，格式重试重新核对资料，任务原始输入完整保留",
+            "两次实际请求各有独立上下文清单，审计事件、阶段、尝试次数与历史摘要一致",
+            "结果正常显示，刷新未重复提交任务，用量准确记录两次请求"
+          ],
+          "errors": [],
+          "task_posts": 1,
+          "model_calls": 2,
+          "model_tokens": 60,
+          "source_content_by_attempt": [
+            true,
+            false
+          ],
+          "context_manifests": 2,
+          "original_task_preserved": true
+        }
+      },
+      {
+        "suite": "history-dependencies",
+        "result": "/private/tmp/af-model-context-refresh-browser-first/history-dependencies/results.json",
+        "sha256": "981f8fa8d95131ef48b7c50c42dd67c5f84f5781e4976e5c48ae06f184411bfb",
+        "result_data": {
+          "checks": [
+            "无引用的改写保留独立历史来源依赖，原报告没有被补写引用",
+            "排队后撤回资料并刷新，下一次模型调用同时屏蔽原文和改写，冻结历史与原报告保留",
+            "撤回后的新回复不再继承已屏蔽来源，继续对话未重复提交或调用模型"
+          ],
+          "errors": [],
+          "task_posts": 4,
+          "model_calls": 4,
+          "redacted_turns": [
+            1,
+            2
+          ],
+          "original_reports_preserved": true,
+          "frozen_history_preserved": true,
+          "source_free_reply_preserved": true
+        }
+      },
+      {
+        "suite": "source-exposure",
+        "result": "/private/tmp/af-model-context-refresh-browser-first/source-exposure/results.json",
+        "sha256": "382de52d200a96b518e3bdb7d184351be11ecfa858575fa4e774e6e719ac15e1",
+        "result_data": {
+          "checks": [
+            "未引用的自动资料在撤回后不再进入模型，原报告和冻结任务保留",
+            "真实搜索与读取的未引用资料在撤回后被屏蔽，读取证据保留且未重跑工具",
+            "两条路径均支持排队后撤回及刷新，未重复发送消息或调用模型"
+          ],
+          "errors": [],
+          "task_posts": 4,
+          "observed": [
+            {
+              "mode": "context",
+              "model_calls": 2,
+              "native_reads": 0
+            },
+            {
+              "mode": "native",
+              "model_calls": 2,
+              "native_reads": 2
+            }
+          ],
+          "original_reports_preserved": true,
+          "frozen_history_preserved": true
+        }
+      },
+      {
+        "suite": "streaming",
+        "result": "/private/tmp/af-model-context-refresh-browser-first/streaming/results.json",
+        "sha256": "dc7b950fa7bdf6ca0879ebfae14fa5945405636dfa1cfaa1ecf549c42c4cf829",
+        "result_data": {
+          "checks": [
+            "公开摘要在任务仍运行时逐段增长，通过持续连接显示",
+            "回答正文在最终结果保存之前连续增长，未泄露协议 JSON 或转义字符",
+            "逐段更新保持输入框节点、草稿和光标位置",
+            "流连接暂不可用时，同一检查点和时间戳的迟到轮询不会覆盖新增公开过程，正文、输入焦点与光标保留",
+            "同一数据位置的完整轮次详情可恢复，重连推送保留匹配的操作信息",
+            "刷新后立即重放已生成片段，并继续接收同一轮回答",
+            "生成结束无重复正文，Unicode 正确，隐藏思考与 HTML 执行内容不会泄露",
+            "连接中断后能继续接收输出，未重新调用模型或重复追加",
+            "停止生成会保留已显示片段，并明确标记本轮未完成",
+            "生成失败保留正文片段和错误信息，未把片段伪装为最终结果",
+            "桌面、平板和手机深浅色显示正常，输入和发送操作保持可用"
+          ],
+          "errors": [],
+          "samples": [
+            "第一段：",
+            "第一段：入口种植",
+            "第一段：入口种植低矮",
+            "第一段：入口种植低矮植物，保"
+          ],
+          "layouts": [
+            {
+              "theme": "light",
+              "width": 1440
+            },
+            {
+              "theme": "light",
+              "width": 768
+            },
+            {
+              "theme": "light",
+              "width": 375
+            },
+            {
+              "theme": "light",
+              "width": 320
+            },
+            {
+              "theme": "dark",
+              "width": 1440
+            },
+            {
+              "theme": "dark",
+              "width": 768
+            },
+            {
+              "theme": "dark",
+              "width": 375
+            },
+            {
+              "theme": "dark",
+              "width": 320
+            }
+          ]
+        }
+      }
+    ],
+    "screenshot": {
+      "file": "/private/tmp/af-model-context-refresh-browser-third/model-context-refresh/retry-after-withdrawal.png",
+      "sha256": "afa7a4c0003e5ea468f7f4d56b06beb7a9f863eb2cac05c8f1d110e5878df6fa",
+      "visually_inspected": true
+    }
+  },
+  "candidate": {
+    "command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-model-context-refresh-source-candidate-20261102",
+    "directory": "/private/tmp/af-model-context-refresh-source-candidate-20261102",
+    "package_files_verified": 143,
+    "source_and_wheel_match": true,
+    "bundle_wheel_match": true,
+    "inner_and_outer_checksums_verified": true,
+    "fresh_environment_install_rerun": false,
+    "published": false,
+    "artifacts": {
+      "/private/tmp/af-model-context-refresh-source-candidate-20261102/agent-framework-1.3.0.tar.gz": "465742b548b65ed17caf664190ae6d9fd428f8fe6b4a26479a310654f575e686",
+      "/private/tmp/af-model-context-refresh-source-candidate-20261102/bounded_agent_mvp-1.3.0-py3-none-any.whl": "a02c8ce5941f05406b5755ecca887beb702c85e256b5c63b3b3307e052c8f860"
+    }
+  },
+  "source_sha256": {
+    "agent_framework/llm.py": "bfc51354d34d48697605c84611a5e16292d781813ad39240b4fc802bbcfa5bf4",
+    "agent_framework/runtime.py": "5457421b5f16908fb3296f5e5bd593b58a20ceaa8c76586ffa25b94834d5dc2d",
+    "agent_framework/read_proxy.py": "da2e2687e90672ac9cef57ecff656450d6b41007e05f0edae256274be0e9ecdd",
+    "agent_framework/history_dependencies.py": "75b8c1aead8c005188ef58339e8d1a19326dd2198fb726243f0a4150a7821bab",
+    "tests/test_model_context_refresh.py": "99b13058cbd3add57a46be5aefa0384607309657f350e4964fdb66c7767f0fc5",
+    "tests/serve_history_context_fixture.py": "e6e192deec7fac9a99dff56de0e7ff286b26b082d893a3a459213c9cdb5c5e74",
+    "tests/verify_model_context_refresh.cjs": "085f509e948f43317bed8301646b441a4b700e044866fe8ca28a5e80778894ce",
+    "scripts/run_browser_tests.py": "41d118558d060be8aa954f77c9a75925d764ffdcd330d67c8ff19d1ffa88ebc8",
+    "README.md": "a74f90b5c47f98c9f7bb3d964770a144887cb6c8d852ddca909a69ca7d8e9b12",
+    "design.md": "df2c44730e75a57183177d162d6ae4e3087b7812c9e8ddb37f8100e153149279",
+    "docs/reliability/model-context-refresh.md": "c8e9d95636397de7af1019d53bc9040836c37bb492f14d34a1d877e09e2841a0"
+  },
+  "boundaries": [
+    "Already issued requests cannot be recalled; validation happens before later dispatches and does not freeze source availability afterward.",
+    "Context compilation may persist a manifest even if a later cancellation, deadline or lease check blocks dispatch; exposure remains conservative.",
+    "Historical dependencies include rejected attempts and Skill phases; no per-sentence provenance inference.",
+    "Required sources remain a workflow binding; normal conversation knowledge remains optional.",
+    "Frozen Skill instructions/resources and task inputs remain unchanged; native capabilities are not expanded.",
+    "Standalone planners without the Runtime hook retain caller-supplied context behavior.",
+    "Schema retry limits and transport-error failure semantics remain unchanged; no automatic network/auth/timeout retry added.",
+    "Synthetic model transports verify actual inputs, audit and UI behavior, not real model comprehension; no production data or publication."
+  ]
+}

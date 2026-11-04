@@ -2,6 +2,7 @@
 // Explicit disposable preview URL is required: never writes to the daily workspace.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {chromium}=require('playwright');
+const {waitFor}=require('./browser_poll.cjs');
 const base=process.env.SIMPLE_TASK_BASE_URL;if(!base)throw Error('Set SIMPLE_TASK_BASE_URL to an isolated preview.');
 const output=process.env.SIMPLE_TASK_OUTPUT||'/private/tmp/agent-framework-simple-tasks/results';fs.mkdirSync(output,{recursive:true});
 (async()=>{
@@ -24,12 +25,13 @@ const output=process.env.SIMPLE_TASK_OUTPUT||'/private/tmp/agent-framework-simpl
   await page.locator('#task-agent').selectOption(agent.id);
   // Simulate a recoverable request failure without changing persisted task state.
   await page.route('**/api/tasks',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:'暂时无法提交，请重试'})}),{times:1});
-  await page.locator('#create-dialog button[type="submit"]').click();await page.waitForFunction(()=>!taskJourney.saving);assert.equal(await page.locator('#task-goal').inputValue(),'为客户整理一份处理计划，列出时间安排。');assert.equal(await page.locator('#task-agent').inputValue(),agent.id);assert(await page.locator('#create-error').isVisible());pass('缺少智能体会提示，提交失败保留目标与选择，可直接重试');
+  await page.locator('#create-dialog button[type="submit"]').click();await page.waitForFunction(()=>!taskJourney.saving);assert.equal(await page.locator('#task-goal').inputValue(),'为客户整理一份处理计划，列出时间安排。');assert.equal(await page.locator('#task-agent').inputValue(),agent.id);assert(await page.locator('#create-error').isVisible());
+  const failedIntent=await page.evaluate(()=>structuredClone(taskJourney.submission.payload));await page.getByRole('button',{name:'核对提交结果',exact:true}).click();await page.locator('#task-submission-status').getByText('暂未找到已受理任务',{exact:true}).waitFor();pass('缺少智能体会提示，提交失败保留目标与选择，可核对原任务后重试');
   let sent;const posted=page.waitForResponse(r=>r.url().endsWith('/api/tasks')&&r.request().method()==='POST');
   page.on('request',r=>{if(r.url().endsWith('/api/tasks')&&r.method()==='POST')sent=r.postDataJSON();});
-  await page.locator('#create-dialog button[type="submit"]').click();const response=await posted;assert.equal(response.status(),202,await response.text());const created=await response.json();await page.locator('#create-dialog').waitFor({state:'hidden'});
+  await page.getByRole('button',{name:'沿用原编号重试',exact:true}).click();const response=await posted;assert.equal(response.status(),202,await response.text());const created=await response.json();await page.locator('#create-dialog').waitFor({state:'hidden'});assert.deepEqual(sent,failedIntent);
   assert.deepEqual(Object.keys(sent).sort(),['agent_id','agent_revision','clear_draft','goal','request_id'].sort());assert.equal(created.grant.valid,false);
-  await page.waitForFunction(async id=>(await api('/api/runs/'+id)).run.status==='SUCCEEDED',created.run.run_id);await page.waitForFunction(id=>state.detail?.run.run_id===id&&state.detail.run.status==='SUCCEEDED',created.run.run_id);
+  await waitFor(async()=>(await call('/api/runs/'+created.run.run_id)).run.status==='SUCCEEDED','Simple task did not complete');await page.waitForFunction(id=>state.detail?.run.run_id===id&&state.detail.run.status==='SUCCEEDED',created.run.run_id);
   assert((await page.locator('.task-chat-answer').innerText()).includes('处理计划'));assert.equal(await page.locator('.phase-bar').count(),0);pass('一次提交直接开始执行，结果按任务内容显示，未预授予写入权限');
   const duplicate=await call('/api/tasks',sent);assert.equal(duplicate.run.run_id,created.run.run_id);assert.equal((await call('/api/runs')).counts.total,initialTotal+1);pass('重试同一次提交返回同一任务，避免重复创建');
   // Return from agent configuration must preserve the goal.

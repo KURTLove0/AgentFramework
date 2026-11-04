@@ -1,0 +1,264 @@
+{
+  "recorded_on": "2026-10-31",
+  "scope": "Current source: daily schedule, evaluation policy and role contract save confirmation, read-only uncertain-result reconciliation, conflict comparison, scope/route/dialog ownership guards and committed role revision responses. Existing releases unchanged.",
+  "baseline": {
+    "cases": 6,
+    "failed": 6,
+    "log": "/private/tmp/af-settings-baseline.log",
+    "note": "The original callbacks performed writes; the updated harness collects a synchronous frozen payload and controls the separate API response."
+  },
+  "backend": {
+    "passed": true,
+    "tests": 832,
+    "seconds": 164.827,
+    "new_cases": 2,
+    "command": ".venv/bin/python -m unittest discover -s tests -q",
+    "log": "/private/tmp/af-settings-full-20261031.log"
+  },
+  "targeted_backend": {
+    "passed": true,
+    "tests": 50,
+    "seconds": 7.945,
+    "command": "PYTHONPATH=tests .venv/bin/python -m unittest test_workspace_operations test_job_ontology test_agent_domains",
+    "log": "/private/tmp/af-settings-backend-targeted.log",
+    "note": "An earlier targeted invocation omitted tests from PYTHONPATH, causing one test module import error; the corrected targeted run and full discovery both passed."
+  },
+  "ui": {
+    "passed": true,
+    "tests": 417,
+    "seconds": 5.084988375,
+    "new_cases": 25,
+    "command": "npm test",
+    "log": "/private/tmp/af-settings-ui-full-20261031.log"
+  },
+  "browser": [
+    {
+      "suite": "operation-settings",
+      "passed": true,
+      "exit_code": 0,
+      "details": "/private/tmp/af-settings-browser-final-20261031/operation-settings/results.json",
+      "checks": [
+        "每日计划保存成功后读取失败仍展示已保存设置，重试只读且重复提交不产生第二次写入",
+        "每日计划响应丢失后只读核对原设置，无重复保存",
+        "岗位契约断线核对确认同一版本，不生成多余 Agent 版本",
+        "空间评测设置用独立只读接口核对，保留已确认的阈值和窗口",
+        "未提交成功时先读原版本，保留输入后可手动重试，服务端只递增一次版本",
+        "并发版本冲突保留原输入、展示当前值且阻止覆盖",
+        "冲突核对在两种桌面宽度、明暗主题和 200% 字号下可阅读并保持键盘焦点",
+        "切换页面后迟到的岗位设置读取不会打开旧窗口"
+      ],
+      "errors": [],
+      "writes": [
+        "/api/workspace-schedule",
+        "/api/workspace-schedule",
+        "/api/agents",
+        "/api/agents/agent-d26b6a5e207e4ed7/evaluation-contract",
+        "/api/evaluation-policy",
+        "/api/evaluation-policy",
+        "/api/evaluation-policy",
+        "/api/evaluation-policy",
+        "/api/evaluation-policy"
+      ],
+      "layouts_count": 8
+    },
+    {
+      "suite": "reading-interactions",
+      "passed": true,
+      "exit_code": 0,
+      "details": "/private/tmp/af-settings-browser-final-20261031/reading-interactions/results.json",
+      "checks": [
+        "后台同步期间保留已读记录并标注状态，主动翻页立即生效，旧同步回复不会把页面退回",
+        "重新搜索同一关键词会建立新的浏览起点，即使后台读取仍在进行也不会忽略操作",
+        "详情立即显示可关闭的等待窗口，关闭后可读另一条；旧回复不会重开或替换当前记录，关闭恢复原入口焦点",
+        "离开评测页会关闭只读详情，迟到失败不会弹出到新页面",
+        "读取已关闭记录的慢回复不会覆盖随后打开的设置，未保存输入与放弃确认仍有效",
+        "长读取错误在8组桌面深浅色和200%文字下可读，重试与关闭按钮可见，用户内容安全转义",
+        "恢复后重试仍读取原评测，成功后焦点回到记录正文；全部浏览、取消和重试没有提交写入"
+      ],
+      "errors": [],
+      "writes": [],
+      "layouts_count": 8
+    },
+    {
+      "suite": "legacy-modules",
+      "passed": true,
+      "exit_code": 0,
+      "details": "/private/tmp/af-settings-browser-final-20261031/legacy-modules/module-results.json",
+      "checks": [
+        {
+          "id": "agent-task",
+          "detail": "当前表单建立通用智能体；兼容夹具完成授权与回读流程",
+          "passed": true
+        },
+        {
+          "id": "knowledge-publish",
+          "detail": "资料从草稿审核发布，保留来源和版本",
+          "passed": true
+        },
+        {
+          "id": "knowledge-revise",
+          "detail": "知识修订产生草稿，旧发布版本继续保留",
+          "passed": true
+        },
+        {
+          "id": "grounded-result",
+          "detail": "兼容只读问答可查看来源和逐字原文",
+          "passed": true
+        },
+        {
+          "id": "skill-lifecycle",
+          "detail": "Skill 资源编辑、校验、发布与 ZIP 导出可连续完成",
+          "passed": true
+        },
+        {
+          "id": "skill-import-withdraw",
+          "detail": "ZIP 夹具随测试生成，导入与撤回不依赖外部临时文件",
+          "passed": true
+        },
+        {
+          "id": "workflow-run",
+          "detail": "当前工作流按目标执行，无过时的预授权向导",
+          "passed": true
+        },
+        {
+          "id": "workflow-chat",
+          "detail": "对话提案经采用后进入画布审查，未自动执行",
+          "passed": true
+        },
+        {
+          "id": "daily-plan",
+          "detail": "当前每日计划可重复派发并复用同一待启动任务",
+          "passed": true
+        },
+        {
+          "id": "evaluation-loop",
+          "detail": "失败提醒可查看冻结检查、确认并保存空间阈值",
+          "passed": true
+        },
+        {
+          "id": "retrospective",
+          "detail": "兼容任务复盘、审阅、沉淀和资料回跳可完成",
+          "passed": true
+        },
+        {
+          "id": "ontology-loop",
+          "detail": "本体生成、审阅、发布、生效与对象浏览形成闭环",
+          "passed": true
+        }
+      ],
+      "errors": []
+    },
+    {
+      "suite": "daily-recovery",
+      "passed": true,
+      "exit_code": 0,
+      "details": "/private/tmp/af-settings-browser-final-20261031/daily-recovery/results.json",
+      "checks": [
+        "执行器拒绝后保存中断原因，提供显式重试且不重复创建首项任务",
+        "工作台待办显示真实派发中断原因并可返回原计划处理",
+        "修改模板后重试保留原目标和版本，容量不足时完整保存两项任务及自动启动请求",
+        "刷新和桌面深浅色布局保留排队状态，重试不延长原任务授权",
+        "关闭定时期间容量恢复仍自动执行原任务，每项只创建一次草稿"
+      ],
+      "errors": [],
+      "layouts_count": 4
+    },
+    {
+      "suite": "control-routes",
+      "passed": true,
+      "exit_code": 0,
+      "details": "/private/tmp/af-settings-browser-final-20261031/control-routes/results.json",
+      "errors": [],
+      "violations": {
+        "overflow": [],
+        "radius": [],
+        "size": [],
+        "focus": [],
+        "popovers": [],
+        "menu": [],
+        "commandFocus": []
+      },
+      "records_count": 170,
+      "focus_count": 360,
+      "popovers_count": 20
+    }
+  ],
+  "checks": {
+    "syntax": "node --check agent_framework/webui/operations.js",
+    "diff": "git diff --check",
+    "visual_review": [
+      "light 1440",
+      "dark 1440"
+    ],
+    "screenshots": "Copied from final operation-settings browser run"
+  },
+  "limitations": [
+    "Uncertain attempts and draft inputs remain in the open dialog only; reloading the browser does not restore them.",
+    "A read of matching current values confirms current configuration, not a durable receipt for the earlier request. No persistent request IDs were introduced.",
+    "Read-before-retry preserves the original revision; database revision checks reject a second update if the first request completed meanwhile.",
+    "Conflict resolution retains input and shows the latest configuration; closing and reopening is required to edit the latest version.",
+    "Layout validation for this slice covers 1024 and 1440 desktop widths, light/dark themes and 200% text."
+  ],
+  "files": [
+    {
+      "path": "agent_framework/agents.py",
+      "sha256": "f30fd4c52fbfbe217d97bed65529818e93c92ec9affa135ff28185560029d958"
+    },
+    {
+      "path": "agent_framework/web.py",
+      "sha256": "35c3a099485d474c084d3796f12858c4cdc21bcebaaccef38a132bbcd8e3861b"
+    },
+    {
+      "path": "agent_framework/webui/operations.js",
+      "sha256": "714ec704771b0f244465e606a38c41f15153848059bd08e3a92679858062c23a"
+    },
+    {
+      "path": "agent_framework/webui/operations.css",
+      "sha256": "735f629a161f9ea71ea18a3a02ad532d3a432773928cbace8dd63bbbebb1d7fb"
+    },
+    {
+      "path": "tests/test_operation_settings_interactions.js",
+      "sha256": "f84230ef5aac15bfead6322b6d4ae97161c02f134401c6df0a2531c8c66ad698"
+    },
+    {
+      "path": "tests/test_evaluation_record_interactions.js",
+      "sha256": "ab767030027ae1aafd192784edd2ed4cbbbb12392b0339013d309265220d4526"
+    },
+    {
+      "path": "tests/test_workspace_operations.py",
+      "sha256": "957b6a2e86eb2dff6775aa8095e2c896128addf15694f29a0151890db6f0eb1a"
+    },
+    {
+      "path": "tests/verify_operation_settings.cjs",
+      "sha256": "1c05a5e34849d0cacd6f059a402437680287b6b7c539b7a84d2afc538349b8b6"
+    },
+    {
+      "path": "scripts/run_browser_tests.py",
+      "sha256": "5d1f66b398fab49cda3d985653b2d741c86d5d3d843d3e7f2e13e482b3440400"
+    },
+    {
+      "path": "docs/operations/settings-recovery.md",
+      "sha256": "4ad972012ae87c5fd0888fe2278cf53bcca6d260e36c9e9176b0a381e7eab370"
+    },
+    {
+      "path": "docs/operations/settings-recovery-light.png",
+      "sha256": "60ac840d2a784c99774e1c2af6ec5ef2e408b71f6547650199f9f786b5abb848"
+    },
+    {
+      "path": "docs/operations/settings-recovery-dark.png",
+      "sha256": "fe71ded42c0c2d4ba9a42e37d2526f917f01330ed7112db9c48a37bdd5c58ad1"
+    },
+    {
+      "path": "docs/operations/implementation.md",
+      "sha256": "f94623b39a4e131f08f0ab528bfd12469d986e7099a732b3fa5057b0edca907f"
+    },
+    {
+      "path": "README.md",
+      "sha256": "2d731362778ea1399cd06b79f6146f07ccda26fcb950be0ec3274617ad6100ab"
+    },
+    {
+      "path": "design.md",
+      "sha256": "3e39eae5a44b6cd10d87138b4059bf60a35fa580f2fd2b46e0eb5ea7d9af5f82"
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Expose independent-task reuse from the main conversation, prefill its initial goal, explain current versus frozen agent versions, keep source lineage, protect existing drafts and unresolved submissions, and fence asynchronous new-task/configuration-return preparation by scope and request ownership.",
+  "prior_behavior": "The legacy run detail exposed copy-run, but the main conversation did not. The compact form omitted old/current agent comparison. New-task and configuration-return reads could apply after a route or workspace change; copying a source also allowed autosave to replace an existing unrelated draft without a separate choice.",
+  "backend": {
+    "new_tests": 7,
+    "related": {
+      "tests": 40,
+      "passed": 40,
+      "duration_seconds": 3.903,
+      "log": {
+        "path": "/private/tmp/af-task-reuse-backend-related-verified.log",
+        "sha256": "7887d3f767d735fd28c6619c0937ae40862c05d5ce84621319cd72ac6d29ac6e"
+      }
+    },
+    "full": {
+      "command": ".venv/bin/python -m unittest discover -s tests -p 'test_*.py'",
+      "tests": 1306,
+      "passed": 1306,
+      "duration_seconds": 231.459,
+      "log": {
+        "path": "/private/tmp/af-task-reuse-backend-full.log",
+        "sha256": "adf46077f557dedb0543a77ffa05fd51ab59a7391d102d6fc9a27b5da09a5d0c"
+      }
+    },
+    "coverage": [
+      "Independent task ID with current agent and empty conversation history",
+      "Original run and events unchanged",
+      "No inherited grant or failure scenario",
+      "Existing settings draft retained",
+      "Idempotent repeated copy submission",
+      "Stale agent configuration rejected",
+      "Archived source with a different available agent",
+      "Source principal/workspace access",
+      "Offline static resource"
+    ],
+    "implementation": "Reuses the existing accepted-task/source_run_id contract; backend application changes only register the new static script. The related suite has 40 tests; an earlier 50-test invocation inadvertently rediscovered an imported test class before the import was changed to a module alias."
+  },
+  "frontend": {
+    "new_tests": 15,
+    "related_before_final_wording": {
+      "tests": 39,
+      "passed": 39,
+      "failed": 0,
+      "duration_ms": 847.658166,
+      "log": {
+        "path": "/private/tmp/af-task-reuse-frontend-related-verified.log",
+        "sha256": "27deefbe8709535b2906a68a75392b6055d9d10c28a75eec9c67de6c0a059ccd"
+      }
+    },
+    "full": {
+      "command": "npm test",
+      "tests": 940,
+      "passed": 940,
+      "failed": 0,
+      "duration_ms": 11154.693542,
+      "log": {
+        "path": "/private/tmp/af-task-reuse-frontend-full-verified.log",
+        "sha256": "3f32751ae70132002c1097c9e83f99ccfebb2562c0d101c4b0c0b287d1d83936"
+      }
+    },
+    "coverage": [
+      "Root-only action and source link",
+      "Old/current agent version explanation and escaping",
+      "Switching or unavailable agent",
+      "Unrelated draft preservation and explicit replacement/adoption",
+      "Open editor and pending configuration preserved",
+      "Unresolved submission precedes new prefill",
+      "Fixed workspace read context",
+      "Tenant/principal/workspace/route/task fencing",
+      "Old completion cannot clear a newer preparation",
+      "Duplicate clicks",
+      "Configuration return and failure retry"
+    ],
+    "fixture_change": "The journey fixture is importable without rerunning its scenarios. A legacy test now closes the existing form before opening a genuinely new editor; calling newTask while its editor is already open now preserves and focuses that editor.",
+    "initial_fixture_log": {
+      "path": "/private/tmp/af-task-reuse-frontend-related-first.log",
+      "sha256": "252cec75fc6361a7136284c884f2a5b50d62e4a6c24b42d06542186b1cbb88f6"
+    }
+  },
+  "browser": {
+    "passed_suites": {
+      "task-reuse": {
+        "result": {
+          "path": "/private/tmp/af-task-reuse-browser-verified/task-reuse/results.json",
+          "sha256": "c8009bde8f39398a6c17538a409da6dc95660fede848657c4764e40ed55fdd10"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-reuse-browser-verified/results.json",
+          "sha256": "a3fb69ba9d698c9454fc58036c311927bf72e247f462688ed0339aa6e588e194"
+        },
+        "checks": [
+          "任务对话入口带入初始目标和当前智能体版本，清楚说明范围与配置变化；已有设置草稿保持独立，准备过程不提交任务",
+          "明确开始后获得独立新任务、空对话历史和当前配置，保留来源链接；原任务、对话草稿及已有设置草稿均不变",
+          "原智能体归档后必须重新选择；可明确恢复旧草稿或保存复用设置，刷新恢复保留来源且不冒充历史配置版本",
+          "迟到配置不能覆盖新任务窗口；准备失败不打开空表单，解除故障后可重试；八种布局的焦点与边界通过检查"
+        ],
+        "errors": [],
+        "layout_cases": 8,
+        "enlarged_font_pixels": 28
+      },
+      "task-drafts": {
+        "result": {
+          "path": "/private/tmp/af-task-reuse-browser-verified/task-drafts/results.json",
+          "sha256": "0a242b0876f559823f484de53d91604b063c726796fa10c50fe217c8a266e008"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-reuse-browser-verified/results.json",
+          "sha256": "a3fb69ba9d698c9454fc58036c311927bf72e247f462688ed0339aa6e588e194"
+        },
+        "checks": [
+          "两页面保存冲突保留本页输入，核对后仍防止覆盖再次更新的草稿，显式选择才能替换设置",
+          "过期确认不能放弃新草稿，重新检查只读取内容，再次明确确认才会清理",
+          "提交过期草稿仍创建本页任务，同时保留其他页面的新草稿与界面回执",
+          "放弃已提交但回执丢失时保留输入，再次请求也不能清理后来创建的新草稿"
+        ],
+        "errors": []
+      },
+      "task-submissions": {
+        "result": {
+          "path": "/private/tmp/af-task-reuse-browser-first/task-submissions/results.json",
+          "sha256": "91e2e5539750beb38c053dfc7015ed513b83ea0108d5c97d61dce78c35423747"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-reuse-browser-first/results.json",
+          "sha256": "73504c8cac1ccb139d77b68319527f84fc5065490dd913de42f7006c7ea10850"
+        },
+        "checks": [
+          "回执丢失后继续编辑不另建任务，核对并打开同一已受理记录",
+          "未受理时显式采用当前配置并保留目标，核对后再变化仍拒绝旧版本，重试编号不变",
+          "刷新后恢复待核对编号，读取不会提交，明确另建后才使用新编号创建任务",
+          "暂未找到之后原请求晚到受理，继续提交仍共用原编号，冲突后可查回原任务且不重复创建"
+        ],
+        "errors": []
+      },
+      "task-exports": {
+        "result": {
+          "path": "/private/tmp/af-task-reuse-browser-first/task-exports/results.json",
+          "sha256": "8a0d6c229fc2092ef066de445978eb6dcec6dbb2a0985c9e630cecc43a905a43"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-reuse-browser-first/results.json",
+          "sha256": "73504c8cac1ccb139d77b68319527f84fc5065490dd913de42f7006c7ea10850"
+        },
+        "checks": [
+          "通过真实下载保存并离线校验完整任务包，含所有轮次和两次修改；排队、取消、未保存内容边界正确，两个草稿保留",
+          "下载失败后显示具体原因并保留明确重试入口，重试只下载一次且键盘焦点可继续操作",
+          "切换任务中止旧下载，迟到响应不会替新任务触发文件下载或成功提示",
+          "执行后重新下载包含真实采用的修改内容和完整执行记录；八种主题、宽度及正常/28px 字号检查通过，下载没有写请求"
+        ],
+        "errors": []
+      }
+    },
+    "iterations": [
+      {
+        "result": {
+          "path": "/private/tmp/af-task-reuse-browser-first/task-reuse/failure.json",
+          "sha256": "d6fe040a094595bd7f717c667efb89a648fc93c23ccae60a2d1bd3c648e1b871"
+        },
+        "note": "Reuse and isolation assertions passed; the new verifier omitted archived:true from the existing agent archive API. The fixture request now includes the required explicit value."
+      },
+      {
+        "result": {
+          "path": "/private/tmp/af-task-reuse-browser-second/task-reuse/results.json",
+          "sha256": "ac3d7f308eb8242241d1b1d749f5b0acd816f2dcee65f51416d5d0ae28c489b6"
+        },
+        "note": "All functional assertions passed. Visual review identified misleading wording treating an existing saved draft as a concurrent conflict. Final UI distinguishes the state, collapses saved details until requested and names the replacement action explicitly."
+      }
+    ],
+    "screenshots": [
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-reuse-light.png",
+        "sha256": "589f80704387f29ed672365d779544d11227c3cc766982da9c6eb3b15816f0ff"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-reuse-dark.png",
+        "sha256": "5475f8e62e73afdb6f41adf6e48542adbb158eb11d58145c79a9bae7152e5810"
+      }
+    ],
+    "visual_review": "Inspected final light/dark reuse dialogs, old/current configuration comparison, saved-draft disclosure, explicit replacement/restoration options, goal/agent controls and fixed footer. Eight layouts verify 1024/1440 widths and actual 28px body/button text, keyboard focus, viewport bounds and no horizontal body overflow.",
+    "isolation": "Temporary Mock tasks. Completes a two-turn original, updates its agent, creates a new task through the real form, compares original run/events and independent history, follows the source link, archives the original agent, explicitly saves/restores settings, reloads, delays one configuration read and injects one 503 response. Existing conversation and settings drafts remain separate; no real model or business calls."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-task-reuse-source-candidate-20261103",
+    "build_log": {
+      "path": "/private/tmp/af-task-reuse-build.log",
+      "sha256": "d9e8f9e6bb6f7156384cc3bc5661edda87122c0cdc50931e95a9356777bed005"
+    },
+    "verification": {
+      "path": "/private/tmp/af-task-reuse-package-check.json",
+      "sha256": "eff5aeef81203613a2536fc81df84e1b50b1c1065e57b3ceec8751e6c27b0d76"
+    },
+    "program_files": 161,
+    "bundle": {
+      "path": "/private/tmp/af-task-reuse-source-candidate-20261103/agent-framework-1.3.0.tar.gz",
+      "sha256": "f671aa83f4cd3488e9d4e09792ea1fdafac58e8bd49cac51c5aea341e3224883"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-task-reuse-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "558504b8765cfc5d94dd3e8de94e7dcea010c006cfa04bd3330f263d26c1aa24"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-task-reuse-source-candidate-20261103/SHA256SUMS",
+      "sha256": "36711d588e85b8a20313a796d2ad3935c06eb56db3b1b289f7b0806091e9d62d"
+    },
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/web.py": "1611561afeab3731155134efe6690ac6f47401bc4cba55a8e9c5ea0775094eaa",
+    "agent_framework/webui/app.js": "46845aed9128788b5a62aabeada0f97415bc30375f721f66d95ac5dddb21665e",
+    "agent_framework/webui/journeys.js": "92b36f8f8fdf55dfe7dc85e981caa1ccb9f4a6e4fcd25de44ad5b21c2c6d9d0f",
+    "agent_framework/webui/task_reuse.js": "73e34e9faf60534f1c2996d23ddb4f2191f7f0ec33ee233dd44bc308a0aff806",
+    "agent_framework/webui/task_conversation.js": "278288a2fec9d2eff5459f548a7aaf485d79e09bb2531a9cf944ca19e30442f4",
+    "agent_framework/webui/task_conversation.css": "8283415e01906f8a21dec5eb8a39a21c717e1b1e493b625a224371f35b27adf0",
+    "agent_framework/webui/index.html": "ef08f66fc7b9099948fc80d94bdcbc33945e31e9409563bb981de0f88030ee94",
+    "tests/test_task_reuse.py": "ba01216dad0f95015315c949457efba8541c5d380b9aa128598169c0b6e68f28",
+    "tests/test_task_reuse_interactions.js": "a3393c893dc4777066e1f569a0a4df386b4461a699dddcdfcba0149e2a00fe7f",
+    "tests/test_journey_interactions.js": "4a6c6bc8b7c290e3021fbebec41d17961a6d5acef9e29e58dee5837d8121ea44",
+    "tests/verify_task_reuse.cjs": "c6416727a70433505f2ae933baa3f17caacb0c93e85cef5488c22e233453e5a7",
+    "tests/serve_project_review_fixture.py": "dddbd230fe87e39a8e28f71998597c645b1fbab0fb9da46aca882f561de23a2f",
+    "scripts/run_browser_tests.py": "f68c2bbfbeb7a3e0fe08432272620a820e83bfb456232740cb2e45de47237c58",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "44a877a87852ef8a1ebc4c4bd24934ae9c7e23a2fa3d24b7f0a347c5f90f2a46",
+    "design.md": "1de13e5b2415d7323cce00f24d349b75b5a480a5087a30e32049570ca1aa3faa",
+    "docs/reliability/task-reuse.md": "920b80d6db75edefddcff1e881315a52d83bcb87bb47675a3765834b4e2f3b7d"
+  },
+  "limits": [
+    "Conversation reuse copies the initial goal, not later messages, replies, edit history or execution state. It is separate from retrying a failed turn in the existing conversation.",
+    "The compact form uses the current selected agent and existing new-task defaults. It does not clone the old frozen configuration or expose legacy advanced budgets.",
+    "Saved settings retain source_run_id but not a frozen original-agent revision. Restored drafts explicitly say the original version can be inspected in the source task.",
+    "New tasks expose a link back to the source. No new reverse-lineage catalog or import/fork of the entire conversation is added.",
+    "Unrelated saved settings pause autosave for the copied form; its edited text is kept in the current editor until explicit replacement or task submission. Existing unload/close guards still apply.",
+    "A pending accepted-task receipt or retained configuration journey is handled before a different source prefill; no new request ID or duplicate task is created automatically.",
+    "Invalidation fences late read results. Already-issued configuration reads may still finish server-side; this is not transport-level cancellation.",
+    "Desktop coverage is two widths and enlarged form text, not all devices or uniform browser zoom.",
+    "Focused/full counts overlap. Version remains 1.3.0; no publication or repeated fresh installation."
+  ]
+}

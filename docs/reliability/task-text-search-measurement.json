@@ -1,0 +1,37 @@
+{
+  "tasks": 80,
+  "turns": 320,
+  "reply_padding_bytes_per_turn": 32768,
+  "audit_padding_bytes_per_event": 32768,
+  "measurements": [
+    {
+      "query_kind": "one header",
+      "seconds": 0.0791,
+      "matches": 1,
+      "page_rows": 1,
+      "response_bytes": 1127
+    },
+    {
+      "query_kind": "followup bodies",
+      "seconds": 0.0789,
+      "matches": 80,
+      "page_rows": 50,
+      "response_bytes": 53926
+    },
+    {
+      "query_kind": "saved reply bodies",
+      "seconds": 0.1439,
+      "matches": 80,
+      "page_rows": 50,
+      "response_bytes": 57376
+    },
+    {
+      "query_kind": "no match",
+      "seconds": 0.0803,
+      "matches": 0,
+      "page_rows": 0,
+      "response_bytes": 187
+    }
+  ],
+  "scope": "Temporary SQLite database, mock synthetic records, one read per query; timing is an observation, not a capacity guarantee."
+}

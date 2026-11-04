@@ -1,0 +1,275 @@
+{
+  "date": "2026-11-04",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Add validated read-only backup contents counts and paged workspace catalog to verify-backup; exercise installed backup/inspect/restore CLI and restored-server state and replay behavior.",
+  "new_tests": 9,
+  "before": {
+    "tests": 7,
+    "failed": 7,
+    "reason": "Original verifier has no contents summary. Pagination and malformed-catalog tests were added after this baseline.",
+    "log": {
+      "path": "/private/tmp/af-backup-contents-before-20261104.log",
+      "sha256": "0f930c434aad6ecc4990ade5f196d8a3ffb991fc80e1e51ae5920b6a6fda2d67"
+    }
+  },
+  "backend": {
+    "full": {
+      "tests": 1401,
+      "passed": 1401,
+      "failed": 0,
+      "duration_seconds": 236.656,
+      "log": {
+        "path": "/private/tmp/af-backup-contents-backend-full-20261104.log",
+        "sha256": "6fc6d0693ee6b7d0842ae5c0d5364af52d46e502c1fd346d79cad510de659ba2"
+      }
+    },
+    "related": {
+      "tests": 58,
+      "passed": 58,
+      "failed": 0,
+      "duration_seconds": 6.041,
+      "log": {
+        "path": "/private/tmp/af-backup-contents-related-verified-20261104.log",
+        "sha256": "9e8994c2ac3c28772c60d1cfeffb9717c5e7ba17718c98eaa7a4c337cfc276aa"
+      }
+    },
+    "related_resource_warnings_as_errors": true,
+    "initial_related_run": {
+      "log": {
+        "path": "/private/tmp/af-backup-contents-related-20261104.log",
+        "sha256": "a7cae628de7dfae296f08f1be978fcc9397dd7096b701dc8b554ce12d0b1adad"
+      },
+      "reason": "Workflow-chat tests import the test_workflows fixture by top-level name; reran the full related set with PYTHONPATH=tests."
+    }
+  },
+  "frontend": {
+    "source_changed": false,
+    "full_unit_suite_repeated": false,
+    "reason": "Application changes are limited to backup inspection and CLI; actual installed browser recovery is covered after restoration."
+  },
+  "candidate": {
+    "bundle": {
+      "path": "/private/tmp/af-backup-contents-source-candidate-20261104/agent-framework-1.3.0.tar.gz",
+      "sha256": "63fb13caeb856437f97633617107458332af8d4bfa146c7916a42ed44ad845b7"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-backup-contents-source-candidate-20261104/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "f5ffc035c740d5e59344ba6e6355506b0a7da73fe6421752349293c108dfcbea"
+    },
+    "build_log": {
+      "path": "/private/tmp/af-backup-contents-build-20261104.log",
+      "sha256": "12c320b8990f7a8787c4e9f2adce65c45f89d76bb0eeb1fef1b0c1e4e0913a26"
+    },
+    "package_check": {
+      "application_files": 166,
+      "changed_application_files": [
+        "agent_framework/backups.py",
+        "agent_framework/cli.py"
+      ],
+      "matches_saved_source": true,
+      "bundle_sha256": "63fb13caeb856437f97633617107458332af8d4bfa146c7916a42ed44ad845b7",
+      "wheel_sha256": "f5ffc035c740d5e59344ba6e6355506b0a7da73fe6421752349293c108dfcbea"
+    },
+    "package_check_evidence": {
+      "path": "/private/tmp/af-backup-contents-package-check-20261104.json",
+      "sha256": "c2803e6cdfda95dc4b7d56728324c4d6b4907be1c948fe8719dc099e97146c2d"
+    },
+    "published": false
+  },
+  "installed": {
+    "verified_at": "2026-11-04T02:30:38.326977+00:00",
+    "artifact": "/private/tmp/af-backup-contents-source-candidate-20261104/agent-framework-1.3.0.tar.gz",
+    "artifact_sha256": "63fb13caeb856437f97633617107458332af8d4bfa146c7916a42ed44ad845b7",
+    "version": "1.3.0",
+    "scope": "bundled-install-and-start-scripts",
+    "fresh_offline_install": true,
+    "all_modules": {
+      "version": "1.3.0",
+      "modules": 85,
+      "yaml_version": "6.0.3"
+    },
+    "ui_resources_matching_wheel": 70,
+    "clean_startup_runs": 0,
+    "agent_save_replay": true,
+    "task_submission_replay_and_lookup": true,
+    "isolated_business_worker": true,
+    "verified_simulated_drafts": 1,
+    "installed_export_verifier": true,
+    "caller_code_executed": false,
+    "test_data": "temporary-isolated-directories",
+    "restart_checks": [
+      {
+        "draft_state": "saved",
+        "draft_revision": 3,
+        "new_process_session": true,
+        "graceful_shutdown": true,
+        "settings_revision": 2,
+        "settings_and_receipts_preserved": true,
+        "agent_and_receipt_preserved": true,
+        "task_history_and_receipt_preserved": true,
+        "task_count_after_replay": 2,
+        "simulated_drafts_after_replay": 1
+      },
+      {
+        "draft_state": "discarded",
+        "draft_revision": 4,
+        "new_process_session": true,
+        "graceful_shutdown": true,
+        "settings_revision": 2,
+        "settings_and_receipts_preserved": true,
+        "agent_and_receipt_preserved": true,
+        "task_history_and_receipt_preserved": true,
+        "task_count_after_replay": 2,
+        "simulated_drafts_after_replay": 1
+      }
+    ],
+    "backup_restore_checks": {
+      "installed_cli": true,
+      "contents": {
+        "version": 1,
+        "counts": {
+          "execution_records": 2,
+          "conversations": 1,
+          "agents": 1,
+          "workspaces": 1,
+          "workflows": 0,
+          "workflow_runs": 0,
+          "runtime_configurations": 1,
+          "saved_task_drafts": 0,
+          "business_drafts": 1
+        },
+        "workspaces": {
+          "total": 1,
+          "offset": 0,
+          "limit": 100,
+          "has_more": false,
+          "next_offset": null,
+          "items": [
+            {
+              "tenant": "delivery-tenant",
+              "id": "workspace-default",
+              "project_id": "project-demo",
+              "name": "默认工作空间",
+              "deleted": false
+            }
+          ]
+        }
+      },
+      "original_databases_unchanged": true,
+      "existing_target_rejected_unchanged": true,
+      "restored_server_started": true,
+      "settings_drafts_history_receipts_and_replays_preserved": true,
+      "browser_uses_restored_data": true
+    },
+    "dependency_wheels": {
+      "pyyaml-6.0.3-cp314-cp314-macosx_11_0_arm64.whl": "34d5fcd24b8445fadc33f9cf348c1047101756fd760b4dacb5c3e99755703310"
+    },
+    "browser_results": "/private/tmp/af-backup-contents-installed-20261104-browser/results.json"
+  },
+  "installed_report": {
+    "path": "/private/tmp/af-backup-contents-installed-20261104.json",
+    "sha256": "92a0ba529c36e85cc6b1a14de05f60cf9f0e3392c814a93dad9c3b937b1e5a1b"
+  },
+  "installed_log": {
+    "path": "/private/tmp/af-backup-contents-installed-20261104.log",
+    "sha256": "92a0ba529c36e85cc6b1a14de05f60cf9f0e3392c814a93dad9c3b937b1e5a1b"
+  },
+  "browser": {
+    "result": {
+      "checks": [
+        "回执丢失后继续编辑不另建任务，核对并打开同一已受理记录",
+        "未受理时显式采用当前配置并保留目标，核对后再变化仍拒绝旧版本，重试编号不变",
+        "刷新后恢复待核对编号，读取不会提交，明确另建后才使用新编号创建任务",
+        "暂未找到之后原请求晚到受理，继续提交仍共用原编号，冲突后可查回原任务且不重复创建"
+      ],
+      "errors": [],
+      "posts": [
+        {
+          "request_id": "487bba03-aa84-44d9-a96b-41a0c7ec3a59",
+          "agent_revision": 1
+        },
+        {
+          "request_id": "bec9a082-b341-4b2a-bd53-d44f9d7c4666",
+          "agent_revision": 1
+        },
+        {
+          "request_id": "bec9a082-b341-4b2a-bd53-d44f9d7c4666",
+          "agent_revision": 2
+        },
+        {
+          "request_id": "bec9a082-b341-4b2a-bd53-d44f9d7c4666",
+          "agent_revision": 3
+        },
+        {
+          "request_id": "a539e5ce-ef25-4332-9bab-04a1eecc5498",
+          "agent_revision": 3
+        },
+        {
+          "request_id": "c3f04c33-5297-4f9f-9309-b05b841433d3",
+          "agent_revision": 3
+        },
+        {
+          "request_id": "6b5d975a-108a-4a4e-af4b-0de2617d9d2c",
+          "agent_revision": 3
+        },
+        {
+          "request_id": "6b5d975a-108a-4a4e-af4b-0de2617d9d2c",
+          "agent_revision": 3
+        }
+      ],
+      "total": 7
+    },
+    "evidence": {
+      "path": "/private/tmp/af-backup-contents-installed-20261104-browser/results.json",
+      "sha256": "5c203ef1ebe38a1453f032db8770740cfec60c0cfdf5cab08f0d6c4579bb9bb0"
+    },
+    "screenshots": [
+      {
+        "path": "/private/tmp/af-backup-contents-installed-20261104-browser/accepted-light.png",
+        "sha256": "7c7822452882700d9054d02085c475f385d745644052e31dfd6739ea3ed63e1b"
+      },
+      {
+        "path": "/private/tmp/af-backup-contents-installed-20261104-browser/restored-dark.png",
+        "sha256": "23ae0b233219af66b390d782a280d1296babb21ea7b1dc80f51c2fbc8fcc50a9"
+      }
+    ]
+  },
+  "historical_artifacts": {
+    "agent-framework-1.1.0.tar.gz": "78fda0c93a5ce6b091183a0e47c6120f1a3f18cbeec1251cd2d33b54326894bc",
+    "agent-framework-1.2.0.tar.gz": "73f6c5f15aa5546418810f1404a49a91ba87fcad5a43f01aa27d0c38556af7be",
+    "agent-framework-1.3.0.tar.gz": "32004453ac6355f6fd272edac325d743a21a1f0467ae9048ec27799bb0efbe08",
+    "bounded_agent_mvp-1.1.0-py3-none-any.whl": "50334ab2c04575706f49ead28d3fa7a731f5a726636e152b8a68142d093ec869",
+    "bounded_agent_mvp-1.2.0-py3-none-any.whl": "43cf6789ab121b46500648b222daf637187033db2fbb1148dcad53a3dc71259a",
+    "bounded_agent_mvp-1.3.0-py3-none-any.whl": "ada65ea8468cb675263ddbab69c452de1654612258fb4e574747fb184aaaf83a"
+  },
+  "source_files": {
+    "agent_framework/backups.py": "7556a251fce49e897988f47a2a64f442213e57a284f1b7e10e57c2c29fc91007",
+    "agent_framework/cli.py": "856dde3b5e0f45a4896ca783b9abd3bbdeb07116d61f1f4ea38f38d96a5f2874",
+    "tests/test_backup_contents.py": "83e6a0cd26265c57d28b036223b9738723df498c69a28270a2af181638be4372",
+    "tests/test_backups.py": "fcdf9f0f510897e4d6a4206cdc9c2632de98937617e76bfcaf06f9a5452af460",
+    "tests/test_backup_durability.py": "af74d6e05dcfb9c8941660df8e45206f01c2fc2e4f8a5348104799e70ddd251b",
+    "tests/test_learning_generation.py": "929ab3850fd5b87359ece7a23bee4c7fbd0c8bb579653dbdfa570f4ff6279979",
+    "tests/test_workflow_chat_requests.py": "b39a58e16db5108e4aba487d13ee4ff0f8661f560affad6041f40b79805edbe5",
+    "tests/test_release_delivery.py": "ba909b0b31f7db19b699a4081d21b431aac23ba7b0ce919bbdddba674fcfd6d1",
+    "tests/verify_task_submissions.cjs": "30e60f6a4d303ffd90e0d901fe09c7eaed2eda40e039a1c60887c7139cdbe9cc",
+    "scripts/verify_release.py": "d80c4e7d838d99914aae3be302d343ffec8c67eee1177efff2beb0ec081c62ee",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "scripts/install.sh": "94d7e77d3f56ca6f17916c4b2d793e2298b425a5e5a75efd969ec34a8a7a2a1d",
+    "scripts/start.sh": "70a6931ef2d9993f9764c14593a3cec3b7bf9c8c50ed80082f8b850766c4bc54",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "1886f64838833ea255758f81c2481fc23cc2aac4a7c99bc98f10e70299bcc600",
+    "design.md": "c4db6b41f37907f3e7f768f2cca0d336de7e4b11cda53c771b34fb204ae47a7a",
+    "docs/data-protection/implementation.md": "e5b05b272f0579fe765d57cc06e61fba7f5b8a8faa70ab3fec351ba1f8d3f76d",
+    "docs/data-protection/backup-contents.md": "eebf1959067d4cd041396896d6c35dbce2d7bcdccfdbccd54395ebaa304e7c01",
+    "docs/release/source-delivery.md": "c110ecd835b833af2abb02845f2d1f203a16438280f63d30f595ad97e157e5d8"
+  },
+  "limits": [
+    "CLI maintenance access covers every tenant and principal in the backup; no ordinary web download added.",
+    "Execution record counts include materialized turns; conversation counts count registered roots.",
+    "Workspace preview is paged at 100 rows; totals cover the whole snapshot.",
+    "Server task drafts are included, browser-local unsaved editing and recovery records are outside the backup.",
+    "Installed validation used macOS / Python 3.14.3, temporary data and mock execution only.",
+    "Graceful restart and backup restoration do not prove power-loss or cross-version migration behavior."
+  ]
+}

@@ -2,22 +2,22 @@
 import json
 import os
 from pathlib import Path
-import queue
 import re
-import signal
 import subprocess
 import tempfile
 import threading
 import time
+from concurrent.futures import Future, TimeoutError
+from copy import deepcopy
 
 from .contracts import canonical
 from . import __version__
 from .store import Store
-from .llm import qoder_command, qoder_environment
+from .llm import ModelError, qoder_command, qoder_environment
+from .model_discovery import DirectoryProcess, ModelDiscoveryError, run_directory_command
 
 
-class ModelDiscoveryError(ValueError):
-    pass
+WAIT_TIMEOUT=25
 
 
 class ModelCatalog:
@@ -25,6 +25,7 @@ class ModelCatalog:
         self.store=Store(Path(data_dir)/'runtime.sqlite3')
         self.tenant=tenant
         self.lock=threading.Lock()
+        self.inflight={}
         with self.store.connect() as db:
             db.execute('CREATE TABLE IF NOT EXISTS model_catalog (tenant TEXT, provider TEXT, data TEXT, fetched REAL, PRIMARY KEY(tenant,provider))')
 
@@ -36,21 +37,45 @@ class ModelCatalog:
     def list(self, provider, refresh=False):
         if provider not in {'codex','cursor','qoder','mock'}:raise ValueError('不支持的运行时')
         if provider=='mock':return {'provider':'mock','models':[{'id':'builtin','name':'内置确定性规划器','efforts':[]}],'source':'built-in','cached':False,'fetched_at':None}
+        cached=self.cached(provider)
+        if cached and not refresh and time.time()-cached['fetched_at']<300:return cached
         with self.lock:
-            cached=self.cached(provider)
-            if cached and not refresh and time.time()-cached['fetched_at']<300:return cached
+            pending=self.inflight.get(provider)
+            owner=pending is None
+            if owner:
+                # Another query may have completed since the fast cache read.
+                if not refresh:
+                    cached=self.cached(provider)
+                    if cached and time.time()-cached['fetched_at']<300:return cached
+                pending=Future();self.inflight[provider]=pending
+        if not owner:
+            try:return deepcopy(pending.result(timeout=WAIT_TIMEOUT))
+            except TimeoutError as exc:raise ModelDiscoveryError('模型目录仍在读取，请稍后重试') from exc
+        try:
             try:
                 models={'codex':self._codex,'cursor':self._cursor,'qoder':self._qoder}[provider]()
                 if not models:raise ModelDiscoveryError('CLI 未返回可选择的模型')
-            except (OSError,subprocess.SubprocessError,ValueError,KeyError,TypeError,AttributeError,queue.Empty) as exc:
+            except (OSError,subprocess.SubprocessError,ValueError,KeyError,TypeError,AttributeError,ModelError) as exc:
                 # A previous list remains available for display but cannot pretend to be fresh.
-                if provider=='qoder' and isinstance(exc,ModelDiscoveryError):raise
-                raise ModelDiscoveryError('无法读取 '+provider+' 模型列表，请检查 CLI 登录态、网络与版本后重试') from exc
+                message=str(exc) if isinstance(exc,ModelDiscoveryError) else '无法读取 '+provider+' 模型列表，请检查 CLI 登录态、网络与版本后重试'
+                failure=getattr(exc,'cleanup_failure',None)
+                if failure:message+='；查询进程清理未确认，请先在终端检查 CLI 进程'
+                error=ModelDiscoveryError(message)
+                if failure:error.cleanup_failure=failure
+                raise error from exc
             data={'provider':provider,'models':models,'source':{'codex':'codex app-server model/list','cursor':'cursor-agent models','qoder':qoder_command()+' --list-models'}[provider]}
             now=time.time()
             with self.store.connect() as db:
                 db.execute('INSERT OR REPLACE INTO model_catalog VALUES(?,?,?,?)',(self.tenant,provider,canonical(data),now))
-            return {**data,'fetched_at':now,'cached':False}
+            result={**data,'fetched_at':now,'cached':False}
+            pending.set_result(result)
+            return deepcopy(result)
+        except BaseException as exc:
+            pending.set_exception(exc)
+            raise
+        finally:
+            with self.lock:
+                if self.inflight.get(provider) is pending:del self.inflight[provider]
 
     def require(self, provider, model):
         if provider=='mock':return
@@ -61,8 +86,8 @@ class ModelCatalog:
     @staticmethod
     def _qoder():
         with tempfile.TemporaryDirectory(prefix='agent-qoder-models-') as directory:
-            result=subprocess.run([qoder_command(),'--setting-sources','','--list-models','--output-format','json'],
-                                  cwd=directory,capture_output=True,text=True,timeout=20,env=qoder_environment())
+            result=run_directory_command([qoder_command(),'--setting-sources','','--list-models','--output-format','json'],
+                                         cwd=directory,env=qoder_environment())
         if result.returncode:
             if 'not logged in' in result.stderr.lower() or 'unauthenticated' in result.stderr.lower():
                 raise ModelDiscoveryError('Qoder CLI 尚未登录，请在终端执行 '+qoder_command()+' login 后刷新模型。')
@@ -107,8 +132,8 @@ class ModelCatalog:
 
     @staticmethod
     def _cursor():
-        result=subprocess.run(['cursor-agent','models'],capture_output=True,text=True,timeout=20,env={**os.environ,'NO_COLOR':'1'})
-        if result.returncode:raise ModelDiscoveryError('Cursor model lookup failed')
+        result=run_directory_command(['cursor-agent','models'],env={**os.environ,'NO_COLOR':'1'})
+        if result.returncode:raise ModelDiscoveryError('无法读取 Cursor 模型列表，请检查 CLI 登录态、网络与版本后重试')
         plain=re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]','',result.stdout)
         models=[];seen=set()
         for line in plain.splitlines():
@@ -123,46 +148,21 @@ class ModelCatalog:
             command=['codex','app-server','--stdio']
             for feature in ('plugins','hooks','apps','shell_tool','multi_agent','browser_use','computer_use'):
                 command+=['-c',f'features.{feature}=false']
-            process=subprocess.Popen(command,cwd=directory,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,start_new_session=True)
-            messages=queue.Queue(maxsize=1000)
-            def reader():
-                try:
-                    for line in process.stdout:
-                        if len(line)>2*1024*1024:break
-                        messages.put_nowait(json.loads(line))
-                except (ValueError,queue.Full):pass
-                finally:
-                    try:messages.put_nowait(None)
-                    except queue.Full:pass
-            thread=threading.Thread(target=reader,daemon=True);thread.start()
-            deadline=time.monotonic()+20
-            def send(data):process.stdin.write(canonical(data)+'\n');process.stdin.flush()
-            def response(identity):
-                while True:
-                    data=messages.get(timeout=max(.01,deadline-time.monotonic()))
-                    if data is None:raise ModelDiscoveryError('Codex model session ended')
-                    if data.get('id')==identity:
-                        if 'error' in data:raise ModelDiscoveryError('Codex model request rejected')
-                        return data['result']
-            try:
-                send({'id':1,'method':'initialize','params':{'clientInfo':{'name':'agent-framework-models','version':__version__}}})
-                response(1);send({'method':'initialized'})
+            with DirectoryProcess(command,cwd=directory) as session:
+                session.send({'id':1,'method':'initialize','params':{'clientInfo':{'name':'agent-framework-models','version':__version__}}})
+                session.response(1);session.send({'method':'initialized'})
                 models=[];cursor=None
                 for page in range(20):
                     identity=page+2
-                    send({'id':identity,'method':'model/list','params':{'limit':100,'includeHidden':False,**({'cursor':cursor} if cursor else {})}})
-                    result=response(identity)
+                    session.send({'id':identity,'method':'model/list','params':{'limit':100,'includeHidden':False,**({'cursor':cursor} if cursor else {})}})
+                    result=session.response(identity)
+                    if not isinstance(result.get('data'),list):raise ModelDiscoveryError('Codex 未返回有效的模型目录')
                     for row in result['data']:
                         if row.get('hidden'):continue
                         model=row.get('model') or row['id']
                         models.append({'id':model,'name':row.get('displayName',model),'efforts':[e['reasoningEffort'] for e in row.get('supportedReasoningEfforts',[])], 'default_effort':row.get('defaultReasoningEffort'), 'is_default':row.get('isDefault',False)})
                     cursor=result.get('nextCursor')
                     if not cursor:break
-                else:raise ModelDiscoveryError('Codex model catalog is too large')
+                    if not isinstance(cursor,str) or len(cursor)>16384:raise ModelDiscoveryError('Codex 模型目录分页标识无效')
+                else:raise ModelDiscoveryError('Codex 模型目录分页过多，请检查 CLI 后重试')
                 return list({m['id']:m for m in models}.values())
-            finally:
-                try:os.killpg(process.pid,signal.SIGTERM)
-                except ProcessLookupError:pass
-                try:process.wait(timeout=2)
-                except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait()
-                process.stdin.close();process.stdout.close();thread.join(timeout=1)

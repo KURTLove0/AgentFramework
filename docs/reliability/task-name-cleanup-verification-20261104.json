@@ -1,0 +1,111 @@
+{
+  "date": "2026-11-04",
+  "status": "verified-source-change-unreleased",
+  "problem": "名称草稿清理异常被吞掉，放弃、采用当前名称及已确认保存仍关闭窗口，旧副本可能在下次打开时恢复。",
+  "behavior": [
+    "清理失败保留窗口、输入和明确错误，可重试原操作。",
+    "已确认保存只重试本地清理，继续编辑则沿用新版本且不重建输入框。",
+    "不清理或收尾覆盖已被替换的恢复副本；已删除副本和实际读到的损坏副本可明确结束。",
+    "清理操作区支持文字放大和按钮换行。"
+  ],
+  "source_files": [
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/agent_framework/webui/task_names.js",
+      "sha256": "06b8ee8ff34eaf664074ecaef7d7cf49a74d4e52049ccd82be2a0f5c8ffe0807"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/agent_framework/webui/task_conversation.css",
+      "sha256": "c2b4463d5ebd750e263c0c4a24b1dc5757f21d8a48269b5b9a5207125b9b37b5"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/tests/test_task_names_interactions.js",
+      "sha256": "f1e9a9ddb608fe92b4e1c5b0fc9c547b435563d9a50b003eaf35176ffe8c486f"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/tests/verify_task_names.cjs",
+      "sha256": "cab68e91912a80dfac7666b9b6803f376b1f9917d5a31df5896904d20ca9bdf3"
+    }
+  ],
+  "original_sources": [
+    {
+      "path": "/private/tmp/af-task-name-cleanup-original-20261104.js",
+      "sha256": "4a06b3962820e8e43f4e262495f13db49b3af8dd4fccc0805d5518971584bda5"
+    },
+    {
+      "path": "/private/tmp/af-task-name-cleanup-original-20261104.css",
+      "sha256": "cadf2cbacfd7975f7530c649dafb2e68feaba3345d1176a53d027fc600be4d06"
+    }
+  ],
+  "baseline": {
+    "tests": 18,
+    "passed": 12,
+    "failed": 6,
+    "log": {
+      "path": "/private/tmp/af-task-name-cleanup-baseline-final-20261104.log",
+      "sha256": "5a71980b04852012ba1720264e8f021be878b1407f0bee3918a7e1536d941cf2"
+    }
+  },
+  "targeted": {
+    "tests": 18,
+    "passed": 18,
+    "log": {
+      "path": "/private/tmp/af-task-name-cleanup-unit-complete-20261104.log",
+      "sha256": "c7812db4bbbe6ac27a095616a4f36d7f02e6a2573111daa4355414f52f2d3fd8"
+    }
+  },
+  "frontend": {
+    "tests": 1160,
+    "passed": 1160,
+    "failed": 0,
+    "log": {
+      "path": "/private/tmp/af-task-name-cleanup-frontend-complete-20261104.log",
+      "sha256": "d338bbe1b49cadc3bf5224dd3880966d228d2c1f51b9d34505f6faa755a08400"
+    }
+  },
+  "browser": {
+    "suite": "task-names",
+    "checks": 7,
+    "ordinary_layouts": 8,
+    "cleanup_layouts": 2,
+    "result": {
+      "path": "/private/tmp/af-task-name-cleanup-browser-complete-20261104/task-names/results.json",
+      "sha256": "9777a823f7c46be1b2f746477e3c70901b60a978f2ef7949c44cd83deac44af8"
+    },
+    "explicit_name_writes": {
+      "count": 3,
+      "base_revisions": [
+        0,
+        1,
+        2
+      ]
+    }
+  },
+  "screenshots": [
+    {
+      "path": "/private/tmp/af-task-name-cleanup-browser-complete-20261104/task-names/name-cleanup-light.png",
+      "sha256": "b0dc1a6932ac8b67e5705ac98c8992c225fc6e0ed45b6c49263ea991ae4aa918"
+    },
+    {
+      "path": "/private/tmp/af-task-name-cleanup-browser-complete-20261104/task-names/name-cleanup-dark.png",
+      "sha256": "cca771e82e7c8c1d26f1088f29e08f2ebdf98086894ab0ce2fb3b947b3bb76bf"
+    }
+  ],
+  "verification_corrections": [
+    {
+      "finding": "页面刷新后原字号规则已丢失，首次清理布局实际为 14px；原断言失败，已在当前文档中重新注入并断言 28px。",
+      "evidence": {
+        "path": "/private/tmp/af-task-name-cleanup-browser-20261104/task-names/failure.json",
+        "sha256": "c0cf56eedd1d451ea56819eea0fc2b0268325284e9936dd5d219a6494b307cd7"
+      }
+    },
+    {
+      "finding": "中间验收只检查了清理按钮边界；目视发现较长按钮挤压右侧按钮，已缩短文字、允许换行并断言全部按钮在表单内。",
+      "evidence": {
+        "path": "/private/tmp/af-task-name-cleanup-browser-final-20261104/task-names/name-cleanup-light.png",
+        "sha256": "896e5b3b3eb692b6858eb147e2b29204dc778f0be115135a6e4cafac89153333"
+      }
+    }
+  ],
+  "real_model_calls": 0,
+  "release": "版本、后端接口、数据库结构与已发布产物均未改动；本轮未重新打包。"
+}

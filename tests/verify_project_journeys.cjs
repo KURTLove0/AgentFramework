@@ -2,6 +2,7 @@
 // Requires serve_project_review_fixture.py and its disposable data directory.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {chromium}=require('playwright');
+const {waitFor}=require('./browser_poll.cjs');
 const base=process.env.PROJECT_REVIEW_URL;if(!base)throw Error('Set PROJECT_REVIEW_URL to the isolated fixture.');
 const output=process.env.PROJECT_REVIEW_OUTPUT||'/private/tmp/project-review-results';fs.mkdirSync(output,{recursive:true});
 (async()=>{
@@ -11,7 +12,7 @@ const output=process.env.PROJECT_REVIEW_OUTPUT||'/private/tmp/project-review-res
  const call=(url,data)=>page.evaluate(({url,data})=>api(url,data),{url,data});
  const nav=async(view,id)=>{await page.evaluate(({view,id})=>navigate(view,id),{view,id});await page.waitForFunction(view=>state.view===view&&!state.busy&&state.connected,view);};
  const post=url=>page.waitForResponse(r=>r.url().endsWith(url)&&r.request().method()==='POST');
- const done=async(id,turn=1,status='SUCCEEDED')=>{await page.waitForFunction(async({id,turn,status})=>{const d=await api('/api/tasks/'+id);return d.conversation.turns[turn-1]?.status===status&&!d.conversation.active},{id,turn,status});};
+ const done=(id,turn=1,status='SUCCEEDED')=>waitFor(async()=>{const d=await call('/api/tasks/'+id);return d.conversation.turns[turn-1]?.status===status&&!d.conversation.active;},'Task did not reach '+status);
  const waitFlow=async(id,status)=>{for(let i=0;i<150;i++){const d=await call('/api/workflow-runs/'+id);if(d.run.status===status&&!d.job?.active&&!d.run.lease_active)return d;await new Promise(resolve=>setTimeout(resolve,100));}throw Error('Workflow did not settle: '+status);};
  const shot=name=>page.screenshot({path:path.join(output,name+'.png'),animations:'disabled'});
  try{

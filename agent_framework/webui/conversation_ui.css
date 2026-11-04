@@ -1,0 +1,213 @@
+/* Hallmark · genre: atmospheric · structure: conversation workspace · theme: Deep Space Glass · tone: focused productivity */
+/* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V4 · locked project tokens, content before chrome */
+:root {--chat-reading-width:800px; --chat-message-gap:32px; --chat-user-surface:var(--blue-soft); --chat-surface:var(--surface)}
+
+/* The conversation owns the width; properties are an optional inspector. */
+.task-thread-panel {height:calc(100dvh - var(--topbar-height,76px) - 112px); min-height:480px; background:var(--chat-surface); max-height:none}
+.task-thread-header {align-items:center; padding:20px 28px; gap:20px; background:var(--chat-surface)}
+.task-thread-identity {display:flex; align-items:center; gap:14px; min-width:0}
+.task-thread-identity>div {min-width:0}
+.task-thread-agent-mark {display:grid; place-items:center; width:40px; height:40px; flex:none; border-radius:12px; color:var(--blue); background:var(--blue-soft)}
+.task-thread-agent-mark svg {width:22px; height:22px}
+.task-thread-header h2 {font-size:18px; font-weight:600; line-height:1.5; margin:6px 0 0; -webkit-line-clamp:2}
+.task-thread-meta {gap:10px 16px; font-size:13px}
+.task-thread-meta strong {color:var(--ink); font-weight:600}
+.task-thread-meta .chat-task-status {font-weight:400; font-size:12px}
+.task-thread-header-actions {display:flex; align-items:center; gap:8px; flex:none}
+.task-thread-header-actions .button {white-space:nowrap; font-size:var(--type-body); min-height:40px; box-shadow:none}
+.task-thread-layout {grid-template-columns:minmax(0,1fr)}
+.task-thread-layout[data-properties-open=true] {grid-template-columns:minmax(0,1fr) 264px}
+.task-thread-properties[hidden] {display:none}
+.task-thread-properties {background:var(--chat-surface); padding:24px 20px}
+.task-thread-properties>h3 {font-size:14px; margin-bottom:16px}
+.task-thread-properties .fact {padding:10px 0; align-items:start}
+.task-thread-properties .fact:first-child {display:block; padding-top:0; padding-bottom:16px; border-bottom:1px solid var(--border); margin-bottom:8px}
+.task-thread-properties .fact:first-child dd {margin:8px 0 0; font-family:var(--mono); font-size:12px}
+.task-thread-properties .text-button {color:var(--blue)}
+.task-activity-heading {width:calc(100% - 56px); max-width:var(--chat-reading-width); align-self:center; padding:16px 0 0; gap:8px}
+.task-activity-heading h3 {font-size:13px; font-weight:400; color:var(--muted)}
+.task-activity-heading>span {font-size:12px; margin-left:auto}
+.task-message-list {padding:24px 28px 20px; scroll-padding:24px 0 56px}
+.task-chat-turn {max-width:var(--chat-reading-width); margin:0 auto var(--chat-message-gap)}
+.task-chat-message {gap:12px; margin-bottom:24px}
+.task-message-avatar {width:28px; flex-basis:28px; height:28px; border-radius:9px}
+.task-message-main>header {min-height:28px; font-size:13px; gap:10px}
+.task-message-main time {margin-left:0; color:var(--muted)}
+.task-chat-message.is-user {max-width:85%; width:fit-content; margin-left:auto; margin-bottom:28px}
+.is-user .task-message-avatar {display:none}
+.is-user .task-message-main>header {justify-content:flex-end; margin-bottom:6px}
+.is-user .task-message-main>header strong {font-weight:400; color:var(--muted); font-size:12px}
+#content .task-user-content {padding:12px 18px; margin:0; border-radius:16px 4px 16px 16px; background:var(--chat-user-surface); color:var(--ink); font-size:14px; line-height:1.75}
+.is-assistant .task-message-avatar {margin-top:0}
+.is-assistant .task-message-main>header {margin-bottom:4px}
+.chat-round {font-size:12px}
+.task-turn-progress {margin:0 0 14px; border:0; border-radius:8px; background:transparent; color:var(--muted)}
+.task-turn-progress>summary {min-height:36px; width:fit-content; max-width:100%; padding:4px 0; gap:8px; font-size:13px}
+.task-turn-progress>summary:after {margin-left:4px; font-size:16px}
+.task-turn-progress[open]>summary {color:var(--ink)}
+.chat-process-count {font-size:12px}
+.chat-process-body {padding:0 12px 8px; margin:8px 0 12px; border-top:0; border-left:2px solid var(--border); background:transparent}
+.chat-process-body ol {margin-top:0}
+.chat-process-body li {padding:5px 0; font-size:13px; line-height:1.7}
+#content .task-chat-answer {font-size:var(--type-body); line-height:1.75}
+#content .task-chat-answer :is(p,li) {font-size:inherit; line-height:1.75}
+#content .task-chat-answer h3 {font-size:18px; line-height:1.5}
+#content .task-chat-answer h4 {font-size:16px; line-height:1.5}
+#content .task-chat-answer h5 {font-size:14px; line-height:1.5; font-weight:600}
+.task-chat-answer p {margin:12px 0}
+.task-chat-answer h3 {font-size:18px; line-height:1.5; margin:24px 0 12px}
+.task-chat-answer h4,.task-chat-answer h5 {font-size:16px; line-height:1.5}
+.task-chat-answer li+li {margin-top:6px}
+.task-chat-answer pre {background:var(--subtle); border-color:var(--border); border-radius:10px; font-size:13px}
+.chat-answer-actions {gap:16px; margin-top:14px; border:0}
+.chat-answer-actions .text-button {font-size:12px; min-height:36px; color:var(--muted); opacity:1}
+.chat-answer-actions .text-button svg {width:14px; height:14px}
+.chat-question {background:var(--blue-soft); border-color:var(--border)}
+.chat-turn-error {background:var(--red-soft); border-color:var(--red)}
+.chat-question,.chat-turn-error {border-radius:12px}
+.task-chat-composer {width:calc(100% - 56px); max-width:var(--chat-reading-width); align-self:center; margin:4px 28px 20px; padding:14px 16px 12px; border:1px solid var(--control-border); border-radius:16px; background:var(--chat-surface); box-shadow:var(--control-shadow)}
+.task-chat-composer:focus-within {border-color:var(--control-focus); box-shadow:0 0 0 3px var(--control-focus-ring)}
+.task-chat-composer:has([aria-invalid=true]) {border-color:var(--red)}
+.task-chat-composer {display:flex;flex-direction:column;flex-shrink:1;min-height:0}
+.task-chat-composer> :not(textarea) {flex:none}
+.task-chat-composer>textarea {flex:0 1 auto}
+.task-composer-label {display:block; font-size:13px; color:var(--muted); margin:0 0 8px}
+.task-chat-composer textarea {min-height:56px; font-size:14px; line-height:1.7; padding:0; border-radius:0}
+#task-chat-form #task-chat-input,#flow-chat-form #flow-chat-message {padding:0; font-size:var(--type-body); line-height:1.7; min-height:64px; max-height:180px; background:transparent; border-radius:0}
+.task-composer-footer {margin-top:8px; gap:12px}
+.task-composer-footer>span {font-size:12px; line-height:1.6}
+.task-composer-footer>.button {min-height:40px; min-width:76px; border-radius:10px; background:var(--action); color:var(--color-accent-ink); border-color:var(--action); box-shadow:none}
+.task-composer-footer>.button,.flow-chat-compose-actions .button {font-size:var(--type-body); height:max(var(--control-height),calc(1.5em + 18px)); box-sizing:border-box; padding-block:0}
+.task-composer-footer>.button:disabled {background:var(--subtle); border-color:var(--border); color:var(--muted); opacity:1}
+.task-composer-footer>.button:active:not(:disabled) {background:var(--action-hover)}
+.chat-latest-bar {position:relative; left:auto; bottom:auto; transform:none; flex:none; height:0; align-self:center}
+.chat-latest-bar button {position:relative; top:-52px; min-height:40px; font-size:13px; background:var(--chat-surface)}
+
+/* Workflow design uses the same message and composer language. */
+#flow-chat-dialog {width:min(1120px,calc(100vw - 64px)); max-width:none; height:min(820px,calc(100dvh - 64px)); max-height:calc(100dvh - 64px); padding:0; overflow:hidden; background:var(--chat-surface)}
+#flow-chat-dialog[open] {display:flex; flex-direction:column}
+#flow-chat-dialog .flow-chat-head {flex:none; padding:24px 28px 20px; margin:0; border-bottom:1px solid var(--border); align-items:flex-start}
+.flow-chat-head .eyebrow {margin-bottom:6px; font-size:12px}
+#flow-chat-dialog .flow-chat-head h2 {font-size:20px; margin:0}
+.flow-chat-head .field-help {margin:8px 0 0; font-size:13px}
+.flow-chat-workspace {display:grid; grid-template-columns:minmax(0,1fr); min-height:0; flex:1; overflow:hidden}
+.flow-chat-workspace:has(#flow-chat-proposal:not(:empty)) {grid-template-columns:minmax(0,1fr) 360px}
+.flow-chat-column {display:flex; flex-direction:column; min-width:0; min-height:0}
+#flow-chat-recovery {margin:0 24px 8px; flex:none; max-height:34vh; overflow:auto; overflow-wrap:anywhere}
+#flow-chat-recovery h3 {margin:0 0 6px}
+#flow-chat-recovery p {margin:6px 0; font-size:13px}
+#flow-chat-recovery .toolbar {flex-wrap:wrap; gap:8px; margin-top:10px}
+#flow-chat-recovery .flow-chat-original {white-space:pre-wrap}
+.flow-chat-agent-bar {padding:16px 28px 0; display:flex; gap:16px; align-items:center; flex:none}
+.flow-chat-agent-bar>label {min-width:200px; max-width:400px; flex:0 0 360px; margin:0; display:flex; align-items:center; gap:12px; font-size:13px; white-space:nowrap}
+.flow-chat-agent-bar label .select-picker {flex:1; min-width:0; width:auto}
+.flow-chat-agent-bar .select-trigger:disabled {opacity:1; color:var(--ink); background:var(--subtle); border-color:var(--border); cursor:default}
+.flow-chat-agent-bar select {min-width:0; font-size:var(--type-body)}
+.flow-chat-agent-bar .field-help {font-size:var(--type-help); line-height:1.7; margin:0; color:var(--muted)}
+#flow-chat-history {display:flex; flex-direction:column; gap:24px; margin:0; max-height:none; min-height:120px; flex:1; overflow:auto; overscroll-behavior:contain; padding:28px}
+#flow-chat-dialog .flow-chat-intro {width:100%; max-width:620px; margin:auto; padding:8px 0; text-align:center; background:transparent; border:0; border-radius:0}
+.flow-chat-intro-mark {display:grid; place-items:center; width:48px; height:48px; background:var(--blue-soft); color:var(--blue); border-radius:14px; margin:0 auto 20px}
+.flow-chat-intro-mark svg {width:24px; height:24px}
+#flow-chat-dialog .flow-chat-intro h3 {font-size:20px; margin:0 0 12px}
+#flow-chat-dialog .flow-chat-intro>.field-help {font-size:13px; line-height:1.8; max-width:520px; margin:0 auto 20px}
+#flow-chat-dialog .flow-chat-starters {display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:0}
+.flow-chat-starters .button {font-size:13px; min-height:40px; padding:8px 12px; box-shadow:none}
+#flow-chat-history .chat-message {display:flex; gap:12px; border:0; padding:0; margin:0; border-radius:0; background:transparent; font-size:14px; line-height:1.75; min-width:0}
+.flow-message-avatar {display:grid; place-items:center; flex:0 0 28px; width:28px; height:28px; border-radius:9px; background:var(--blue-soft); color:var(--blue)}
+.flow-message-avatar svg {width:16px; height:16px}
+#flow-chat-history .chat-message>div {min-width:0; flex:1}
+#flow-chat-history .chat-message strong {display:block; font-size:13px; line-height:28px; font-weight:600}
+#flow-chat-history .chat-message p {margin:6px 0 0; overflow-wrap:anywhere; white-space:pre-wrap; line-height:1.75}
+#flow-chat-history .chat-message.user {max-width:85%; align-self:flex-end; width:fit-content}
+#flow-chat-history .chat-message.user .flow-message-avatar {display:none}
+#flow-chat-history .chat-message.user strong {font-weight:400; color:var(--muted); text-align:right; font-size:12px}
+#flow-chat-history .chat-message.user p {background:var(--chat-user-surface); border-radius:16px 4px 16px 16px; padding:12px 16px; margin-top:4px}
+#flow-chat-dialog .flow-chat-composer {margin:4px 24px 24px; padding:14px 16px 12px; border:1px solid var(--control-border); border-radius:16px; flex:none; background:var(--chat-surface); box-shadow:var(--control-shadow)}
+.flow-chat-composer:focus-within {border-color:var(--control-focus)!important; box-shadow:0 0 0 3px var(--control-focus-ring)!important}
+#flow-chat-form>label:first-child {font-size:13px; color:var(--muted); margin:0 0 8px}
+#flow-chat-message {border:0; border-radius:0; padding:0; min-height:64px; max-height:160px; resize:vertical; font-size:14px; line-height:1.7; background:transparent; box-shadow:none; margin:0}
+#flow-chat-message:focus {outline:none; box-shadow:none}
+#flow-chat-consent-label {font-size:var(--type-help); line-height:1.7; align-items:flex-start; gap:8px; margin:8px 0}
+#flow-chat-consent {margin-top:3px; flex:none}
+.flow-chat-compose-actions {display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:8px}
+.flow-chat-compose-actions .field-help {font-size:12px; margin:0}
+.flow-chat-compose-actions .button {min-height:40px; font-size:var(--type-body); background:var(--action); color:var(--color-accent-ink); border-color:var(--action); box-shadow:none}
+.flow-chat-compose-actions .button:disabled {background:var(--subtle); color:var(--muted); border-color:var(--border); opacity:1}
+#flow-chat-proposal:empty {display:none}
+#flow-chat-proposal:not(:empty) {display:flex; flex-direction:column; overflow:hidden; border-left:1px solid var(--border); padding:0; margin:0; background:var(--subtle); font-size:13px; min-width:0}
+.flow-chat-proposal-content {flex:1; min-height:0; overflow:auto; overscroll-behavior:contain; padding:24px}
+.flow-chat-proposal-actions {flex:none; padding:16px 24px; border-top:1px solid var(--border); background:var(--subtle)}
+#flow-chat-proposal .flow-chat-proposal-actions .button {margin-top:0}
+#flow-chat-proposal .flow-chat-proposal-actions p {margin:8px 0 0}
+#flow-chat-proposal .panel-heading {padding:0; gap:8px; flex-wrap:wrap}
+#flow-chat-proposal h3 {font-size:18px}
+#flow-chat-proposal .flow-graph {gap:12px; margin:20px 0}
+#flow-chat-proposal .flow-graph>li {padding:14px; border:1px solid var(--border); border-radius:12px; background:var(--chat-surface)}
+#flow-chat-proposal .flow-graph .mini-heading {gap:8px; flex-wrap:wrap}
+#flow-chat-proposal .flow-graph p {font-size:13px; line-height:1.75}
+#flow-chat-proposal .button {width:100%; margin-top:12px}
+#flow-chat-proposal .flow-draft-summary {background:var(--chat-surface)}
+@media(hover:hover) {
+ .task-composer-footer>.button:hover:not(:disabled),.flow-chat-compose-actions .button:hover:not(:disabled) {background:var(--action-hover); border-color:var(--action-hover)}
+ .task-turn-progress>summary:hover,.chat-answer-actions .text-button:hover {color:var(--blue)}
+}
+@media(max-width:1200px) {
+ .task-thread-header {padding:18px 22px; gap:12px}
+ .task-thread-header h2 {font-size:16px}
+ .task-thread-layout[data-properties-open=true] {grid-template-columns:minmax(0,1fr) 224px}
+ .flow-chat-agent-bar {align-items:flex-start; flex-direction:column; gap:8px}
+ .flow-chat-agent-bar>label {flex:auto; width:100%; max-width:none}
+ .flow-chat-workspace:has(#flow-chat-proposal:not(:empty)) {grid-template-columns:minmax(0,1fr) 320px}
+}
+@media(max-width:900px) {
+ .task-properties-toggle {display:none!important}
+ .task-thread-layout[data-properties-open=true] {grid-template-columns:minmax(0,1fr)}
+ .task-thread-properties {display:none}
+ .task-thread-header {align-items:flex-start}
+ .task-thread-agent-mark {width:32px; height:32px}
+ .task-thread-header-actions {flex-wrap:wrap; justify-content:flex-end}
+ .task-thread-meta {gap:6px 10px}
+ #flow-chat-dialog {width:calc(100vw - 32px); height:calc(100dvh - 32px); max-height:calc(100dvh - 32px)}
+ .flow-chat-workspace:has(#flow-chat-proposal:not(:empty)) {display:flex; flex-direction:column; overflow:auto}
+ .flow-chat-workspace:has(#flow-chat-proposal:not(:empty)) .flow-chat-column {min-height:500px; flex:none}
+ #flow-chat-proposal:not(:empty) {overflow:visible; border-left:0; border-top:1px solid var(--border); flex:none}
+}
+@media(max-width:600px) {
+ .task-thread-panel {height:calc(100dvh - var(--topbar-height,56px) - 76px); min-height:420px}
+ .task-thread-header {padding:16px; gap:8px}
+ .task-thread-identity {gap:10px}
+ .task-thread-agent-mark {display:none}
+ .task-thread-header h2 {font-size:16px}
+ .task-thread-meta strong {max-width:100%; overflow-wrap:anywhere}
+ .task-thread-header-actions .button {font-size:12px; min-height:44px}
+ .task-activity-heading {width:calc(100% - 32px); padding-top:12px}
+ .task-message-list {padding:20px 16px}
+ .task-chat-message {gap:8px}
+ .task-chat-message.is-user {max-width:92%}
+ #content .task-user-content,#content .task-chat-answer {font-size:16px}
+ .task-chat-composer {width:calc(100% - 24px); margin:4px 12px 12px; padding:12px}
+ .task-chat-composer textarea {font-size:16px}
+ .task-composer-footer>span {font-size:12px}
+ .task-composer-footer>.button {min-height:44px}
+ .task-chat-message .task-message-avatar {flex-basis:24px; width:24px; height:24px}
+ #flow-chat-dialog .flow-chat-head {padding:20px 16px 16px}
+ #flow-chat-dialog .flow-chat-head h2 {font-size:18px}
+ .flow-chat-agent-bar {padding:12px 16px 0}
+ #flow-chat-history {padding:20px 16px}
+ #flow-chat-dialog .flow-chat-composer {margin:4px 12px 12px; padding:12px}
+ #flow-chat-message {font-size:16px}
+ .flow-chat-compose-actions {align-items:flex-end}
+ .flow-chat-compose-actions .button {min-height:44px; white-space:nowrap}
+ .flow-chat-compose-actions .field-help {font-size:12px}
+}
+@media(max-height:540px) {.task-thread-panel {height:640px; min-height:640px}}
+@media(prefers-reduced-motion:reduce) {.task-conversation-page *,.flow-chat-workspace * {scroll-behavior:auto; transition:none}}
+
+.task-thread-header {flex-wrap:wrap}
+.task-thread-header-actions {flex-wrap:wrap;max-width:100%}
+.task-reply-copy-feedback {min-width:0;margin-top:8px}
+.task-reply-copy-feedback p {margin:0;color:var(--muted);font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.task-reply-copy-manual {margin-top:10px;min-width:0}
+.task-reply-copy-manual label {display:block;margin-bottom:6px;font-size:13px;color:var(--muted)}
+.task-reply-copy-manual textarea {display:block;width:100%;max-width:100%;min-height:120px;resize:vertical;font:inherit;line-height:1.6}
+.task-reply-copy-manual .text-button {margin-top:6px;min-height:36px}

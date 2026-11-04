@@ -45,7 +45,7 @@ class QoderConfigurationTests(unittest.TestCase):
         data=self.settings();data['default_runtime']='qoder';data['profiles']['qoder']={'model':'qoder-fixture','timeout':5,'max_attempts':2}
         saved=self.app.configuration.save(data)
         self.assertEqual(saved['default_runtime'],'qoder')
-        with patch('agent_framework.runtime_config.shutil.which',return_value='/local/qodercli'),patch('agent_framework.runtime_config.subprocess.run',return_value=subprocess.CompletedProcess([],0,'1.0.31\n','')) as run:
+        with patch('agent_framework.runtime_config.shutil.which',return_value='/local/qodercli'),patch('agent_framework.runtime_config.run_version_command',return_value=subprocess.CompletedProcess([],0,'1.0.31\n','')) as run:
             self.assertTrue(self.app.configuration.detect('qoder')['ok'])
             self.assertEqual(run.call_args.args[0],['qodercli','--version'])
             self.assertIsInstance(self.app.configuration.planner().transport,QoderTransport)
@@ -97,7 +97,7 @@ class QoderCatalogTests(unittest.TestCase):
 
     def test_json_models_from_cli_are_authoritative_cached_and_refreshed(self):
         output=json.dumps({'models':[{'id':'model-a','displayName':'Model A'},{'modelId':'model-b','name':'Model B'},{'id':'model-a','name':'duplicate'}]})
-        with patch('agent_framework.model_catalog.subprocess.run',return_value=subprocess.CompletedProcess([],0,output,'')) as run:
+        with patch('agent_framework.model_catalog.run_directory_command',return_value=subprocess.CompletedProcess([],0,output,'')) as run:
             result=self.catalog.list('qoder');self.assertEqual([m['id'] for m in result['models']],['model-a','model-b'])
             self.assertIn('--list-models',run.call_args.args[0]);self.assertNotIn('--print',run.call_args.args[0])
             self.assertTrue(self.catalog.list('qoder')['cached']);self.assertEqual(run.call_count,1)
@@ -107,18 +107,18 @@ class QoderCatalogTests(unittest.TestCase):
         self.assertIsNone(ModelCatalog(self.tmp.name,'other-tenant').cached('qoder'))
 
     def test_text_models_and_auth_failures_never_fabricate_choices(self):
-        with patch('agent_framework.model_catalog.subprocess.run',return_value=subprocess.CompletedProcess([],0,'Available models\nmodel-a - Model A\nmodel-b - Model B\n','')):
+        with patch('agent_framework.model_catalog.run_directory_command',return_value=subprocess.CompletedProcess([],0,'Available models\nmodel-a - Model A\nmodel-b - Model B\n','')):
             self.assertEqual(len(self.catalog.list('qoder')['models']),2)
-        with patch('agent_framework.model_catalog.subprocess.run',return_value=subprocess.CompletedProcess([],1,'','Not logged in.')):
+        with patch('agent_framework.model_catalog.run_directory_command',return_value=subprocess.CompletedProcess([],1,'','Not logged in.')):
             with self.assertRaisesRegex(ModelDiscoveryError,'login'):self.catalog.list('qoder',True)
         self.assertEqual(len(self.catalog.cached('qoder')['models']),2)
         for output in ('No models available','{"models":[]}','{"error":"login"}'):
-            with patch('agent_framework.model_catalog.subprocess.run',return_value=subprocess.CompletedProcess([],0,output,'')):
+            with patch('agent_framework.model_catalog.run_directory_command',return_value=subprocess.CompletedProcess([],0,output,'')):
                 with self.assertRaises(ModelDiscoveryError):self.catalog.list('qoder',True)
 
     def test_installed_qoder_single_column_format_uses_names_and_complete_custom_keys(self):
         output='MODEL\nAuto\nPerformance\nResearch Model (custom-model-123)\nLong key (custom-truncated…)\n'
-        with patch('agent_framework.model_catalog.subprocess.run',return_value=subprocess.CompletedProcess([],0,output,'')):
+        with patch('agent_framework.model_catalog.run_directory_command',return_value=subprocess.CompletedProcess([],0,output,'')):
             models=self.catalog.list('qoder')['models']
         self.assertEqual([m['id'] for m in models],['Auto','Performance','custom-model-123'])
         self.assertEqual(models[-1]['name'],'Research Model')

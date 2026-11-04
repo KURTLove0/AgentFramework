@@ -1,0 +1,238 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Read-only history of queued-message edits, showing original text, immutable before/after changes and the actual frozen execution goal. Bounded scoped pagination retains the initial revision ceiling while new edits arrive. The browser preserves drafts, expanded entries, reading position and copy focus, with explicit error recovery and stale-response guards.",
+  "prior_behavior": "Every edit was already persisted with prior and new text, but conversation rows only showed an edited badge; users could not inspect the full history in the UI.",
+  "backend": {
+    "new_tests": 11,
+    "focused": {
+      "tests": 27,
+      "passed": 27,
+      "duration_seconds": 2.913,
+      "log": {
+        "path": "/private/tmp/af-message-history-backend-focused.log",
+        "sha256": "2a0c290bb72869f7789230600ab6408ed74c521e3810d313491eb2440951418d"
+      }
+    },
+    "full": {
+      "command": ".venv/bin/python -m unittest discover -s tests -p 'test_*.py'",
+      "tests": 1268,
+      "passed": 1268,
+      "duration_seconds": 229.563,
+      "log": {
+        "path": "/private/tmp/af-message-history-backend-full.log",
+        "sha256": "c88158d8322ccb9a312b68616bee80d589fe89d57ecb1458b6e87000aeb62775"
+      }
+    },
+    "coverage": [
+      "Complete original/before/after chain",
+      "Fixed revision window under concurrent edits",
+      "One read snapshot for current text, counts and page",
+      "Revision order despite backward clock",
+      "Actual frozen execution goal",
+      "Cancelled queue without fabricated execution",
+      "Principal/workspace/turn scope",
+      "Cursor and size validation",
+      "Bounded read without detail hydration or dispatch",
+      "Old readonly database without edit table",
+      "Readonly HTTP route and static asset"
+    ]
+  },
+  "frontend": {
+    "new_tests": 15,
+    "full": {
+      "command": "npm test",
+      "tests": 901,
+      "passed": 901,
+      "failed": 0,
+      "duration_ms": 10461.962042,
+      "log": {
+        "path": "/private/tmp/af-message-history-frontend-verified.log",
+        "sha256": "64764baeae170917aab4bc94afd5114183d13386c4f1d875b8c5e9a1f8f0f968"
+      }
+    },
+    "coverage": [
+      "Scoped readonly requests",
+      "Duplicate read suppression",
+      "Stable page merging and new-change notice",
+      "Explicit refresh",
+      "Retained content on transient errors",
+      "Same-page retry and direct fresh-range recovery",
+      "403/404 content removal",
+      "Response shape and ordering validation",
+      "Late response and native-close fencing",
+      "Navigation and identity ownership",
+      "Exact Unicode copy",
+      "Copy failure and focus preservation"
+    ]
+  },
+  "browser": {
+    "passed_suites": {
+      "task-message-history": {
+        "result": {
+          "path": "/private/tmp/af-message-history-browser-release/task-message-history/results.json",
+          "sha256": "3a9949200b0e3d2627e3d8015f1296c8553ea878a675d78c4912ff899d1fbf8f"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-message-history-browser-release/results.json",
+          "sha256": "b98337cefa7ccd268d4c607f163e91d29f1a17828f7b07d90474e331051889de"
+        },
+        "checks": [
+          "真实历史展示原消息及修改前后完整内容，复制保持 Unicode 与换行，输入作为纯文本呈现",
+          "三页读取无重复遗漏；新修改保留旧查看范围，失败重试保留展开与滚动位置，刷新后显示新修改；两个草稿不变",
+          "切换会话关闭旧窗口，迟到的旧读取不会覆盖新会话的修改记录",
+          "执行完成后显示真实运行采用的要求；八种主题、宽度和字号布局通过焦点、边界及文字溢出检查，读取复制无写请求"
+        ],
+        "errors": [],
+        "layout_cases": 8,
+        "enlarged_font_pixels": 28
+      },
+      "task-message-edits": {
+        "result": {
+          "path": "/private/tmp/af-message-history-browser-first/task-message-edits/results.json",
+          "sha256": "0f16fae0355c178b5cc8533454c69e945529ec092f3d8bdee7765af23d7078fa"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-message-history-browser-first/results.json",
+          "sha256": "db49f7ee78bde3f8dc8322a5e4ffafff5ef12045e89f491f47389f167b158dc1"
+        },
+        "checks": [
+          "修改保持队列位置、运行身份与后续消息，原发送回执和未发送对话草稿保留",
+          "多页面修改冲突保留本页输入，只读核对后明确保存；八种桌面主题与字号布局可操作",
+          "保存回执丢失后刷新恢复原请求及后续输入，核对不重发，后续编辑需明确再次保存",
+          "派发先发生时拒绝迟到修改并保留可复制输入；实际执行和后续上下文使用各自正确版本，导出标记修改"
+        ],
+        "errors": []
+      },
+      "run-inspector": {
+        "result": {
+          "path": "/private/tmp/af-message-history-browser-first/run-inspector/results.json",
+          "sha256": "0aa10d82fa8ca498ea1239d62a74caf1c15cee5763abf927d2a9c7fb81e3712d"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-message-history-browser-first/results.json",
+          "sha256": "db49f7ee78bde3f8dc8322a5e4ffafff5ef12045e89f491f47389f167b158dc1"
+        },
+        "checks": [
+          "读取失败在原窗口内可重试；刷新失败保留原记录和读取时间，并明确标注保留内容",
+          "浅深主题、1024/1440 宽度及两倍文字下，重试入口可聚焦、可到达且无横向溢出",
+          "下载绑定刚刚查看的轮次与工作空间，实际记录包校验通过且属于第二轮运行",
+          "慢读取期间关闭窗口并切换任务，旧响应不会重新打开窗口或覆盖当前任务",
+          "访问失效时移除旧内容与下载；真实切换空间后，原空间的迟到读取不能恢复窗口"
+        ],
+        "errors": []
+      },
+      "task-messages": {
+        "result": {
+          "path": "/private/tmp/af-message-history-browser-first/task-messages/results.json",
+          "sha256": "ac39378e598828f25c80946b2dc3b2cc5c18a8d893c0b8f7cd2b37cc66ebf0f6"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-message-history-browser-first/results.json",
+          "sha256": "db49f7ee78bde3f8dc8322a5e4ffafff5ef12045e89f491f47389f167b158dc1"
+        },
+        "checks": [
+          "受理后丢失回执，修改文字与刷新均保留原发送编号；只读核对找回同一轮消息",
+          "核对区在八种桌面主题和文字布局下可到达；确认返回后仍保留后来编辑的文字",
+          "其他页面更新后先核对版本，核对后再变化仍拒绝；原请求晚到受理后同编号重试不增加轮次",
+          "核对读取失败保留原消息与恢复入口，不自动重发，也不把未知结果当作未受理",
+          "切换任务后晚到的核对结果不会覆盖当前对话，返回原任务仍可继续核对"
+        ],
+        "errors": []
+      }
+    },
+    "iterations": [
+      {
+        "log": {
+          "path": "/private/tmp/af-message-history-browser-first/task-message-history.log",
+          "sha256": "7cd5799a1c4ff11c7820047afe32159d7c8e1172272f84640d836c668746009e"
+        },
+        "note": "The new verifier removed a route handler before its deliberately delayed response finished. It now explicitly waits for delivery before removing interception. The three existing regression suites in this run passed."
+      },
+      {
+        "result": {
+          "path": "/private/tmp/af-message-history-browser-verified/task-message-history/results.json",
+          "sha256": "3a9949200b0e3d2627e3d8015f1296c8553ea878a675d78c4912ff899d1fbf8f"
+        },
+        "note": "The complete history journey passed, followed by addition of a direct latest-range recovery action and clearing content on close."
+      },
+      {
+        "result": {
+          "path": "/private/tmp/af-message-history-browser-final/task-message-history/failure.json",
+          "sha256": "17f6ed41239b8552f2226b24f1431d6f1f62086adb88c0083dd873fd44256b01"
+        },
+        "note": "Browser integration exposed colon-containing copy control IDs interacting with the shared focus-restoration selector. IDs now use selector-safe hyphens. Visual review also replaced latest-turn wording with the actual historical turn status. The final full JavaScript run and history browser suite passed after both fixes."
+      }
+    ],
+    "screenshots": [
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-message-history-light.png",
+        "sha256": "c6d1f038e0c1fe65b8d4be9178ba5c65e80825b6f07f580b44b8c6387713d4ae"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-message-history-dark.png",
+        "sha256": "9f9abb6e2f6ba90c1bc160a159ddb0deee618fdab4bedaf8325be0c40ea9e059"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-message-history-original.png",
+        "sha256": "b5f3b3bcfd0be41c3171466e2c8fe8aef2beedb85026526259efd556b5206d30"
+      }
+    ],
+    "visual_review": "Inspected the original, before/after and actual execution text, desktop dialog scroll and footer, light/dark screenshots, and the final corrected per-turn status. Eight final layout cases assert real 28px controls and text, keyboard focus, visible bounds and no horizontal text overflow.",
+    "isolation": "Temporary databases with Mock runtime execution. The fixture holds dispatch until explicit test-only release. The verifier saves 24 real edits, injects a page read failure and delayed response, preserves both composer and edit drafts, checks read/copy request methods and validates the actual stored execution goal. No external model or business service is called.",
+    "ordering": "The three related suites passed before final changes confined to the new history dialog and its tests. The final history suite and full JavaScript regression passed after all application changes."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-message-history-source-candidate-final-20261103",
+    "build_log": {
+      "path": "/private/tmp/af-message-history-build-final.log",
+      "sha256": "fd1a3f33e3b6128f0bc582cfecbf18c6cfe940200244ba27168c18e81f4f26c7"
+    },
+    "verification": {
+      "path": "/private/tmp/af-message-history-package-check.json",
+      "sha256": "a00766fd07237c6819457de422f2911a2898b06ddc8ae91551a6b6b37706a812"
+    },
+    "program_files": 156,
+    "bundle": {
+      "path": "/private/tmp/af-message-history-source-candidate-final-20261103/agent-framework-1.3.0.tar.gz",
+      "sha256": "9d3cc6c40ef9e5e53c1b79ca6de66bc92965f3ee22bd75f1ec11f0a046e918e7"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-message-history-source-candidate-final-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "049f9b13e60d841491792cc07d6ef1df396d878dd1cb7148b9fe6ebf9112c066"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-message-history-source-candidate-final-20261103/SHA256SUMS",
+      "sha256": "ec1d2ea91d0d479641b2f99e2a3cfe14cfe6f193cc808f395e3cb46494d96980"
+    },
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/task_message_history.py": "08adf33e5af9e18ab20868ce0725fd515fd11ad1b8109d5a146e484f9974cafd",
+    "agent_framework/web.py": "0cb300564d75ad3fb6ec20d434182c3f8f445c4daedee34c90620045be10c775",
+    "agent_framework/webui/task_message_history.js": "704efc124018bf6c30efe94503d9d96dd3bbabfeb1c4c7da2cef06d7825bd14d",
+    "agent_framework/webui/task_conversation.js": "d1352d28aa4b7850d5759ec42ac270f6912dc4015a7d267a146b5ce8aa69bd9e",
+    "agent_framework/webui/task_conversation.css": "4f68664529c7d6a213b6d8c0c70b95b8d076156ca3de6fe434704cba4b9a909f",
+    "agent_framework/webui/app.js": "e8253c18a39c5336fcff54bc68315ef652a4b1ffceb1eab114e426d08d5e9bd3",
+    "agent_framework/webui/index.html": "6a286df94db695fb43fac669112807aa2601d5e63768feaf6c8e810b15b363e5",
+    "tests/test_task_message_history.py": "8a483b07d3cd0e04180875f26ec33ea2ef046ed50b2a294c1e1f3429dc852e6f",
+    "tests/test_task_message_history_interactions.js": "48e30f3c0ce115396d3008ad8e226a2ce7021005334f6204d8835a81bfd73076",
+    "tests/verify_task_message_history.cjs": "55b2fc786c62eeb7fc2193a6e830fadd786e473cfb46d310b8d52230482eab8a",
+    "tests/serve_message_edits_fixture.py": "21cfb6ab124f3c0479f58bb277c6c1300bf3680377ebc62d7b47839f94514d51",
+    "scripts/run_browser_tests.py": "7c59174321dabd2b738abf264fa5c36646980e63642a1cf9735b4b289c2d9bc6",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "2fdfdb6c50067b9716b92d595f6d457fd7834373e5688162a2b9e49da79185a5",
+    "design.md": "2235ba1a4dde53ea6d42907eb31ea74f6b714d05a12c8d67c71cdc23dc0a3479",
+    "docs/reliability/task-message-history.md": "a1c8ccd42ee212e75f491a3a8b5942bd718f1d5d50b964c1ec8bbd5392db3d2f"
+  },
+  "limits": [
+    "This is read-and-copy history, not rollback. Started execution requirements remain immutable.",
+    "The history list retains its initial revision ceiling, while current content and execution headers reflect each page read. New changes enter the list only after explicit refresh.",
+    "Each request returns at most 20 changes. Pages explicitly loaded by the user accumulate only in the current dialog and are cleared on close; no offline history cache was added.",
+    "The layout matrix covers 1024/1440 desktop widths and enlarged dialog text/controls, not a claim of uniform page zoom or all device coverage.",
+    "Full and focused test counts overlap. Version remains 1.3.0; no publication or repeated fresh installation."
+  ]
+}

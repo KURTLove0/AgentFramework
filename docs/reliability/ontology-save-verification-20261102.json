@@ -1,0 +1,223 @@
+{
+  "date": "2026-11-02",
+  "status": "source_verified_not_packaged",
+  "release_version_unchanged": "1.3.0",
+  "scope": "Atomic ontology revision receipts, exact retries, distinct saved/latest version inspection and scoped tab recovery of local edits",
+  "checks": {
+    "backend": {
+      "command": "PYTHONPATH=tests .venv/bin/python -m unittest tests.test_ontology_save_recovery tests.test_asset_save_recovery tests.test_asset_write_safety tests.test_ontology_regressions tests.test_ontology_evidence tests.test_learning tests.test_learning_acceptance tests.test_backups tests.test_web",
+      "tests": 152,
+      "new_tests": 11,
+      "seconds": 35.302,
+      "passed": true,
+      "log": "/private/tmp/af-ontology-saves-backend-20261102.log"
+    },
+    "frontend": {
+      "command": "npm test",
+      "tests": 651,
+      "new_tests": 16,
+      "seconds": 7.131353541,
+      "passed": true,
+      "log": "/private/tmp/af-ontology-saves-ui-final-20261102.log"
+    },
+    "browser_command": ".venv/bin/python scripts/run_browser_tests.py --suite ontology-saves --suite learning-requests --suite learning-reads --suite audit-fixes --suite asset-saves --output /private/tmp/af-ontology-saves-browser-final-20261102",
+    "browser": [
+      {
+        "suite": "ontology-saves",
+        "passed": true,
+        "exit_code": 0,
+        "checks": [
+          "保存回复丢失并刷新后恢复原请求与后续输入；一次只读核对同时区分自己的 v2 和另一页面的 v3",
+          "采用已保存结果前保护后续修改；明确保留本页内容后基于 v3 保存为 v4，八种桌面布局均可操作",
+          "未送达保存沿用原编号、原版本和原内容重试，只新增 v5；后来输入独立保留",
+          "慢核对可关闭，迟到回复不覆盖新窗口；其他空间不显示这份编辑，返回后仍可恢复",
+          "另一页面抢先保存时不把其 v6 误认作自己的提交；保留内容并明确基于新版本继续后保存为 v7"
+        ],
+        "layouts_checked": 8,
+        "log": "/private/tmp/af-ontology-saves-browser-final-20261102/ontology-saves.log",
+        "detail": "/private/tmp/af-ontology-saves-browser-final-20261102/ontology-saves/results.json"
+      },
+      {
+        "suite": "learning-requests",
+        "passed": true,
+        "exit_code": 0,
+        "checks": [
+          "模型仍在处理时可关闭并刷新，原请求与后续要求恢复；只读核对不增加生成调用",
+          "原结果明确采用后进入审阅，后续要求保留；四种宽度和明暗主题的恢复操作均可见",
+          "未送达请求按原编号、内容与来源重试，后续编辑不混入请求，只产生一份新提案",
+          "切换工作空间不显示其他空间的原请求；返回后保留未发送的后续要求",
+          "复盘迟到回复不能覆盖重新打开的窗口；切换页面保留入口，核对后仅恢复同一份结果"
+        ],
+        "layouts_checked": 8,
+        "log": "/private/tmp/af-ontology-saves-browser-final-20261102/learning-requests.log",
+        "detail": "/private/tmp/af-ontology-saves-browser-final-20261102/learning-requests/results.json"
+      },
+      {
+        "suite": "learning-reads",
+        "passed": true,
+        "exit_code": 0,
+        "checks": [
+          "慢读取冻结编辑与写入，保留关闭入口；取消等待并继续编辑后，旧回复不覆盖输入或切换空间",
+          "读取失败保留未保存内容并恢复操作，不把读取错误当作未知写入",
+          "采用已存提案前明确确认；继续编辑保留输入，接受替换后采用保存版本，全程无写入或模型重放",
+          "其他页面修订本体后，四种桌面场景均先确认替换；拒绝保留原输入，接受后采用 v2 且不产生额外版本",
+          "初次加载可以关闭并重开；旧加载失败不会替换新窗口或清除新输入"
+        ],
+        "layouts_checked": 4,
+        "log": "/private/tmp/af-ontology-saves-browser-final-20261102/learning-reads.log",
+        "detail": "/private/tmp/af-ontology-saves-browser-final-20261102/learning-reads/results.json"
+      },
+      {
+        "suite": "audit-fixes",
+        "passed": true,
+        "exit_code": 0,
+        "checks": [
+          "Failed generation can be repaired, validated, deposited and published without another generation",
+          "Assertion evidence rejects invented quotations and stores exact offsets with human review",
+          "Assertion evidence dialog fits mobile and desktop in both themes",
+          "JSON-LD download contains the reviewed quotation and source hash",
+          "Withdrawing a replacement does not silently roll back; explicit activation restores the chosen version",
+          "Offline ordinary tasks show no quality score in the evaluation UI",
+          "Expired ontology explains its state and offers no browsing or activation action"
+        ],
+        "layouts_checked": 0,
+        "log": "/private/tmp/af-ontology-saves-browser-final-20261102/audit-fixes.log",
+        "detail": "/private/tmp/af-ontology-saves-browser-final-20261102/audit-fixes/results.json"
+      },
+      {
+        "suite": "asset-saves",
+        "passed": true,
+        "exit_code": 0,
+        "checks": [
+          "提交成功后回复丢失，重试只确认原版本；后续输入完整保留，核对其他页面的更新后可明确保存为 v3 草稿",
+          "提交未送达时，暂未找到回执仍保留原编号；明确重试后只创建一个私有偏好草稿",
+          "原保存已被其他页面发布时，重试显示当前已发布状态，经明确查看后关闭，不创建草稿或重复发布",
+          "过期修订返回冲突并保留输入，核对最新 v4 后明确继续，才创建 v5；没有覆盖其他页面版本",
+          "工作记忆与能力方法仍可正常保存草稿，私有范围和所属模块保持正确"
+        ],
+        "layouts_checked": 8,
+        "log": "/private/tmp/af-ontology-saves-browser-final-20261102/asset-saves.log",
+        "detail": "/private/tmp/af-ontology-saves-browser-final-20261102/asset-saves/results.json"
+      }
+    ],
+    "recovery_proof": {
+      "checks": [
+        "保存回复丢失并刷新后恢复原请求与后续输入；一次只读核对同时区分自己的 v2 和另一页面的 v3",
+        "采用已保存结果前保护后续修改；明确保留本页内容后基于 v3 保存为 v4，八种桌面布局均可操作",
+        "未送达保存沿用原编号、原版本和原内容重试，只新增 v5；后来输入独立保留",
+        "慢核对可关闭，迟到回复不覆盖新窗口；其他空间不显示这份编辑，返回后仍可恢复",
+        "另一页面抢先保存时不把其 v6 误认作自己的提交；保留内容并明确基于新版本继续后保存为 v7"
+      ],
+      "errors": [],
+      "layouts": [
+        {
+          "theme": "light",
+          "width": 1024,
+          "overflow": false,
+          "visible": true
+        },
+        {
+          "theme": "light",
+          "width": 1280,
+          "overflow": false,
+          "visible": true
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "overflow": false,
+          "visible": true
+        },
+        {
+          "theme": "light",
+          "width": 1920,
+          "overflow": false,
+          "visible": true
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "overflow": false,
+          "visible": true
+        },
+        {
+          "theme": "dark",
+          "width": 1280,
+          "overflow": false,
+          "visible": true
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "overflow": false,
+          "visible": true
+        },
+        {
+          "theme": "dark",
+          "width": 1920,
+          "overflow": false,
+          "visible": true
+        }
+      ],
+      "posts": 6,
+      "ontologyVersions": 7,
+      "workspace": "workspace-08064e764a45464d",
+      "ontology": "learned-758cc947e38e4beffa71a601"
+    },
+    "browser_regressions": [
+      {
+        "before_log": "/private/tmp/af-ontology-saves-browser-20261102/ontology-saves.log",
+        "finding": "Saving after recovery did not switch back to the ontology tab, so the new version could not be located.",
+        "fix": "Set ontology tab and locate the accepted version after a guarded library refresh."
+      },
+      {
+        "before_log": "/private/tmp/af-ontology-saves-browser-fixed-20261102/ontology-saves.log",
+        "finding": "The change event on input blur rebuilt recovery buttons between pointer events and lost the inspection click.",
+        "fix": "Persist input without rebuilding recovery controls unless the storage warning changes; a focused unit regression and final browser flow pass."
+      }
+    ],
+    "syntax": "Changed Python modules AST-parse; node --check passed for ontology_save.js and learning.js.",
+    "diff_check": "git diff --check passed.",
+    "visual_review": "Inspected light/dark 1440px screenshots showing original save v2, later version v3, retained local text and explicit recovery actions. Eight desktop layouts pass overflow and button hit-testing."
+  },
+  "behavior": {
+    "atomic_save": "Ontology version, search index, audit and existing asset_save_requests row commit together; receipt failure rolls back all writes.",
+    "idempotency": "Optional request_id binds operation ontology.revise, base_ref and full content. Exact replay returns the accepted version even after subsequent revisions or lifecycle/source changes.",
+    "inspection": "GET ontology-saves/request_id?base_ref=ref reads the original receipt and latest version in one authorized snapshot. A newer version alone never proves the original save succeeded.",
+    "editing": "Local ontology content and immutable save attempts are retained separately in sessionStorage scoped by tenant, principal, workspace and asset.",
+    "recovery": "Explicit original retry or explicit adoption/rebase; confirmation protects later edits before viewing saved results or adopting latest content.",
+    "ownership": "Session, route and scope guards fence late reads and POST replies. Normal close preserves edits; storage failure keeps the editor open.",
+    "compatibility": "Existing asset save receipt schema is reused; request_hash is an additive response field. Unkeyed legacy ontology revisions retain version conflict behavior."
+  },
+  "limitations": [
+    "Tab sessionStorage recovery depends on browser session behavior; accepted versions and receipts remain server records.",
+    "Explicitly keeping local content against a newer version does not automatically merge the other revision.",
+    "Closing a pending view or discarding its local recovery copy does not cancel an in-flight server save.",
+    "Only submissions with request_id have exact receipt-based retries; legacy calls without it remain supported.",
+    "No external model was invoked; tests use temporary data and offline generation.",
+    "No release package was built or deployed."
+  ],
+  "sha256": {
+    "agent_framework/knowledge.py": "04428e90d99500554afbaaf6aee03539f8030d97f4cf3ae98691ef72b7350bb6",
+    "agent_framework/ontology.py": "26e0887632d11c83b53fcf93d186b1370bfd76aae9a26bc829bd04b61e0921a1",
+    "agent_framework/web.py": "2f4b28d1277618587a88a9a12719792152d6bf787b242f942f44d6a09db528f6",
+    "agent_framework/webui/ontology_save.js": "c8ddecb246f784afd1aa25b153ec38c4b481fda7b0a62d4351edfe5dc84c3ff2",
+    "agent_framework/webui/learning.js": "15b6b125b1eeae8613d86be6b3d0cf1018af65fcf07888f7c7a7c8f3f30818d7",
+    "agent_framework/webui/app.js": "20bd557f8ca207ab8d44a834d170aabbbf4b4f7709e2948fc3a5f9031db37369",
+    "agent_framework/webui/library.js": "cdef5765e77f36fcc6abd8db251b18b590be71f9d31374aca741ba6fee5606a6",
+    "agent_framework/webui/index.html": "ec1056f09cdc22876da1f2da6c3c11ec67bcadbeb7619c9ffc3859966df98c7a",
+    "agent_framework/webui/hig.css": "0e266fbed0dd97b90ddf4d35952b0985a1c4ed982313f44037b0ebbca23cffe9",
+    "tests/test_ontology_save_recovery.py": "96cfd177f97822e00b20f493ee187ecfbb4409a75cee07f95fc865993015b967",
+    "tests/test_ontology_saves.js": "bc87b00ef1ed2a71352476295b7da0019ed61a13529a68dd8441caee1ad90638",
+    "tests/test_learning_interactions.js": "453feb85c7c193c8954535be66df34662a3f528a23d257e30ac9b98eb88891c2",
+    "tests/learning_ui_harness.cjs": "17468c179bf2b0ff62f63ed8717b813e9f1cd94caf108f5830d3e381f5c2cd86",
+    "tests/verify_ontology_saves.cjs": "deeb547a00eac89f2d7c41f7dfb5a54238c96029c2cb857755f803fb2874b97b",
+    "scripts/run_browser_tests.py": "79f9dff121e3c5b40b9201d9aa61477b62b268447469951ad0333d6084a3ca28",
+    "README.md": "a14e99bc7fa27d2624b505b9e64e93e7468c4c53db0cf98993cc6a05876694f7",
+    "design.md": "6f1573d1f95678713dccd822810380c44a6161d7b1e2e10b2a92e09c30387a7c",
+    "docs/learning/implementation.md": "8434ffbe42a9f6c78a1829056b91440bfb5ad6abb6db8650b353d45d8764c212",
+    "docs/reliability/ontology-save-recovery.md": "123de94ef11e86bc83aa6a02e87d8e7c1f2403f5e18427341432d5d33bb6b717",
+    "docs/reliability/ontology-save-light.png": "1ebbb5a786e0bdebd0ccadbfb49d265aa9c98959a8b6dbee42980779e66a8be9",
+    "docs/reliability/ontology-save-dark.png": "3025cde5369e9849da3ad6746ac678689566a0f975368c4c819ecb83099c79ca"
+  }
+}

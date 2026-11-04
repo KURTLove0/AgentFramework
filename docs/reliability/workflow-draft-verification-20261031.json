@@ -1,0 +1,300 @@
+{
+  "date": "2026-10-31",
+  "status": "source_verified_not_packaged",
+  "release_version_unchanged": "1.3.0",
+  "scope": "Tab-local workflow draft recovery, immutable pending save restoration, explicit keep/discard, private scope and recovery record ownership",
+  "checks": {
+    "frontend": {
+      "command": "npm test",
+      "tests": 504,
+      "new_draft_tests": 22,
+      "seconds": 6.017722,
+      "passed": true,
+      "log": "/private/tmp/af-workflow-drafts-ui-20261031.log"
+    },
+    "backend": {
+      "command": "PYTHONPATH=tests .venv/bin/python -m unittest tests.test_workflow_save_recovery tests.test_web",
+      "tests": 32,
+      "seconds": 13.839,
+      "passed": true,
+      "log": "/private/tmp/af-workflow-drafts-backend-20261031.log"
+    },
+    "browser": [
+      {
+        "suite": "workflow-drafts",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-drafts-final-20261031/results.json",
+        "log": "/private/tmp/af-workflow-drafts-final-20261031/workflow-drafts.log"
+      },
+      {
+        "suite": "workflow-saves",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-drafts-browser-20261031/results.json",
+        "log": "/private/tmp/af-workflow-drafts-browser-20261031/workflow-saves.log"
+      },
+      {
+        "suite": "workflow-agents",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-drafts-browser-20261031/results.json",
+        "log": "/private/tmp/af-workflow-drafts-browser-20261031/workflow-agents.log"
+      },
+      {
+        "suite": "workspace-safety",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-drafts-integration-20261031/results.json",
+        "log": "/private/tmp/af-workflow-drafts-integration-20261031/workspace-safety.log"
+      },
+      {
+        "suite": "control-routes",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-drafts-integration-20261031/results.json",
+        "log": "/private/tmp/af-workflow-drafts-integration-20261031/control-routes.log"
+      }
+    ],
+    "new_browser_checks": [
+      "未提交的提案、空目标、分支、检索、共享智能体草案及键盘移动后的节点位置均可刷新恢复，未自动写入",
+      "服务重启和页面刷新后，原提交编号与后续输入分开恢复；只读核对后明确保存为 v2，共享智能体未重复创建",
+      "未送达提交刷新后不会自动重发；明确重试沿用原内容和编号，仍保留后来未填完的目标",
+      "两个空间在同一标签页各自保留草稿，切换后只展示当前空间的恢复入口",
+      "恢复入口与保留关闭在浅深主题、1024/1440 宽度和两倍文字的 8 组桌面布局下可用",
+      "取消放弃操作保留副本；确认放弃和清理损坏副本只改浏览器数据，不删除服务中的流程",
+      "浏览器存储失败时明确提示并拒绝静默关闭丢失输入，用户仍能主动保存到服务"
+    ],
+    "layouts": [
+      {
+        "theme": "light",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 252,
+          "right": 992,
+          "scroll": 738,
+          "client": 738,
+          "font": 14
+        },
+        "footer": {
+          "left": 425,
+          "right": 557,
+          "top": 927,
+          "bottom": 971,
+          "font": 14,
+          "root": 1024,
+          "dialog": 990,
+          "scroll": 990,
+          "focused": true
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 252,
+          "right": 992,
+          "scroll": 738,
+          "client": 738,
+          "font": 28
+        },
+        "footer": {
+          "left": 355,
+          "right": 585,
+          "top": 907,
+          "bottom": 971,
+          "font": 28,
+          "root": 1024,
+          "dialog": 990,
+          "scroll": 990,
+          "focused": true
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 272,
+          "right": 1408,
+          "scroll": 1134,
+          "client": 1134,
+          "font": 14
+        },
+        "footer": {
+          "left": 633,
+          "right": 765,
+          "top": 927,
+          "bottom": 971,
+          "font": 14,
+          "root": 1440,
+          "dialog": 1398,
+          "scroll": 1398,
+          "focused": true
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 272,
+          "right": 1408,
+          "scroll": 1134,
+          "client": 1134,
+          "font": 28
+        },
+        "footer": {
+          "left": 563,
+          "right": 793,
+          "top": 907,
+          "bottom": 971,
+          "font": 28,
+          "root": 1440,
+          "dialog": 1398,
+          "scroll": 1398,
+          "focused": true
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 252,
+          "right": 992,
+          "scroll": 738,
+          "client": 738,
+          "font": 14
+        },
+        "footer": {
+          "left": 425,
+          "right": 557,
+          "top": 927,
+          "bottom": 971,
+          "font": 14,
+          "root": 1024,
+          "dialog": 990,
+          "scroll": 990,
+          "focused": true
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 252,
+          "right": 992,
+          "scroll": 738,
+          "client": 738,
+          "font": 28
+        },
+        "footer": {
+          "left": 355,
+          "right": 585,
+          "top": 907,
+          "bottom": 971,
+          "font": 28,
+          "root": 1024,
+          "dialog": 990,
+          "scroll": 990,
+          "focused": true
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 272,
+          "right": 1408,
+          "scroll": 1134,
+          "client": 1134,
+          "font": 14
+        },
+        "footer": {
+          "left": 633,
+          "right": 765,
+          "top": 927,
+          "bottom": 971,
+          "font": 14,
+          "root": 1440,
+          "dialog": 1398,
+          "scroll": 1398,
+          "focused": true
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 272,
+          "right": 1408,
+          "scroll": 1134,
+          "client": 1134,
+          "font": 28
+        },
+        "footer": {
+          "left": 563,
+          "right": 793,
+          "top": 907,
+          "bottom": 971,
+          "font": 28,
+          "root": 1440,
+          "dialog": 1398,
+          "scroll": 1398,
+          "focused": true
+        }
+      }
+    ],
+    "page_errors": [],
+    "real_local_service_restarts": 1,
+    "syntax_and_diff": {
+      "commands": [
+        "node --check agent_framework/webui/workflow_draft.js",
+        "node --check agent_framework/webui/workflow_save.js",
+        "node --check agent_framework/webui/workflow_designer.js",
+        "git diff --check"
+      ],
+      "passed": true
+    }
+  },
+  "limits": [
+    "Recovery uses sessionStorage in the current browser tab; it is not a cross-device or long-term backup.",
+    "One unfinished workflow draft per tenant/principal/workspace per tab.",
+    "Restoring never submits, starts or cancels work automatically.",
+    "Discarding browser recovery does not cancel an in-flight save or delete server records.",
+    "No package rebuild or deployment performed."
+  ],
+  "files": {
+    "agent_framework/web.py": "1a973a59b74e54ad58c3984802a2f7525853722329b6ee4218dfec0f06ccd470",
+    "agent_framework/webui/workflow_draft.js": "01ccc196dc89e1337181a60c9596bd1d64c57680d05f9e45351056fbc401abe4",
+    "agent_framework/webui/workflow_save.js": "0eef3c0c9d055d72dd73e084758c1881b49d440dea646414a058ca9790163d3f",
+    "agent_framework/webui/workflow_designer.js": "f08c4f56bb6f02e718e8ae4269ea4bc6fa1d13cb32c907dee38c6a40fe97132c",
+    "agent_framework/webui/workflows.js": "6725af1848151a83893cfb59cf108d212c02ba8168cde55f8a22ba92aaf2b827",
+    "agent_framework/webui/app.js": "02c7079a6151331a874282a4e3a88f0fe46c59dc5c7a6f5d942eb5319258877a",
+    "agent_framework/webui/workspaces.js": "e64a3401d34240cd3785e06e9ede74e6d7ec7f46c5a74d88c19a95dbc9f7d2ae",
+    "agent_framework/webui/index.html": "d4d17eb14cb210c3bdb413f07856c33d2603f01b3c7324b7b9cb4a4fee2db87a",
+    "agent_framework/webui/hig.css": "57d51d83dfe984c473bd320e0ffdb40cd85640421570705764f7a01c642a8d27",
+    "tests/test_workflow_draft_interactions.js": "334d0bfb80838f2b8997b7eec945103aa5e60221089a0ed86ddb2419fa0e4128",
+    "tests/test_workflow_save_recovery.py": "6304962c73b95ab79e461961be3569bda47fb7863f5f3562edf03e7cfb526772",
+    "tests/verify_workflow_drafts.cjs": "6c08c5611b6b7230fdeabd4b483d6946f338793d84ad0725e8e1b60e31845499",
+    "tests/verify_workflow_saves.cjs": "2130033f334c5735322ed91d2519679752d3d83ea51b721cb53d77fb8ff5df45",
+    "tests/serve_asset_draft_fixture.py": "a6a2cd408a0d9ec91aaac0ebccceeefcf13c58567b9ed6ab53dafe786ad1cc7d",
+    "tests/browser_poll.cjs": "bb93b31053782395b1bb355a9b34cd2ae952e2651668185cc3988f9276bf325e",
+    "scripts/run_browser_tests.py": "9f1da88e47568f5366732b6ef92c897ee066cc8ce480202feee471257d2e71cb",
+    "README.md": "e0e9c9aca7b87a4791ed6c16f283177e06005e7915d97f211f294c1b7affd7c4",
+    "design.md": "504f9f184093f0824f2452bf476eab88acfecd5d51865028478810f7fa0977b3",
+    "docs/workflows/implementation.md": "a86a0ec97b631006a3d333a5b99a983e3a969b8017998f0692c4d8258a4db362",
+    "docs/reliability/workflow-saves.md": "53b43a54077beac2d29f7dda50877abeb04bb2f3b0704b60e2a83482c4444401",
+    "docs/reliability/workflow-drafts.md": "ff5cb4aca6cacac5b04a11fa952042a8adaa30fafc78634cb4fa8c8b437b359c",
+    "docs/reliability/workflow-draft-notice-light.png": "7213b5704b8a0dede7e6ea0b32af272b01c1e32be689f67bfe140dff83856544",
+    "docs/reliability/workflow-draft-notice-dark.png": "f57bdff2028c618314299089e1b4d153a9f9d181ea1cd5f38716733e588b1330",
+    "docs/reliability/workflow-draft-editor-light.png": "cde20620e51a51fd316312da6522dd4f26058c660b530b3a2e209e3fff35b00e",
+    "docs/reliability/workflow-draft-editor-dark.png": "4d1fd097f01ee7deead45be26aefcc4514242d17c40bb6e4bccaee5786bf3895"
+  }
+}

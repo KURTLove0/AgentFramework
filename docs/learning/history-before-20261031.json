@@ -1,0 +1,29 @@
+{
+  "records": 400,
+  "body_kib": 32,
+  "model_calls": 0,
+  "measurements": [
+    {
+      "seconds": 0.10746441700030118,
+      "selects": 201,
+      "decoded_json_bytes": 6595800,
+      "returned": 200,
+      "response_bytes": 43601
+    },
+    {
+      "seconds": 0.1136969590006629,
+      "selects": 201,
+      "decoded_json_bytes": 6595800,
+      "returned": 200,
+      "response_bytes": 43601
+    },
+    {
+      "seconds": 0.12796395800251048,
+      "selects": 201,
+      "decoded_json_bytes": 6595800,
+      "returned": 200,
+      "response_bytes": 43601
+    }
+  ],
+  "median_seconds": 0.1136969590006629
+}

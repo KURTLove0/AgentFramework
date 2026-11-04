@@ -6,13 +6,13 @@ user supplied command, URL, credential or model-generated shell is executed.
 import json
 from pathlib import Path
 import subprocess
-import sys
 
 from .contracts import ToolFailure, canonical
+from .processes import module_command
 
 
 def invoke(adapter_ref, payload, timeout, write):
-    command = [sys.executable, '-m', 'agent_framework.worker']
+    command = module_command('agent_framework.worker')
     if adapter_ref == 'mock-worker@1.0.0':
         request = payload
     elif adapter_ref == 'mock-cli@1.0.0':

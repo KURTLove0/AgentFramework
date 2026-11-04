@@ -1,0 +1,119 @@
+{
+  "date": "2026-11-01",
+  "status": "source_verified_not_packaged",
+  "release_version_unchanged": "1.3.0",
+  "scope": "Independent proposal admission and bounded concurrent design/retrospective/ontology generation while ordinary commands remain responsive",
+  "reproduction": {
+    "command": "PYTHONPATH=tests .venv/bin/python -m unittest tests.test_proposal_responsiveness",
+    "before_log": "/private/tmp/af-proposal-block-before-20261101.log",
+    "before_result": "Draft POST timed out at 1 second while the offline design model was paused.",
+    "after_result": "The same draft and task-creation requests complete while the model is still paused; separate tests cover ontology and retrospective generation."
+  },
+  "checks": {
+    "backend": {
+      "command": "PYTHONPATH=tests .venv/bin/python -m unittest tests.test_proposal_responsiveness tests.test_http_responsiveness tests.test_workflow_chat_requests tests.test_learning_acceptance tests.test_learning tests.test_ontology_regressions tests.test_ontology_evidence tests.test_web",
+      "tests": 122,
+      "new_tests": 12,
+      "seconds": 28.797,
+      "passed": true,
+      "log": "/private/tmp/af-proposal-backend-final-20261101.log"
+    },
+    "browser_command": ".venv/bin/python scripts/run_browser_tests.py --suite proposal-capacity --suite learning-reads --suite workflow-chat-requests --output /private/tmp/af-proposal-browser-20261101",
+    "browser": [
+      {
+        "suite": "proposal-capacity",
+        "passed": true,
+        "exit_code": 0,
+        "checks": [
+          "工作流设计和本体生成在两个页面同时受理，等待独立的离线生成结果",
+          "两个生成都未完成时，第三个页面自动保存目标并创建任务，任务实际执行成功",
+          "生成名额已满时立即提示尚未受理；没有创建第三份请求或调用模型，页面保留原需求与核对入口",
+          "名额释放后沿用原编号重试成功，后续输入保留；两个原生成也完成，未自动保存或运行工作流"
+        ],
+        "layouts_checked": 0,
+        "log": "/private/tmp/af-proposal-browser-20261101/proposal-capacity.log",
+        "detail": "/private/tmp/af-proposal-browser-20261101/proposal-capacity/results.json"
+      },
+      {
+        "suite": "learning-reads",
+        "passed": true,
+        "exit_code": 0,
+        "checks": [
+          "慢读取冻结编辑与写入，保留关闭入口；取消等待并继续编辑后，旧回复不覆盖输入或切换空间",
+          "读取失败保留未保存内容并恢复操作，不把读取错误当作未知写入",
+          "采用已存提案前明确确认；继续编辑保留输入，接受替换后采用保存版本，全程无写入或模型重放",
+          "其他页面修订本体后，四种桌面场景均先确认替换；拒绝保留原输入，接受后采用 v2 且不产生额外版本",
+          "初次加载可以关闭并重开；旧加载失败不会替换新窗口或清除新输入"
+        ],
+        "layouts_checked": 4,
+        "log": "/private/tmp/af-proposal-browser-20261101/learning-reads.log",
+        "detail": "/private/tmp/af-proposal-browser-20261101/learning-reads/results.json"
+      },
+      {
+        "suite": "workflow-chat-requests",
+        "passed": true,
+        "exit_code": 0,
+        "checks": [
+          "丢失已保存响应后，刷新恢复原请求；只读核对找到同一设计结果，未创建智能体或工作流",
+          "四种桌面宽度和深浅主题中核对操作与后续输入可见，无横向溢出",
+          "未送达请求在核对后按原编号、内容和版本重试，后续输入保留在同一设计对话",
+          "历史读取失败保持发送关闭，重读成功后恢复原对话",
+          "处理中可关闭并保留入口；迟到响应不会覆盖新窗口，切换页面关闭窗口且保留核对入口"
+        ],
+        "layouts_checked": 8,
+        "log": "/private/tmp/af-proposal-browser-20261101/workflow-chat-requests.log",
+        "detail": "/private/tmp/af-proposal-browser-20261101/workflow-chat-requests/results.json"
+      }
+    ],
+    "multi_page_proof": {
+      "checks": [
+        "工作流设计和本体生成在两个页面同时受理，等待独立的离线生成结果",
+        "两个生成都未完成时，第三个页面自动保存目标并创建任务，任务实际执行成功",
+        "生成名额已满时立即提示尚未受理；没有创建第三份请求或调用模型，页面保留原需求与核对入口",
+        "名额释放后沿用原编号重试成功，后续输入保留；两个原生成也完成，未自动保存或运行工作流"
+      ],
+      "errors": [],
+      "workspace": "workspace-387ede967d314ae3",
+      "taskId": "task-173a89d7a022ae5bf349c941b09e83e8",
+      "generators": {
+        "calls": [
+          "design",
+          "learning",
+          "other-design"
+        ],
+        "active": 0,
+        "maximum": 2
+      },
+      "requestIds": [
+        "design-883105fc-5be8-46de-b087-62c282559a81",
+        "design-883105fc-5be8-46de-b087-62c282559a81"
+      ]
+    },
+    "syntax": "AST parsed changed Python modules; node --check tests/verify_proposal_capacity.cjs passed.",
+    "diff_check": "git diff --check passed.",
+    "visual_review": "Light/dark recovery screenshots inspected; original request and retry controls are visible."
+  },
+  "limitations": [
+    "Capacity applies to each Web application instance, shared across its workspace views; it is not a global quota across independent service processes.",
+    "Ordinary task execution retains its separate queue and existing capacity rules.",
+    "No external model was invoked; tests use disposable data and offline or synthetic generation.",
+    "No release package was built or deployed."
+  ],
+  "sha256": {
+    "agent_framework/proposal_capacity.py": "34c71eb436274d7528835278349191cf2d8b550e6cb37f7b94cc87cb4816d869",
+    "agent_framework/web.py": "cd3f967c144d6b8d51884ebc5f7fb267d5de88733af89b25caf7a85bbe535e57",
+    "agent_framework/learning.py": "b3c27972337f17023d57aa476e254b1c392f10d8a344afab5097bffd36de35eb",
+    "agent_framework/workflow_chat_requests.py": "bc43342de8c19ab2e52a578b11ec3cf5380dbcbd1464c53a4947872cd65fb4a8",
+    "tests/test_proposal_responsiveness.py": "3f1db8b914a025db5cfbfee655ccf7f596e8ba47d995f0a4bb96e0739f638f2d",
+    "tests/serve_proposal_capacity_fixture.py": "120f292d763e33c19dbc496396525de0ba94c81180909b813249258cd0ade872",
+    "tests/verify_proposal_capacity.cjs": "db4b375d5948ee8e48e52026e7ca8fc9f14f57f31c63f9869654295196d13e3a",
+    "scripts/run_browser_tests.py": "116044fb09a5b93d1091ce729c0ab0cc1649acc142a44449c7e4e83934d172d3",
+    "README.md": "0b3ccfa72ba6a52c6224450d518b318bcc0632400a166a32ba0998f881602002",
+    "design.md": "dde21e81d59dbfe8b4dde4810699d8de23be64287b0601e374f61c7277371ec3",
+    "docs/learning/implementation.md": "210ebf59c2a20afdc24428b33ab56b5ce959225a631d07c5de9e540edd5f1b11",
+    "docs/reliability/http-responsiveness.md": "9512807a75986380480cc5e4a9a7e1018d7d11700dca360ff4baf6dde5d46720",
+    "docs/reliability/proposal-responsiveness.md": "4a1a34d17d93ef35b4faf64ef3a6aaa420ff7a87dcc572d98734327ff6201692",
+    "docs/reliability/proposal-capacity-light.png": "7653d0be3317373a474fb52f6c65fd1bde551fb5b3f08d3c019ff02baff9f409",
+    "docs/reliability/proposal-capacity-dark.png": "c25f9e4211a6cdc52c8ed0a252e275d35f55fbbabdf0e3937d4465973a8660f3"
+  }
+}

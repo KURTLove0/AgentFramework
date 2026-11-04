@@ -1,0 +1,248 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Edit only undispatched conversation messages without changing queue position or execution identity. Persist versioned edit receipts and original submission content, fence dispatch against stale prepared content, and retain browser edits across conflicts, lost acknowledgements, refresh and dispatch.",
+  "prior_behavior": "Queued messages exposed cancellation but no in-place edit operation. Original message receipt lookup read the turn content directly. Dispatch acceptance checked queued state but did not need to compare content before this feature.",
+  "backend": {
+    "new_tests": 16,
+    "related": {
+      "tests": 69,
+      "passed": 69,
+      "duration_seconds": 7.043,
+      "log": {
+        "path": "/private/tmp/af-message-edits-related-final.log",
+        "sha256": "6bb05f8674a6cd66712f1504e8c2c36524dc65aa27bfd647436db7b54a9f66bf"
+      }
+    },
+    "full": {
+      "command": ".venv/bin/python -m unittest discover -s tests -p 'test_*.py'",
+      "tests": 1257,
+      "passed": 1257,
+      "duration_seconds": 229.086,
+      "log": {
+        "path": "/private/tmp/af-message-edits-backend-full.log",
+        "sha256": "040a317c92881890e7029bf8ebfa86145185d3ac54bd27604a2aac6c42fe6c58"
+      }
+    },
+    "coverage": [
+      "Stable turn identity and queue order",
+      "Original send and failed-turn retry receipt preservation",
+      "Durable idempotent edit replay after materialization",
+      "Competing edits",
+      "Edit-before-dispatch and dispatch-before-edit",
+      "Stale preparation errors",
+      "Atomic rollback",
+      "Scope and payload validation",
+      "Unrelated appended messages",
+      "Read-only receipt lookup",
+      "Cleanup hold remains enforced",
+      "Readonly historical database",
+      "Backup restoration",
+      "HTTP and asset routing"
+    ]
+  },
+  "frontend": {
+    "new_tests": 13,
+    "focused_final": {
+      "tests": 33,
+      "passed": 33,
+      "failed": 0,
+      "duration_ms": 476.389167,
+      "log": {
+        "path": "/private/tmp/af-message-edits-frontend-focused-final.log",
+        "sha256": "41763cc7f6cdb76a7ee5bcee04def17a97dbe7763af4274f27fe85da31be6c44"
+      }
+    },
+    "related": {
+      "tests": 69,
+      "passed": 69,
+      "failed": 0,
+      "duration_ms": 990.089375,
+      "log": {
+        "path": "/private/tmp/af-message-edits-frontend-related.log",
+        "sha256": "0028144e4c358610fe6c5cc38cda65f4d6f7a6f8f0cd13476edd0a8fcebd734d"
+      }
+    },
+    "full": {
+      "command": "npm test",
+      "tests": 886,
+      "passed": 886,
+      "failed": 0,
+      "duration_ms": 10249.504458,
+      "log": {
+        "path": "/private/tmp/af-message-edits-frontend-final.log",
+        "sha256": "6fb81ed5f628159f05e1959230235ad9f091dade396820a52d9ddca67633c5a6"
+      }
+    },
+    "iteration": {
+      "log": {
+        "path": "/private/tmp/af-message-edits-frontend-first.log",
+        "sha256": "7df2e15ceff88d4093848b01ddb318c0d7c657c474b4c6550c09532c4a604489"
+      },
+      "tests": 69,
+      "passed": 68,
+      "failed": 1,
+      "note": "Retrying an older frozen payload after local edits incorrectly cleared those edits because no typing occurred during that retry. Closing now additionally requires current input to match the submitted content. The regression passes."
+    },
+    "ordering": "The final full JavaScript run preceded only the final already-inspected guidance wording. Focused 33 tests and the complete queue-edit browser suite passed after that wording change."
+  },
+  "browser": {
+    "passed_suites": {
+      "task-message-edits": {
+        "result": {
+          "path": "/private/tmp/af-message-edits-browser-verified/task-message-edits/results.json",
+          "sha256": "316d395e7b1f436fa3e27d636b0807cf3ed0df3c75c94555945158fe0dcc44bd"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-message-edits-browser-verified/results.json",
+          "sha256": "a3309b8bbd68fe86eb3e2906fb254beca8540ba7ad389746ce0b5cd4e2bd5708"
+        },
+        "checks": [
+          "修改保持队列位置、运行身份与后续消息，原发送回执和未发送对话草稿保留",
+          "多页面修改冲突保留本页输入，只读核对后明确保存；八种桌面主题与字号布局可操作",
+          "保存回执丢失后刷新恢复原请求及后续输入，核对不重发，后续编辑需明确再次保存",
+          "派发先发生时拒绝迟到修改并保留可复制输入；实际执行和后续上下文使用各自正确版本，导出标记修改"
+        ],
+        "errors": [],
+        "layout_cases": 8,
+        "enlarged_font_pixels": 28,
+        "editor_width_fraction_minimum": 0.8
+      },
+      "task-messages": {
+        "result": {
+          "path": "/private/tmp/af-message-edits-browser-first/task-messages/results.json",
+          "sha256": "fed4578aca628bcb7f4db109872084bbbf904eddc8a63eb9b97c7b6d31d6eed0"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-message-edits-browser-first/results.json",
+          "sha256": "dc52dfba96feeee1aad866e063ad0c1c30a1cf5d382b9b777b49e8534426f96d"
+        },
+        "checks": [
+          "受理后丢失回执，修改文字与刷新均保留原发送编号；只读核对找回同一轮消息",
+          "核对区在八种桌面主题和文字布局下可到达；确认返回后仍保留后来编辑的文字",
+          "其他页面更新后先核对版本，核对后再变化仍拒绝；原请求晚到受理后同编号重试不增加轮次",
+          "核对读取失败保留原消息与恢复入口，不自动重发，也不把未知结果当作未受理",
+          "切换任务后晚到的核对结果不会覆盖当前对话，返回原任务仍可继续核对"
+        ],
+        "errors": []
+      },
+      "turn-retries": {
+        "result": {
+          "path": "/private/tmp/af-message-edits-browser-first/turn-retries/results.json",
+          "sha256": "4b4d77d8909b52289ae11e55eb03baeb7f780faee1e6522c4a1b6312ba86b8b0"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-message-edits-browser-first/results.json",
+          "sha256": "dc52dfba96feeee1aad866e063ad0c1c30a1cf5d382b9b777b49e8534426f96d"
+        },
+        "checks": [
+          "两个页面同时重试只新增一轮，再次失败从新轮次重试；原失败、关联和相同文字的未发送草稿均保留",
+          "重试来源与结果可双向定位，八组桌面主题和字号下入口可见，重绘保留按钮焦点",
+          "重试已受理但回执丢失时，刷新恢复原轮次，只读核对返回同一次结果且保留后续输入",
+          "未受理的重试遇到对话更新先拒绝，核对后沿用原轮次和原要求，后来输入不会混入"
+        ],
+        "errors": []
+      },
+      "conversation-review": {
+        "result": {
+          "path": "/private/tmp/af-message-edits-browser-first/conversation-review/results.json",
+          "sha256": "7d61df1d9edb2556d9688e74f3dacf1c8101eb287aafc253ddf66d521032e420"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-message-edits-browser-first/results.json",
+          "sha256": "dc52dfba96feeee1aad866e063ad0c1c30a1cf5d382b9b777b49e8534426f96d"
+        },
+        "checks": [
+          "真实业务写入回读失败后，原任务保持待核对，已接收消息可见、暂停，诊断入口只读",
+          "刷新保留未发送草稿与排队消息；新消息受阻，同一提交回执仍可读取，取消后重复提交不会复活消息",
+          "待授权对话保留具体操作的确认入口和排队取消入口；12 种深浅色、宽度与文字大小组合无横向溢出"
+        ],
+        "errors": []
+      }
+    },
+    "visual_iteration": {
+      "result": {
+        "path": "/private/tmp/af-message-edits-browser-first/task-message-edits/results.json",
+        "sha256": "4dd61afac0e829d08df231f8add8f2b4296e3f22f2ef33ae1742d3dbe41a98ab"
+      },
+      "screenshot": {
+        "path": "/private/tmp/af-message-edits-browser-first/task-message-edits/queue-edit-light.png",
+        "sha256": "ed6c758cb0b9df4d074ab4524cb29798d60ae5a2f143f4c9fd77c76ba99a1853"
+      },
+      "note": "Functional and control-boundary assertions passed, but visual inspection found an unintended two-column form with a narrow editor. The final layout is one column with explicit width assertions and was verified again."
+    },
+    "screenshots": [
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-message-edits-light.png",
+        "sha256": "89ad14ec0af990d3328513b3890d838cba7b5d5fe9fb60c1c5d85e5d816ec94d"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-message-edits-dark.png",
+        "sha256": "fda222daeecab8ace62dfecd28204a08bd89b9a0521c9da62e3e0b35a4033549"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-message-edits-started.png",
+        "sha256": "9cc74230b867f6325cb9932d2f379f887bfe806bac21aad3ef577f43c1caa36c"
+      }
+    ],
+    "visual_review": "Inspected full-width editor, current-versus-local content choices, and started-message copy recovery. Final eight desktop layout cases assert real 28px controls, visible bounds, keyboard focus and editor width above 80 percent of dialog width.",
+    "isolation": "Disposable databases and Mock runtime tasks. Fixture dispatch is deliberately held until an explicit test-only release. Real HTTP interception creates edit conflicts, lost receipts and dispatch-before-edit ordering. The verifier checks actual stored execution requirements, next-turn context and Markdown export. No real model service or business system is called."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-message-edits-source-candidate-20261103",
+    "build_log": {
+      "path": "/private/tmp/af-message-edits-build.log",
+      "sha256": "53551137600e99bc855a5fa9773f5931fe90519f5ad4ffe5c57158b018014d13"
+    },
+    "verification": {
+      "path": "/private/tmp/af-message-edits-package-check.json",
+      "sha256": "5e5fe5f4f95db0dd4215e794b8096944d8f38cb464ec92d9c9beccc98d6d2726"
+    },
+    "program_files": 154,
+    "bundle": {
+      "path": "/private/tmp/af-message-edits-source-candidate-20261103/agent-framework-1.3.0.tar.gz",
+      "sha256": "a0e2dfedecc708450660423b230b8cd1bdd04b96880a0c566366ded64f16efea"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-message-edits-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "b77edc10a0fd89f44add2402d1cbc8927bc9928c7359670e838aa69431012e82"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-message-edits-source-candidate-20261103/SHA256SUMS",
+      "sha256": "dd338cc55dc85bc7b2e0a96bf959ba3810880473a87ef8334e4bcb2b9e24f954"
+    },
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/task_message_edits.py": "1c7b1b33d4aaa5b7f08cad0dd8395a0c8dcaec972964d360f2822b0d7f295ed0",
+    "agent_framework/task_conversations.py": "495356ac3ded2c8d4a6c5226cf66afdc7e77e1f3b1e3d84e3601047370dfd0d9",
+    "agent_framework/web.py": "bacb0d536085009f33ab82f48bd51a55448fdd89a1e68a2b124596cbcea9a59f",
+    "agent_framework/exports.py": "5c841959e6d01381b50ff93ee61794efcdce143fece6722554f2cb9153967ba7",
+    "agent_framework/webui/task_message_edit.js": "bf037fc8977377245b80848ef931b04978c13aca943e4965668a53a03f8eb11f",
+    "agent_framework/webui/task_message.js": "2b24d9a3176f6590ceaefd5c9cb629e32e6c558d1832791447b5e9bcb94da78f",
+    "agent_framework/webui/task_conversation.js": "6b81802ca1aa122ad5d2060b6cd59973c6ac2077271bb5f84c4cdcb0ea6096d7",
+    "agent_framework/webui/task_conversation.css": "995b0ba5cff786f72e478f64c90552551cb6d5b9fbfaaa9b9deb0e16869a2622",
+    "agent_framework/webui/index.html": "d5186c35a24f77cfe0253b667b5a54428e25eea3140c8aa3a70fb0d9e68f5580",
+    "tests/test_task_message_edits.py": "2b85b1fd6ed799cfc3719b753b4fd58b8fff1c939ebe2f7f28cb3ddbc3cb3499",
+    "tests/test_task_message_edit_interactions.js": "fd61a1a5d530eeacb90c244859833690ced861ea0d211c383d0b7a41d5dd572f",
+    "tests/test_task_message_interactions.js": "52802be4d179b2199a2e1aebb3eeb6ab2255b2888f8670004748490b801bc6b8",
+    "tests/serve_message_edits_fixture.py": "21cfb6ab124f3c0479f58bb277c6c1300bf3680377ebc62d7b47839f94514d51",
+    "tests/verify_task_message_edits.cjs": "5ab9daf082b2adafe57faeda6a7f656ec46cf7f1df1ffa21fa41cf7afe00db9d",
+    "scripts/run_browser_tests.py": "1e03ff315fa07f654322961f4a1f597f46027672a2eb4456d002dcf7b241016b",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "144f5ebd60e1db55e6f251036548bc5ef3989488cb27eeda96e23888cfac5d98",
+    "design.md": "174b4f5de4a62db1929be3facb85b1ba0d99d2815160498b948e5e559c06825b",
+    "docs/reliability/task-message-edits.md": "bd0e99c02ee23efe3decd14c4b50a7ea7a48d437cc1904a71a056d6c0852f991"
+  },
+  "limits": [
+    "Only queued followups with no materialized run are editable. Opening the editor does not pause dispatch; started or cancelled messages remain immutable.",
+    "One unfinished edit is retained per conversation per tab. Browser refresh recovery depends on sessionStorage, with explicit storage failure guidance.",
+    "Editing an existing queue item does not release environment or unresolved-business holds.",
+    "Database records preserve prior and new text, original submission receipts and immutable edit receipts. The UI does not yet expose full edit history or rollback.",
+    "The enlarged-text matrix covers the editor controls, not a claim of uniform page zoom coverage.",
+    "Focused and full counts overlap. No version bump, publication or repeated fresh installation."
+  ]
+}

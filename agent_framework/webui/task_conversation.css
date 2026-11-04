@@ -3,6 +3,15 @@
 .task-thread-panel{padding:0!important;overflow:hidden;display:flex;flex-direction:column;height:calc(100dvh - var(--topbar-height,76px) - 88px);min-height:500px;max-height:1100px}
 .task-thread-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:24px 28px 22px;border-bottom:1px solid var(--border);flex:none}
 .task-thread-header>div{min-width:0}
+#task-name-form .form-grid{grid-template-columns:minmax(0,1fr);gap:12px}
+#task-name-form .dialog-foot{flex-wrap:wrap}
+#task-name-form .dialog-foot button{max-width:100%;white-space:normal}
+#task-name-dialog .notice{display:block}
+#task-name-dialog .toolbar{flex-wrap:wrap}
+.task-favorite-notice{flex-direction:column;align-items:flex-start}
+.task-favorite-notice p{margin:0;width:100%;overflow-wrap:anywhere}
+.task-favorite-notice button{max-width:100%;white-space:normal}
+#task-export-download[aria-disabled="true"]{background:var(--subtle);color:var(--muted);border-color:var(--border);cursor:wait}
 .task-thread-header h2{font-size:21px;line-height:1.5;margin:5px 0 12px;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .task-thread-id{font-size:12px;color:var(--muted);margin:0}.task-thread-id span{font-family:var(--mono);margin-left:8px}
 .task-thread-meta{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
@@ -38,12 +47,21 @@
 .chat-limitations,.chat-cancelled-note,.chat-thinking-note{color:var(--muted);font-size:12px;line-height:1.8}
 .task-chat-preview{margin-top:14px;min-height:40px}.task-chat-preview[hidden]{display:none}.chat-preview-label{font-size:12px;color:var(--muted);line-height:1.8;margin:10px 0}.task-chat-preview[aria-busy=true] .chat-preview-label::before{content:"";display:inline-block;width:6px;height:6px;margin-right:7px;background:var(--blue);border-radius:50%}
 .chat-question,.chat-turn-error{padding:12px 14px;margin-top:12px;background:var(--subtle);border:1px solid var(--border);border-radius:10px;font-size:14px;line-height:1.8}.chat-question{display:flex;align-items:flex-start;gap:10px}.chat-question>span{flex:none;display:flex;padding-top:4px;color:var(--blue)}.chat-question p,.chat-turn-error p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.chat-turn-error strong{display:block;color:var(--red);font-size:13px;margin-bottom:4px}
-.chat-queued-label{font-size:11px;color:var(--amber)}.chat-queue-actions{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin-top:8px}.chat-queue-actions button{font-size:12px;min-height:36px}
+.chat-queued-label{font-size:11px;color:var(--amber)}.chat-queue-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin-top:8px}.chat-queue-actions button{font-size:12px;min-height:36px}
 .task-chat-composer{margin:0 22px 20px;border:1px solid var(--border-strong);border-radius:13px;background:var(--surface);padding:12px 14px 10px;flex:none}
 .task-chat-composer:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
 .task-chat-composer textarea{display:block;resize:none;width:100%;border:0!important;box-shadow:none!important;outline:0!important;background:transparent;color:var(--ink);font:14px/1.7 var(--font);padding:0;min-height:64px;max-height:180px;overflow-y:auto}
 .task-composer-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}.task-composer-footer>span{font-size:11px;color:var(--muted);line-height:1.6}.task-composer-footer>button{font-size:13px;min-height:38px;padding:7px 12px;gap:6px;white-space:nowrap}.task-composer-footer svg{width:15px;height:15px}
 .task-chat-composer .inline-error{font-size:12px;margin:8px 0 0}
+.chat-draft-status{margin-top:8px;font-size:12px;line-height:1.5;color:var(--muted)}
+.chat-draft-status p{margin:0}.chat-draft-status .toolbar{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:4px}
+.chat-draft-status .text-button{min-height:44px;white-space:normal;text-align:left}
+#chat-draft-dialog{width:min(880px,calc(100vw - 32px))}
+.chat-draft-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin:18px 0}
+.chat-draft-columns label{display:flex;flex-direction:column;gap:8px;font-weight:600;min-width:0}
+.chat-draft-columns textarea{width:100%;height:min(28dvh,240px);resize:none;font-weight:400;line-height:1.65;overflow:auto}
+#chat-draft-dialog .dialog-foot{flex-wrap:wrap}#chat-draft-dialog .dialog-foot button{min-height:44px;white-space:normal}
+@media(max-width:600px){.chat-draft-columns{grid-template-columns:minmax(0,1fr);gap:12px}.chat-draft-columns textarea{height:110px}#chat-draft-dialog .dialog-foot{gap:8px}}
 .chat-latest-bar{position:absolute;bottom:174px;left:50%;transform:translateX(-50%);z-index:2}.chat-latest-bar button{font-size:12px;min-height:36px;box-shadow:var(--control-shadow);border-radius:20px;white-space:nowrap;background:var(--surface)}
 .task-thread-properties{min-width:0;background:var(--subtle);border-left:1px solid var(--border);padding:22px 20px;overflow-y:auto;font-size:13px}.task-thread-properties>h3{font-size:12px;margin:0 0 22px}.task-thread-properties .facts{font-size:12px}.task-thread-properties .fact{padding:7px 0;gap:10px}.task-thread-properties .fact dd{overflow-wrap:anywhere}
 .task-property-section{border-top:1px solid var(--border);margin-top:20px;padding-top:16px}.task-property-section h4{font-size:12px;margin:0 0 10px}.task-property-section .text-button{font-size:12px;min-height:36px;display:flex;padding:8px 0}.task-property-section summary{cursor:pointer;font-size:12px;min-height:36px;padding:6px 0;font-weight:600}.task-property-section p{font-size:12px;line-height:1.8;color:var(--muted);margin-top:14px}
@@ -55,3 +73,51 @@
 @media(max-height:540px){.task-thread-panel{height:640px;max-height:none}}
 
 .task-mobile-actions{display:grid;gap:4px;border-top:1px solid var(--border);margin-top:12px;padding-top:8px}.task-mobile-actions .text-button{min-height:44px;display:flex;align-items:center;padding:8px 0;text-align:left;font-size:13px}.task-mobile-panel .facts{margin:0}
+.task-cleanup-review{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:16px 24px;overflow-wrap:anywhere}
+.task-cleanup-review p{margin:0;line-height:1.6}
+.task-cleanup-review .task-cleanup-confirm{display:flex;align-items:flex-start;gap:10px;line-height:1.6}
+.task-cleanup-confirm input{flex:0 0 auto;margin-top:5px}
+.task-cleanup-review button{max-width:100%;white-space:normal;text-align:left}
+.task-thread-panel:has(.task-cleanup-review){height:auto;max-height:none}
+.task-thread-panel:has(.task-cleanup-review) .task-thread-layout{height:520px;min-height:520px;flex:none}
+
+#queue-edit-dialog {width:min(720px,calc(100vw - 48px));max-width:calc(100vw - 48px)}
+#queue-edit-dialog .form-grid {grid-template-columns:minmax(0,1fr)}
+#queue-edit-dialog .form-grid>.full {min-width:0;grid-column:1/-1}
+#queue-edit-dialog textarea {min-height:180px;resize:vertical}
+#queue-edit-dialog .queue-edit-current {white-space:pre-wrap;overflow-wrap:anywhere;max-height:220px;overflow:auto}
+#queue-edit-dialog .notice {margin:0;min-width:0}
+#queue-edit-dialog .notice>div {min-width:0;width:100%}
+
+#message-history-dialog {width:min(900px,calc(100vw - 48px));max-width:calc(100vw - 48px)}
+#message-history-dialog .dialog-body {min-height:160px}
+#message-history-dialog .notice {margin:0 0 16px}
+#message-history-dialog details {margin-block:16px;border:1px solid var(--border);border-radius:12px;padding:12px 16px}
+#message-history-dialog summary {cursor:pointer;font-weight:600;line-height:1.8}
+#message-history-dialog summary time {font-weight:400;color:var(--muted);margin-left:8px}
+.message-history-heading {margin-top:24px}
+.message-history-heading p,.message-history-current>p {color:var(--muted);margin-block:8px}
+.message-history-text {white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;line-height:1.8;margin-block:8px}
+.message-change-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:12px}
+.message-change-grid>section {min-width:0}
+#message-history-dialog .message-history-new {color:var(--blue)}
+@media(max-width:1100px){.message-change-grid {grid-template-columns:minmax(0,1fr)}}
+
+.run-text-match {display:block;width:100%;max-width:480px;text-align:left;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--muted);padding:8px 10px;margin-top:10px;cursor:pointer;font:inherit;line-height:1.6;white-space:normal}
+.run-text-match>span:first-child {display:block;font-size:12px;margin-bottom:4px}
+.run-text-excerpt {display:block;color:var(--text);overflow-wrap:anywhere;white-space:normal}
+.run-text-match mark {background:var(--blue-soft);color:var(--text);font-weight:600}
+.run-text-match:hover {border-color:var(--blue)}
+.task-source-note{margin:0 0 20px;padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--subtle);overflow-wrap:anywhere}
+.task-source-note h3{margin:0 0 8px;font-size:15px}
+.task-source-note p{margin:8px 0;line-height:1.6}
+.task-source-note p:last-child{margin-bottom:0}
+.task-source-link{overflow-wrap:anywhere}
+
+/* Direct task provenance shares the structured dialog's keyboard and scroll model. */
+.task-relation-section { margin-block: 1.25rem; min-width: 0; }
+.task-relation-list { list-style: none; padding: 0; margin: .75rem 0; }
+.task-relation-card { padding: 1rem 0; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+.task-relation-card > a { display: inline-block; font-weight: 600; padding-block: .25rem; color: var(--blue); text-decoration: underline; text-underline-offset: .2em; }
+.task-relation-meta { display: flex; flex-wrap: wrap; gap: .3rem 1rem; margin-block: .35rem; color: var(--muted); font-size: .85rem; }
+.task-relation-card p { margin: .5rem 0; white-space: pre-wrap; }

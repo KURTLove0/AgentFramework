@@ -1,0 +1,50 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),{chromium}=require('playwright'),H=require('./ui95_helpers.cjs');
+const base=process.env.MESSAGE_EDITS_URL,out=process.env.MESSAGE_EDITS_OUTPUT;if(!base||!out)throw Error('Use isolated queue fixture');fs.mkdirSync(out,{recursive:true});
+const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
+(async()=>{
+ const browser=await chromium.launch({channel:'chrome',headless:true}),context=await browser.newContext({viewport:{width:1440,height:1100},permissions:['clipboard-read','clipboard-write'],reducedMotion:'reduce'}),page=await context.newPage(),other=await context.newPage(),checks=[],errors=[],posts=[],layouts=[];
+ const config=JSON.parse(fs.readFileSync(path.join(out,'fixture.json'),'utf8')),[a,b]=config.roots,call=(p,url,data)=>p.evaluate(({url,data})=>api(url,data),{url,data}),pass=text=>{checks.push(text);console.log('PASS '+text);};let release;
+ for(const p of [page,other]){p.setDefaultTimeout(15000);p.on('pageerror',e=>errors.push(e.message));p.on('request',r=>{if(r.method()==='POST')posts.push(new URL(r.url()).pathname);});}
+ const ready=async(p,id)=>{await p.waitForFunction(id=>state.detail?.conversation?.id===id&&!state.busy,id);await H.settled(p);};
+ const nav=async(id)=>{await H.nav(page,'runs',id);await ready(page,id);};
+ const open=async()=>{await page.locator('#chat-turn-2 [data-message-history]').click();await page.waitForFunction(()=>messageEditHistory?.data&&!messageEditHistory.loading);};
+ const read=async(selector)=>{await page.locator(selector).click();await page.waitForFunction(()=>messageEditHistory&&!messageEditHistory.loading);};
+ const endpoint=base+'/api/tasks/'+a+'/messages/2/edits',version=n=>'第 '+n+' 次：周六 16 点开会\n议题：产品需求与排期 😀 <img src=x onerror=alert(1)>'+(n===22?'\n参考资料：'+('https://example.test/very-long-reference/').repeat(40):'');
+ try{
+  await page.goto(base+'/?workspace='+config.workspace+'#/runs/'+a);await ready(page,a);await other.goto(base+'/?workspace='+config.workspace+'#/runs/'+a);await ready(other,a);
+  for(let n=1;n<=23;n++)await call(page,'/api/tasks/'+a+'/messages/2/edit',{content:version(n),revision:n-1,request_id:'history-'+n});
+  await call(other,'/api/tasks/'+b+'/messages/2/edit',{content:'另一会话的要求',revision:0,request_id:'other-history'});
+  await page.waitForFunction(()=>state.detail?.conversation?.turns[1].edit_revision===23);
+  await page.locator('#task-chat-input').fill('独立的后续对话草稿');await page.locator('#chat-turn-2 [data-queue-edit]').click();await page.locator('#queue-edit-input').fill('还未保存的本页编辑');await page.keyboard.press('Escape');const readonlyStart=posts.length;
+  await open();assert.equal(await page.locator('.message-history-change').count(),10);assert.equal(await page.locator('.message-history-current .message-history-text').innerText(),version(23));assert.equal(await page.locator('#message-history-dialog img').count(),0);
+  await page.locator('[data-history-key="original"] summary').click();await page.locator('[data-message-history-copy="original"]').click();assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),'周五 15 点开会');assert.equal(await page.evaluate(()=>document.activeElement.id),'message-history-copy-original');
+  await page.locator('[data-message-history-copy="before:23"]').click();assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),version(22));
+  pass('真实历史展示原消息及修改前后完整内容，复制保持 Unicode 与换行，输入作为纯文本呈现');
+
+  await call(other,'/api/tasks/'+a+'/messages/2/edit',{content:version(24),revision:23,request_id:'history-24'});let fail=true;
+  await page.route(endpoint+'?**',async route=>{if(fail){fail=false;return route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:'模拟读取暂时不可用'})});}return route.continue();});
+  await page.locator('#message-history-dialog .dialog-body').evaluate(el=>el.scrollTop=250);const beforeScroll=await page.locator('#message-history-dialog .dialog-body').evaluate(el=>el.scrollTop);
+  await read('#message-history-more');assert.match(await page.locator('#message-history-dialog').innerText(),/仍保留上次读取的记录/);assert(await page.locator('#message-history-restart').isVisible());assert.equal(await page.locator('.message-history-change').count(),10);
+  await read('#message-history-refresh');await page.unroute(endpoint+'?**');assert.equal(await page.locator('.message-history-change').count(),20);assert.equal(await page.locator('#message-history-dialog .dialog-body').evaluate(el=>el.scrollTop),beforeScroll);assert(await page.locator('[data-history-key="original"]').evaluate(el=>el.open));assert(await page.locator('[data-history-key="23"]').evaluate(el=>el.open));assert.match(await page.locator('.message-history-new').innerText(),/有新修改/);
+  await read('#message-history-more');assert.equal(await page.locator('.message-history-change').count(),23);assert.equal(await page.locator('#message-history-more').count(),0);assert.deepEqual(await page.locator('.message-history-change').evaluateAll(els=>els.map(e=>Number(e.dataset.historyKey))),Array.from({length:23},(_,i)=>23-i));
+  await read('#message-history-refresh');assert.equal(await page.locator('.message-history-change').count(),10);assert.equal(await page.locator('.message-history-change').first().getAttribute('data-history-key'),'24');assert.equal(await page.locator('#message-history-dialog .dialog-body').evaluate(el=>el.scrollTop),0);assert.equal(posts.length,readonlyStart+1);
+  await page.locator('#message-history-close').click();assert.equal(await page.locator('#task-chat-input').inputValue(),'独立的后续对话草稿');await page.locator('[aria-label="排队消息编辑"] [data-queue-edit]').click();assert.equal(await page.locator('#queue-edit-input').inputValue(),'还未保存的本页编辑');await page.keyboard.press('Escape');
+  pass('三页读取无重复遗漏；新修改保留旧查看范围，失败重试保留展开与滚动位置，刷新后显示新修改；两个草稿不变');
+
+  const entered=deferred(),go=deferred(),delivered=deferred();release=go.resolve;await page.route(endpoint,async route=>{const response=await route.fetch();entered.resolve();await go.promise;await route.fulfill({response});delivered.resolve();});
+  await page.locator('#chat-turn-2 [data-message-history]').click();await entered.promise;await nav(b);await open();go.resolve();await delivered.promise;await page.unroute(endpoint);release=null;await H.settled(page);assert.equal(await page.evaluate(()=>messageEditHistory.task),b);assert.equal(await page.locator('.message-history-current .message-history-text').innerText(),'另一会话的要求');await page.locator('#message-history-close').click();
+  pass('切换会话关闭旧窗口，迟到的旧读取不会覆盖新会话的修改记录');
+
+  await nav(a);await call(other,'/__test/release-queue',{});await page.waitForFunction(()=>state.detail?.conversation?.turns[2].status==='SUCCEEDED');const detail=await call(page,'/api/tasks/'+a),executed=await call(page,'/api/runs/'+detail.conversation.turns[1].run_id);assert.equal(executed.run.task.goal,version(24));const writesBeforeHistory=posts.length;await open();assert.match(await page.locator('.message-history-current h3').innerText(),/本轮执行采用的要求/);assert.match(await page.locator('.message-history-current p').innerText(),/已完成/);assert.equal(await page.locator('.message-history-current .message-history-text').innerText(),executed.run.task.goal);
+  for(const theme of ['light','dark'])for(const width of [1024,1440])for(const scale of [1,2]){
+   await page.setViewportSize({width,height:1100});await page.evaluate(({theme,scale})=>{document.documentElement.dataset.theme=theme;document.documentElement.dataset.historyScale=scale;if(!window.historyFontRule){document.styleSheets[0].insertRule('html[data-history-scale="2"] #message-history-dialog :is(p,button,summary,h3,h4,.message-history-text){font-size:28px!important}',0);window.historyFontRule=true;}},{theme,scale});
+   const bounds=await page.locator('#message-history-more').evaluate(el=>{el.focus();const r=el.getBoundingClientRect();return {root:document.documentElement.scrollWidth,width:innerWidth,left:r.left,right:r.right,top:r.top,bottom:r.bottom,font:parseFloat(getComputedStyle(el).fontSize),focused:document.activeElement===el};});assert(bounds.focused&&bounds.root<=width+1&&bounds.left>=0&&bounds.right<=width+1&&bounds.top>=0&&bounds.bottom<=1100,JSON.stringify(bounds));if(scale===2)assert.equal(bounds.font,28);
+   const content=await page.locator('.message-history-current .message-history-text').evaluate(el=>{el.focus();el.scrollIntoView({block:'center'});return {font:parseFloat(getComputedStyle(el).fontSize),focused:document.activeElement===el,scroll:el.scrollWidth,width:el.clientWidth};});assert(content.focused&&content.scroll<=content.width+1,JSON.stringify(content));if(scale===2)assert.equal(content.font,28);
+   layouts.push({theme,width,scale,bounds,content});if(width===1440&&scale===1){await page.locator('#message-history-dialog .dialog-body').evaluate(el=>el.scrollTop=0);await page.screenshot({path:path.join(out,'message-history-'+theme+'.png'),animations:'disabled'});}
+  }
+  await page.setViewportSize({width:1440,height:1100});await page.evaluate(()=>document.documentElement.dataset.historyScale=1);await read('#message-history-more');await read('#message-history-more');await page.locator('[data-history-key="1"] summary').click();await page.locator('[data-message-history-copy="before:1"]').click();assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),'周五 15 点开会');await page.screenshot({path:path.join(out,'message-history-original.png'),animations:'disabled'});assert.equal(posts.length,writesBeforeHistory);
+  pass('执行完成后显示真实运行采用的要求；八种主题、宽度和字号布局通过焦点、边界及文字溢出检查，读取复制无写请求');
+  assert.deepEqual(errors,[]);fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({checks,errors,posts,layouts},null,2));
+ }catch(error){await page.screenshot({path:path.join(out,'failure.png'),animations:'disabled'}).catch(()=>{});fs.writeFileSync(path.join(out,'failure.json'),JSON.stringify({checks,errors,error:error.stack},null,2));throw error;}finally{release?.();await browser.close();}
+})().catch(error=>{console.error(error);process.exitCode=1;});

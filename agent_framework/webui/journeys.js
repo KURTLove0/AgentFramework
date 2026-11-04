@@ -9,12 +9,48 @@ function updateCompactTask(){
  const agent=selectedTaskAgent(),info=$('#task-agent-info');if(!info)return;
  info.textContent=agent?`${agent.description?agent.description+' · ':''}${agentRuntimeLabel(agent.runtime)}${agent.runtime==='mock'?'':' · '+(agent.model||'未配置模型')} · v${agent.revision}`:(state.agents||[]).some(a=>!a.archived)?'选择已配置的智能体，沿用它的执行方式。':'当前空间还没有智能体，请先创建一个。';
  $('#create-title').textContent='新建任务';
+ if(typeof renderTaskSource==='function')renderTaskSource();
  if(typeof refreshFormControls==='function')refreshFormControls();
 }
+function compactTaskFields(){
+ const agent=selectedTaskAgent(),payload={goal:$('#task-goal').value.trim(),agent_id:agent.id,agent_revision:agent.revision,...(taskJourney.sourceRun?.run_id?{source_run_id:taskJourney.sourceRun.run_id}:{}),...taskDraftCleanupFields()};
+ return payload;
+}
 function compactTaskPayload(){
- const agent=selectedTaskAgent(),payload={goal:$('#task-goal').value.trim(),agent_id:agent.id,agent_revision:agent.revision,...(taskJourney.sourceRun?.run_id?{source_run_id:taskJourney.sourceRun.run_id}:{}),clear_draft:!!taskJourney.ownsDraft};
- const {clear_draft,...identity}=payload,key=JSON.stringify(identity);if(taskJourney.submitKey!==key){taskJourney.submitKey=key;taskJourney.requestId=crypto.randomUUID();}
+ const payload=compactTaskFields();if(typeof taskSubmissionPayload==='function')return taskSubmissionPayload(payload);
+ const {clear_draft,draft_revision,...identity}=payload,key=JSON.stringify(identity);if(taskJourney.submitKey!==key){taskJourney.submitKey=key;taskJourney.requestId=crypto.randomUUID();}
  return {...payload,request_id:taskJourney.requestId};
+}
+
+function taskDraftCleanupFields(){return taskJourney.ownsDraft?{clear_draft:true,draft_revision:taskJourney.serverRevision}:{clear_draft:false};}
+function applyTaskDraftReceipt(saved,workspace){
+ if(workspace!==state.workspaceId||!saved||!Number.isInteger(saved.revision)||saved.revision<(state.savedTaskDraft?.revision||0))return false;
+ state.savedTaskDraft=saved;return true;
+}
+function renderTaskDraftStatus(){
+ const target=$('#task-draft-status');if(!target)return;
+ const issue=taskJourney.draftIssue;target.hidden=!issue&&!taskJourney.draftSaving;
+ if(target.hidden)return;
+ if(taskJourney.draftSaving){target.innerHTML='<p>正在保存或读取设置草稿，请稍候…</p>';return;}
+ const latest=issue.latest,agent=latest?.draft&&(state.agents||[]).find(item=>item.id===latest.draft.agent_id),existing=issue.kind==='existing';
+ target.innerHTML=`<p><strong>${existing?'已有保存的任务设置':issue.kind==='conflict'?'设置草稿已在其他页面变化':'设置草稿暂未保存'}</strong></p><p>${esc(issue.message)}${existing?'':' 本页输入保留，可以继续编辑或创建任务。'}</p>${latest?`<details ${existing?'':'open'}><summary>已保存的版本</summary><div class="task-draft-comparison"><p>${esc(latest.draft?.goal||'当前没有保存的草稿。')}</p>${latest.draft?`<p>执行智能体：${esc(agent?.name||latest.draft.agent_id||'尚未选择')}</p>`:''}</div></details><div class="toolbar"><button type="button" class="button secondary" data-task-draft-save>${existing?'用本页设置替换草稿':'保留本页设置并保存'}</button>${latest.draft?'<button type="button" class="text-button" data-task-draft-restore>使用已保存设置</button>':''}</div>`:'<button type="button" class="text-button" data-task-draft-review>查看已保存版本</button>'}`;
+}
+async function reviewTaskDraft(){
+ if(taskJourney.draftSaving||taskJourney.saving||taskJourney.draftDiscarding)return;
+ const workspace=taskJourney.workspace;taskJourney.draftSaving=true;renderTaskDraftStatus();
+ try{
+  const saved=await api('/api/task-draft',undefined,15000,true,{workspace,payload:undefined});
+  if(workspace!==state.workspaceId||workspace!==taskJourney.workspace)return;
+  applyTaskDraftReceipt(saved,workspace);taskJourney.draftIssue={kind:'conflict',message:'请核对保存的版本，再选择保留哪份设置。',latest:saved};
+ }catch(error){if(workspace===state.workspaceId)taskJourney.draftIssue={kind:'error',message:error.message};}
+ finally{taskJourney.draftSaving=false;renderTaskDraftStatus();}
+}
+async function resolveTaskDraft(useSaved){
+ const latest=taskJourney.draftIssue?.latest;if(!latest||taskJourney.draftSaving||taskJourney.saving)return;
+ taskJourney.serverRevision=latest.revision;taskJourney.draftIssue=null;
+ if(useSaved){applyTaskDraft(latest.draft);setTaskStep(latest.draft.step||0,false);clearTimeout(taskJourney.draftTimer);taskJourney.initial=taskFormSnapshot();taskJourney.draftDirty=false;renderTaskDraftStatus();$('#task-goal')?.focus();}
+ else{taskJourney.draftDirty=true;await saveTaskDraft();if(!taskJourney.draftIssue)$('#task-goal')?.focus();}
+ if(typeof captureTaskSubmissionEditing==='function')captureTaskSubmissionEditing();
 }
 
 function taskFormSnapshot(){
@@ -99,8 +135,10 @@ function renderTaskReadiness(){
   const save=$('#task-submit-actions button[value="save"]');if(save)save.textContent=result.ready?'保存待启动':'保存设置草稿';
 }
 function taskSubmitGate(event){
+  if(typeof taskSubmissionBlocked==='function'&&taskSubmissionBlocked()){toast('请先在提交结果中核对或重试。');$('#task-submission-status')?.scrollIntoView?.({block:'nearest'});return false;}
+  if(taskJourney.draftSaving||taskJourney.draftDiscarding){toast('正在处理设置草稿，请稍候再创建任务。');return false;}
   if(taskJourney.saving||state.composing||event?.isComposing||event?.keyCode===229)return false;
-  if($('#create-form').dataset?.simple==='true'){const invalid=taskInvalidField($('#create-form'));if(invalid){showTaskFieldError(invalid);return false;}if(!selectedTaskAgent()){showTaskFieldError($('#task-agent'));return false;}taskJourney.saving=true;$('#create-form').setAttribute('aria-busy','true');return true;}
+  if($('#create-form').dataset?.simple==='true'){const invalid=taskInvalidField($('#create-form'));if(invalid){showTaskFieldError(invalid);return false;}if(!selectedTaskAgent()||selectedTaskAgent().archived||$('#task-agent').selectedOptions?.[0]?.disabled){showTaskFieldError($('#task-agent'));return false;}taskJourney.saving=true;$('#create-form').setAttribute('aria-busy','true');return true;}
   if(taskJourney.step<2){setTaskStep(taskJourney.step+1);return false;}
   const readiness=taskReadiness();
   if(!readiness.ready&&event?.submitter?.value==='save'){
@@ -116,10 +154,10 @@ function freezeTaskForm(frozen){
   if(frozen){taskJourney.disabledFields=$$('#create-form input,#create-form select,#create-form textarea').map(field=>[field,field.disabled]);taskJourney.disabledFields.forEach(([field])=>{field.disabled=true;});}
   else{(taskJourney.disabledFields||[]).forEach(([field,disabled])=>{field.disabled=disabled;});taskJourney.disabledFields=null;}
 }
-function taskSubmissionFinished(saved){
+function taskSubmissionFinished(saved,draftReceipt){
   freezeTaskForm(false);taskJourney.saving=false;$('#create-form').removeAttribute('aria-busy');if($('#task-step-status'))$('#task-step-status').textContent=`第 ${taskJourney.step+1} / 3 步 · ${taskStepNames[taskJourney.step]}`;
-  const owned=taskJourney.ownsDraft;
-  if(saved){taskJourney.initial='';taskJourney.returnToTask=false;taskJourney.serverRevision=0;taskJourney.draftDirty=false;taskJourney.sourceRun=null;taskJourney.ownsDraft=false;if(owned)state.savedTaskDraft={draft:null,revision:0,updated_at:null};}
+  if(saved){if(typeof clearTaskSubmission==='function')clearTaskSubmission();applyTaskDraftReceipt(draftReceipt,taskJourney.workspace);clearTimeout(taskJourney.draftTimer);taskJourney.initial='';taskJourney.returnToTask=false;taskJourney.serverRevision=state.savedTaskDraft?.revision||0;taskJourney.draftDirty=false;taskJourney.sourceRun=null;taskJourney.ownsDraft=false;taskJourney.draftIssue=null;}
+  renderTaskDraftStatus();
   renderTaskReadiness();
 }
 function taskDraftPayload(){
@@ -129,23 +167,24 @@ function taskDraftPayload(){
     step:taskJourney.step,...(taskJourney.sourceRun?.run_id?{source_run_id:taskJourney.sourceRun.run_id}:{})};
 }
 async function saveTaskDraft(){
-  if(taskJourney.draftSaving||taskJourney.saving||!taskJourney.initial||(!taskJourney.draftDirty&&!taskHasChanges()))return;
+  if(taskJourney.draftSaving||taskJourney.draftDiscarding||taskJourney.saving||taskJourney.draftIssue||!taskJourney.initial||(!taskJourney.draftDirty&&!taskHasChanges()))return;
   taskJourney.draftSaving=true;
-  const workspace=taskJourney.workspace;
+  const workspace=taskJourney.workspace;renderTaskDraftStatus();
   try{
     while(taskJourney.draftDirty||taskHasChanges()){
       taskJourney.draftDirty=false;
       const draft=taskDraftPayload(),snapshot=taskFormSnapshot();
-      const saved=await api('/api/task-draft',{revision:taskJourney.serverRevision,draft});
+      const data={revision:taskJourney.serverRevision,draft};
+      const saved=await api('/api/task-draft',data,15000,true,{workspace,payload:JSON.stringify(data)});
       if(workspace!==state.workspaceId)throw Error('工作空间已切换，本次草稿未保存。');
-      taskJourney.serverRevision=saved.revision;state.savedTaskDraft=saved;taskJourney.ownsDraft=true;taskJourney.initial=snapshot;
+      taskJourney.serverRevision=saved.revision;applyTaskDraftReceipt(saved,workspace);taskJourney.ownsDraft=true;taskJourney.initial=snapshot;
       if(!taskHasChanges())break;
     }
     return true;
   }catch(error){
-    if(!taskJourney.draftErrorAt||Date.now()-taskJourney.draftErrorAt>5000){toast('设置草稿暂未保存：'+error.message);taskJourney.draftErrorAt=Date.now();}
+    if(workspace===state.workspaceId)taskJourney.draftIssue={kind:error.status===409?'conflict':'error',message:error.message};
     return false;
-  }finally{taskJourney.draftSaving=false;}
+  }finally{taskJourney.draftSaving=false;renderTaskDraftStatus();}
 }
 function scheduleTaskDraftSave(){
   if(!taskJourney.initial)return;
@@ -170,38 +209,48 @@ function draftResumeBanner(){
   return `<section class="journey-return draft-resume" aria-label="继续未提交的任务设置"><span>${icon('file')}<span><strong>继续上次任务设置</strong><small>${esc(draft.goal||'尚未填写任务目标')} · 保存于 ${time(saved.updated_at,true)}</small></span></span><div class="toolbar"><button class="button secondary" data-action="discard-saved-draft">放弃草稿</button><button class="button primary" data-action="resume-saved-draft">继续设置</button></div></section>`;
 }
 function discardSavedTaskDraft(){
-  if(taskJourney.draftSaving){toast('正在保存设置草稿，请稍候。');return;}
-  const dialog=$('#confirm-dialog'),submit=$('#confirm-submit');
-  $('#confirm-title').textContent='放弃保存的任务设置草稿？';
-  $('#confirm-body').innerHTML='<p>只会删除未提交的设置，不影响已经创建或执行的任务。</p>';
-  $('#confirm-error').hidden=true;submit.disabled=false;submit.className='button danger';submit.textContent='放弃草稿';
-  submit.onclick=async()=>{submit.disabled=true;try{const saved=await api('/api/task-draft/discard',{});state.savedTaskDraft=saved;taskJourney.serverRevision=0;taskJourney.ownsDraft=false;taskJourney.initial='';dialog.close();state.fingerprint='';render();toast('任务设置草稿已放弃');}catch(error){$('#confirm-error').textContent=error.message;$('#confirm-error').hidden=false;}finally{submit.disabled=false;}};
-  dialog.showModal();dialog.querySelector('[data-close]')?.focus();
+  if(taskJourney.draftSaving||taskJourney.draftDiscarding){toast('正在处理设置草稿，请稍候。');return;}
+  openTaskDraftDiscard(state.savedTaskDraft,()=>{state.fingerprint='';render();toast('任务设置草稿已放弃');});
+}
+function openTaskDraftDiscard(reviewed,proceed){
+ const workspace=state.workspaceId,dialog=$('#confirm-dialog'),submit=$('#confirm-submit');let latest=reviewed,recheck=false;
+ const describe=()=>{$('#confirm-body').innerHTML='<p>放弃本页尚未提交的设置，不影响已创建的任务。</p>'+(latest?.draft?`<p>将清除以下已保存草稿：</p><div class="task-draft-comparison">${esc(latest.draft.goal||'尚未填写任务目标')}</div>`:'<p>当前没有需要清除的已保存草稿。</p>');};
+ $('#confirm-title').textContent='放弃任务设置草稿？';describe();$('#confirm-error').hidden=true;submit.disabled=false;submit.className='button danger';submit.textContent='放弃草稿';
+ submit.onclick=async()=>{
+  if(taskJourney.draftDiscarding)return;taskJourney.draftDiscarding=true;submit.disabled=true;submit.setAttribute('aria-busy','true');submit.textContent=recheck?'正在检查…':'正在放弃…';
+  try{
+   if(workspace!==state.workspaceId)throw Error('工作空间已切换，请返回原空间重新核对。');
+   if(recheck){latest=await api('/api/task-draft',undefined,15000,true,{workspace,payload:undefined});applyTaskDraftReceipt(latest,workspace);describe();recheck=false;$('#confirm-error').hidden=true;return;}
+   if(latest){const data={revision:latest.revision},saved=await api('/api/task-draft/discard',data,15000,true,{workspace,payload:JSON.stringify(data)});applyTaskDraftReceipt(saved,workspace);}
+   if(workspace!==state.workspaceId)return;
+   clearTimeout(taskJourney.draftTimer);taskJourney.initial='';taskJourney.returnToTask=false;taskJourney.sourceRun=null;taskJourney.ownsDraft=false;taskJourney.draftDirty=false;taskJourney.draftIssue=null;taskJourney.serverRevision=state.savedTaskDraft?.revision||0;
+   dialog.close();proceed();
+  }catch(error){recheck=error.status===409||recheck;$('#confirm-error').textContent=error.message;$('#confirm-error').hidden=false;$('#confirm-error').focus();}
+  finally{taskJourney.draftDiscarding=false;submit.disabled=false;submit.removeAttribute('aria-busy');submit.textContent=recheck?'重新检查草稿':'放弃草稿';}
+ };
+ dialog.showModal();dialog.querySelector('[data-close]')?.focus();
 }
 function leaveTaskForKnowledge(){
+  if(taskJourney.saving||taskJourney.submissionReviewing){toast('任务正在提交或核对，请稍候。');return;}
   taskJourney.returnToTask=true;taskJourney.workspace=state.workspaceId;saveTaskDraft();
   $('#create-dialog').close();navigate('library');
 }
 function beginTaskJourney(){
   if($('#task-scenario-options'))$('#task-scenario-options').open=false;
   taskJourney.workspace=state.workspaceId;taskJourney.returnToTask=false;taskJourney.saving=false;
-  taskJourney.initial=taskFormSnapshot();setTaskStep(0,false);
+  taskJourney.initial=taskFormSnapshot();setTaskStep(0,false);renderTaskDraftStatus();
   $('#create-dialog').showModal();if(selectedTaskAgent())$('#task-goal').focus();else if(typeof focusFormControl==='function')focusFormControl($('#task-agent'));else $('#task-domain').focus();
 }
-function confirmTaskDiscard(proceed=()=>$('#create-dialog').close()){
+function confirmTaskDiscard(proceed=()=>$('#create-dialog').close(),discardSaved=false){
+  if(taskJourney.submissionReviewing){toast('正在核对提交结果，请稍候。');return;}
   if(taskJourney.saving){toast('任务正在提交，请稍候。');return;}
-  if(taskJourney.draftSaving){toast('正在保存设置草稿，请稍候。');return;}
-  if(!taskHasChanges()){taskJourney.returnToTask=false;proceed();return;}
-  const dialog=$('#confirm-dialog'),submit=$('#confirm-submit');
-  $('#confirm-title').textContent='放弃未完成的任务设置？';
-  $('#confirm-body').innerHTML='<p>任务尚未创建。返回可继续当前步骤；放弃会清除本页保留的输入。</p>';
-  $('#confirm-error').hidden=true;submit.disabled=false;submit.className='button danger';submit.textContent='放弃设置';
-  let discarded=false;const focus=document.activeElement;
-  dialog.addEventListener('close',()=>{if(!discarded&&$('#create-dialog').open)focus?.focus({preventScroll:true});},{once:true});
-  submit.onclick=()=>{discarded=true;taskJourney.initial='';taskJourney.returnToTask=false;taskJourney.sourceRun=null;taskJourney.ownsDraft=false;if(taskJourney.serverRevision){api('/api/task-draft/discard',{}).then(saved=>{state.savedTaskDraft=saved;taskJourney.serverRevision=0;}).catch(()=>{});}dialog.close();proceed();};
-  dialog.showModal();dialog.querySelector('[data-close]')?.focus();
+  if(taskJourney.draftSaving||taskJourney.draftDiscarding){toast('正在处理设置草稿，请稍候。');return;}
+  if(!taskHasChanges()&&!discardSaved){taskJourney.returnToTask=false;proceed();return;}
+  const reviewed=taskJourney.ownsDraft?{...state.savedTaskDraft,revision:taskJourney.serverRevision}:null;
+  openTaskDraftDiscard(reviewed,proceed);
 }
 function leaveTaskForConfiguration(){
+  if(taskJourney.saving||taskJourney.submissionReviewing){toast('任务正在提交或核对，请稍候。');return;}
   taskJourney.returnToTask=true;taskJourney.workspace=state.workspaceId;saveTaskDraft();
   const agent=selectedTaskAgent();$('#create-dialog').close();navigate($('#create-form').dataset?.simple==='true'?'agents':agent?'agents':'runtimes');if(agent&&typeof openAgent==='function')void openAgent(agent.id);
 }
@@ -215,23 +264,25 @@ function syncTaskReturnBanner(){
   const banner=taskReturnBanner();if(banner)$('#content').insertAdjacentHTML('afterbegin',banner);
 }
 async function returnToTaskDraft(button){
-  if(taskJourney.opening)return;taskJourney.opening=true;if(button)button.disabled=true;
+  if(taskJourney.opening)return;const request=beginTaskPreparation(button,()=>returnToTaskDraft(button)),workspace=state.workspaceId,read=url=>api(url,undefined,15000,true,{workspace,payload:undefined});
   try{
     if(taskJourney.workspace!==state.workspaceId)throw Error('该任务设置属于另一工作空间，请切回原空间后继续。');
     const form=$('#create-form'),agentId=form.agent_id.value,runtime=form.planner.value;
-    state.runtimeConfig=await api('/api/runtime-config');state.agents=(await api('/api/agents')).agents;
+    const [configuration,catalog]=await Promise.all([read('/api/runtime-config'),read('/api/agents?view=catalog')]);
+    if(!taskPreparationCurrent(request))return;
+    state.runtimeConfig=configuration;state.agents=catalog.agents;
     updateTaskAgentOptions();updateRuntimeOptions();form.agent_id.value=state.agents.some(a=>a.id===agentId&&!a.archived)?agentId:'';
     if(!agentId)form.planner.value=runtime;updateTaskAgent();
     form.consent.checked=false;form.mcp_consent.checked=false;form.grant.checked=false;
     taskJourney.returnToTask=false;setTaskStep(agentId&&!form.agent_id.value?0:1,false);
-    $('#create-dialog').showModal();if($('#create-form').dataset?.simple==='true')$('#task-goal').focus();else $('#'+taskSteps[taskJourney.step]).focus();
+    hideTaskPreparation(request);$('#create-dialog').showModal();if($('#create-form').dataset?.simple==='true')$('#task-goal').focus();else $('#'+taskSteps[taskJourney.step]).focus();
     $('#task-return-note').textContent=agentId&&!form.agent_id.value?'原 Agent 已不可用，请重新选择。任务说明已保留。':'已更新可用配置，任务目标已保留，可以开始执行。';$('#task-return-note').hidden=false;
     state.fingerprint='';render();
-  }catch(e){toast(e.message);}finally{taskJourney.opening=false;if(button)button.disabled=false;}
+  }catch(e){if(taskPreparationCurrent(request))showTaskPreparation(request,e.message);}finally{finishTaskPreparation(request);}
 }
 function runMatchesFilter(run,filter){
-  if(filter==='group:running')return !!run.job?.active||['RUNNING','RECONCILING','VERIFYING'].includes(run.status);
-  if(filter==='group:waiting')return ['WAITING_AUTH','WAITING_INPUT','NEEDS_REVIEW'].includes(run.status);
+  if(filter==='group:running')return !!run.job?.active||['RUNNING','RECONCILING','VERIFYING','CANCELLING'].includes(run.status);
+  if(filter==='group:waiting')return ['WAITING_AUTH','WAITING_INPUT','NEEDS_REVIEW','INTERRUPTED'].includes(run.status);
   return filter==='all'||run.status===filter;
 }
 function runNextStep(detail){
@@ -265,6 +316,7 @@ function afterJourneyRender(){
   }
   if(state.renderedRunTab!==state.tab){state.renderedRunTab=state.tab;if(!changed&&!matchMedia('(prefers-reduced-motion: reduce)').matches)$('#tab-content')?.animate?.([{opacity:.3,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:150,easing:'ease-out'});}
   if(state.libraryFocusRef){const target=document.getElementById('library-asset-'+state.libraryFocusRef);if(target){target.scrollIntoView({block:'center',behavior:'instant'});target.focus({preventScroll:true});state.libraryFocusRef=null;}}
+  if(typeof focusCommandWorkflow==='function')focusCommandWorkflow();
 }
 
 document.addEventListener('DOMContentLoaded',()=>{$('#create-form').noValidate=true;taskSteps.forEach(id=>{if($('#'+id))$('#'+id).tabIndex=-1;});});
@@ -273,8 +325,8 @@ document.addEventListener('click',event=>{
   if(event.target.closest('#task-next'))setTaskStep(taskJourney.step+1);
   if(event.target.closest('#task-back'))setTaskStep(taskJourney.step-1,false);
   const returnButton=event.target.closest('[data-action="return-task-draft"]');if(returnButton)returnToTaskDraft(returnButton);
-  if(event.target.closest('[data-action="discard-task-draft"]'))confirmTaskDiscard(()=>{state.fingerprint='';state.routeFocus='content';render();});
-  const filter=event.target.closest('[data-run-filter]');if(filter){state.filter=filter.dataset.runFilter;state.search='';resetRunCursor();state.fingerprint='';if(state.view!=='runs')navigate('runs');else refreshRunList();}
+  if(event.target.closest('[data-action="discard-task-draft"]'))confirmTaskDiscard(()=>{state.fingerprint='';state.routeFocus='content';render();},true);
+  const filter=event.target.closest('[data-run-filter]');if(filter){Object.assign(state,{filter:filter.dataset.runFilter,search:'',runVisibility:'all',runAgent:'',runDomain:'',runAfter:'',runBefore:'',runDateDraft:null});resetRunCursor();state.fingerprint='';if(state.view!=='runs')navigate('runs');else refreshRunList();}
   const tab=event.target.closest('[data-open-run-tab]');if(tab){state.tab=tab.dataset.openRunTab;state.runTabTouched=true;state.fingerprint='';render();$('#tab-'+state.tab)?.focus({preventScroll:true});$('#tab-content')?.scrollIntoView({block:'nearest',behavior:'instant'});}
 });
 document.addEventListener('click',event=>{
@@ -282,9 +334,9 @@ document.addEventListener('click',event=>{
 },true);
 $('#create-dialog').addEventListener('cancel',event=>{event.preventDefault();confirmTaskDiscard();});
 $('#create-dialog').addEventListener('close',()=>{state.fingerprint='';render();});
-$('#create-form').addEventListener('input',event=>{if(event.isComposing)return;event.target.removeAttribute('aria-invalid');if(taskJourney.fieldError===event.target&&event.target.validity.valid&&event.target.value.trim()){taskJourney.fieldError=null;$('#create-error').hidden=true;}if(['goal','change_id'].includes(event.target.name)){const form=$('#create-form');form.consent.checked=false;form.mcp_consent.checked=false;form.grant.checked=false;}updateTaskReview();scheduleTaskDraftSave();});
-$('#create-form').addEventListener('change',event=>{if(['task-domain','task-agent','planner-select'].includes(event.target.id)){const form=$('#create-form');form.consent.checked=false;form.mcp_consent.checked=false;form.grant.checked=false;}queueMicrotask(updateTaskReview);scheduleTaskDraftSave();});
-$('#create-form').addEventListener('compositionend',event=>{if(taskJourney.fieldError===event.target&&event.target.validity.valid&&event.target.value.trim()){taskJourney.fieldError=null;$('#create-error').hidden=true;}if(['goal','change_id'].includes(event.target.name)){const form=$('#create-form');form.consent.checked=false;form.mcp_consent.checked=false;form.grant.checked=false;}updateTaskReview();scheduleTaskDraftSave();});
+$('#create-form').addEventListener('input',event=>{if(event.isComposing)return;event.target.removeAttribute('aria-invalid');if(taskJourney.fieldError===event.target&&event.target.validity.valid&&event.target.value.trim()){taskJourney.fieldError=null;$('#create-error').hidden=true;}if(['goal','change_id'].includes(event.target.name)){const form=$('#create-form');form.consent.checked=false;form.mcp_consent.checked=false;form.grant.checked=false;}updateTaskReview();scheduleTaskDraftSave();if(typeof renderTaskSubmission==='function')renderTaskSubmission();});
+$('#create-form').addEventListener('change',event=>{if(['task-domain','task-agent','planner-select'].includes(event.target.id)){const form=$('#create-form');form.consent.checked=false;form.mcp_consent.checked=false;form.grant.checked=false;}queueMicrotask(updateTaskReview);scheduleTaskDraftSave();if(typeof renderTaskSubmission==='function')renderTaskSubmission();});
+$('#create-form').addEventListener('compositionend',event=>{if(taskJourney.fieldError===event.target&&event.target.validity.valid&&event.target.value.trim()){taskJourney.fieldError=null;$('#create-error').hidden=true;}if(['goal','change_id'].includes(event.target.name)){const form=$('#create-form');form.consent.checked=false;form.mcp_consent.checked=false;form.grant.checked=false;}updateTaskReview();scheduleTaskDraftSave();if(typeof renderTaskSubmission==='function')renderTaskSubmission();});
 window.addEventListener('beforeunload',event=>{if(($('#create-dialog').open||taskJourney.returnToTask)&&taskHasChanges()){event.preventDefault();event.returnValue='';}});
 
 // Resource dialogs share a fixed header/footer and one independently scrolling body.
@@ -324,6 +376,13 @@ function installStructuredDialogs(){
 }
 if(typeof MutationObserver==='function'&&document.body)installStructuredDialogs();
 
+document.addEventListener('click',event=>{
+ if(taskJourney.draftDiscarding&&event.target.closest('#confirm-dialog [data-close]')){event.preventDefault();event.stopImmediatePropagation();return;}
+ if(event.target.closest('[data-task-draft-review]'))void reviewTaskDraft();
+ else if(event.target.closest('[data-task-draft-save]'))void resolveTaskDraft(false);
+ else if(event.target.closest('[data-task-draft-restore]'))void resolveTaskDraft(true);
+},true);
+$('#confirm-dialog').addEventListener('cancel',event=>{if(taskJourney.draftDiscarding)event.preventDefault();});
 function confirmDialogDiscard(owner,title,message){
  const dialog=$('#confirm-dialog');if(dialog.open)return Promise.resolve(false);
  return new Promise(resolve=>{const submit=$('#confirm-submit'),back=dialog.querySelector('.dialog-foot [data-close]'),focus=document.activeElement;let accepted=false;

@@ -1,0 +1,139 @@
+{
+  "recorded_on": "2026-10-30",
+  "scope": "Current source; temporary databases and synthetic runtimes; release artifacts not rebuilt",
+  "baseline": {
+    "backend": {
+      "tests": 6,
+      "failures": 2,
+      "errors": 3,
+      "passed": 1
+    },
+    "ui": {
+      "tests": 19,
+      "failed": 5,
+      "passed": 14
+    },
+    "issues": [
+      "A grant after cancellation issued permission and replaced the dispatch reason",
+      "Cancellation between grant preflight and commit did not roll back permission",
+      "Delayed write receipts replaced newer accepted or polled state"
+    ]
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests -q",
+    "tests": 637,
+    "seconds": 144.045,
+    "passed": true,
+    "new_receipt_tests": 7
+  },
+  "ui": {
+    "command": "npm test",
+    "tests": 148,
+    "seconds": 3.358388,
+    "failed": 0,
+    "passed": true,
+    "new_receipt_order_checks": 8,
+    "new_async_poll_checks": 5,
+    "additional_cancellation_render_checks": 2
+  },
+  "browser": {
+    "suites": [
+      {
+        "suite": "workflow-sync",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "journeys",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "audit-fixes",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "conversations",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "model-runtime",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "simple-tasks",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "legacy-modules",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "workflow-queue",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "workflow-agents",
+        "passed": true,
+        "exit_code": 0
+      }
+    ],
+    "workflow_sync": {
+      "checks": [
+        "后台旧目录晚于归档回执和新目录返回，缓存与页面仍保持已归档",
+        "新目录读取失败后，旧读取的成功响应不能清除失败说明或撤销已接受的归档",
+        "旧详情晚于取消回执返回，取消提示和禁用按钮保持正确，排队节点未启动",
+        "读取旧运行期间切换记录，旧请求失败不会覆盖新运行详情或显示过期错误",
+        "两个取消请求均按原记录收尾，没有创建业务节点任务",
+        "授权已接受但回执延迟，取消的新回执先到后，旧授权回执不能回退状态或提示",
+        "取消请求已经保存后，实际 HTTP 授权接口拒绝新增授权，取消队列保持原意",
+        "队列释放后按取消请求结束原节点，已接受的早期授权没有产生草稿"
+      ],
+      "errors": [],
+      "grant_revision": 11,
+      "cancel_revision": 12,
+      "late_grant_receipt_applied": false,
+      "grant_after_cancel_http_status": 409,
+      "final_status": "CANCELLED",
+      "final_child_draft_count": 0
+    },
+    "desktop": {
+      "widths": [
+        1024,
+        1440
+      ],
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "reviewed_screenshots": [
+        "delayed-grant-after-cancel-light.png",
+        "delayed-grant-after-cancel-dark.png"
+      ]
+    }
+  },
+  "verification_harness": {
+    "replacement": "Await API predicate in Node on every attempt; false continues, timeout and read errors fail",
+    "async_dom_predicates_replaced": 9,
+    "scripts": 7,
+    "ordinary_task_retry": "Review original request receipt, retry with original request ID, assert complete payload equality"
+  },
+  "sha256": {
+    "agent_framework/workflows.py": "dcbc542c59a70123ae72c73f7f419739eed096f9126b21bf002e8cdd778a52c2",
+    "agent_framework/webui/workflows.js": "02f62c81fe4a3749a3bac5bb6e95209c517671853dfdcc9ef5f35993a820ec0a",
+    "tests/browser_poll.cjs": "bb93b31053782395b1bb355a9b34cd2ae952e2651668185cc3988f9276bf325e",
+    "tests/test_workflow_receipts.py": "967732053fd84160e6a5e0e15dc0a3c4652015cff6a5a1510a97a365c77b2ce9",
+    "tests/test_workflow_sync.js": "54eacf6944b4b90f682c88837f8c8b41d09490af2651de4ccfbd3fa0cfef7e01",
+    "tests/verify_workflow_sync.cjs": "44b3a3e2db8e6dd2015965b121326690049c523ad23d138ce62f2fedb7dd1da5"
+  },
+  "limits": [
+    "Run revision orders committed workflow state, not a transaction snapshot across child, queue and executor data",
+    "Cancellation retains prior accepted grants and audit; existing in-flight effect reconciliation rules still apply"
+  ]
+}

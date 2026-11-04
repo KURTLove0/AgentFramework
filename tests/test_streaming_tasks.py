@@ -103,18 +103,21 @@ class StreamingTaskTests(unittest.TestCase):
         task=self.start();self.app.mutate(task,'cancel');turn=self.wait(task)['conversation']['turns'][0]
         self.assertEqual(turn['status'],'CANCELLED');self.assertEqual(turn['preview']['content'],'第一段');self.assertIsNone(turn['reply'])
 
-    def test_completion_between_detail_reads_refreshes_the_conversation(self):
-        from agent_framework.task_conversations import TaskConversations
-        task=self.start();stale=self.app.detail(task)['conversation']
-        self.release.set();self.wait(task)
-        original=TaskConversations.view;reads=[]
-        def view(service,identity):
-            reads.append(identity)
-            return stale if len(reads)==1 else original(service,identity)
-        with patch.object(TaskConversations,'view',view):detail=self.app.detail(task)
-        self.assertEqual(detail['run']['status'],'SUCCEEDED')
-        self.assertEqual(detail['conversation']['turns'][0]['status'],'SUCCEEDED')
-        self.assertEqual(detail['conversation']['turns'][0]['reply'],detail['run']['report'])
+    def test_completion_during_detail_keeps_snapshot_and_appears_on_next_read(self):
+        from agent_framework.store import Store
+        task=self.start();original=Store.result;reads=[]
+        def result(store,*args,**kwargs):
+            state=original(store,*args,**kwargs)
+            if not reads:
+                reads.append(True);future=self.app.jobs[task]['future'];self.release.set();future.result(timeout=5)
+            return state
+        with patch.object(Store,'result',result):detail=self.app.detail(task)
+        self.assertEqual(detail['run']['status'],'RUNNING')
+        self.assertEqual(detail['conversation']['turns'][0]['status'],'RUNNING')
+        self.assertIsNone(detail['conversation']['turns'][0]['reply'])
+        final=self.wait(task)
+        self.assertEqual(final['run']['status'],'SUCCEEDED')
+        self.assertEqual(final['conversation']['turns'][0]['reply'],final['run']['report'])
     def test_failure_keeps_generated_fragments_marked_incomplete(self):
         self.fail_model=True;task=self.start();self.release.set();turn=self.wait(task)['conversation']['turns'][0]
         self.assertEqual(turn['status'],'FAILED');self.assertEqual(turn['preview']['content'],'第一段');self.assertIsNone(turn['reply'])

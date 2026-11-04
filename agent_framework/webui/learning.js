@@ -1,7 +1,7 @@
 'use strict';
 const learningKinds={KNOWLEDGE:'知识',MEMORY:'记忆',EXPERIENCE:'经验',CAPABILITY:'能力'};
 const ontologyPredicates={IS_A:'属于 / 上位概念',PART_OF:'组成部分',RELATED_TO:'相关',REQUIRES:'依赖',PRODUCES:'产出',VALIDATES:'验证'};
-const learningUI={workspace:null,purpose:'retrospective',runId:null,source:null,agents:[],history:[],current:null,asset:null,busy:false,dirty:false,uncertain:false,request:null,selected:new Set(),output:null,focus:null};
+const learningUI={session:0,workspace:null,purpose:'retrospective',runId:null,source:null,agents:[],history:[],historyCursor:null,current:null,asset:null,busy:false,reading:false,dirty:false,uncertain:false,request:null,selected:new Set(),output:null,focus:null};
 const learningDialog=document.createElement('dialog');learningDialog.id='learning-dialog';learningDialog.className='learning-dialog';learningDialog.setAttribute('aria-labelledby','learning-title');document.body.append(learningDialog);
 function allLibraryAssets(){const d=state.library;return d?[...d.knowledge,...d.memory.preferences,...(d.memory.notes||[]),...d.experience,...(d.capability_methods||[]),...(d.ontologies||[])]:[];}
 function learningError(message){const p=$('#learning-error');if(p){p.textContent=message;p.hidden=false;p.focus();}else toast(message);}
@@ -10,27 +10,40 @@ function learningSourcesSelect(value,attrs){return `<label>依据来源<select m
 function learningAssetLink(ref,kind,title){return `<button type="button" class="button secondary" data-learning-asset="${esc(ref)}" data-learning-kind="${esc(kind)}">查看${esc(learningKinds[kind]||'本体')} · ${esc(title)}</button>`;}
 async function openLearning(runId=null,purpose='retrospective',assetRef=null){
  if(learningUI.busy||learningDialog.open)return;
- Object.assign(learningUI,{workspace:state.workspaceId,purpose,runId,current:null,asset:null,source:null,busy:true,dirty:false,uncertain:false,request:null,selected:new Set(),output:null,modelValidation:null,focus:document.activeElement});
- learningDialog.innerHTML='<div class="dialog-head"><h2 id="learning-title">正在加载…</h2></div><p role="status">正在读取当前空间的 Agent 与来源。</p>';learningDialog.showModal();
+ if(assetRef)assetRef=ontologySaveBaseRef(assetRef);
+ ontologySaveEditor=null;learningReviewEditor=null;
+ Object.assign(learningUI,{session:learningUI.session+1,workspace:state.workspaceId,purpose,runId,current:null,asset:null,source:null,history:[],historyCursor:null,busy:true,reading:true,dirty:false,uncertain:false,request:null,selected:new Set(),output:null,modelValidation:null,focus:document.activeElement});
+ attachLearningRequest(assetRef);
+ const session=learningUI.session,current=()=>session===learningUI.session&&learningUI.workspace===state.workspaceId&&learningDialog.open;
+ learningDialog.innerHTML='<div class="dialog-head"><h2 id="learning-title">正在加载…</h2><button class="icon-button" data-learning-close aria-label="关闭">'+icon('close')+'</button></div><p role="status">正在读取当前空间的 Agent 与来源，可关闭窗口取消等待。</p>';learningDialog.showModal();learningDialog.setAttribute('aria-busy','true');
  try{
-  const [agents,history,source]=await Promise.all([api('/api/agents'),api('/api/learning-proposals?purpose='+purpose+(runId?'&run_id='+encodeURIComponent(runId):'')),runId?api('/api/learning/run/'+encodeURIComponent(runId)):Promise.resolve(null)]);
-  if(learningUI.workspace!==state.workspaceId)throw Error('工作空间已变化，请重新打开。');
-  learningUI.agents=agents.agents.filter(a=>!a.archived);learningUI.history=history.proposals;learningUI.source=source;
-  if(assetRef){learningUI.asset=allLibraryAssets().find(a=>a.ref===assetRef);if(!learningUI.asset)throw Error('本体已变化，请刷新知识库。');learningUI.output=structuredClone(learningUI.asset.content);}
-  learningUI.busy=false;renderLearning();
- }catch(error){learningUI.busy=false;learningDialog.innerHTML=`<div class="dialog-head"><h2 id="learning-title">无法加载</h2><button class="icon-button" data-learning-close aria-label="关闭">${icon('close')}</button></div><p class="inline-error" role="alert">${esc(error.message)}</p>`;}
+  const loaded=await Promise.allSettled([api('/api/agents?view=catalog'),api(learningHistoryQuery()),runId?api('/api/learning/run/'+encodeURIComponent(runId)):Promise.resolve(null),assetRef?api('/api/knowledge/assets/'+encodeURIComponent(assetRef)+'/history'):Promise.resolve(null)]);
+  if(!current())return;
+  const failed=loaded.find(result=>result.status==='rejected');if(failed&&!learningRequestPending())throw failed.reason;
+  const [agents,history,source,assetHistory]=loaded.map((result,index)=>result.status==='fulfilled'?result.value:[{agents:[]},{proposals:[]},null][index]);
+  if(failed)learningRequestEditor.issue='当前配置或来源暂时无法读取，仍可核对原请求：'+failed.reason.message;
+  learningUI.agents=agents.agents.filter(a=>!a.archived);learningUI.history=history.proposals;learningUI.historyCursor=history.next_cursor||null;learningUI.source=source;
+  if(assetRef){learningUI.asset=assetHistory.versions.find(a=>a.ref===assetRef);if(!learningUI.asset)throw Error('本体已变化，请刷新知识库。');learningUI.output=structuredClone(learningUI.asset.content);attachOntologySave();}
+  learningUI.busy=false;learningUI.reading=false;renderLearning();
+ }catch(error){if(!current())return;learningUI.busy=false;learningUI.reading=false;learningDialog.setAttribute('aria-busy','false');learningDialog.innerHTML=`<div class="dialog-head"><h2 id="learning-title">无法加载</h2><button class="icon-button" data-learning-close aria-label="关闭">${icon('close')}</button></div><p class="inline-error" role="alert">${esc(error.message)}</p>`;}
 }
 function captureLearningView(root=learningDialog){
- const active=document.activeElement;
- return {details:new Map([...root.querySelectorAll('details[data-learning-disclosure]')].map(e=>[e.dataset.learningDisclosure,e.open])),scroll:$('.learning-body',learningDialog)?.scrollTop,dialogScroll:learningDialog.scrollTop,focus:root.contains(active)?{id:active.id,tag:active.tagName,data:{...active.dataset},start:active.selectionStart,end:active.selectionEnd}:null};
+ let active=document.activeElement;
+ const source=active?.closest?.('.select-picker')?.previousElementSibling;
+ if(source?.tagName==='SELECT'&&root.contains(source))active=source;
+ const data=Object.fromEntries(Object.entries(active?.dataset||{}).filter(([key])=>!['learningDisabled','ontologyValidationDescription'].includes(key)));
+ return {details:new Map([...root.querySelectorAll('details[data-learning-disclosure]')].map(e=>[e.dataset.learningDisclosure,e.open])),scroll:$('.learning-body',learningDialog)?.scrollTop,dialogScroll:learningDialog.scrollTop,focus:active&&root.contains(active)?{id:active.id,tag:active.tagName,data,start:active.selectionStart,end:active.selectionEnd}:null};
 }
 function restoreLearningView(snapshot,root=learningDialog){
  if(!snapshot)return false;
  for(const details of root.querySelectorAll('details[data-learning-disclosure]'))if(snapshot.details.has(details.dataset.learningDisclosure))details.open=snapshot.details.get(details.dataset.learningDisclosure);
  const f=snapshot.focus,fields=[...root.querySelectorAll('input,textarea,select,button,[tabindex]')];
- const target=f&&(f.id?fields.find(e=>e.id===f.id):Object.keys(f.data).length?fields.find(e=>e.tagName===f.tag&&Object.entries(f.data).every(([key,value])=>e.dataset[key]===value)):null);
+ const target=f&&((f.id?fields.find(e=>e.id===f.id):null)||(Object.keys(f.data).length?fields.find(e=>e.tagName===f.tag&&Object.entries(f.data).every(([key,value])=>e.dataset[key]===value)):null));
  if(target&&!target.disabled){target.focus({preventScroll:true});if(typeof f.start==='number'&&typeof target.setSelectionRange==='function')try{target.setSelectionRange(f.start,f.end);}catch{}}
- const body=$('.learning-body',learningDialog);if(body&&snapshot.scroll!==undefined)body.scrollTop=snapshot.scroll;learningDialog.scrollTop=snapshot.dialogScroll;
+ const body=$('.learning-body',learningDialog);if(body&&snapshot.scroll!==undefined)body.scrollTop=snapshot.scroll;
+ // The body owns scrolling in the fixed dialog. A picker can otherwise leave
+ // a programmatic offset on the clipped frame and hide its focused control.
+ learningDialog.scrollTop=window.getComputedStyle?.(learningDialog)?.overflowY==='hidden'?0:snapshot.dialogScroll;
  return !!target&&!target.disabled;
 }
 function renderLearning(){
@@ -38,13 +51,42 @@ function renderLearning(){
  const u=learningUI,ontology=u.purpose==='ontology',p=u.current,done=p?.status==='DEPOSITED',editing=!!u.output,asset=u.asset;
  learningDialog.setAttribute('aria-busy',String(u.busy));
  const title=ontology?(asset?'修订领域本体':'生成领域本体'):'运行复盘';
- learningDialog.innerHTML=`<div class="dialog-head"><div><p class="eyebrow">${ontology?'ONTOLOGY':'RUN RETROSPECTIVE'}</p><h2 id="learning-title">${title}</h2></div><button class="icon-button" data-learning-close aria-label="关闭${title}">${icon('close')}</button></div><div class="learning-body">${!editing?learningSetup()+(p?.repairable?'<p class="field-help">生成结果已保留，可创建修复草稿并逐项校验。</p><button class="button secondary" data-learning-repair>创建修复草稿</button>':''):`<div class="learning-state-bar"><span class="pill ${done?'good':''}">${done?'已沉淀':asset?'新版本草稿':p?.status==='DRAFT'?'建议待审阅':esc(p?.status)}</span><span class="field-help">${done?'已保留原始来源和确认回执。':'逐项核对内容与引用；保存不代表发布，也不改变工具权限。'}</span></div>${done?`<div class="resource-feedback" role="status"><div><strong>已沉淀 ${p.receipt.assets.length} 项</strong><p>知识、记忆和能力方法保存为私有草稿；经验需离线评测后审核发布。</p></div></div><div class="learning-receipt">${p.receipt.assets.map(a=>learningAssetLink(a.ref,a.kind,a.title)).join('')}</div>`:''}${ontology?ontologyEditor():reviewEditor()}<details class="technical-details" data-learning-disclosure="technical"><summary>生成信息与冻结来源</summary><pre>${json(p?{agent:p.agent.name,agent_revision:p.agent_revision,runtime:p.runtime,model:p.model,model_options:p.model_options,schema_hash:p.output_schema_hash,generation:p.generation,sources:p.source_context.sources,receipt:p.receipt}:asset.provenance)}</pre></details>`}<p id="learning-progress" class="field-help" role="status" hidden>正在处理，请等待结果…</p><p id="learning-error" class="inline-error" tabindex="-1" role="alert" hidden></p></div><div class="dialog-foot"><button class="button secondary" data-learning-close>${editing&&!done?'返回':'关闭'}</button><div class="toolbar">${editing&&!done?`<button class="button secondary" data-learning-reload>${asset?'核对本体版本':'重新读取已存提案'}</button>${asset?'<button class="button primary" data-ontology-save>保存为新版本草稿</button>':`<button class="button secondary" data-learning-save>保存审阅</button><button class="button primary" data-learning-deposit>${ontology?'保存本体草稿':'沉淀选中条目'}</button>`}`:!editing?`<button class="button secondary" data-learning-check ${!u.request?'hidden':''}>核对生成状态</button><button class="button primary" data-learning-generate>${u.request?'重新生成新提案':'调用 Agent 生成建议'}</button>`:''}</div></div>`;
+ learningDialog.innerHTML=`<div class="dialog-head"><div><p class="eyebrow">${ontology?'ONTOLOGY':'RUN RETROSPECTIVE'}</p><h2 id="learning-title">${title}</h2></div><button class="icon-button" data-learning-close aria-label="关闭${title}">${icon('close')}</button></div><div class="learning-body"><section id="learning-review-recovery" class="learning-request-recovery" aria-label="审阅与沉淀恢复" tabindex="-1" hidden></section><section id="ontology-save-recovery" class="learning-request-recovery" aria-label="本体保存恢复" tabindex="-1" hidden></section><section id="learning-request-recovery" class="learning-request-recovery" aria-label="生成请求恢复" tabindex="-1" hidden></section>${!editing?learningSetup()+(p?.repairable?'<p class="field-help">生成结果已保留，可创建修复草稿并逐项校验。</p><button class="button secondary" data-learning-repair>创建修复草稿</button>':''):`<div class="learning-state-bar"><span class="pill ${done?'good':''}">${done?'已沉淀':asset?'新版本草稿':p?.status==='DRAFT'?'建议待审阅':esc(p?.status)}</span><span class="field-help">${done?'已保留原始来源和确认回执。':'逐项核对内容与引用；保存不代表发布，也不改变工具权限。'}</span></div>${done?`<div class="resource-feedback" role="status"><div><strong>已沉淀 ${p.receipt.assets.length} 项</strong><p>知识、记忆和能力方法保存为私有草稿；经验需离线评测后审核发布。</p></div></div><div class="learning-receipt">${p.receipt.assets.map(a=>learningAssetLink(a.ref,a.kind,a.title)).join('')}</div>`:''}${ontology?ontologyEditor():reviewEditor()}<details class="technical-details" data-learning-disclosure="technical"><summary>生成信息与冻结来源</summary><pre>${json(p?{agent:p.agent.name,agent_revision:p.agent_revision,runtime:p.runtime,model:p.model,model_options:p.model_options,schema_hash:p.output_schema_hash,generation:p.generation,sources:p.source_context.sources,receipt:p.receipt}:asset.provenance)}</pre></details>`}<p id="learning-progress" class="field-help" role="status" hidden>正在处理，请等待结果…</p><p id="learning-error" class="inline-error" tabindex="-1" role="alert" hidden></p></div><div class="dialog-foot"><button class="button secondary" data-learning-close>${editing&&!done?'返回':'关闭'}</button><div class="toolbar">${editing&&!done?`<button class="button secondary" data-learning-reload>${asset?'核对本体版本':'重新读取已存提案'}</button>${asset?'<button class="button primary" data-ontology-save>保存为新版本草稿</button>':`<button class="button secondary" data-learning-save>保存审阅</button><button class="button primary" data-learning-deposit>${ontology?'保存本体草稿':'沉淀选中条目'}</button>`}`:!editing?`<button class="button secondary" data-learning-check ${!u.request?'hidden':''}>核对生成状态</button><button class="button primary" data-learning-generate>${u.request?'重新生成新提案':'调用 Agent 生成建议'}</button>`:''}</div></div>`;
  if(done)$$('input,textarea,select,button[data-concept-add],button[data-concept-remove],button[data-relation-add],button[data-relation-remove],button[data-property-add],button[data-property-remove]',learningDialog).forEach(e=>e.disabled=true);
- learningDialog.dataset.dirty=String(u.dirty);$('#learning-title').tabIndex=-1;if(!restoreLearningView(view))$('#learning-title').focus({preventScroll:true});if(ontology&&typeof applyOntologyValidation==='function')applyOntologyValidation(u.modelValidation);updateLearningProvider();
+ learningDialog.dataset.dirty=String(u.dirty);$('#learning-title').tabIndex=-1;if(!restoreLearningView(view))$('#learning-title').focus({preventScroll:true});if(ontology&&typeof applyOntologyValidation==='function')applyOntologyValidation(u.modelValidation);updateLearningProvider();renderLearningRequest();renderOntologySave();renderLearningReview();
+}
+function learningGenerationNotice(){
+ const p=learningUI.current;if(!p||!['GENERATING','INTERRUPTED','FAILED'].includes(p.status))return '';
+ const agent=learningUI.agents.find(a=>a.id===p.agent?.id),refs=(p.source_context?.sources||[]).map(s=>s.ref),available=new Set(allLibraryAssets().filter(a=>a.status==='PUBLISHED').map(a=>a.ref));
+ const missing=p.purpose==='ontology'?refs.filter(ref=>!available.has(ref)):[];
+ const message=p.generation_message||(p.status==='FAILED'?'本次生成未成功。请核对原要求与当前配置，再明确发起新的生成。':'该请求仍在生成，可以稍后核对状态。');
+ return `<section id="learning-generation-notice" class="resource-feedback" role="status" tabindex="-1"><div><strong>${p.status==='INTERRUPTED'?'生成已中断':p.status==='FAILED'?'生成未完成':'仍在生成'}</strong><p>${esc(message)}</p><p>原智能体：${esc(p.agent?.name||'未记录')} · v${esc(p.agent_revision)}。${!agent?'原智能体当前不可用，请重新选择。':agent.revision!==p.agent_revision?'当前可选版本为 v'+agent.revision+'，请检查模型与指令后再生成。':'下方已恢复原要求；模型使用许可需重新确认。'}</p>${missing.length?`<p>有 ${missing.length} 份原来源当前不可选择，请核对剩余来源或重新选择。</p>`:''}${p.status==='GENERATING'&&p.generation_expires_at?`<p class="field-help">处理期限：${time(p.generation_expires_at,true)}。期限后可再次核对。</p>`:''}<details><summary>原生成来源 · ${refs.length} 项</summary><ul>${refs.map(ref=>`<li>${esc(ref)}</li>`).join('')}</ul></details></div></section>`;
+}
+function restoreLearningGenerationInputs(p){
+ if(p.output)return;
+ const agent=learningUI.agents.find(a=>a.id===p.agent?.id&&!a.archived);$('#learning-agent').value=agent?agent.id:'';
+ $('#learning-instruction').value=p.instruction||'';$('#learning-consent').checked=false;
+ const refs=new Set((p.source_context?.sources||[]).map(s=>s.ref));
+ $$('[data-ontology-source]',learningDialog).forEach(field=>field.checked=refs.has(field.value));
+ const operational=$('#learning-operational');if(operational)operational.checked=typeof p.operational==='boolean'?p.operational:Boolean(p.source_context?.modeling_guidance);
+ const selected=allLibraryAssets().filter(a=>refs.has(a.ref)&&a.status==='PUBLISHED');
+ if(p.purpose==='ontology')$('#learning-context-preview').textContent=JSON.stringify({sources:selected.map(a=>({ref:a.ref,title:a.title,content:a.content,content_hash:a.content_hash}))},null,2);
+ updateLearningProvider();
 }
 function learningSetup(){
  const u=learningUI,ontology=u.purpose==='ontology',available=allLibraryAssets().filter(a=>['KNOWLEDGE','MEMORY','EXPERIENCE','CAPABILITY'].includes(a.kind)&&a.status==='PUBLISHED');
- return `<ol class="learning-steps"><li>选择 Agent 与来源</li><li>审阅、编辑总结</li><li>确认沉淀并审核发布</li></ol>${u.history.length?`<details class="learning-history"><summary>已有${ontology?'生成':'复盘'}记录 · ${u.history.length}</summary>${u.history.map(p=>`<button class="button secondary" data-learning-open="${esc(p.id)}">${esc(p.agent.name)} · ${time(p.created_at)} · ${esc(({DRAFT:'待审阅',DEPOSITED:'已沉淀',FAILED:'生成失败',GENERATING:'结果尚未确认'})[p.status]||p.status)}</button>`).join('')}</details>`:''}<label>执行总结的 Agent<select id="learning-agent"><option value="">请选择 Agent</option>${u.agents.map(a=>`<option value="${esc(a.id)}">${esc(a.name)} · v${a.revision} · ${esc(a.runtime)}</option>`).join('')}</select></label>${!u.agents.length?'<p class="field-help">当前空间尚无可用 Agent。<button class="text-button" data-learning-configure>前往配置 Agent</button></p>':''}<p id="learning-provider" class="field-help"></p>${ontology?`<fieldset class="learning-source-list"><legend>选择已发布资料（最多 12 个）</legend>${available.map(a=>`<label class="check-label"><input type="checkbox" data-ontology-source value="${esc(a.ref)}"><span>${esc(a.title)}<small>${esc(learningKinds[a.kind]||a.kind)} · ${a.visibility==='PRIVATE'?'仅本人':'空间共享'} · ${esc(a.ref)}</small></span></label>`).join('')||'<p class="field-help">请先在知识库添加或沉淀资料，经审核发布后再生成本体。</p>'}</fieldset><label class="check-label"><input id="learning-operational" type="checkbox" checked><span>同时抽取业务对象与约束<small>只从来源明确的业务标识与属性事实创建实例；没有明确事实时保留空实例集。</small></span></label>`:`<section class="learning-run-facts"><strong>${esc(u.source?.facts.goal)}</strong><p>运行结果：${esc(labels[u.source?.facts.status]||u.source?.facts.status)} · ${u.source?.sources.length||0} 份来源</p><p class="field-help">复盘不会恢复、授权或重新执行原任务。</p></section>`}<label>生成要求<textarea id="learning-instruction" rows="3" maxlength="2000">${ontology?'从所选资料抽取业务概念、属性与关系，保留来源引用；资料没有依据的关系不要添加。':'总结目标、实际结果、验收与问题，提出可沉淀的知识、记忆、经验与能力方法，明确适用范围和限制。'}</textarea></label><label class="check-label" id="learning-consent-wrap" hidden><input id="learning-consent" type="checkbox"><span>允许将所选来源内容、智能体指令及输出要求 发送到该 Agent 的模型服务。<small>不发送登录凭据；此操作不会启动 MCP 或业务工具。</small></span></label><details class="technical-details"><summary>查看将发送的来源内容</summary><pre id="learning-context-preview">${json(u.source||{sources:[]})}</pre></details>`;
+ return `${learningReviewNotice()}${learningGenerationNotice()}<ol class="learning-steps"><li>选择 Agent 与来源</li><li>审阅、编辑总结</li><li>确认沉淀并审核发布</li></ol>${learningHistory()}<label>执行总结的 Agent<select id="learning-agent"><option value="">请选择 Agent</option>${u.agents.map(a=>`<option value="${esc(a.id)}">${esc(a.name)} · v${a.revision} · ${esc(a.runtime)}</option>`).join('')}</select></label>${!u.agents.length?'<p class="field-help">当前空间尚无可用 Agent。<button class="text-button" data-learning-configure>前往配置 Agent</button></p>':''}<p id="learning-provider" class="field-help"></p>${ontology?`<fieldset class="learning-source-list"><legend>选择已发布资料（最多 12 个）</legend>${available.map(a=>`<label class="check-label"><input type="checkbox" data-ontology-source value="${esc(a.ref)}"><span>${esc(a.title)}<small>${esc(learningKinds[a.kind]||a.kind)} · ${a.visibility==='PRIVATE'?'仅本人':'空间共享'} · ${esc(a.ref)}</small></span></label>`).join('')||'<p class="field-help">请先在知识库添加或沉淀资料，经审核发布后再生成本体。</p>'}</fieldset><label class="check-label"><input id="learning-operational" type="checkbox" checked><span>同时抽取业务对象与约束<small>只从来源明确的业务标识与属性事实创建实例；没有明确事实时保留空实例集。</small></span></label>`:`<section class="learning-run-facts"><strong>${esc(u.source?.facts.goal)}</strong><p>运行结果：${esc(labels[u.source?.facts.status]||u.source?.facts.status)} · ${u.source?.sources.length||0} 份来源</p><p class="field-help">复盘不会恢复、授权或重新执行原任务。</p></section>`}<label>生成要求<textarea id="learning-instruction" rows="3" maxlength="2000">${ontology?'从所选资料抽取业务概念、属性与关系，保留来源引用；资料没有依据的关系不要添加。':'总结目标、实际结果、验收与问题，提出可沉淀的知识、记忆、经验与能力方法，明确适用范围和限制。'}</textarea></label><label class="check-label" id="learning-consent-wrap" hidden><input id="learning-consent" type="checkbox"><span>允许将所选来源内容、智能体指令及输出要求 发送到该 Agent 的模型服务。<small>不发送登录凭据；此操作不会启动 MCP 或业务工具。</small></span></label><details class="technical-details"><summary>查看将发送的来源内容</summary><pre id="learning-context-preview">${json(u.source||{sources:[]})}</pre></details>`;
+}
+function learningHistoryQuery(cursor=null){const u=learningUI;return '/api/learning-proposals?purpose='+u.purpose+(u.runId?'&run_id='+encodeURIComponent(u.runId):'')+'&limit=50'+(cursor?'&cursor='+encodeURIComponent(cursor):'');}
+function learningHistoryItems(){return learningUI.history.map(p=>`<button class="button secondary" data-learning-open="${esc(p.id)}">${esc(p.agent.name)} · ${time(p.created_at)} · ${esc(({DRAFT:'待审阅',DEPOSITED:'已沉淀',FAILED:'生成失败',GENERATING:'仍在生成',INTERRUPTED:'生成已中断'})[p.status]||p.status)}</button>`).join('');}
+function learningHistory(){const u=learningUI;return u.history.length?`<details class="learning-history" data-learning-disclosure="history"><summary id="learning-history-summary" tabindex="-1">${u.purpose==='ontology'?'生成':'复盘'}记录</summary><p id="learning-history-status" class="field-help" role="status">已载入 ${u.history.length} 条记录${u.historyCursor?'，可继续加载':''}</p><div id="learning-history-items">${learningHistoryItems()}</div><button id="learning-history-more" class="button secondary" data-learning-history-more ${u.historyCursor?'':'hidden'}>加载更多记录</button></details>`:'';}
+async function loadMoreLearningHistory(){
+ const u=learningUI,cursor=u.historyCursor;if(!cursor||u.output)return;
+ return readLearning(()=>api(learningHistoryQuery(cursor)),page=>{
+  const ids=new Set(u.history.map(p=>p.id));for(const p of page.proposals)if(!ids.has(p.id)){ids.add(p.id);u.history.push(p);}u.historyCursor=page.next_cursor||null;
+  $('#learning-history-items').innerHTML=learningHistoryItems();$('#learning-history-status').textContent='已载入 '+u.history.length+' 条记录'+(u.historyCursor?'，可继续加载':'，已全部载入');
+  const more=$('#learning-history-more');more.hidden=!u.historyCursor;const target=u.historyCursor?more:$('#learning-history-summary');target.focus({preventScroll:true});target.scrollIntoView?.({block:'nearest'});if(window.getComputedStyle?.(learningDialog)?.overflowY==='hidden')learningDialog.scrollTop=0;
+ },()=>false);
 }
 function updateLearningProvider(){
  const select=$('#learning-agent');if(!select)return;const agent=learningUI.agents.find(a=>a.id===select.value),live=agent&&agent.runtime!=='mock';$('#learning-consent-wrap').hidden=!live;$('#learning-provider').textContent=agent?`${agent.runtime} · ${agent.model} · 固定 Agent v${agent.revision}；仅生成提案。`:'';
@@ -60,40 +102,63 @@ function ontologyEditor(){
  const u=learningUI,o=u.output,options=id=>o.concepts.map(n=>`<option value="${esc(n.id)}" ${n.id===id?'selected':''}>${esc(n.label||n.id)}</option>`).join('');
  return `<div class="form-grid"><label>本体名称<input data-ontology-field="name" value="${esc(o.name)}" maxlength="200"></label><label>领域说明<input data-ontology-field="description" value="${esc(o.description)}" maxlength="2000"></label></div><div id="learning-graph">${ontologyGraph(o)}</div><section class="learning-ontology-concepts"><div class="mini-heading"><h3>概念与属性 · ${o.concepts.length}</h3><button class="button secondary" data-concept-add>添加概念</button></div>${o.concepts.map((n,i)=>`<details class="learning-item" data-learning-disclosure="concept-${esc(n.id)}" ${i===0?'open':''}><summary>${esc(n.label||n.id)} · ${n.properties.length} 个属性</summary><div class="mini-heading"><span class="mono field-help">${esc(n.id)}</span><button class="text-button danger-text" data-concept-remove="${i}">删除概念及关联关系</button></div><label>概念名称<input data-concept-field="label" data-index="${i}" value="${esc(n.label)}" maxlength="2000"></label><label>定义<textarea rows="2" data-concept-field="definition" data-index="${i}" maxlength="2000">${esc(n.definition)}</textarea></label><label>别名（每行一条）<textarea rows="2" data-concept-field="aliases" data-index="${i}">${esc(n.aliases.join('\n'))}</textarea></label>${learningSourcesSelect(n.source_refs,`data-concept-field="source_refs" data-index="${i}"`)}<div class="mini-heading"><strong>属性</strong><button class="button secondary" data-property-add="${i}">添加属性</button></div>${n.properties.map((p,j)=>`<div class="ontology-property"><label>属性名称<input data-property-field="label" data-index="${i}" data-property="${j}" value="${esc(p.label)}"></label><label>类型<select data-property-field="type" data-index="${i}" data-property="${j}">${['string','number','boolean','date'].map(t=>`<option ${p.type===t?'selected':''}>${t}</option>`).join('')}</select></label><label>说明<input data-property-field="description" data-index="${i}" data-property="${j}" value="${esc(p.description)}"></label><button class="text-button danger-text" data-property-remove="${i}:${j}">删除属性</button></div>`).join('')}</details>`).join('')}</section><section class="learning-item"><div class="mini-heading"><h3>概念关系 · ${o.relations.length}</h3><button class="button secondary" data-relation-add>添加关系</button></div>${o.relations.map((r,i)=>`<div class="ontology-relation"><label>起点<select data-relation-field="source" data-index="${i}">${options(r.source)}</select></label><label>关系<select data-relation-field="predicate" data-index="${i}">${Object.entries(ontologyPredicates).map(([k,v])=>`<option value="${k}" ${k===r.predicate?'selected':''}>${v}</option>`).join('')}</select></label><label>终点<select data-relation-field="target" data-index="${i}">${options(r.target)}</select></label>${learningSourcesSelect(r.source_refs,`data-relation-field="source_refs" data-index="${i}"`)}<button class="text-button danger-text" data-relation-remove="${i}">删除关系</button></div>`).join('')||'<p class="field-help">没有已确认的关系。可选择两个概念添加，不会根据共现自动推断关系。</p>'}</section>${typeof ontologyModelEditor==='function'?ontologyModelEditor():''}`;
 }
-function markLearningDirty(){learningUI.dirty=true;learningDialog.dataset.dirty='true';if(learningUI.purpose==='ontology'&&typeof invalidateOntologyValidation==='function')invalidateOntologyValidation();}
-function freezeLearning(on){learningUI.busy=on;learningDialog.setAttribute('aria-busy',String(on));if($('#learning-progress'))$('#learning-progress').hidden=!on;if(on&&$('#learning-error'))$('#learning-error').hidden=true;$$('button,input,textarea,select',learningDialog).forEach(e=>{if(on){e.dataset.learningDisabled=String(e.disabled);e.disabled=true;}else{e.disabled=e.dataset.learningDisabled==='true';delete e.dataset.learningDisabled;}});}
-async function closeLearning(){if(learningUI.busy){toast('请求仍在处理中，请等待结果。');return;}if(learningUI.dirty&&!(typeof confirmDialogDiscard==='function'?await confirmDialogDiscard(learningDialog,'放弃未保存的审阅？','审阅修改尚未保存。继续编辑可保留当前内容，放弃后关闭此窗口。'):confirm('有尚未保存的审阅内容，确定关闭？')))return;learningDialog.close();learningUI.dirty=false;learningUI.focus?.focus?.({preventScroll:true});}
-async function loadLearningProposal(id){if(learningUI.dirty&&learningUI.output&&!(typeof confirmDialogDiscard==='function'?await confirmDialogDiscard(learningDialog,'重新读取并放弃修改？','重新读取会用已保存的提案替换当前审阅内容。继续编辑可保留当前修改。'):confirm('重新读取会丢弃未保存的修改，确定继续？')))return;const p=await api('/api/learning-proposals/'+encodeURIComponent(id));learningUI.current=p;learningUI.dirty=false;learningUI.uncertain=false;learningUI.output=p.output?structuredClone(p.output):null;learningUI.selected=new Set(p.output?.items?.map(i=>i.id)||[]);renderLearning();if(p.error)learningError(p.error);else if(p.status==='GENERATING')learningError('该请求仍在生成或结果尚未确认。可以稍后重新读取；不会自动再次调用模型。');}
+function markLearningDirty(){learningUI.dirty=true;if(learningReviewCurrent()){const warning=learningReviewEditor.storageError;persistLearningReview();if(warning!==learningReviewEditor.storageError)renderLearningReview();}if(ontologySaveCurrent()){const warning=ontologySaveEditor.storageError;persistOntologySave();if(warning!==ontologySaveEditor.storageError)renderOntologySave();}learningDialog.dataset.dirty='true';if(learningUI.purpose==='ontology'&&typeof invalidateOntologyValidation==='function')invalidateOntologyValidation();}
+function freezeLearning(on,reading=false){
+ learningUI.busy=on;learningUI.reading=on&&reading;learningDialog.setAttribute('aria-busy',String(on));
+ const progress=$('#learning-progress');if(progress){progress.hidden=!on;progress.textContent=reading?'正在读取已保存内容，可关闭窗口取消等待…':'正在处理，请等待结果…';}
+ if(on&&$('#learning-error'))$('#learning-error').hidden=true;
+ $$('button,input,textarea,select',learningDialog).forEach(e=>{if(on){if(e.dataset.learningDisabled===undefined)e.dataset.learningDisabled=String(e.disabled);if(!(reading&&e.hasAttribute('data-learning-close')))e.disabled=true;}else if(e.dataset.learningDisabled!==undefined){e.disabled=e.dataset.learningDisabled==='true';delete e.dataset.learningDisabled;}});
+}
+async function closeLearning(){
+ const u=learningUI;if(closeOntologySave()||closeLearningReview())return;captureLearningRequestInput();if(learningRequestPending())u.dirty=false;if(u.busy&&!u.reading){toast('请求仍在处理中，请等待结果。');return;}
+ // Closing a read cancels its UI ownership, including while discard is reviewed.
+ if(u.reading){++u.session;freezeLearning(false);}const session=u.session;
+ if(u.dirty&&!(typeof confirmDialogDiscard==='function'?await confirmDialogDiscard(learningDialog,'放弃未保存的审阅？','审阅修改尚未保存。继续编辑可保留当前内容，放弃后关闭此窗口。'):confirm('有尚未保存的审阅内容，确定关闭？')))return;
+ if(session!==u.session)return;++u.session;learningDialog.close();u.dirty=false;u.focus?.focus?.({preventScroll:true});
+}
+async function readLearning(read,apply,replaces=()=>true){
+ const u=learningUI;if(u.busy||learningRequestPending()||learningReviewPending())return;if(u.workspace!==state.workspaceId){learningError('工作空间已变化，请重新打开。');return;}
+ const session=u.session,workspace=u.workspace,focus=document.activeElement,current=()=>u.session===session&&u.workspace===workspace&&state.workspaceId===workspace&&learningDialog.open;
+ freezeLearning(true,true);
+ try{
+  const result=await read(current);if(!current())return;
+  if(replaces(result)&&u.dirty){
+   const message='已读取'+(result.ref?'本体 v'+result.version:'已保存的提案')+'。采用后会替换当前审阅内容；继续编辑可保留当前修改。',accepted=typeof confirmDialogDiscard==='function'?await confirmDialogDiscard(learningDialog,'替换当前未保存的审阅？',message):confirm(message);
+   if(!current())return;if(!accepted){freezeLearning(false);if(focus?.isConnected&&!focus.disabled)focus.focus({preventScroll:true});return;}
+  }
+  freezeLearning(false);apply(result);
+ }catch(error){if(current())learningError(error.message);}
+ finally{if(current()&&u.reading){freezeLearning(false);const active=document.activeElement;if((active===document.body||active===learningDialog||!learningDialog.contains(active))&&focus?.isConnected&&!focus.disabled)focus.focus({preventScroll:true});}}
+}
+function applyLearningProposal(p){
+ const u=learningUI;u.current=p;u.asset=null;u.dirty=false;u.uncertain=false;u.modelValidation=null;u.request=p.request_id||u.request;u.output=p.output?structuredClone(p.output):null;u.selected=new Set(p.output?.items?.map(i=>i.id)||[]);
+ attachLearningReview();renderLearning();restoreLearningGenerationInputs(p);
+ if(!p.output&&learningRequestCurrent()&&learningRequestEditor.record?.phase==='draft')$('#learning-instruction').value=learningRequestEditor.record.local;
+ if(p.error)learningError(p.error);else if(['GENERATING','INTERRUPTED'].includes(p.status))$('#learning-generation-notice')?.focus({preventScroll:true});
+}
+async function loadLearningProposal(id){return readLearning(()=>api('/api/learning-proposals/'+encodeURIComponent(id)),p=>{if(learningReviewCurrent()&&learningReviewEditor.scope.proposal===id&&!clearLearningReview())throw Error('恢复副本暂时无法清除，未替换本页内容。');applyLearningProposal(p);});}
+async function reloadLearningOntology(){
+ const u=learningUI,asset=u.asset;
+ return readLearning(async()=>{const result=await api('/api/library'),latest=result.assets.filter(a=>a.id===asset.id).sort((a,b)=>b.version-a.version)[0];if(!latest||latest.version<asset.version)throw Error('本体不在当前可访问范围。');return latest;},latest=>{u.asset=latest;if(latest.version>asset.version){u.output=structuredClone(latest.content);u.dirty=false;u.modelValidation=null;if(ontologySaveCurrent()){clearOntologySave(ontologySaveEditor);ontologySaveEditor.record.base_ref=latest.ref;ontologySaveEditor.record.local=structuredClone(u.output);}}u.uncertain=false;renderLearning();toast('已核对本体版本 v'+latest.version+'，未重复保存。');},latest=>latest.version>asset.version);
+}
 async function performLearning(action){
  const u=learningUI;if(u.busy)return;if(u.workspace!==state.workspaceId){learningError('工作空间已变化，请重新打开。');return;}
- let saved=false;
+ if(action==='reload'&&learningReviewPending())return checkLearningReview();
+ if(learningReviewPending()){learningError('请先核对本次审阅／沉淀请求。');return;}
+ if(action==='generate')return startLearningRequest();
+ if(action==='check'&&learningRequestPending())return checkLearningRequest();
+ if(learningRequestPending()){learningError('请先核对原生成请求。');return;}
+ if(action==='revise')return saveOntology();
+ if(action==='reload'&&ontologySaveCurrent()&&ontologySaveEditor.record.attempt)return checkOntologySave();
+ if(action==='reload')return u.asset?reloadLearningOntology():loadLearningProposal(u.current.id);
+ if(action==='check')return readLearning(()=>{if(!u.request)throw Error('没有待核对的生成请求。');return api('/api/learning-requests/'+encodeURIComponent(u.request));},applyLearningProposal);
+ if(['save','deposit'].includes(action))return performLearningReview(action);
+ if(action!=='repair')return;
  try{
-  if(action==='generate'){
-   const agent=u.agents.find(a=>a.id===$('#learning-agent').value);if(!agent)throw Error('请选择执行总结的 Agent。');
-   const instruction=$('#learning-instruction').value.trim();if(!instruction)throw Error('请填写生成要求。');
-   const refs=$$('[data-ontology-source]:checked',learningDialog).map(e=>e.value);
-   if(u.purpose==='ontology'&&(!refs.length||refs.length>12))throw Error('请选择 1–12 份已发布资料。');
-   const consent=$('#learning-consent').checked;if(agent.runtime!=='mock'&&!consent)throw Error('请确认允许发送所选模拟上下文。');
-   u.request='request-'+crypto.randomUUID();freezeLearning(true);
-   const p=await api('/api/learning-proposals',{request_id:u.request,purpose:u.purpose,...(u.runId?{run_id:u.runId}:{source_refs:refs}),...(u.purpose==='ontology'?{operational:$('#learning-operational')?.checked??false}:{}),agent_id:agent.id,agent_revision:agent.revision,instruction,consent},Math.max(15000,((agent.options?.timeout||60)+15)*1000));
-   u.current=p;u.output=p.output?structuredClone(p.output):null;u.dirty=false;u.uncertain=false;u.selected=new Set(p.output?.items?.map(i=>i.id)||[]);u.busy=false;renderLearning();if(p.error)learningError(p.error);return;
-  }
-  if(action==='repair'){freezeLearning(true);const p=await api('/api/learning-proposals/'+encodeURIComponent(u.current.id)+'/repair',{revision:u.current.revision});u.current=p;u.output=structuredClone(p.output);u.modelValidation=null;u.dirty=false;u.uncertain=false;u.busy=false;renderLearning();toast('已创建修复草稿，请修正约束后保存；未再次调用模型。');return;}
-  if(action==='check'){freezeLearning(true);const all=await api('/api/learning-proposals?purpose='+u.purpose+(u.runId?'&run_id='+encodeURIComponent(u.runId):''));const p=all.proposals.find(p=>p.request_id===u.request);u.busy=false;freezeLearning(false);if(!p)throw Error('尚未发现该请求；请保留当前页面，稍后再次核对。');await loadLearningProposal(p.id);return;}
-  if(u.uncertain&&action!=='reload')throw Error('上次写入回执尚未确认，请先重新读取提案。');
-  if(action==='reload'){if(u.asset){const result=await api('/api/library');const latest=result.assets.filter(a=>a.id===u.asset.id).sort((a,b)=>b.version-a.version)[0];if(!latest)throw Error('本体不在当前可访问范围。');if(latest.version>u.asset.version){u.asset=latest;u.output=structuredClone(latest.content);u.dirty=false;}u.uncertain=false;renderLearning();toast('已核对本体版本 v'+latest.version+'，未重复保存。');}else await loadLearningProposal(u.current.id);return;}
-  if(action==='revise'){
-   freezeLearning(true);const asset=await api('/api/ontologies/'+encodeURIComponent(u.asset.ref)+'/revise',{content:u.output});saved=true;u.dirty=false;u.busy=false;learningDialog.close();await revealLearningAsset(asset.ref,'ONTOLOGY');toast('本体已保存为新版本草稿，审核发布后生效。');return;
-  }
-  if(action==='deposit'&&u.purpose==='retrospective'&&!u.selected.size)throw Error('请至少选择一个沉淀条目。');
-  freezeLearning(true);
-  if(u.dirty){u.current=await api('/api/learning-proposals/'+encodeURIComponent(u.current.id),{revision:u.current.revision,output:u.output});u.dirty=false;}
-  if(action==='deposit'){u.current=await api('/api/learning-proposals/'+encodeURIComponent(u.current.id)+'/deposit',{revision:u.current.revision,item_ids:u.purpose==='ontology'?['ontology']:[...u.selected]});saved=true;u.output=structuredClone(u.current.output);}
-  u.busy=false;renderLearning();toast(action==='deposit'?'沉淀完成，尚未发布。':'审阅内容已保存。');
+  if(action==='repair'){freezeLearning(true);const p=await api('/api/learning-proposals/'+encodeURIComponent(u.current.id)+'/repair',{revision:u.current.revision});u.current=p;u.output=structuredClone(p.output);u.modelValidation=null;u.dirty=false;u.uncertain=false;u.busy=false;attachLearningReview();renderLearning();toast('已创建修复草稿，请修正约束后保存；未再次调用模型。');return;}
  }catch(error){
   const uncertain=u.busy&&action!=='check';freezeLearning(false);u.busy=false;if(uncertain)u.uncertain=true;
-  learningError((saved?'已保存；后续列表读取失败。':uncertain?'请求结果需要核对，未自动重放。':'')+error.message);
-  if(action==='generate'&&u.request){const check=$('[data-learning-check]',learningDialog);if(check)check.hidden=false;const generate=$('[data-learning-generate]',learningDialog);if(generate)generate.textContent='明确发起新的生成';}
+  learningError((uncertain?'请求结果需要核对，未自动重放。':'')+error.message);
  }finally{if(u.busy)freezeLearning(false);}
 }
 async function revealLearningAsset(ref,kind){
@@ -109,9 +174,10 @@ function ontologyLibraryPage(d){
  }).join('')||resourceEmpty('还没有领域本体','先选择当前空间已发布的资料，由 Agent 抽取概念、属性和关系，再审阅保存。','<button class="button primary" data-new-ontology>生成第一个本体</button>')}</section>`;
 }
 learningDialog.addEventListener('cancel',e=>{e.preventDefault();closeLearning();});
+learningDialog.addEventListener('close',()=>{state.fingerprint='';render();});
 window.addEventListener('beforeunload',e=>{if(learningUI.dirty&&learningDialog.open){e.preventDefault();e.returnValue='';}});
 document.addEventListener('click',async e=>{
- const b=e.target.closest('[data-retrospective],[data-new-ontology],[data-edit-ontology],[data-learning-close],[data-learning-configure],[data-learning-open],[data-learning-generate],[data-learning-check],[data-learning-repair],[data-ontology-activate],[data-learning-save],[data-learning-deposit],[data-learning-reload],[data-learning-asset],[data-ontology-save],[data-concept-add],[data-concept-remove],[data-property-add],[data-property-remove],[data-relation-add],[data-relation-remove]');if(!b)return;e.preventDefault();e.stopPropagation();
+ const b=e.target.closest('[data-retrospective],[data-new-ontology],[data-edit-ontology],[data-learning-close],[data-learning-configure],[data-learning-open],[data-learning-history-more],[data-learning-generate],[data-learning-check],[data-learning-repair],[data-ontology-activate],[data-learning-save],[data-learning-deposit],[data-learning-reload],[data-learning-asset],[data-ontology-save],[data-concept-add],[data-concept-remove],[data-property-add],[data-property-remove],[data-relation-add],[data-relation-remove]');if(!b)return;e.preventDefault();e.stopPropagation();
  if(b.disabled)return;
  try{
   if(b.hasAttribute('data-retrospective')){await openLearning(b.dataset.retrospective);return;}
@@ -121,6 +187,7 @@ document.addEventListener('click',async e=>{
   if(b.hasAttribute('data-learning-close')){await closeLearning();return;}
   if(b.hasAttribute('data-learning-configure')){learningDialog.close();navigate('agents');return;}
   if(b.dataset.learningOpen){await loadLearningProposal(b.dataset.learningOpen);return;}
+  if(b.hasAttribute('data-learning-history-more')){await loadMoreLearningHistory();return;}
   if(b.dataset.learningAsset){await revealLearningAsset(b.dataset.learningAsset,b.dataset.learningKind);return;}
   for(const [attr,action] of [['learningGenerate','generate'],['learningCheck','check'],['learningRepair','repair'],['learningSave','save'],['learningDeposit','deposit'],['learningReload','reload'],['ontologySave','revise']])if(attr in b.dataset){await performLearning(action);return;}
   if(learningUI.busy)return;const o=learningUI.output,refs=learningUI.current?.source_context.sources||learningUI.asset?.provenance.sources;
@@ -138,8 +205,9 @@ function learningFieldChange(e){
  if(target.id==='learning-agent'){const c=$('#learning-consent');if(c)c.checked=false;updateLearningProvider();return;}
  if(target.hasAttribute('data-ontology-source')){const selected=$$('[data-ontology-source]:checked',learningDialog).map(e=>e.value);$('#learning-context-preview').textContent=JSON.stringify({sources:allLibraryAssets().filter(a=>selected.includes(a.ref)).map(a=>({ref:a.ref,title:a.title,content:a.content,content_hash:a.content_hash}))},null,2);$('#learning-consent').checked=false;return;}
  if(target.id==='learning-operational'){const c=$('#learning-consent');if(c)c.checked=false;markLearningDirty();return;}
+ if(target.id==='learning-instruction'&&learningRequestCurrent()&&learningRequestEditor.record){captureLearningRequestInput();$('#learning-consent').checked=false;if(learningRequestEditor.storageError)renderLearningRequest();return;}
  if(target.id==='learning-instruction'){const c=$('#learning-consent');if(c)c.checked=false;markLearningDirty();return;}
- if('reviewSelected'in d){if(target.checked)u.selected.add(d.reviewSelected);else u.selected.delete(d.reviewSelected);return;}
+ if('reviewSelected'in d){if(target.checked)u.selected.add(d.reviewSelected);else u.selected.delete(d.reviewSelected);if(learningReviewCurrent()){const warning=learningReviewEditor.storageError;persistLearningReview();if(warning!==learningReviewEditor.storageError)renderLearningReview();}return;}
  if(!u.output)return;
  const value=target.multiple?[...target.selectedOptions].map(o=>o.value):target.value;
  if(target.hasAttribute('data-review-summary'))u.output.summary=value;

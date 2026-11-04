@@ -12,6 +12,20 @@ from .knowledge import Access, Library, KnowledgeUnavailable
 from .memory import episodes
 
 
+def context_query(text,source):
+    """Sample only optional retrieval; the actual task and model input stay whole."""
+    limit=2000
+    if len(text)<=limit:
+        ranges=[[0,len(text)]];strategy='verbatim'
+    else:
+        size=(limit-2)//3;middle=(len(text)-size)//2
+        ranges=[[0,size],[middle,middle+size],[len(text)-size,len(text)]]
+        strategy='head-middle-tail'
+    query='\n'.join(text[start:end] for start,end in ranges)
+    return query,{'source':source,'strategy':strategy,'input_chars':len(text),'query_chars':len(query),
+                  'query_hash':digest(query),'ranges':ranges}
+
+
 def build(store, state, phase, base):
     binding=state['snapshot'].get('context_policy')
     if not binding:return base, None
@@ -26,7 +40,9 @@ def build(store, state, phase, base):
         if current['status']!='PUBLISHED' or current['content_hash']!=doc['content_hash'] or not current['effective_at']<=time.time()<current['effective_until']:
             raise KnowledgeUnavailable('cited knowledge withdrawn, expired or changed')
     retrieval=state['task'].get('retrieval')
-    result=library.search(access,retrieval['query'] if retrieval else state['task']['goal'],spaces=binding['spaces'],for_context=True,
+    memory_query,memory_query_record=context_query(state['task']['goal'],'task-goal')
+    knowledge_query,knowledge_query_record=(context_query(retrieval['query'],'workflow-query') if retrieval else (memory_query,memory_query_record))
+    result=library.search(access,knowledge_query,spaces=binding['spaces'],for_context=True,
                           limit=50 if retrieval else 12)
     conversation=None;history_redactions=[]
     if state['task'].get('conversation_context'):
@@ -79,7 +95,7 @@ def build(store, state, phase, base):
         {'KNOWLEDGE':knowledge,'PREFERENCE':preferences,'EXPERIENCE':experience,'MEMORY':notes,'CAPABILITY':methods}[asset['kind']].append(item)
     # A private episode is historical evidence of one run, never a general rule.
     recalled=[]
-    for episode in episodes(store,access,state['task']['goal'],limit=3):
+    for episode in episodes(store,access,memory_query,limit=3):
         if episode['run_id']==state['run_id']:continue
         item={k:episode[k] for k in ('run_id','summary','outcome','domain_pack_ref','evidence_refs')}
         size=len(canonical(item).encode())
@@ -89,11 +105,17 @@ def build(store, state, phase, base):
         selected.append({'ref':'episode:'+episode['run_id'],'kind':'EPISODE','content_hash':digest(item),'reason':'same-principal-history'})
     manifest={'id':'context-'+uuid4().hex[:16],'run_id':state['run_id'],'phase':phase,
               'policy_ref':binding['ref'],'created_at':time.time(), 'scope':{'project_id':access.project,'environment':access.environment,'principal':access.principal},
+              'retrieval_queries':{'knowledge':knowledge_query_record,'memory':memory_query_record},
               'selected':selected,'excluded':excluded,
               'evidence':[{'ref':key,'content_hash':value['content_hash']} for key,value in base['evidence'].items()],
               'budget':{'optional_bytes':used,'max_optional_bytes':binding['max_optional_bytes'],'mandatory_evidence_trimmed':False}}
     if conversation:
+        from .history_dependencies import history_sources
+        manifest['conversation_sources']=history_sources(conversation['messages'])
         manifest['conversation_history_hash']=conversation['history_hash']
+        manifest['conversation_context_hash']=digest(conversation)
+        manifest['conversation_message_count']=len(conversation['messages'])
+        manifest['conversation_omitted_messages']=conversation['omitted_messages']
         manifest['conversation_redactions']=history_redactions
     manifest['hash']=digest(manifest)
     preferences.sort(key=lambda item:item['observed_at'])

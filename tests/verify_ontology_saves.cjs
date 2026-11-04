@@ -1,0 +1,47 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),{chromium}=require('playwright'),H=require('./ui95_helpers.cjs');
+const {waitFor}=require('./browser_poll.cjs');
+const base=process.env.ONTOLOGY_SAVE_URL,out=process.env.ONTOLOGY_SAVE_OUTPUT;if(!base||!out)throw Error('Use the ontology-saves browser suite.');fs.mkdirSync(out,{recursive:true});
+(async()=>{
+ const browser=await chromium.launch({channel:'chrome',headless:true}),context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'}),page=await context.newPage(),other=await context.newPage(),checks=[],errors=[],posts=[],layouts=[];
+ for(const p of [page,other]){p.setDefaultTimeout(15000);p.on('pageerror',e=>errors.push(e.message));}page.on('dialog',d=>d.accept());page.on('request',r=>{if(r.method()==='POST'&&new URL(r.url()).pathname.endsWith('/revise'))posts.push({url:new URL(r.url()).pathname,body:r.postDataJSON()});});
+ const call=(tab,url,data)=>tab.evaluate(({url,data})=>api(url,data),{url,data}),ready=tab=>tab.waitForFunction(()=>state.connected&&!state.busy);
+ const action=name=>page.locator('[data-ontology-save-action="'+name+'"]'),description=page.locator('[data-ontology-field=description]');
+ const close=async()=>{await page.locator('#learning-dialog .dialog-head [data-learning-close]').click();await page.locator('#learning-dialog').waitFor({state:'hidden'});};
+ const shot=name=>page.screenshot({path:path.join(out,name+'.png'),animations:'disabled'}),pass=message=>{checks.push(message);console.log('PASS '+message);};
+ try{
+  process.env.AGENT_UI_BASE_URL=base;const workspace=await H.workspace(page,'本体保存恢复');await other.goto(base+'?workspace_id='+workspace.id);await ready(other);
+  const definition=(await call(page,'/api/agent-definition-default?domain=general-assistant%401.0.0')).definition;
+  const agent=await call(page,'/api/agents',{name:'本体保存验收',description:'离线测试',runtime:'mock',model:'builtin',options:{},prompt:'保留依据',skills:[],mcp_servers:[],definition,revision:0});
+  const source=await call(page,'/api/knowledge/assets',{title:'会议资料',content:{text:'会议包含负责人和行动项，引用原始依据。'}});for(const op of ['review','publish'])await call(page,'/api/knowledge/assets/'+encodeURIComponent(source.ref)+'/'+op,{});
+  const proposal=await call(page,'/api/learning-proposals',{request_id:'ontology-save-fixture',purpose:'ontology',source_refs:[source.ref],agent_id:agent.id,agent_revision:1,instruction:'抽取有依据的业务概念',operational:false});
+  const receipt=await call(page,'/api/learning-proposals/'+proposal.id+'/deposit',{revision:proposal.revision,item_ids:['ontology']}),ref=receipt.receipt.assets[0].ref,id=ref.split('@')[0];
+  await H.nav(page,'library');await page.locator('#hub-tab-ontology').click();await page.locator('[data-edit-ontology="'+ref+'"]').click();await description.fill('本次应保存为 v2 的内容');
+  let own;await page.route('**/api/ontologies/*/revise',async route=>{const response=await route.fetch();assert.equal(response.status(),201);own=await response.json();return route.abort('failed');});
+  await page.locator('[data-ontology-save]').click();await page.waitForFunction(()=>learningUI.uncertain&&!ontologySaveEditor.busy);await page.unroute('**/api/ontologies/*/revise');await description.fill('后来编辑，尚未保存');
+  const newer=await call(other,'/api/ontologies/'+encodeURIComponent(own.ref)+'/revise',{content:{...own.content,description:'其他页面保存的 v3'},request_id:'other-page-v3'});assert.equal(newer.version,3);
+  await close();await page.reload();await ready(page);await page.locator('[data-ontology-save-resume]').click();await description.waitFor();assert.equal(await description.inputValue(),'后来编辑，尚未保存');await action('check').click();await page.waitForFunction(()=>ontologySaveEditor.packet?.state==='COMPLETE');
+  assert.equal(await page.evaluate(()=>ontologySaveEditor.packet.saved.version),2);assert.equal(await page.evaluate(()=>ontologySaveEditor.packet.latest.version),3);assert.equal(await description.inputValue(),'后来编辑，尚未保存');assert.equal(posts.length,1);
+  pass('保存回复丢失并刷新后恢复原请求与后续输入；一次只读核对同时区分自己的 v2 和另一页面的 v3');
+  for(const theme of ['light','dark'])for(const width of [1024,1280,1440,1920]){
+   await page.setViewportSize({width,height:1000});await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);await page.locator('#ontology-save-recovery').scrollIntoViewIfNeeded();
+   const bounds=await page.locator('#learning-dialog').evaluate(el=>{const b=el.querySelector('[data-ontology-save-action=keep]'),r=b.getBoundingClientRect();return {overflow:el.scrollWidth>el.clientWidth,visible:r.top>=0&&r.bottom<innerHeight&&b.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))};});assert(!bounds.overflow);assert(bounds.visible);layouts.push({theme,width,...bounds});if(width===1440)await shot('ontology-save-'+theme);
+  }
+  await action('result').click();await page.locator('#confirm-dialog[open]').waitFor();await page.locator('#confirm-dialog .dialog-foot [data-close]').click();assert.equal(await description.inputValue(),'后来编辑，尚未保存');
+  await action('keep').click();assert.equal(await page.evaluate(()=>learningUI.asset.version),3);assert.equal(await description.inputValue(),'后来编辑，尚未保存');await page.locator('[data-ontology-save]').click();await page.locator('#learning-dialog').waitFor({state:'hidden'});
+  let versions=(await call(page,'/api/knowledge/assets/'+encodeURIComponent(ref)+'/history')).versions;assert.equal(versions.length,4);assert.equal(versions.find(x=>x.version===4).content.description,'后来编辑，尚未保存');assert.notEqual(posts[1].body.request_id,posts[0].body.request_id);
+  pass('采用已保存结果前保护后续修改；明确保留本页内容后基于 v3 保存为 v4，八种桌面布局均可操作');
+  await page.locator('[data-edit-ontology="'+id+'@4"]').click();await description.fill('未送达的原内容');let missing=true;await page.route('**/api/ontologies/*/revise',route=>{if(missing){missing=false;return route.abort('failed');}return route.continue();});await page.locator('[data-ontology-save]').click();await page.waitForFunction(()=>learningUI.uncertain&&!ontologySaveEditor.busy);await description.fill('重试之后还要保留的内容');await action('check').click();await action('retry').waitFor();await action('retry').click();await page.waitForFunction(()=>ontologySaveEditor.packet?.state==='COMPLETE'&&!ontologySaveEditor.busy);assert.deepEqual(posts[2],posts[3]);assert.equal(await description.inputValue(),'重试之后还要保留的内容');await page.unroute('**/api/ontologies/*/revise');
+  versions=(await call(page,'/api/knowledge/assets/'+encodeURIComponent(ref)+'/history')).versions;assert.equal(versions.length,5);assert.equal(versions.find(x=>x.version===5).content.description,'未送达的原内容');
+  pass('未送达保存沿用原编号、原版本和原内容重试，只新增 v5；后来输入独立保留');
+  let release,reading=false;await page.route('**/api/ontology-saves/**',async route=>{const response=await route.fetch();reading=true;await new Promise(r=>release=r);await route.fulfill({response});});await action('check').click();await waitFor(()=>reading,'Save inspection did not start');await close();await page.locator('[data-ontology-save-resume]').click();await description.waitFor();release();await page.waitForTimeout(150);assert.equal(await page.evaluate(()=>ontologySaveEditor.packet),null);assert.equal(await description.inputValue(),'重试之后还要保留的内容');await page.unroute('**/api/ontology-saves/**');
+  await close();await page.goto(base+'?workspace_id=workspace-default#/library');await ready(page);assert.equal(await page.locator('[data-ontology-save-resume]').count(),0);await page.goto(base+'?workspace_id='+workspace.id+'#/library');await ready(page);await page.locator('[data-ontology-save-resume]').click();await description.waitFor();assert.equal(await description.inputValue(),'重试之后还要保留的内容');
+  pass('慢核对可关闭，迟到回复不覆盖新窗口；其他空间不显示这份编辑，返回后仍可恢复');
+  await action('check').click();await action('keep').click();const originalV5=await page.evaluate(()=>structuredClone(learningUI.asset));await call(other,'/api/ontologies/'+encodeURIComponent(originalV5.ref)+'/revise',{content:{...originalV5.content,description:'并发创建 v6'},request_id:'other-page-v6'});
+  await page.locator('[data-ontology-save]').click();await page.waitForFunction(()=>learningUI.uncertain&&!ontologySaveEditor.busy);await action('check').click();await page.waitForFunction(()=>ontologySaveEditor.packet?.state==='MISSING');assert.equal(await page.evaluate(()=>ontologySaveEditor.packet.saved),null);assert.equal(await page.evaluate(()=>ontologySaveEditor.packet.latest.version),6);assert.equal(await description.inputValue(),'重试之后还要保留的内容');
+  await action('keep').click();await page.locator('[data-ontology-save]').click();await page.locator('#learning-dialog').waitFor({state:'hidden'});versions=(await call(page,'/api/knowledge/assets/'+encodeURIComponent(ref)+'/history')).versions;assert.equal(versions.length,7);assert.equal(versions.find(x=>x.version===7).content.description,'重试之后还要保留的内容');
+  pass('另一页面抢先保存时不把其 v6 误认作自己的提交；保留内容并明确基于新版本继续后保存为 v7');
+  assert.deepEqual(errors,[]);fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({checks,errors,layouts,posts:posts.length,ontologyVersions:versions.length,workspace:workspace.id,ontology:id},null,2));
+ }catch(error){await shot('failure').catch(()=>{});fs.writeFileSync(path.join(out,'failure.json'),JSON.stringify({checks,errors,error:error.stack,text:await page.locator('body').innerText()},null,2));throw error;}
+ finally{await browser.close();}
+})().catch(error=>{console.error(error);process.exitCode=1;});

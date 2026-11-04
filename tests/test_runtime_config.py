@@ -52,7 +52,7 @@ class ConfigurationTests(unittest.TestCase):
             self.assertEqual(self.app.configuration.get(),saved)
 
     def test_cli_detection_uses_fixed_command_and_never_model_prompt(self):
-        with patch('agent_framework.runtime_config.shutil.which',return_value='/local/cursor-agent'),patch('agent_framework.runtime_config.subprocess.run') as run:
+        with patch('agent_framework.runtime_config.shutil.which',return_value='/local/cursor-agent'),patch('agent_framework.runtime_config.run_version_command') as run:
             run.return_value=subprocess.CompletedProcess([],0,'Cursor 1.0\n','')
             result=self.app.configuration.detect('cursor')
             self.assertTrue(result['ok'])

@@ -180,3 +180,16 @@ class WorkspaceHTTPTests(unittest.TestCase):
         status,session=self.request('/api/session')
         self.assertEqual(status,200);self.assertEqual(session['workspace']['id'],w['id'])
         self.assertEqual(self.request('/api/session',workspace='workspace-default')[0],404)
+
+    def test_deletion_preflight_is_read_only_and_reports_last_space(self):
+        path='/api/workspaces/workspace-default/deletion-check'
+        status,check=self.request(path);self.assertEqual(status,200)
+        self.assertFalse(check['can_delete']);self.assertEqual(check['blockers'][0]['kind'],'last_workspace')
+        self.assertEqual(check['workspace']['revision'],1)
+        self.assertEqual(self.request(path,{})[0],404)
+        self.assertEqual(self.request('/api/workspaces/unknown/deletion-check')[0],404)
+        _,w=self.request('/api/workspaces',space());self.assertTrue(self.request(path)[1]['can_delete'])
+        deleted=self.request('/api/workspaces/'+w['id']+'/delete',{'revision':1})
+        self.assertEqual(deleted[0],200)
+        self.assertEqual(self.request('/api/workspaces/'+w['id']+'/delete',{'revision':1}),deleted)
+        self.assertEqual(self.request('/api/workspaces/'+w['id']+'/deletion-check')[1]['blockers'][0]['kind'],'deleted')

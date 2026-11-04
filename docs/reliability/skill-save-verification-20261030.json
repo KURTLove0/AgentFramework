@@ -1,0 +1,171 @@
+{
+  "recorded_on": "2026-10-30",
+  "scope": "Current source; disposable services and synthetic files; no release rebuild or publishing",
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests -q",
+    "tests": 662,
+    "seconds": 144.661,
+    "passed": true,
+    "new_save_checks": 16,
+    "log": "/private/tmp/af-skill-save-final-backend-20261030.log"
+  },
+  "ui": {
+    "command": "npm test",
+    "tests": 169,
+    "failed": 0,
+    "passed": true,
+    "new_save_checks": 15,
+    "new_resource_checks": 3,
+    "log": "/private/tmp/af-skill-save-reviewed-ui-final-20261030.log"
+  },
+  "browser": {
+    "rerun_command": ".venv/bin/python scripts/run_browser_tests.py --suite skill-saves --suite agent-catalog --suite multica --suite legacy-modules --suite audit-fixes",
+    "passed_suites": [
+      "skill-saves",
+      "agent-catalog",
+      "multica",
+      "legacy-modules",
+      "audit-fixes"
+    ],
+    "runs": [
+      {
+        "results": "/private/tmp/af-skill-save-browser-20261030/results.json",
+        "included_pass": {
+          "suite": "multica",
+          "passed": true,
+          "exit_code": 0
+        },
+        "note": "Multica passed before the final receipt error classification and copy/import identity guards; the initial Skill save script in this run required assertion corrections and was rerun."
+      },
+      {
+        "results": "/private/tmp/af-skill-save-complete-browser-20261030/results.json",
+        "suites": [
+          {
+            "suite": "skill-saves",
+            "passed": true,
+            "exit_code": 0
+          },
+          {
+            "suite": "agent-catalog",
+            "passed": true,
+            "exit_code": 0
+          },
+          {
+            "suite": "legacy-modules",
+            "passed": true,
+            "exit_code": 0
+          },
+          {
+            "suite": "audit-fixes",
+            "passed": true,
+            "exit_code": 0
+          }
+        ],
+        "note": "All four passed after receipt error classification; before final copy/import identity guards."
+      },
+      {
+        "results": "/private/tmp/af-skill-save-reviewed-browser-20261030/results.json",
+        "suites": [
+          {
+            "suite": "skill-saves",
+            "passed": true,
+            "exit_code": 0
+          },
+          {
+            "suite": "legacy-modules",
+            "passed": true,
+            "exit_code": 0
+          },
+          {
+            "suite": "audit-fixes",
+            "passed": true,
+            "exit_code": 0
+          }
+        ],
+        "note": "All three passed with final copy/import identity guards."
+      }
+    ],
+    "recovery": {
+      "checks": [
+        "创建已接受但响应丢失后，同一编号重试返回原技能与版本，二进制和文本资源完整保留",
+        "回执未知后继续编辑不自动提交新版本，核对期间可输入，结果返回保留本页文本和焦点",
+        "核对后其他页面再修改仍返回冲突；重新核对并明确保存后生成新版本，空间切换和桌面文字放大不丢文件",
+        "归档后的原技能保持归档，当前文件可明确另存新包，未丢失二进制资源或后续修改",
+        "原保存实际未接受时，可用原编号确认原内容，再明确保存保留的新内容，没有静默重复版本"
+      ],
+      "errors": [],
+      "layouts": [
+        {
+          "theme": "light",
+          "width": 1024,
+          "textScale": 1
+        },
+        {
+          "theme": "light",
+          "width": 1024,
+          "textScale": 2
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "textScale": 1
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "textScale": 2
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "textScale": 1
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "textScale": 2
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "textScale": 1
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "textScale": 2
+        }
+      ],
+      "originalSkill": "skill-16d8543237964c9b",
+      "copySkill": "skill-76b23840c03046a4"
+    },
+    "reviewed_screenshots": [
+      "skill-save-recovery-light.png",
+      "skill-save-recovery-dark.png"
+    ]
+  },
+  "limits": [
+    "Unsaved files and the pending save number stay in the current editor only; page reload does not restore them automatically",
+    "Server receipts persist through restart and core backup restore; lookup requires the original number and trusted scope",
+    "Durable save receipts cover create/edit endpoints only; ZIP import, legacy migration and lifecycle changes retain their existing behavior",
+    "A missing receipt is not proof that an in-flight save has stopped"
+  ],
+  "sha256": {
+    "agent_framework/skills.py": "8fa52bf3193f753b9a08b834892f0563de687847ae7f46fd271e6a40ed3393b3",
+    "agent_framework/web.py": "9680a226cc1b5683b5f18e5b947a623a813849fe60de6c2a62e0ed0c7d706088",
+    "agent_framework/webui/skill_save.js": "4bf1b3c3320afd94c02b3c10a72b1e2ecd79d15d8c6ab72c56e69ab7cc2dfa86",
+    "agent_framework/webui/skills.js": "b1a769997034844515829658d23815d1066d3652a2639086381b7d79696fe584",
+    "agent_framework/webui/app.js": "dfef3d6e36f33caedc4e42aa569477ca454becffbf2a0f211c0b4afb9f392dca",
+    "agent_framework/webui/workspaces.js": "d141b1cdb556003d1f24af1a773fff3495f5b5746cca4e52157b53c980bae594",
+    "agent_framework/webui/index.html": "39e55c4b0483b9bad6ab6d9d29d6bd34f7355b86ef55747687a84dd66fa721be",
+    "agent_framework/webui/styles.css": "ef244e0ae48f0ee2a8a33706fdc2e5423dbdbe6be787fd9fde8511c4c090b39c",
+    "tests/test_skill_save_recovery.py": "1c67ac5b5e5636e6ecc27e6986f0008e096f49d81a4c2f6046a147075663add2",
+    "tests/test_skill_save_interactions.js": "2e35fe8f31de59be031548c26f3790666ab4c736ad55d13ae10678e54b5d5703",
+    "tests/test_resource_interactions.js": "5bcdd927fb818158dcb4fcb099a3f9849bd1e179fb0855d1506622ff5c745fd0",
+    "tests/test_ui_session.js": "e042acaafcab9a9c96d9ef6c6d62cf3b216d14030bc92a4ef0fe6b58a779fd89",
+    "tests/verify_skill_saves.cjs": "7f8350462ed27c181e8377dd1457c9f8d458a31469797415e191bd19a95b9067",
+    "scripts/run_browser_tests.py": "cba26ff34e2b40d8f6ec019aae8a63a71ad4a6eab7f8b9130f48003348e4a30c",
+    "docs/reliability/skill-save-recovery-light.png": "2d7533de3617be41b8665a956d27757108cfb54ec6cf44827d8d4e3486af6c41",
+    "docs/reliability/skill-save-recovery-dark.png": "be0fdfe63c58cec1b539a3da4f94f2e0181682d1ddd0a6ddf8cf4436a25294d4"
+  }
+}

@@ -1,0 +1,262 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Download an entire task as one flat ZIP with readable conversation and edit history, structured conversation/edits and every materialized run snapshot. Reuse a single SQLite read snapshot and the existing read-only verification CLI. Preserve existing Markdown and per-run downloads.",
+  "backend": {
+    "new_tests": 18,
+    "related": {
+      "tests": 53,
+      "passed": 53,
+      "duration_seconds": 3.614,
+      "log": {
+        "path": "/private/tmp/af-task-exports-backend-related-verified.log",
+        "sha256": "f323e471fd9f3a1cdc5fd7926259b3dec1a01343d21007d656582fb5514b727f"
+      }
+    },
+    "full": {
+      "command": ".venv/bin/python -m unittest discover -s tests -p 'test_*.py'",
+      "tests": 1299,
+      "passed": 1299,
+      "duration_seconds": 232.049,
+      "log": {
+        "path": "/private/tmp/af-task-exports-backend-full.log",
+        "sha256": "5f36f285b3d981c311c5a99930c495b9b6cb00c2656b67c9e03bfa59bf8f1dbd"
+      }
+    },
+    "coverage": [
+      "All materialized turns and complete edit chains",
+      "Queued/cancelled rows without fabricated executions",
+      "Child identity normalization",
+      "Concurrent edit and checkpoint share one old snapshot",
+      "No dispatch/registration/live detail",
+      "Principal/workspace/tenant/child scope",
+      "Names/archive with unchanged saved execution",
+      "Cancellation metadata and raw run status",
+      "Readonly legacy root without edit table",
+      "Bounded output",
+      "Hashes and rehashed inconsistent records",
+      "Event continuity and edit-chain boundaries",
+      "Manifest counts and Markdown source hashes",
+      "Historical renderer compatibility",
+      "Unknown/mixed members rejected before payload IO",
+      "CLI and real HTTP route"
+    ],
+    "iterations": [
+      {
+        "log": {
+          "path": "/private/tmp/af-task-exports-backend-focused.log",
+          "sha256": "4f4e97666b05226591f2508121e326f9e0add8904a3bf0342dae4a0a5c322ab3"
+        },
+        "note": "Found a real SQLite JSON projection rounding difference in cancellation timestamps. The bundle now uses the full cancellation row from the same snapshot in both conversation and run representations. Other failures were fixture setup: incomplete synthetic evidence, writable store used after manually dropping a table, wrong archive field and unsupported workspace constructor argument."
+      },
+      {
+        "log": {
+          "path": "/private/tmp/af-task-exports-backend-related.log",
+          "sha256": "db9c7ff12969f5d17bd6779e444ccbd3de97e6d6386e2c8c368b3b7d2cdc4507"
+        },
+        "note": "The concurrent-export assertion assumed only seed events; queued messages and edits also append legitimate events. It now compares the complete pre-export event list."
+      }
+    ]
+  },
+  "frontend": {
+    "new_tests": 11,
+    "focused": {
+      "tests": 11,
+      "passed": 11,
+      "failed": 0,
+      "duration_ms": 256.841125,
+      "log": {
+        "path": "/private/tmp/af-task-exports-frontend-focused.log",
+        "sha256": "099b80575aac14028d361906e42e8f74d060bc6cb8f312b1091fe7d6185abd75"
+      }
+    },
+    "full": {
+      "command": "npm test",
+      "tests": 925,
+      "passed": 925,
+      "failed": 0,
+      "duration_ms": 11219.486958,
+      "log": {
+        "path": "/private/tmp/af-task-exports-frontend-full.log",
+        "sha256": "d770e19b8264193469fea363d37739cfaf66918d215210c22c67328ce801f313"
+      }
+    },
+    "coverage": [
+      "Explicit download without automatic request on open",
+      "Frozen workspace and read-only request",
+      "Duplicate clicks",
+      "Escaped server errors and explicit retry",
+      "Non-JSON errors/invalid MIME/empty response",
+      "Abort and late responses",
+      "Late blob after reopen",
+      "Tenant/principal/workspace/route/task ownership",
+      "Timeout and fresh retry",
+      "Navigation cleanup",
+      "Asynchronous native close after reopen"
+    ]
+  },
+  "browser": {
+    "passed_suites": {
+      "task-exports": {
+        "result": {
+          "path": "/private/tmp/af-task-exports-browser-verified/task-exports/results.json",
+          "sha256": "8a0d6c229fc2092ef066de445978eb6dcec6dbb2a0985c9e630cecc43a905a43"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-exports-browser-verified/results.json",
+          "sha256": "605a98a7597d36d4803b8665870611b358abc39e68ec948c277a8903d4d0db7d"
+        },
+        "checks": [
+          "通过真实下载保存并离线校验完整任务包，含所有轮次和两次修改；排队、取消、未保存内容边界正确，两个草稿保留",
+          "下载失败后显示具体原因并保留明确重试入口，重试只下载一次且键盘焦点可继续操作",
+          "切换任务中止旧下载，迟到响应不会替新任务触发文件下载或成功提示",
+          "执行后重新下载包含真实采用的修改内容和完整执行记录；八种主题、宽度及正常/28px 字号检查通过，下载没有写请求"
+        ],
+        "errors": [],
+        "layout_cases": 8,
+        "enlarged_font_pixels": 28,
+        "real_downloads_verified": 3
+      },
+      "exports": {
+        "result": {
+          "path": "/private/tmp/af-task-exports-browser-first/exports/results.json",
+          "sha256": "2ee0b11d824a53daed0fe8b49de12dababe8a5e3d6aff6f5fbb22f8625ed87b3"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-exports-browser-first/results.json",
+          "sha256": "427accb1e780406f3848773e85f925807730f0c1c4a50267ee4dfc47062d8ff6"
+        },
+        "checks": [
+          "本轮运行记录可下载经过校验的完整 ZIP，包含结果、事件、报告、证据与上下文清单",
+          "完整对话导出包含实际状态和快照时间，下载后继续保留输入草稿",
+          "停止任务的记录包保留真实终态且不混入旧报告，对话明确标注未完成"
+        ],
+        "errors": []
+      },
+      "task-message-history": {
+        "result": {
+          "path": "/private/tmp/af-task-exports-browser-first/task-message-history/results.json",
+          "sha256": "3a9949200b0e3d2627e3d8015f1296c8553ea878a675d78c4912ff899d1fbf8f"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-exports-browser-first/results.json",
+          "sha256": "427accb1e780406f3848773e85f925807730f0c1c4a50267ee4dfc47062d8ff6"
+        },
+        "checks": [
+          "真实历史展示原消息及修改前后完整内容，复制保持 Unicode 与换行，输入作为纯文本呈现",
+          "三页读取无重复遗漏；新修改保留旧查看范围，失败重试保留展开与滚动位置，刷新后显示新修改；两个草稿不变",
+          "切换会话关闭旧窗口，迟到的旧读取不会覆盖新会话的修改记录",
+          "执行完成后显示真实运行采用的要求；八种主题、宽度和字号布局通过焦点、边界及文字溢出检查，读取复制无写请求"
+        ],
+        "errors": []
+      },
+      "turn-retries": {
+        "result": {
+          "path": "/private/tmp/af-task-exports-browser-first/turn-retries/results.json",
+          "sha256": "d6beae8ced3f2a1fd68eeb82b8009f23fcd6c75a7dd0b3c7a9863dcda7e884d6"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-task-exports-browser-first/results.json",
+          "sha256": "427accb1e780406f3848773e85f925807730f0c1c4a50267ee4dfc47062d8ff6"
+        },
+        "checks": [
+          "两个页面同时重试只新增一轮，再次失败从新轮次重试；原失败、关联和相同文字的未发送草稿均保留",
+          "重试来源与结果可双向定位，八组桌面主题和字号下入口可见，重绘保留按钮焦点",
+          "重试已受理但回执丢失时，刷新恢复原轮次，只读核对返回同一次结果且保留后续输入",
+          "未受理的重试遇到对话更新先拒绝，核对后沿用原轮次和原要求，后来输入不会混入"
+        ],
+        "errors": []
+      }
+    },
+    "iteration": {
+      "result": {
+        "path": "/private/tmp/af-task-exports-browser-first/task-exports/failure.json",
+        "sha256": "45ec92cc4e64f77b308cef53dd0bcfe1876cdb876dec2d9f05756db46c9be5b7"
+      },
+      "note": "Initial verifier waited for a draft notice only rendered by a later task refresh. Reopening through the existing queued message button verifies the actual retained draft without depending on that notice."
+    },
+    "downloads": [
+      {
+        "path": "/private/tmp/af-task-exports-browser-verified/task-exports/queued-task.zip",
+        "sha256": "01f04e8a7691934e7983994beacc7caf534c908bdcc602d284f635e0c4c9588b"
+      },
+      {
+        "path": "/private/tmp/af-task-exports-browser-verified/task-exports/retry-task.zip",
+        "sha256": "ae4a8d46d7156c8ea351b2eb2320ad31a932c2d938c9ed8827efab592bca6ddd"
+      },
+      {
+        "path": "/private/tmp/af-task-exports-browser-verified/task-exports/completed-task.zip",
+        "sha256": "f8ac8ddd3ccc16ba80e2663d86eea5bccc30a096f62ace7b7bcf5fc807202340"
+      }
+    ],
+    "screenshots": [
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-export-light.png",
+        "sha256": "4967ae0b06a68747688a4d9bbd442bc3d874c6de00f10668b968f1792de7f2d5"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/task-export-dark.png",
+        "sha256": "0eaaf809e7de08e5d4f8150594a5bb25b960e12a007708e685a4375de8786df4"
+      }
+    ],
+    "visual_review": "Inspected final light/dark complete-task download dialogs, content hierarchy, saved-scope explanation, download acknowledgement and focused action. Eight real browser layouts cover 1024/1440 width and normal/28px button and body text, with viewport and horizontal overflow checks.",
+    "isolation": "Temporary Mock tasks with held queue dispatch. Two edits, one queued cancellation, three real downloads verified by the CLI, one 503 retry and a delayed response fenced by switching tasks. Releasing the fixture queue adds the actual second execution; unsent and unsaved drafts remain separate. No real model or external business calls."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-task-exports-source-candidate-20261103",
+    "build_log": {
+      "path": "/private/tmp/af-task-exports-build.log",
+      "sha256": "36c8f5c0910bbf6f75d5609e2fa6c873724688385f50fa998b5f1bd3ceedf243"
+    },
+    "verification": {
+      "path": "/private/tmp/af-task-exports-package-check.json",
+      "sha256": "b0fafc2348f9a13bd9302b28f4362667d936940f81f7765e013efdf802ed409e"
+    },
+    "program_files": 160,
+    "bundle": {
+      "path": "/private/tmp/af-task-exports-source-candidate-20261103/agent-framework-1.3.0.tar.gz",
+      "sha256": "21700446d6421d123180749752d6ddd6bf33d537d53de4ff9a6316a4fdaf658f"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-task-exports-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "d78f900a6d49a84d9fddd3ee870e54c8c2f4da8cbc0cff55f5cfbe6899db585c"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-task-exports-source-candidate-20261103/SHA256SUMS",
+      "sha256": "852a78c9e5c14d252da0ac8067e11222bd3122e78b2f8fb37acc9fe651ef9de2"
+    },
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/task_exports.py": "e68e1ea90e1f0588ec3de573f84a0f8b269e96fbfab26a33f6dc44893084f38d",
+    "agent_framework/exports.py": "71381ba8c6f473a4dbb0f4f9d053762275bb3ef50701f825cc77f2da44d9ca01",
+    "agent_framework/web.py": "cd9f9585767e08c1c335ce59d5401c6d4f26d9f88fc6debaf80bc34ffd20b97e",
+    "agent_framework/webui/task_export.js": "c717b6b04959854b7179947941203c5f90e7f0041e05167939baba2d325f71cc",
+    "agent_framework/webui/task_conversation.js": "f06827ed7e7a45b3da63324470485993ff202477bddcade01d40c0794f379d70",
+    "agent_framework/webui/app.js": "54cb7602653b93a801ba3a8fda3c8fe61f044c08c9a04210e5403281f98d7183",
+    "agent_framework/webui/index.html": "ab1c35a4f99701b78e348a4ce69d8dd4be881d7613a68e079d40331561f46378",
+    "tests/test_task_exports.py": "a0bb71a2f251b62a5c514c565e12ef84f743511efda9493b5204b73ecb384f60",
+    "tests/test_task_export_interactions.js": "2a784c8667d32b24839f5bf5d79c2c19f5aa094c11bb3c0e2cd0b10f8c85588f",
+    "tests/verify_task_exports.cjs": "11718ced37d81285c8c07aa7f34e97c9a397361b9aa38c17cd881e38afef7378",
+    "tests/serve_message_edits_fixture.py": "21cfb6ab124f3c0479f58bb277c6c1300bf3680377ebc62d7b47839f94514d51",
+    "scripts/run_browser_tests.py": "c8cd8c8c4205943ac301552ebf9f3b46c9963e1ba3f4fe86f348059d90e94424",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "43793dd264f10974f0e32a04128c318bcfbb2341c4fa2821b9ffadb3aa651d1f",
+    "design.md": "d986875a9f312ef4a1be4ed5fa0d4599cb9dc1917fe0e682bb62c69a5237a9be",
+    "docs/reliability/task-exports.md": "a6a5fad1a33dad3c621a3ad4e51f5550aa15ac2d998488862855769ddab55edd"
+  },
+  "limits": [
+    "The task ZIP is a saved snapshot. Unsent input and unsaved edits are excluded; later execution requires another explicit download.",
+    "Only materialized runs receive execution records. Queued and cancelled messages retain their conversation state.",
+    "Context manifests and saved evidence are included; external knowledge stores or attachments are not downloaded.",
+    "Maximum uncompressed content is 256 MiB, with a separate 64 KiB manifest limit. Generation/compression remain in memory; these limits are not a peak-memory guarantee.",
+    "Verification checks hashes and internal consistency. It is not a digital signature, proof of provenance or a declaration of task success.",
+    "This is task delivery/inspection, not an import or whole-workspace backup. Existing run-export commands and bundles remain supported.",
+    "Browser success means handed to the browser download manager, not proof of final disk persistence. Closing a pending request aborts the browser fetch; server work may already have started.",
+    "Desktop layout coverage is two widths and enlarged dialog text, not every device or uniform page zoom.",
+    "Focused and full test counts overlap. Version remains 1.3.0; no publication or repeated fresh installation."
+  ]
+}

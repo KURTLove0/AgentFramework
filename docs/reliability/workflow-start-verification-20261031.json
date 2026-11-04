@@ -1,0 +1,267 @@
+{
+  "date": "2026-10-31",
+  "status": "source_verified_not_packaged",
+  "release_version_unchanged": "1.3.0",
+  "scope": "Current workflow start preparation, immutable submission recovery, read-only receipt lookup, tab-local persistence and scoped callback ownership",
+  "checks": {
+    "frontend": {
+      "command": "npm test",
+      "tests": 529,
+      "new_start_tests": 25,
+      "seconds": 5.972862625,
+      "passed": true,
+      "log": "/private/tmp/af-workflow-start-ui-final-20261031.log"
+    },
+    "backend": {
+      "command": "PYTHONPATH=tests .venv/bin/python -m unittest tests.test_workflow_start_recovery tests.test_workflow_receipts tests.test_workflow_recovery tests.test_task_acceptance tests.test_workflows tests.test_web",
+      "tests": 97,
+      "new_start_tests": 12,
+      "seconds": 29.312,
+      "passed": true,
+      "log": "/private/tmp/af-workflow-start-backend-final-20261031.log"
+    },
+    "browser": [
+      {
+        "suite": "workflow-starts",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-start-final-20261031/results.json",
+        "log": "/private/tmp/af-workflow-start-final-20261031/workflow-starts.log"
+      },
+      {
+        "suite": "workflow-agents",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-start-integration-20261031/results.json",
+        "log": "/private/tmp/af-workflow-start-integration-20261031/workflow-agents.log"
+      },
+      {
+        "suite": "workflow-queue",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-start-browser-20261031/results.json",
+        "log": "/private/tmp/af-workflow-start-browser-20261031/workflow-queue.log"
+      },
+      {
+        "suite": "journeys",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-start-integration-20261031/results.json",
+        "log": "/private/tmp/af-workflow-start-integration-20261031/journeys.log"
+      },
+      {
+        "suite": "workflow-sync",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-start-sync-ready-20261031/results.json",
+        "log": "/private/tmp/af-workflow-start-sync-ready-20261031/workflow-sync.log"
+      }
+    ],
+    "new_browser_checks": [
+      "响应丢失后更改参数或打开另一流程，都先核对原启动，不自动创建第二次运行",
+      "服务重启和刷新后恢复原编号与后续参数，流程更新并归档后仍能只读找到原运行，未重复派发",
+      "启动核对在浅深主题、1024/1440 宽度和两倍文字下无横向溢出，查看运行可聚焦",
+      "归档阻止另一次启动且保留变更 ID；未送达请求刷新后明确重试沿用原体，保留后来清空的输入",
+      "较早流程的准备检查晚到时，不覆盖后来打开的流程和输入",
+      "启动恢复按空间隔离；取消移除保留入口，确认移除不取消或删除已经存在的运行"
+    ],
+    "layouts": [
+      {
+        "theme": "light",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "root": 1024,
+          "width": 1024,
+          "scroll": 618,
+          "client": 618,
+          "top": 709.53125,
+          "bottom": 753.53125,
+          "focused": true,
+          "font": 14
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "root": 1024,
+          "width": 1024,
+          "scroll": 618,
+          "client": 618,
+          "top": 825.578125,
+          "bottom": 889.578125,
+          "focused": true,
+          "font": 28
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "root": 1440,
+          "width": 1440,
+          "scroll": 618,
+          "client": 618,
+          "top": 709.53125,
+          "bottom": 753.53125,
+          "focused": true,
+          "font": 14
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "root": 1440,
+          "width": 1440,
+          "scroll": 618,
+          "client": 618,
+          "top": 825.578125,
+          "bottom": 889.578125,
+          "focused": true,
+          "font": 28
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "root": 1024,
+          "width": 1024,
+          "scroll": 618,
+          "client": 618,
+          "top": 709.53125,
+          "bottom": 753.53125,
+          "focused": true,
+          "font": 14
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "root": 1024,
+          "width": 1024,
+          "scroll": 618,
+          "client": 618,
+          "top": 825.578125,
+          "bottom": 889.578125,
+          "focused": true,
+          "font": 28
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "root": 1440,
+          "width": 1440,
+          "scroll": 618,
+          "client": 618,
+          "top": 709.53125,
+          "bottom": 753.53125,
+          "focused": true,
+          "font": 14
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "root": 1440,
+          "width": 1440,
+          "scroll": 618,
+          "client": 618,
+          "top": 825.578125,
+          "bottom": 889.578125,
+          "focused": true,
+          "font": 28
+        }
+      }
+    ],
+    "page_errors": [],
+    "real_local_service_restarts": 1,
+    "browser_test_adaptations": [
+      "workflow-agents waits for current asynchronous preparation before interacting with applicable consent fields.",
+      "workflow-sync waits for the pending history read and requests the fresh first page before inspecting the newly created run; stale grant and cancellation assertions remain unchanged."
+    ],
+    "earlier_attempts": [
+      {
+        "result": "/private/tmp/af-workflow-start-browser-20261031/results.json",
+        "failed_suite": "workflow-agents",
+        "cause": "Test interacted with a consent field before asynchronous preparation finished; fixed and passed in integration run."
+      },
+      {
+        "result": "/private/tmp/af-workflow-start-integration-20261031/results.json",
+        "failed_suite": "workflow-sync",
+        "cause": "Test assumed a new run was already in history with an earlier paging boundary."
+      },
+      {
+        "result": "/private/tmp/af-workflow-start-sync-final-20261031/results.json",
+        "failed_suite": "workflow-sync",
+        "cause": "Awaiting a history read alone retained its earlier paging boundary."
+      },
+      {
+        "result": "/private/tmp/af-workflow-start-sync-anchor-20261031/results.json",
+        "failed_suite": "workflow-sync",
+        "cause": "Fresh-page action was requested while history was still pending; final test awaits the read and then uses the fresh-page action."
+      }
+    ],
+    "syntax_and_diff": {
+      "commands": [
+        "node --check agent_framework/webui/workflow_start.js",
+        "node --check agent_framework/webui/workflows.js",
+        "node --check tests/verify_workflow_starts.cjs",
+        "node --check tests/verify_workflow_sync.cjs",
+        "git diff --check"
+      ],
+      "passed": true
+    }
+  },
+  "limits": [
+    "Recovery covers an attempted submission, not a fresh unsubmitted start form.",
+    "One pending start per tenant/principal/workspace in the current tab; sessionStorage is not cross-device synchronization or long-term backup.",
+    "Restoring and read-only lookup never submit or dispatch work.",
+    "A missing receipt does not prove that an in-flight request has stopped.",
+    "Removing local recovery does not cancel or delete a server run; a later explicit new submission can create another run.",
+    "Workflow state reflects the latest successful read; retained results are labeled if refresh fails.",
+    "No external model calls, package rebuild or deployment performed."
+  ],
+  "files": {
+    "agent_framework/workflows.py": "4552df990d570085acdda28f588baaa836f173251f01c456fde356541bc3a3b6",
+    "agent_framework/web.py": "753ea19d65efd2f382ba739b5630380caf131e600e11c30636074c375d20c23e",
+    "agent_framework/webui/workflow_start.js": "814da8b3bca65397003693a474ce486fc55aa06dc87f6c1515d32ed28521a075",
+    "agent_framework/webui/workflows.js": "ad1dd22c1250d150252967edd0f3421ec0e35ea48ca76632e136408a88f9da0c",
+    "agent_framework/webui/index.html": "a2d2eca59967c013bf48453c446d08fc916e0d8e8f65e9d574987405e16a36bd",
+    "agent_framework/webui/workflow_draft.js": "01ccc196dc89e1337181a60c9596bd1d64c57680d05f9e45351056fbc401abe4",
+    "agent_framework/webui/workflow_save.js": "0eef3c0c9d055d72dd73e084758c1881b49d440dea646414a058ca9790163d3f",
+    "agent_framework/webui/app.js": "02c7079a6151331a874282a4e3a88f0fe46c59dc5c7a6f5d942eb5319258877a",
+    "tests/test_workflow_start_recovery.py": "da9b685668094a0632e7de7e9fdaa4bbdf23c1069e696552f2e51010a7c761f2",
+    "tests/test_workflow_start_interactions.js": "d8da39a9db233a678e2b8b152e8e4633836e90eed7486c094dceb9cfa961d186",
+    "tests/test_workflow_interactions.js": "c67a20e7e95f20f753349bf542642e1124936faf79f96f01d099d4cfa5abd3e0",
+    "tests/verify_workflow_starts.cjs": "f4835fa28a805f0a3249e23dacf893a32c9aa312049849478a493613ecf4d180",
+    "tests/verify_workflow_agents.cjs": "c5a195de62a727a72b466b56c90877b4d731b3b2a310f4fbe111d696f894d054",
+    "tests/verify_workflow_sync.cjs": "cc2e05596269682f6342b2fc396a62c7c78ae751c3fd00d67e357be29e2cc47e",
+    "tests/verify_workflow_queue.cjs": "be5c40247ab7a3e252cb638eb0f4701eaa50201ef5e78c017eb1a8b1bc12c774",
+    "tests/verify_project_journeys.cjs": "0da8179da56f809d30b6f5fa566f2f1c62ca6fa9b2d2974207fa8240a58234dd",
+    "tests/serve_asset_draft_fixture.py": "a6a2cd408a0d9ec91aaac0ebccceeefcf13c58567b9ed6ab53dafe786ad1cc7d",
+    "tests/serve_project_review_fixture.py": "dddbd230fe87e39a8e28f71998597c645b1fbab0fb9da46aca882f561de23a2f",
+    "tests/serve_workflow_queue_fixture.py": "c3ccd0e897f65a65948b0193decfcff27aff0bdbc63d915b126c05d36d1e1be6",
+    "tests/browser_poll.cjs": "bb93b31053782395b1bb355a9b34cd2ae952e2651668185cc3988f9276bf325e",
+    "scripts/run_browser_tests.py": "8782ec8294199567d2a5362c6392682711a3d91ec7047467fe8d010fe3f1f0fd",
+    "README.md": "b21c47b327ba86a70dc645e6109abbe4b8602b4f1736eaf349114edbb63b5dfd",
+    "design.md": "13e4865b2a7626e469d8c48cddb52363f44d95aa2b2ec61a534edc76d2bd8efd",
+    "docs/workflows/implementation.md": "ceefe96492b7fee7b9a4cfacccd0e71e0537889927559c27f07551559c8a7824",
+    "docs/reliability/workflow-starts.md": "9322292c52a417abd7b68dc6d989835ed1b86e1f81219a046d66a848a2795211",
+    "docs/reliability/workflow-start-light.png": "0a14972b57256943ec6bcd83ef12b4328e2988df0ef67d88823edebc95273ffe",
+    "docs/reliability/workflow-start-dark.png": "d67546a573dee0ec00c6eb5863e292b6ee9cf683fa2d3f426efc5f763191e330"
+  }
+}

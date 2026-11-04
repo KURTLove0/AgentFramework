@@ -91,7 +91,7 @@ class LearningTests(unittest.TestCase):
     def test_paused_run_can_be_reviewed_but_not_archived_as_experience_and_stale_facts_fail(self):
         run=self.run_task(grant=False);p=self.service.generate(self.request(run))
         self.assertNotIn('EXPERIENCE',{i['kind'] for i in p['output']['items']})
-        self.app.mutate(run,'grant');self.app.close()
+        self.app.mutate(run,'grant',{'proof':self.app.detail(run)['permissions']['grant_token']});self.app.close()
         app=Application(self.tmp.name);self.addCleanup(app.close);app.runtime().run(run)
         with self.assertRaises(ConfigConflict):Learning(app).deposit(p['id'],{'revision':p['revision'],'item_ids':['knowledge']})
         with self.assertRaises(ConfigConflict):self.service.run_context(self.app.create({'start':False})['run']['run_id'])

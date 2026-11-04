@@ -1,0 +1,280 @@
+{
+  "date": "2026-10-31",
+  "status": "source_verified_not_packaged",
+  "release_version_unchanged": "1.3.0",
+  "scope": "Reviewed workflow proposal binding, transactional acceptance and durable approval replay, latest child-turn consistency, inline read-only recovery",
+  "checks": {
+    "frontend": {
+      "command": "npm test",
+      "tests": 543,
+      "new_grant_tests": 14,
+      "seconds": 6.214223167,
+      "passed": true,
+      "log": "/private/tmp/af-workflow-grant-ui-20261031.log"
+    },
+    "backend": {
+      "command": "PYTHONPATH=tests .venv/bin/python -m unittest tests.test_workflow_grants tests.test_workflow_receipts tests.test_workflow_queue tests.test_workflow_routing tests.test_workflows tests.test_task_conversations tests.test_workflow_start_recovery tests.test_web",
+      "tests": 111,
+      "new_grant_tests": 19,
+      "seconds": 41.374,
+      "passed": true,
+      "log": "/private/tmp/af-workflow-grant-backend-final-20261031.log"
+    },
+    "browser": [
+      {
+        "suite": "workflow-grants",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-grant-evidence-20261031/results.json",
+        "log": "/private/tmp/af-workflow-grant-evidence-20261031/workflow-grants.log"
+      },
+      {
+        "suite": "workflow-sync",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-grant-sync-final-20261031/results.json",
+        "log": "/private/tmp/af-workflow-grant-sync-final-20261031/workflow-sync.log"
+      },
+      {
+        "suite": "workflow-queue",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-grant-browser-20261031/results.json",
+        "log": "/private/tmp/af-workflow-grant-browser-20261031/workflow-queue.log"
+      },
+      {
+        "suite": "workflow-agents",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-grant-final-browser-20261031/results.json",
+        "log": "/private/tmp/af-workflow-grant-final-browser-20261031/workflow-agents.log"
+      },
+      {
+        "suite": "workflow-starts",
+        "passed": true,
+        "exit_code": 0,
+        "runner_result": "/private/tmp/af-workflow-grant-final-browser-20261031/results.json",
+        "log": "/private/tmp/af-workflow-grant-final-browser-20261031/workflow-starts.log"
+      }
+    ],
+    "new_browser_checks": [
+      "点击时冻结原提案，提交前提案变化会拒绝授权，不创建草稿或派发",
+      "授权失败的核对入口在浅深主题、1024/1440 宽度与两倍文字下可聚焦且无横向溢出",
+      "明确核对只读取并显示新提案，用户重新审查前不自动授权",
+      "授权已受理但响应丢失后，只读核对找回排队状态，不重复提交",
+      "重放已接受的提案回执不增加授权事件，取消后也不会覆盖取消派发"
+    ],
+    "layouts": [
+      {
+        "theme": "light",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 314,
+          "right": 474,
+          "top": 866.53125,
+          "bottom": 910.53125,
+          "font": 14,
+          "focused": true,
+          "scroll": 690,
+          "client": 690,
+          "root": 1024,
+          "width": 1024
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 314,
+          "right": 600,
+          "top": 673.75,
+          "bottom": 734.9375,
+          "font": 28,
+          "focused": true,
+          "scroll": 690,
+          "client": 690,
+          "root": 1024,
+          "width": 1024
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 334,
+          "right": 494,
+          "top": 711.4375,
+          "bottom": 755.4375,
+          "font": 14,
+          "focused": true,
+          "scroll": 1086,
+          "client": 1086,
+          "root": 1440,
+          "width": 1440
+        }
+      },
+      {
+        "theme": "light",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 334,
+          "right": 620,
+          "top": 674.171875,
+          "bottom": 735.359375,
+          "font": 28,
+          "focused": true,
+          "scroll": 1086,
+          "client": 1086,
+          "root": 1440,
+          "width": 1440
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 314,
+          "right": 474,
+          "top": 711.53125,
+          "bottom": 755.53125,
+          "font": 14,
+          "focused": true,
+          "scroll": 690,
+          "client": 690,
+          "root": 1024,
+          "width": 1024
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 314,
+          "right": 600,
+          "top": 806.75,
+          "bottom": 867.9375,
+          "font": 28,
+          "focused": true,
+          "scroll": 690,
+          "client": 690,
+          "root": 1024,
+          "width": 1024
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 334,
+          "right": 494,
+          "top": 711.4375,
+          "bottom": 755.4375,
+          "font": 14,
+          "focused": true,
+          "scroll": 1086,
+          "client": 1086,
+          "root": 1440,
+          "width": 1440
+        }
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 334,
+          "right": 620,
+          "top": 674.171875,
+          "bottom": 735.359375,
+          "font": 28,
+          "focused": true,
+          "scroll": 1086,
+          "client": 1086,
+          "root": 1440,
+          "width": 1440
+        }
+      }
+    ],
+    "page_errors": [],
+    "earlier_browser_attempt": {
+      "result": "/private/tmp/af-workflow-grant-browser-20261031/results.json",
+      "failures": [
+        {
+          "suite": "workflow-grants",
+          "cause": "Text locator selected matching content in the collapsed audit section; narrowed to the displayed proposal."
+        },
+        {
+          "suite": "workflow-sync",
+          "cause": "A later history request could still start after awaiting the earlier promise; now finishes a current full catalog read before invoking the latest-record action."
+        }
+      ]
+    },
+    "visual_review": "Final light and dark layouts checked; final evidence uses the application theme selector and resets scroll before full-page screenshots.",
+    "syntax_and_diff": {
+      "commands": [
+        "node --check agent_framework/webui/workflow_grant.js",
+        "node --check agent_framework/webui/workflows.js",
+        "node --check tests/verify_workflow_grants.cjs",
+        "node --check tests/verify_workflow_sync.cjs",
+        "git diff --check"
+      ],
+      "passed": true
+    }
+  },
+  "acceptance_invariants": [
+    "POST requires the proposal_token attached to the reviewed child proposal; node-only approval is rejected.",
+    "Current child turn, status, cancellation and proposal are re-read inside the same write transaction as permission, dispatch and workflow.granted receipt.",
+    "A changed or corrupt proposal cannot be authorized by an older review.",
+    "Exact committed replays preserve the original permission, including later revocation or expiry, and cannot replace a cancellation dispatch.",
+    "Concurrent identical submissions create one authorization and one grant dispatch registration.",
+    "Read-only UI recovery does not replay approval and stale callbacks cannot replace a different scope or a newer cancellation."
+  ],
+  "limits": [
+    "The change covers workflow approvals; the independent single-task approval path is outside this increment.",
+    "Clients must read proposal_token before presenting and approving a proposal; older node-only clients need updating.",
+    "UI recovery state is page-local; authoritative approvals and receipts persist on the server.",
+    "HTTP replay may attempt to advance an already saved dispatch, but does not create a new dispatch or permission.",
+    "Business tools remain simulated; no external model calls, package rebuild or deployment occurred."
+  ],
+  "files": {
+    "agent_framework/workflows.py": "ae658541cc1c947db85fa90d55c8e19a3a132cd3193304ed96c83d2f95d33cb5",
+    "agent_framework/web.py": "1ba9fa9126a84602dc7faba5309b7438b9019ebf9a398c128fc94695d348311b",
+    "agent_framework/store.py": "f10fe16c7a3228695b2f89a0a55cd4117cfe86b58a00bd1e7dbeb265362c0065",
+    "agent_framework/task_conversations.py": "d60fa274fcabe5d9483aabf29e44f3c7c1138b940fe4d1d0409854bbd91a6438",
+    "agent_framework/workflow_evaluate.py": "fbc56293a68fc457a8347fc6254034aedb4c92ae8b92b95f4d1ac2200cb0a888",
+    "agent_framework/webui/workflow_grant.js": "bdbf77aaa18204d15c455a133dbd469afb7acbfd8389e07ed0b3df4632fa55a2",
+    "agent_framework/webui/workflows.js": "ace29079dea9dbc4a62930d5c40813273a6584b743319618d9cc0a30178acbb8",
+    "agent_framework/webui/index.html": "e18de16e0778f9adba30597d8fa9002a19cf191fc338b0ee367d14a560bdcb98",
+    "agent_framework/webui/hig.css": "7483f265970f680c4f0e731803ea8079d004d4b12b9676b735dce59adde907a4",
+    "agent_framework/webui/appearance.js": "51558291ac3e59858080ce94ce75ee1c67e9d7950b19f1e10cc51e6bf02e9a52",
+    "tests/test_workflow_grants.py": "b492f1b3a0f6382756733319caa0990850486024b96c65b133a6d2495a84c117",
+    "tests/test_workflow_grant_interactions.js": "c31b4e87feaa38d511896765a5f4f9504df08858d47227a1012c9f433656cc31",
+    "tests/test_workflow_interactions.js": "9d804d8376f63c952235e7e84526f50094c46b1eb69f2220f100481cc5233040",
+    "tests/test_workflow_receipts.py": "3cc1dcf9783148372bdd69d6492f7def40397c81e318cc39cd56a8ca2fc56fc8",
+    "tests/test_workflow_queue.py": "459b616f25cccd30715623b47b836eb628f5579746f40cdf3b8a3150ff29e42d",
+    "tests/test_workflow_routing.py": "30be492e4923f579ac5fc0fe98448b70698c8fa8d22feb460579f4e039850d8b",
+    "tests/test_workflows.py": "9a415ee744e02c2c17b226c56cae601d6cd6a8e5766a3c7a360af82895df2820",
+    "tests/serve_workflow_grant_fixture.py": "a8704f7c0782bfc056fd1ffb263894239bb61fa7e2a3fb0620daae2095bf4ec7",
+    "tests/serve_workflow_queue_fixture.py": "c3ccd0e897f65a65948b0193decfcff27aff0bdbc63d915b126c05d36d1e1be6",
+    "tests/verify_workflow_grants.cjs": "a9d073c2f094074a5d703bef64ae7af955d8b2f7b7f6228001b2ace48e1100a7",
+    "tests/verify_workflow_sync.cjs": "18b4368c7eeedd40b4e1bc4c0383c0156364bed8fa06b71b3c327252afd02b45",
+    "tests/verify_workflow_queue.cjs": "be5c40247ab7a3e252cb638eb0f4701eaa50201ef5e78c017eb1a8b1bc12c774",
+    "tests/verify_workflow_agents.cjs": "c5a195de62a727a72b466b56c90877b4d731b3b2a310f4fbe111d696f894d054",
+    "tests/verify_workflow_starts.cjs": "f4835fa28a805f0a3249e23dacf893a32c9aa312049849478a493613ecf4d180",
+    "tests/browser_poll.cjs": "bb93b31053782395b1bb355a9b34cd2ae952e2651668185cc3988f9276bf325e",
+    "scripts/run_browser_tests.py": "967ecbdde5df0371dcf81173dd3bd58532edb60435ea2a0db391b48697e0d572",
+    "README.md": "174a44b06b50382095f7ed099fdeb3be336f5f262aff1f6f82cd3a0ec1f5a647",
+    "design.md": "0e5c26607d010488abadbc909c8661ebf99bb5a1cbb5368120711a4ab5438964",
+    "docs/workflows/implementation.md": "f7a1a5d150b7834be551c2459debe098defde2c612b17235a0b60cb8258def62",
+    "docs/reliability/workflow-grants.md": "82376d58f4b233660513ce2c15b818715cbcb43e4090c6b41fe23efd963e7088",
+    "docs/reliability/workflow-grant-light.png": "b33f3953411ac3bf75807973bdeaaaf3ab3e1a45ba607c3f9648bc75bad662e6",
+    "docs/reliability/workflow-grant-dark.png": "5d1427b33cdb1fcf8ce06e514da06bd483c634883fa59b00c7c0e083d04a9600"
+  }
+}

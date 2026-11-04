@@ -102,11 +102,18 @@ class TaskContract:
                 or type(context['omitted_messages']) is not int or context['omitted_messages']<0 or not isinstance(context['history_hash'],str)):
                 raise ValueError('conversation history exceeds context budget')
             for message in context['messages']:
-                if (not isinstance(message,dict) or set(message)!={'role','content','turn','run_id','status','citations'}
+                required={'role','content','turn','run_id','status','citations'}
+                if (not isinstance(message,dict) or not required<=set(message)<=required|{'source_dependencies'}
                     or message['role'] not in ('user','assistant') or not isinstance(message['content'],str)
                     or type(message['turn']) is not int or not 1<=message['turn']<context['turn']):
                     raise ValueError('invalid conversation history message')
                 identifier(message['run_id'])
+                if 'source_dependencies' in message:
+                    from .conversation_history import compact_citations
+                    try:dependencies=compact_citations(message['source_dependencies'])
+                    except (KeyError,ValueError):raise ValueError('invalid conversation source dependencies') from None
+                    if message['role']!='assistant' or dependencies!=message['source_dependencies']:
+                        raise ValueError('invalid conversation source dependencies')
             object.__setattr__(self,'conversation_context',json.loads(canonical(context)))
         elif self.execution_mode=='conversation':raise ValueError('conversation context required')
         builtin = 'general-assistant@1.0.0' if self.domain_pack_ref=='general-assistant@1.0.0' else 'knowledge-assistant@1.0.0' if self.domain_pack_ref == 'knowledge-answer@1.0.0' else 'release-assistant@1.0.0'

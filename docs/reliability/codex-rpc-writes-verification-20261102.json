@@ -1,0 +1,309 @@
+{
+  "date": "2026-11-02",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Keep Codex RPC input backpressure interruptible by cancellation, call deadline and original heartbeat errors; preserve complete ordered UTF-8 frames",
+  "before_tests": {
+    "command": ".venv/bin/python -m unittest tests.test_codex_rpc_writes",
+    "tests": 3,
+    "errors": 3,
+    "seconds": 6.834,
+    "observed": "Blocking turn/start writes lasted until the fixture child exited after 2.2 seconds, raising BrokenPipeError instead of the intended stop, timeout or LeaseLost. Cleanup also raised PermissionError against the already-exited process group in this test environment.",
+    "log": "/private/tmp/af-codex-rpc-writes-baseline.log",
+    "sha256": "86249d0f0f44c5b009706cec16de9aea7126453a2f06e99e82322b0ffb3b81bf"
+  },
+  "initial_sandbox_run": {
+    "tests": 3,
+    "errors": 3,
+    "seconds": 6.818,
+    "log": "/private/tmp/af-codex-rpc-writes-before.log",
+    "sha256": "5d34b9c0cc65195f28100a09c4b7ecb042168dea6941fedebc09f36e8f4237f0"
+  },
+  "focused": {
+    "command": ".venv/bin/python -m unittest tests.test_codex_rpc_writes tests.test_codex_stream tests.test_cognition_lease_loss tests.test_workflow_model_cancellation",
+    "passed": 21,
+    "seconds": 5.477,
+    "log": "/private/tmp/af-codex-rpc-writes-focused-first.log",
+    "sha256": "7cc859e4f6e3909a9f8964e9e1f027ea6ff3fdc4a664288510eeee987cd68248"
+  },
+  "expanded": {
+    "command": ".venv/bin/python -m unittest tests.test_codex_rpc_writes",
+    "passed": 6,
+    "seconds": 0.859,
+    "log": "/private/tmp/af-codex-rpc-writes-expanded.log",
+    "sha256": "ac68de1c01d5b322c08a1111e735efb103a03abc5e3027ccdd0713a8383303fc"
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests",
+    "passed": 1136,
+    "seconds": 206.69,
+    "log": "/private/tmp/af-codex-rpc-writes-backend-full.log",
+    "sha256": "252b1c0616eef50297f979016cb70f7aada3fc1ebb5f825098e4028b6651bc02"
+  },
+  "frontend": {
+    "command": "node --test tests/test_*.js",
+    "passed": 787,
+    "duration_ms": 8726.259417,
+    "log": "/private/tmp/af-codex-rpc-writes-frontend-full.log",
+    "sha256": "aebed75623c0a6c37c3e93243a3db550b8f63e385168116a43b50bf948d7fe73"
+  },
+  "browser": {
+    "commands": [
+      ".venv/bin/python scripts/run_browser_tests.py --suite codex-rpc-writes --suite cognition-lease-loss --suite streaming --suite cancellations --output /private/tmp/af-codex-rpc-writes-browser-first",
+      ".venv/bin/python scripts/run_browser_tests.py --suite codex-rpc-writes --output /private/tmp/af-codex-rpc-writes-browser-second"
+    ],
+    "fixture_correction": {
+      "problem": "Initial fixture used the existing 2000-character task creation input, so the large-frame size assertion failed.",
+      "correction": "Submit the large message through the supported conversation continuation UI, validate it reaches the model unchanged, and inspect the current child run. No product limits changed.",
+      "result": "/private/tmp/af-codex-rpc-writes-browser-first/codex-rpc-writes/failure.json",
+      "sha256": "0f3bc425aa12a8b5cf994adca2b78e07d1a925182e51e1cba6d4ef516d094d02"
+    },
+    "suites": [
+      {
+        "suite": "codex-rpc-writes",
+        "result": "/private/tmp/af-codex-rpc-writes-browser-second/codex-rpc-writes/results.json",
+        "sha256": "2d5a8617a83e6abfcc321a58bb52f4bebca08f871f8f38893f70b688492d77dd",
+        "result_data": {
+          "checks": [
+            "长输入发送受阻时可停止，刷新保留草稿，后续明确发送的消息只执行一次",
+            "发送期间租约失效后及时中断，显式恢复继续同一任务和原配置",
+            "发送阶段计入模型超时，失败后没有自动格式重试或残留子进程"
+          ],
+          "errors": [],
+          "observed": [
+            {
+              "mode": "stop",
+              "task_id": "task-02e55e71fa9933fb698872faa917e0a2",
+              "prompt_bytes": 72798,
+              "exit_ms": 219.93979200000012,
+              "model_calls_at_exit": 1,
+              "status": "CANCELLED"
+            },
+            {
+              "mode": "lease",
+              "task_id": "task-47f6ea20b6d5167d80c627407a6aa679",
+              "prompt_bytes": 73256,
+              "exit_ms": 945.5882919999999,
+              "model_calls_at_exit": 1,
+              "status": "INTERRUPTED"
+            },
+            {
+              "mode": "timeout",
+              "task_id": "task-b6087ea9d8705c71cda22528018a8ac7",
+              "prompt_bytes": 73250,
+              "exit_ms": 1865.9364589999996,
+              "model_calls_at_exit": 1,
+              "status": "FAILED"
+            }
+          ],
+          "task_posts": 3,
+          "stop_posts": 1,
+          "resume_posts": 1,
+          "message_posts": 4
+        }
+      },
+      {
+        "suite": "cognition-lease-loss",
+        "result": "/private/tmp/af-codex-rpc-writes-browser-first/cognition-lease-loss/results.json",
+        "sha256": "2ccc158f8c14eadae9a45500aad7adf29f506b38cc07dab91c8514aa47edf367",
+        "result_data": {
+          "checks": [
+            "静默调用失去租约后 5 秒内退出，任务显示中断，没有误写用户停止请求",
+            "刷新保留中断状态与草稿，等待显式恢复，没有自动发起新模型调用",
+            "显式恢复继续同一轮和原配置、期限与授权，最终草稿只创建一次"
+          ],
+          "errors": [],
+          "model_timeout_seconds": 60,
+          "lease_loss_exit_ms": 1061.526125,
+          "model_calls_before_resume": 1,
+          "model_calls_after_resume": 9,
+          "resume_posts": 1,
+          "cancel_posts": 0,
+          "business_writes": 1
+        }
+      },
+      {
+        "suite": "streaming",
+        "result": "/private/tmp/af-codex-rpc-writes-browser-first/streaming/results.json",
+        "sha256": "b8834945019130be592f22dfc2601cc0bb2caef2ed15d8d7bc9c50debec4cfc0",
+        "result_data": {
+          "checks": [
+            "公开摘要在任务仍运行时逐段增长，通过持续连接显示",
+            "回答正文在最终结果保存之前连续增长，未泄露协议 JSON 或转义字符",
+            "逐段更新保持输入框节点、草稿和光标位置",
+            "流连接暂不可用时，同一检查点和时间戳的迟到轮询不会覆盖新增公开过程，正文、输入焦点与光标保留",
+            "同一数据位置的完整轮次详情可恢复，重连推送保留匹配的操作信息",
+            "刷新后立即重放已生成片段，并继续接收同一轮回答",
+            "生成结束无重复正文，Unicode 正确，隐藏思考与 HTML 执行内容不会泄露",
+            "连接中断后能继续接收输出，未重新调用模型或重复追加",
+            "停止生成会保留已显示片段，并明确标记本轮未完成",
+            "生成失败保留正文片段和错误信息，未把片段伪装为最终结果",
+            "桌面、平板和手机深浅色显示正常，输入和发送操作保持可用"
+          ],
+          "errors": [],
+          "samples": [
+            "第一段：入口",
+            "第一段：入口种植低矮",
+            "第一段：入口种植低矮植物，保",
+            "第一段：入口种植低矮植物，保留清"
+          ],
+          "layouts": [
+            {
+              "theme": "light",
+              "width": 1440
+            },
+            {
+              "theme": "light",
+              "width": 768
+            },
+            {
+              "theme": "light",
+              "width": 375
+            },
+            {
+              "theme": "light",
+              "width": 320
+            },
+            {
+              "theme": "dark",
+              "width": 1440
+            },
+            {
+              "theme": "dark",
+              "width": 768
+            },
+            {
+              "theme": "dark",
+              "width": 375
+            },
+            {
+              "theme": "dark",
+              "width": 320
+            }
+          ]
+        }
+      },
+      {
+        "suite": "cancellations",
+        "result": "/private/tmp/af-codex-rpc-writes-browser-first/cancellations/results.json",
+        "sha256": "2cfe04e090b90810fba572df1f037206e76f38412eff7254989a775e0b411fcc",
+        "result_data": {
+          "checks": [
+            "停止返回已保存请求，清楚显示正在停止并保留片段及排队消息，不提前显示已停止",
+            "执行器内存记录消失后刷新仍显示同一停止请求，输入草稿与桌面深浅色布局保留",
+            "停止当前轮次后继续明确排队的下一轮，不重复调用模型，不丢失未发送草稿",
+            "停止处理失败跨刷新保留，显式重试后结束原任务并保留同一请求历史",
+            "停止重试已完成但响应丢失时，只读核对替换旧的停止中状态，明确显示已结束且不重复提交"
+          ],
+          "errors": [],
+          "layouts": [
+            {
+              "theme": "light",
+              "width": 1440,
+              "overflow": false
+            },
+            {
+              "theme": "light",
+              "width": 1024,
+              "overflow": false
+            },
+            {
+              "theme": "dark",
+              "width": 1440,
+              "overflow": false
+            },
+            {
+              "theme": "dark",
+              "width": 1024,
+              "overflow": false
+            },
+            {
+              "theme": "light",
+              "width": 1440,
+              "review": true,
+              "overflow": false
+            },
+            {
+              "theme": "light",
+              "width": 1024,
+              "review": true,
+              "overflow": false
+            },
+            {
+              "theme": "dark",
+              "width": 1440,
+              "review": true,
+              "overflow": false
+            },
+            {
+              "theme": "dark",
+              "width": 1024,
+              "review": true,
+              "overflow": false
+            }
+          ],
+          "root": "task-9947006161f561310c818c490791e345",
+          "failed": "run-bdc4bfa8d4664a5f",
+          "reviewed": "run-2584a2795b1c4710"
+        }
+      }
+    ],
+    "screenshots": [
+      {
+        "file": "/private/tmp/af-codex-rpc-writes-browser-second/codex-rpc-writes/rpc-write-stop.png",
+        "sha256": "bdf854250a5e82a5d205b5ffda784254e90626bc040b60bbbdb770fcfa6d1c35",
+        "visually_inspected": true
+      },
+      {
+        "file": "/private/tmp/af-codex-rpc-writes-browser-second/codex-rpc-writes/rpc-write-lease.png",
+        "sha256": "d82e520bd58cb4fb5fa982655e9c85a63a1cb4bc2b9f3411d9afbbea410132bb",
+        "visually_inspected": true
+      },
+      {
+        "file": "/private/tmp/af-codex-rpc-writes-browser-second/codex-rpc-writes/rpc-write-timeout.png",
+        "sha256": "f8d13713434b5062ad4871c365a1d99e371a57ed2d0ee800fa35c4d746a9538c",
+        "visually_inspected": true
+      }
+    ]
+  },
+  "candidate": {
+    "command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-codex-rpc-writes-source-candidate-20261102",
+    "directory": "/private/tmp/af-codex-rpc-writes-source-candidate-20261102",
+    "build": {
+      "log": "/private/tmp/af-codex-rpc-writes-candidate-build.log",
+      "sha256": "e0e92e0083559dc2c2c7f1456e1b9da8932250d0af3445bccecfc7f74a30eb65"
+    },
+    "verification": {
+      "result": "/private/tmp/af-codex-rpc-writes-candidate-verification.json",
+      "sha256": "570097839227119661a68ab38e192075386a9ab294b14a5972d262f4c6dcc9d7"
+    },
+    "package_files_verified": 143,
+    "source_and_wheel_match": true,
+    "bundle_wheel_match": true,
+    "inner_and_outer_checksums_verified": true,
+    "fresh_environment_install_rerun": false,
+    "published": false,
+    "artifacts": {
+      "/private/tmp/af-codex-rpc-writes-source-candidate-20261102/agent-framework-1.3.0.tar.gz": "f052b3f26348273da107d24b20a875b3fa13ea18f7d905faa855c24a08179228",
+      "/private/tmp/af-codex-rpc-writes-source-candidate-20261102/bounded_agent_mvp-1.3.0-py3-none-any.whl": "b320c02fa8bffcf88cb7547730218275752fa9f33ed88e639b2eeeda058f5f88"
+    }
+  },
+  "source_sha256": {
+    "agent_framework/codex_stream.py": "c2055d16976d13d8521855c8315a9b534273279157e89cd08b22f580df9379b1",
+    "tests/test_codex_rpc_writes.py": "ef9763bb452ce611fcdfd663489b5a3f6e3057e4a80b47ec3cafa8a7a88c97c6",
+    "tests/serve_codex_rpc_writes_fixture.py": "888c699afe05180e66ed99d64c7011488d2df3473c5fc3c88bf56b0d17619cad",
+    "tests/verify_codex_rpc_writes.cjs": "696ac88cc9b2c654ca7c2b64378f4ba70981a9b2c782f80fdea23e06aa331d3a",
+    "scripts/run_browser_tests.py": "f2c7dc2618d7383a08d5537ff893bd0780afdaa1d96f3d516e049b45685e01c7",
+    "README.md": "3c31cc8c2887d4c0fbc934a77b230c6add796fece6200d61d7e3fc4e7da818b3",
+    "design.md": "ab68160c933baeb3e4ddc5cd3bcfa03205eee6932378972b4ed5aa723704524a",
+    "docs/reliability/codex-rpc-writes.md": "6f4dfe1d60c6e9ccc4a9fd5d9e2848f87fcd4eb476b6364b94cf0ffd0a39d64f"
+  },
+  "boundaries": [
+    "Both input and output checks share the call deadline and original transport cancellation hook. Heartbeat and database detection latency still apply.",
+    "Each complete UTF-8 JSON-RPC frame finishes before another is sent; a full pipe waits at most 50 ms per selector wait.",
+    "No new background stdin writer; existing process-group cleanup retires local model processes and output readers.",
+    "Local process termination does not prove service-side inference has stopped or undo earlier business effects.",
+    "Browser fixtures use 60-second child waits for stop/lease cases and a 2-second model timeout for the deadline case. Observed timings are not production guarantees.",
+    "No real model service, production data, new API limits, protocol version changes, fresh-environment install or publication."
+  ]
+}

@@ -7,7 +7,7 @@ if [ ! -x "$AGENT_VENV_DIR/bin/python" ]; then
   echo "请先运行 sh scripts/install.sh（或设置 AGENT_VENV_DIR）。" >&2
   exit 1
 fi
-exec "$AGENT_VENV_DIR/bin/python" -m agent_framework \
+exec "$AGENT_VENV_DIR/bin/python" -I -m agent_framework \
   --data-dir "${AGENT_DATA_DIR:-$RELEASE_ROOT/.agent-data}" \
   --tenant "${AGENT_TENANT:-local}" \
   serve --host 127.0.0.1 --port "${AGENT_PORT:-8787}" \

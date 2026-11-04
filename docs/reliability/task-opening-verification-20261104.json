@@ -1,0 +1,122 @@
+{
+  "date": "2026-11-04",
+  "status": "verified-source-change-unreleased",
+  "scope": "任务准备的等待、取消、读取失败重试与配置返回；无后端、存储、版本或发布包改动",
+  "production_files": [
+    {
+      "source": {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/agent_framework/webui/app.js",
+        "sha256": "9b3fbe4b78489cee97e632dcf9511f6044463a948aa5699d38dd2ff8f9780929"
+      },
+      "before": {
+        "path": "/private/tmp/af-task-opening-original-20261104/app.js",
+        "sha256": "ec9ce89838d355968434900a1ed7487a2a4118bae40a6633ec7a07df4251068a"
+      }
+    },
+    {
+      "source": {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/agent_framework/webui/journeys.js",
+        "sha256": "222a067a75479e88b784727cf7b2ae39221a5d521e207cfdfc17b34d11e4fe28"
+      },
+      "before": {
+        "path": "/private/tmp/af-task-opening-original-20261104/journeys.js",
+        "sha256": "a2c895775b3ac4ae89eec95e89423713f2c15502501cb1bca0a067be1b9129ee"
+      }
+    },
+    {
+      "source": {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/agent_framework/webui/index.html",
+        "sha256": "6401469bc5922ccfd14170d1b6a0a0b401ba6f6a0279ccc38b80b8cd027bea37"
+      },
+      "before": {
+        "path": "/private/tmp/af-task-opening-original-20261104/index.html",
+        "sha256": "6efce74d5014d7732e8f0b4e10442c2ba87b6148d446bb489d012f2752d29719"
+      }
+    }
+  ],
+  "verification_sources": [
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/tests/test_task_opening.js",
+      "sha256": "c3bc9a787288d5b2ad426c3cd4213334ebab071828dbf4a6157f2dfc33434944"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/tests/test_journey_interactions.js",
+      "sha256": "7d262b33f64a22936b13e2aecb2b33982564f0bcc932ca82b0c9731ed9472767"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/tests/test_task_reuse_interactions.js",
+      "sha256": "abec122b0267222d8ac0535c636842ffc41ff5f0ff93cbaf5b2b3b06ff1f9a16"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/tests/verify_task_opening.cjs",
+      "sha256": "d17390095354fa3959247abb5dbc20ac2f25fa9b95262e37afd45906988dd5fe"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/tests/verify_task_reuse.cjs",
+      "sha256": "19d5054add2223f3d952f957e87dff3a2b84df1752f352a359b71fc0667a0fdf"
+    },
+    {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/scripts/run_browser_tests.py",
+      "sha256": "0f55b88c9737bbec5042dd2e71dc579faf01f2ffe7c113948aa67816d511c2fe"
+    }
+  ],
+  "baseline": {
+    "tests": 7,
+    "passed": 2,
+    "failed": 5,
+    "log": {
+      "path": "/private/tmp/af-task-opening-baseline-complete-20261104.log",
+      "sha256": "11c0cb1bda8f42a8cee20ae0801bd916449043f29f8a1ac70b8198c1877dffb3"
+    }
+  },
+  "frontend": {
+    "tests": 1150,
+    "passed": 1150,
+    "failed": 0,
+    "log": {
+      "path": "/private/tmp/af-task-opening-frontend-final-20261104.log",
+      "sha256": "b2197f4bb193a29149290134bcd8c67fccfed865c7979c6d4a802d2d55768a88"
+    }
+  },
+  "browser": [
+    {
+      "suite": "task-opening",
+      "checks": 3,
+      "layouts": 8,
+      "result": {
+        "path": "/private/tmp/af-task-opening-browser-final-20261104/task-opening/results.json",
+        "sha256": "452c52b23c159a49749684be170d9fde7eaba3e55ccdc4446d7a2c04b93dfc13"
+      }
+    },
+    {
+      "suite": "task-reuse",
+      "checks": 4,
+      "layouts": 8,
+      "result": {
+        "path": "/private/tmp/af-task-opening-browser-final-20261104/task-reuse/results.json",
+        "sha256": "825525e378c52352ef7bd36db8bb818dd3796ea41ff78ba21e84ad9ac60b8b23"
+      }
+    },
+    {
+      "suite": "task-draft-ownership",
+      "checks": 5,
+      "layouts": 8,
+      "result": {
+        "path": "/private/tmp/af-task-opening-browser-final-20261104/task-draft-ownership/results.json",
+        "sha256": "2d7197575fc3e2f221dec88152e5a8e8883cbdc34176cff57f7d5d643d109a70"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "/private/tmp/af-task-opening-browser-final-20261104/task-opening/task-opening-light.png",
+      "sha256": "599f52f6b33489b805d6d19ad31ca4f55be15f13b2f85b5b959158b7798ae2b2"
+    },
+    {
+      "path": "/private/tmp/af-task-opening-browser-final-20261104/task-opening/task-opening-dark.png",
+      "sha256": "00dd8ad9e081277715ebcfd32b45e51ccb07dd48014ff99bd0b8b9525007bdca"
+    }
+  ],
+  "packaging": "三个已存在资源均匹配现有 package-data 配置；本轮未重新构建或安装",
+  "real_model_calls": 0
+}

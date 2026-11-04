@@ -1,0 +1,864 @@
+{
+  "version": "1.4.0",
+  "date": "2026-11-04",
+  "platform": "macOS-15.5-arm64-arm-64bit-Mach-O",
+  "python": "3.14.3",
+  "artifacts": {
+    "agent-framework-1.4.0.tar.gz": {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/dist/agent-framework-1.4.0.tar.gz",
+      "sha256": "6ebb7fa34512b6f2fc2a620e50d6762a9d97172c95f88c3e15da90dc46c22d82"
+    },
+    "bounded_agent_mvp-1.4.0-py3-none-any.whl": {
+      "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/dist/bounded_agent_mvp-1.4.0-py3-none-any.whl",
+      "sha256": "97feefd6f78970e28b75598689c918c82445bb2d8ce7e5a9e80c0245ae4e26ba"
+    }
+  },
+  "historical_artifacts_unchanged": {
+    "agent-framework-1.1.0.tar.gz": "78fda0c93a5ce6b091183a0e47c6120f1a3f18cbeec1251cd2d33b54326894bc",
+    "agent-framework-1.2.0.tar.gz": "73f6c5f15aa5546418810f1404a49a91ba87fcad5a43f01aa27d0c38556af7be",
+    "agent-framework-1.3.0.tar.gz": "32004453ac6355f6fd272edac325d743a21a1f0467ae9048ec27799bb0efbe08",
+    "bounded_agent_mvp-1.1.0-py3-none-any.whl": "50334ab2c04575706f49ead28d3fa7a731f5a726636e152b8a68142d093ec869",
+    "bounded_agent_mvp-1.2.0-py3-none-any.whl": "43cf6789ab121b46500648b222daf637187033db2fbb1148dcad53a3dc71259a",
+    "bounded_agent_mvp-1.3.0-py3-none-any.whl": "ada65ea8468cb675263ddbab69c452de1654612258fb4e574747fb184aaaf83a"
+  },
+  "application_file_count": 168,
+  "application_source_sha256": {
+    "agent_framework/__init__.py": "99b206c8c3cf0b061f4798c66319c0c65c9dc12af74f1c2666b997ea0470c637",
+    "agent_framework/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "agent_framework/adapters.py": "c43895c9d8d310fa8a450f919ea48a5bfd8505bbde8aa8d6a2a90b8d88a3604a",
+    "agent_framework/agent_domains.py": "d7a080fb1cc7dffe0fbdc996d23b983bc9ab0d7c0a483262bbcf7719daf2e79d",
+    "agent_framework/agent_evaluation.py": "5d7c79ec818bd43f1b1e40ef7b5614e8a1454b1e1beb5f5fbbd6f1a56b41b51d",
+    "agent_framework/agent_extensions.py": "80517684761d8d05c2d76a31cd990194f664017a9d7be091c18176fbd15fdf96",
+    "agent_framework/agents.py": "f30fd4c52fbfbe217d97bed65529818e93c92ec9affa135ff28185560029d958",
+    "agent_framework/assistant_evaluate.py": "dc6a1ced9a2e37f773daa309b2c3b4e0ded378751d84d51ab773320bbb5d1780",
+    "agent_framework/backups.py": "7556a251fce49e897988f47a2a64f442213e57a284f1b7e10e57c2c29fc91007",
+    "agent_framework/cli.py": "856dde3b5e0f45a4896ca783b9abd3bbdeb07116d61f1f4ea38f38d96a5f2874",
+    "agent_framework/codex_stream.py": "9fdfc09c596113d4c5c6aa43a128f92966d56799461c7d4589ce79a6e347bd0b",
+    "agent_framework/context_builder.py": "6c34122acebb3ae53e9a0c33e5e20b48406892206afc47c35c514627dbef8580",
+    "agent_framework/contracts.py": "e0c83c4784e06e78a655040a3b49ec4775cc3fc2518a6865c6deceace888fbd4",
+    "agent_framework/conversation_execution.py": "11aecbbfde88035f0d6fc7b8ab862acbd5d41da52affa18f0eae686a351fa5ed",
+    "agent_framework/conversation_history.py": "d7c3551f20c145baf38bda65611def579b1e14ebee5b6c5c1dd080a971d9c528",
+    "agent_framework/conversation_projection.py": "25648c97b45eb8dd41e791d535d3370995012adac68022e307701a96a495c80c",
+    "agent_framework/definitions.py": "16b689919e38d7cbc3047b7ef3e1bdd3911563f07eb6e220bc52c98b6047ffe8",
+    "agent_framework/domains/__init__.py": "93fbe1f965bfb446f59909ed81ee4593519de4a15b8e24de3ef95af4d61a04fd",
+    "agent_framework/domains/change_assessment.py": "40c36b5faa4e86d28341d54e7f41e361aa9976625060f90d98d9998fd965a4eb",
+    "agent_framework/domains/change_verifier.py": "406976d65ac5cd27045bb753b7a8d19e30377023767e38bf5c2aa3ee2b560c38",
+    "agent_framework/domains/general_assistant.py": "17e1a3b5079393fb8017bbe81df252b4978fd2eaa7db8d28dc0f9a3a25c1c81a",
+    "agent_framework/domains/knowledge_answer.py": "18cfa6114d4635e59b0a61deaf24a9e25dc4795df0ddae07c149af777eebaf7b",
+    "agent_framework/evaluate.py": "f25d3f1fc4d55ec88cc3c1103c57ec4a4adc44bcf24e14edb2f4e5cd8e635f5b",
+    "agent_framework/evaluation_catalog.py": "8a626f5211819d67e6615b4d1bd2df4554377211b302005bf8c438d353399dc9",
+    "agent_framework/evaluation_contract.py": "27e8752c03228f76766ae9b411e0e7b5d3d78bb67cc75f03a3997b7a000a4686",
+    "agent_framework/experience.py": "4c015e9199baf2a0487b30ac0f4afa38ad9de0813fe94f9d5b37b0c0673f80e1",
+    "agent_framework/exports.py": "71381ba8c6f473a4dbb0f4f9d053762275bb3ef50701f825cc77f2da44d9ca01",
+    "agent_framework/file_durability.py": "b993329df09f4d61acfc285a0db355ae0219c334d91afaaecf7d6d2623f81d1e",
+    "agent_framework/gateway.py": "d311679639c0aa7710d3bba477fe2c4c17fb5c57ede5aae7cb6b4770627f5f47",
+    "agent_framework/history_dependencies.py": "75b8c1aead8c005188ef58339e8d1a19326dd2198fb726243f0a4150a7821bab",
+    "agent_framework/inspection.py": "83f5d04d43916a1153d50df49b4754d95520f2ed2dbd924f6b2bc03c0f807810",
+    "agent_framework/knowledge.py": "04428e90d99500554afbaaf6aee03539f8030d97f4cf3ae98691ef72b7350bb6",
+    "agent_framework/knowledge_hub.py": "3edfaffeddbe430133fd1877389477e0cfb0322cbff598abc2c9b8ffbbe248ac",
+    "agent_framework/learning.py": "548699227edd223df1b3d9016d0e3f4c8ff0844b49253782c6f8a9474ee47d3f",
+    "agent_framework/learning_generation.py": "109bfdb390660dd3d617d13e752417b8a99ef9cb6381892f2df56e8092640cb6",
+    "agent_framework/learning_writes.py": "1a6996f966806909b0537f64fc5bb390fa4d4d9adcbc2fb33db9eb6f8e90ab66",
+    "agent_framework/library_cli.py": "5ced6c3153ad05099bb0a69d11de272840dfa9240787ee0993b88e4cb915fb39",
+    "agent_framework/llm.py": "9f8433717aa77458a3ebed104cc1a9790e5903385026021a703db775bf7a0b43",
+    "agent_framework/memory.py": "ac612c5f9e1d5b986036bfdf622e0182145fffae666b9120baa4e22899b3b9c6",
+    "agent_framework/mock_tools.py": "be121aad25a03f17e5cdf0792f22e58ec50e29c35b45ce52d15942f2d8b345b2",
+    "agent_framework/model_catalog.py": "9cd93e8b32a0d646ff5499eb002175bbbf8bbb51c2c3892e71e620af92f22792",
+    "agent_framework/model_discovery.py": "76ef9f9d44c0a2fec915270850ab7902733b493d0a53267b7c229ab0b3c81e18",
+    "agent_framework/model_execution.py": "5818a5d29b8957bc71580447118c8b02ea9a2c985c2c88d1ebffeb939dcf0e28",
+    "agent_framework/model_output_stream.py": "c3fd51556c43d8fbcdf1748cba4dd7517ec2beb73f52026b1d94a4180585146f",
+    "agent_framework/model_stream.py": "a60d13be2ec827d39bf719b0f4449506cc954cd0cb10f1352eea8c7ea5b29733",
+    "agent_framework/ontology.py": "26e0887632d11c83b53fcf93d186b1370bfd76aae9a26bc829bd04b61e0921a1",
+    "agent_framework/ontology_evidence.py": "923a4df5f689700c9e44caf0dc7d22609521a667248b56d12e7faa002a48e165",
+    "agent_framework/ontology_model.py": "447dd0df02e47c121d6e9de10138663da486070599f0449c1bafac6231c6909f",
+    "agent_framework/p0_evaluate.py": "0f07368b3fcaedb6db4d9a2d545cbcd5e5a338eebfb06640faf2d42fe02d32d2",
+    "agent_framework/planner.py": "87dae7afd294e8c562afc74ae1ec94eb8bf29901e3b9e2f732380e5c5743bb8e",
+    "agent_framework/process_pipes.py": "06995f21334e58286bfe6393b5c022f92518db5d960fa7141970faee36f332b4",
+    "agent_framework/processes.py": "07d43b478737d5371c83734f02efd2061abf843c50c136c6238b2dbb84625f68",
+    "agent_framework/proposal_capacity.py": "34c71eb436274d7528835278349191cf2d8b550e6cb37f7b94cc87cb4816d869",
+    "agent_framework/read_proxy.py": "ab3cd84d410ed99faefb78561fb408f7be01b0e22bc36c93d9542e1499d92e37",
+    "agent_framework/resources/agent.json": "be29f8965003f180b1bf921b48e51f6fe5ae904ca3e979c57e0fdc09fd185fa2",
+    "agent_framework/resources/capability.json": "7a9959fde2e84368eae66010679afc1f688da8180c40c3b6cfb39850502b647f",
+    "agent_framework/resources/change-assessment.md": "a7595e6c0f4bba6542f31e34a1f1013bd2b171cd96d7f3bc1054c07e94d61c19",
+    "agent_framework/resources/skills/release-risk-analysis/SKILL.md": "c66db09fcc43d38b69825ebbf95a9e6d4e1e5b54aa24d928520bfa624a49cd10",
+    "agent_framework/resources/skills/release-risk-analysis/references/method.md": "3cb3030e3aa67e72e906cf05d6e7c6173948001f04c87701ee0a4b78753e8597",
+    "agent_framework/resources/skills/source-grounded-answer/SKILL.md": "4c37235e1c254fbad27ffee31119402191d6ff2945e1ce5860fb6af45d5dddc3",
+    "agent_framework/resources/skills/source-grounded-answer/references/grounding.md": "ff951a1feb19885e26dba2664aacb76c2214236ccdefe712558e5c7a04c51e0a",
+    "agent_framework/run_catalog.py": "029488681d9894bd001d69b8e970a610b83889e8924146a16d6cf5585962acf5",
+    "agent_framework/runtime.py": "26f8876b9e5d007bf931bf254feb3f5478f1e360ae150a42564ac8db9935a975",
+    "agent_framework/runtime_config.py": "cd86146d9caf1c4f74f93596f29702ee2ed55c2e3c92e156da2ee17e90090592",
+    "agent_framework/runtime_detection.py": "65c0c208f3d002e1ce4ef576d3da34b0cf12e851ec2a0ae29471b0ac42e17977",
+    "agent_framework/skill_context.py": "6b830a4a13eb37ea0aeb61bce3f9013890100f6b0d1f76b0b7db04b904d7bc98",
+    "agent_framework/skills.py": "8fa52bf3193f753b9a08b834892f0563de687847ae7f46fd271e6a40ed3393b3",
+    "agent_framework/source_exposure.py": "837340626f555cbc7d5fbb0e0fadfe05848ada9f58368ca4b40f1ce28a51d007",
+    "agent_framework/store.py": "b698ab588ae8ca3cbe2d4a31b4b6c852a8d0d8b4c5af9e9fd635c838c1a200d3",
+    "agent_framework/stream_capacity.py": "f9f7e92692d7acec923c61bb4f566144ceb718e39633e70e493157b461583ba3",
+    "agent_framework/structured.py": "c1fcf856717fab2168404a13e1f9c59e88e470d5ed8ac53b44dfd69ab4c9919a",
+    "agent_framework/task_archive.py": "db91561cd8c25fe02c8d6f7d66b94264573451af9c6da9ba01b9fbafcb288b08",
+    "agent_framework/task_cleanup.py": "40c1d577bbff9638575dee86ad4f169b7bc0fe035f9f5433bbcaef7c8e247a32",
+    "agent_framework/task_conversations.py": "b06d4576ce437fe1664febfc4b44dd1f7272592328f63f56979374faf384d3b4",
+    "agent_framework/task_exports.py": "e68e1ea90e1f0588ec3de573f84a0f8b269e96fbfab26a33f6dc44893084f38d",
+    "agent_framework/task_favorites.py": "45b1183fa9df86e034b561334cd3b6a851deca51c3a3bc43fce6a7fa5e99a9f0",
+    "agent_framework/task_message_edits.py": "1c7b1b33d4aaa5b7f08cad0dd8395a0c8dcaec972964d360f2822b0d7f295ed0",
+    "agent_framework/task_message_history.py": "08adf33e5af9e18ab20868ce0725fd515fd11ad1b8109d5a146e484f9974cafd",
+    "agent_framework/task_names.py": "29b085518246890e9ef4fce8f1424aae5220cf99197eb30dadb6975298365187",
+    "agent_framework/task_permissions.py": "28e5ed5d29707698db90efc1f43c11ca6b943f7c15687d8177b13a02aa1a4953",
+    "agent_framework/task_relations.py": "c2ce7d9268fce69d7655420a8cd152e8755fd585d712813de589b0ca7ae8d736",
+    "agent_framework/task_text_search.py": "8b9e1c4187f562ef16e4f12700efba49f2b10fdbd2ae5f5161c646d4fba08a2d",
+    "agent_framework/verifier.py": "840834bfa62b9e6d512f87330d8534154d8d0225e7d7d8d9bce38bb369aa756e",
+    "agent_framework/web.py": "56f2600022bca417d39e50e5c8575efa4e54be14ce37b19dc6837095c83ab44a",
+    "agent_framework/webui/MARKDOWN-IT-LICENSE.txt": "869b3482be5073dd75775389288dd1c53fa7698c3c817f262822bafaf978c89c",
+    "agent_framework/webui/OFL-SpaceGrotesk.txt": "564ce565c371c5e5bbf286006565a7c9aa55a9f56e7ca58d56e05d649dd61a72",
+    "agent_framework/webui/agent_domains.js": "2484cfe7dbb1e16c285e83b63fb3c63acce0a128f582ee9955efa4ba355f5533",
+    "agent_framework/webui/agent_draft.js": "6c30187e5ee342a17ef71c1d38aac57656eba5cceb708b21425b6044503a2f23",
+    "agent_framework/webui/agent_experience.js": "bf4a084b40de81d168722bf17be4ca6a5126ddfbeaa907ba851f0f5a7ca387b5",
+    "agent_framework/webui/agents.css": "240cce6c3a5b8b589e94a5f5fd46b5c07ea440ce4ed856a15b33cdcb2d2b68f8",
+    "agent_framework/webui/agents.js": "174d1276c084ede74bf627f567e6430b704527c49ee3337fad115944b6ff12ad",
+    "agent_framework/webui/app.js": "ff6364ac65cc44bef575e7bf413afe34253291b7ff5f809c8692fc9fef5f76c5",
+    "agent_framework/webui/appearance.js": "51558291ac3e59858080ce94ce75ee1c67e9d7950b19f1e10cc51e6bf02e9a52",
+    "agent_framework/webui/asset_draft.js": "15c88eb117651cda99e8f8b12f65f2d8537a1081e302ffae9635b3562b9692c9",
+    "agent_framework/webui/asset_save.js": "e760436245698150b8c7fe2267d129bbde6f47791550d92b63ec2258ff636a85",
+    "agent_framework/webui/attention.js": "fee6e0bd90e014cd378970ce4b67c2c02a6950f6b7e23bfbc2486161750871c5",
+    "agent_framework/webui/chat_draft.js": "5720e57f7e481081ff0bb7afbb2652928ef233d2d0071351b81d42b3a700df94",
+    "agent_framework/webui/commands.js": "d285da271974cd58501f99506fcfe87419b46e4a96c348858c68b2196ba4ce76",
+    "agent_framework/webui/conversation_ui.css": "9bc15652717af93f5529367287afcc3004df3ab277d1764dd477e113f297ea3f",
+    "agent_framework/webui/domains.css": "779c8ebf1553c0dd9a831c2ef96393f99bec5cc1ff8d6b0f8f0376c1c3637fa8",
+    "agent_framework/webui/domains.js": "4a2c568b1c388d725c69c890dbd76e28a028f019d886c88aede6304f9ad384d3",
+    "agent_framework/webui/evaluation_alerts.js": "a47128c1eb1da2de693159dae1e6e750af3f1c328d3a54208efce8d3ee40caf9",
+    "agent_framework/webui/evaluation_history.js": "077761a30d304a5937420b2cf0b85f12d9ece67581fbf9b266a4315bd7ee9d50",
+    "agent_framework/webui/form_controls.css": "2162e2947091afd56bf32d4a448ee1044f09928e8b7b4f77ff14c226127ec27f",
+    "agent_framework/webui/form_controls.js": "affc8408b33472e72638e7505639f9fe6ba4606f277cc360f4acd232469c7e0b",
+    "agent_framework/webui/hig.css": "df1092edd53f56c33f46459e120545781184e28f3d2730e3d78132eb80e27a66",
+    "agent_framework/webui/index.html": "a43c414470e6c10566dbc3d6ca37c02fc9396963c14d95b1a646c0fd5350e04b",
+    "agent_framework/webui/journeys.js": "222a067a75479e88b784727cf7b2ae39221a5d521e207cfdfc17b34d11e4fe28",
+    "agent_framework/webui/learning.js": "041c78b81982b1cacb4d6a995802d25a5053a373e95b15ffa3ee4ff6c3d37bf0",
+    "agent_framework/webui/learning_request.js": "f1b6dab1c5bba0aad506e431ae9bde5c81461a7c494f30c2495127b41e48fb8f",
+    "agent_framework/webui/learning_review.js": "c17900e928918d877538725ffb5cc3ce8858c9685b52ce7f3acd074c6256bb2f",
+    "agent_framework/webui/library.js": "cdef5765e77f36fcc6abd8db251b18b590be71f9d31374aca741ba6fee5606a6",
+    "agent_framework/webui/markdown-it-15.0.3.min.js": "758061fd114ea825a7864ad8a4aeffa4ab97233b1ff9924f51e9bb635c0776f2",
+    "agent_framework/webui/ontology_evidence.js": "3d64e15b0036dd5b5f928e2d103289e998ea05a86616be32f80387781dc97783",
+    "agent_framework/webui/ontology_model.js": "2512c41c82589dc965580eefe7ec71848775f344827728341d40e593a53da57e",
+    "agent_framework/webui/ontology_save.js": "b3161448a89f23d2b0e203db4838e262858b94ff9c4f3928dafbe323dfb745d6",
+    "agent_framework/webui/operations.css": "735f629a161f9ea71ea18a3a02ad532d3a432773928cbace8dd63bbbebb1d7fb",
+    "agent_framework/webui/operations.js": "a3db84ee4372b301bba041a9de6a4b00ee77e5e7c329488f37e8191726a106ae",
+    "agent_framework/webui/reply_markdown.css": "3e28ef69921d787b669c47e07d4904449e61b85c736dd37ed7e6031cace43714",
+    "agent_framework/webui/reply_markdown.js": "1846ecea7fc27c18558b2691dedba633a9ed401236bf83afb1a3567a207938fd",
+    "agent_framework/webui/roles.js": "be6eac69ddaddff8665a09e5716e4c0bc25a20837bfeeeae11add3a52e5c0883",
+    "agent_framework/webui/run_action.js": "ba9405afff7f77c3e119dea1fbafd5595af51689a61ad02bd2c99a9633eb1eef",
+    "agent_framework/webui/run_history.js": "f7ecd91f460e4d582e320e6b55bf1a1d5fdde35f4be16a33bf5c7db220ecf6c2",
+    "agent_framework/webui/run_inspector.js": "7a48571db3333c483764c51714775d3ed2724778c4948aa76f8bd4bbb03c19de",
+    "agent_framework/webui/run_view.css": "611406c74d54facab212e160d25d09be03c4853e7266a47ce4e88237aeced680",
+    "agent_framework/webui/run_view.js": "e6422b56eed9d6e7e991a9fd134a1fe209f3d587b69cdb9205a5315c07ddb8d5",
+    "agent_framework/webui/runtime_settings.js": "6aef2bb8d2f35c93ffade632f39de617f3846973c13ec58d3b532a9d6c62dbdc",
+    "agent_framework/webui/skill_save.js": "4bf1b3c3320afd94c02b3c10a72b1e2ecd79d15d8c6ab72c56e69ab7cc2dfa86",
+    "agent_framework/webui/skills.js": "0afcedce5751992634a76692d4700828d05d3a9e35054a1dd29b6807ad6a1ad7",
+    "agent_framework/webui/space-grotesk.ttf": "acad6de1fc93436f5c0f1f4137751ef04f1aea3063e7036535970ffcfbd79f72",
+    "agent_framework/webui/styles.css": "37680f7a3f4101d4bb131aebc3c3f1239e8672c7a942c0b313e7391b29811f77",
+    "agent_framework/webui/task_archive.js": "742a88532b73ae69d0e6ff0084e16f166d4ac0e274a840437a49e38213d2d111",
+    "agent_framework/webui/task_cleanup.js": "441ca3b66b788cb211dc21ba1292fc75b11f9b5a7097514fd4dbc9819a7aea45",
+    "agent_framework/webui/task_conversation.css": "74536fcef38a870fdfdc7f65d37ef090acbbfe62a292529e255548c2d0767b55",
+    "agent_framework/webui/task_conversation.js": "79245c9c8c9847c51f24580e20cece2d7ba3754eaa9ab83b85767c403d6d5a75",
+    "agent_framework/webui/task_export.js": "73fbf627b14fd2c1fdb3cf2e91cb544c1ee0345fb44a9a2e2379030d971b845a",
+    "agent_framework/webui/task_favorites.js": "af5a0cb72660fc51a5fc651f323c7629aef53586e83566392f6b3229d3f9ab51",
+    "agent_framework/webui/task_message.js": "2b24d9a3176f6590ceaefd5c9cb629e32e6c558d1832791447b5e9bcb94da78f",
+    "agent_framework/webui/task_message_edit.js": "bf037fc8977377245b80848ef931b04978c13aca943e4965668a53a03f8eb11f",
+    "agent_framework/webui/task_message_history.js": "704efc124018bf6c30efe94503d9d96dd3bbabfeb1c4c7da2cef06d7825bd14d",
+    "agent_framework/webui/task_names.js": "06b8ee8ff34eaf664074ecaef7d7cf49a74d4e52049ccd82be2a0f5c8ffe0807",
+    "agent_framework/webui/task_relations.js": "ba094d537c4a6f38de05a009c4d0fd6a20cf9677acb619a2bd6ceddf78125a9a",
+    "agent_framework/webui/task_reply_copy.js": "8e58f8289b0b277b5d53c909406a05a3fb5b7a0eb81e49c04b81b98290f5b03d",
+    "agent_framework/webui/task_reuse.js": "2483e4974697cb94dc52172f72728f250fcc627126dee9b455e11ef2974aa18c",
+    "agent_framework/webui/task_search.css": "71392ea2f912ed0f52decc28d3ada9a3e70ae856f760bf9574d7f1a288f671f4",
+    "agent_framework/webui/task_search.js": "ac5d405fb7dedca680364e3757505c0b6c4fc02e2d774154ba6e12fc629f46fc",
+    "agent_framework/webui/task_submission.js": "9502ccce5413af3b48c1873436d8816928d3c9bb055e87c011d57b3b3d9e00dd",
+    "agent_framework/webui/task_text_search.js": "972db59ec49ff465298d863d8814362a017ea820cf841bd6db665e005e38bb5f",
+    "agent_framework/webui/ui_details.css": "445745eed71473830ab0501c02d606ef27f10bbdffc7cb3a62bea65f101bc675",
+    "agent_framework/webui/workflow_chat_request.js": "4db0fa6bca3bd6da4eab50038e557b509296b79b934fe68c9d1deec0995328c5",
+    "agent_framework/webui/workflow_control.js": "62a16a70dd32701933a567711f487d0e6f974ad799cf9f2a9af7b7aa7bde3b31",
+    "agent_framework/webui/workflow_designer.js": "f08c4f56bb6f02e718e8ae4269ea4bc6fa1d13cb32c907dee38c6a40fe97132c",
+    "agent_framework/webui/workflow_draft.js": "01ccc196dc89e1337181a60c9596bd1d64c57680d05f9e45351056fbc401abe4",
+    "agent_framework/webui/workflow_grant.js": "ff249b29c9830c2741669f44748b5b6bc4cbea0e38c3935c81a44978dbf99ba2",
+    "agent_framework/webui/workflow_save.js": "0eef3c0c9d055d72dd73e084758c1881b49d440dea646414a058ca9790163d3f",
+    "agent_framework/webui/workflow_start.js": "814da8b3bca65397003693a474ce486fc55aa06dc87f6c1515d32ed28521a075",
+    "agent_framework/webui/workflows.js": "7a599478c0b041e8b10a2564363c7e725a374e4ff026727a8306efe35a5a4a05",
+    "agent_framework/webui/workspaces.js": "e64a3401d34240cd3785e06e9ede74e6d7ec7f46c5a74d88c19a95dbc9f7d2ae",
+    "agent_framework/worker.py": "604b82876569f3fa24ad1cfb7ffc34d5a805ce3ff80acb991d14374bba6abab8",
+    "agent_framework/workflow_agents.py": "050af8e76c22d1244ec92e7eefe19e22eb424888cff618fb2e05c9288814e7ad",
+    "agent_framework/workflow_catalog.py": "a5a6bcacfc607034771aa7e0c4e34658b3aa85a325880790caf3c78354b60a40",
+    "agent_framework/workflow_chat.py": "ad0b42516768e3d554105439b98b3a463a1964fee78ce28c9afcf0a4efbee13b",
+    "agent_framework/workflow_chat_requests.py": "bc43342de8c19ab2e52a578b11ec3cf5380dbcbd1464c53a4947872cd65fb4a8",
+    "agent_framework/workflow_evaluate.py": "fbc56293a68fc457a8347fc6254034aedb4c92ae8b92b95f4d1ac2200cb0a888",
+    "agent_framework/workflow_rules.py": "e9dac3813849425fbb9665ad5cbb540648c1dd3d2d96f252c8ad5dcea199bb59",
+    "agent_framework/workflows.py": "12fc9b997a0a853cc8b6559e8602635741b33589700fbc7eb28cfd25e91fe61a",
+    "agent_framework/workspace_scheduler.py": "9568d9dba9ddc57591469f02dc88404eb26e0c0566aea3ff62692505bee304e9",
+    "agent_framework/workspaces.py": "7acae0e7dd420e317e1ef58324b7196ade332c9e01599b582456726234ba0154"
+  },
+  "acceptance_source_sha256": {
+    "scripts/verify_release.py": "aeb83f59dde8795e11749917e9d9df6ff1c4c162d1ccd638bdfb18acd8a9d27d",
+    "scripts/verify_upgrade.py": "c6a55a5d76c76297cb58cfecf685015f3977b5a1698ffba90897ecc714705b49",
+    "scripts/run_browser_tests.py": "35026ca56b5a7611b117ddec7c10d43160f6f85904c848c1e7f6f6ec4f114704",
+    "tests/test_release_delivery.py": "704f1a05c54176865fbfcc3852d0ec8b33387fdd09b875dedc64d90cae9a34ed",
+    "tests/test_task_conversations.py": "bc166179101c41b9ae904de283bbf19a4883c949aadc09c4db3ddff5099bc802",
+    "tests/serve_dynamic_pages_fixture.py": "59e4e4e82bd26812e2fe4d47cda14e35b6db77ce3b0becd017bc18f2e85388bb",
+    "tests/verify_dynamic_pages.cjs": "f4db90e3ca0e9d986194d55009164deb9e7c4c4c5b53aeaff6976ce33f0e407d",
+    "tests/test_workflow_history_interactions.js": "5867d666d9ee967d86d466a5869948239008cfb2552c3c323be53d3087bbd1bd",
+    "tests/test_evaluation_history_interactions.js": "9e1ddca19b61a1d4dee5982638b0b391e0582d9bb48921a8cbfa58113580c455"
+  },
+  "installed": {
+    "verified_at": "2026-11-04T10:02:26.067699+00:00",
+    "artifact": "/private/tmp/af-1.4.0-final-20261104/agent-framework-1.4.0.tar.gz",
+    "artifact_sha256": "6ebb7fa34512b6f2fc2a620e50d6762a9d97172c95f88c3e15da90dc46c22d82",
+    "version": "1.4.0",
+    "scope": "bundled-install-and-start-scripts",
+    "fresh_offline_install": true,
+    "all_modules": {
+      "version": "1.4.0",
+      "modules": 85,
+      "yaml_version": "6.0.3"
+    },
+    "ui_resources_matching_wheel": 72,
+    "clean_startup_runs": 0,
+    "agent_save_replay": true,
+    "task_submission_replay_and_lookup": true,
+    "isolated_business_worker": true,
+    "verified_simulated_drafts": 1,
+    "installed_export_verifier": true,
+    "caller_code_executed": false,
+    "test_data": "temporary-isolated-directories",
+    "restart_checks": [
+      {
+        "draft_state": "saved",
+        "draft_revision": 3,
+        "new_process_session": true,
+        "graceful_shutdown": true,
+        "settings_revision": 2,
+        "settings_and_receipts_preserved": true,
+        "agent_and_receipt_preserved": true,
+        "task_history_and_receipt_preserved": true,
+        "task_count_after_replay": 2,
+        "simulated_drafts_after_replay": 1
+      },
+      {
+        "draft_state": "discarded",
+        "draft_revision": 4,
+        "new_process_session": true,
+        "graceful_shutdown": true,
+        "settings_revision": 2,
+        "settings_and_receipts_preserved": true,
+        "agent_and_receipt_preserved": true,
+        "task_history_and_receipt_preserved": true,
+        "task_count_after_replay": 2,
+        "simulated_drafts_after_replay": 1
+      }
+    ],
+    "backup_restore_checks": {
+      "installed_cli": true,
+      "contents": {
+        "version": 1,
+        "counts": {
+          "execution_records": 2,
+          "conversations": 1,
+          "agents": 1,
+          "workspaces": 1,
+          "workflows": 0,
+          "workflow_runs": 0,
+          "runtime_configurations": 1,
+          "saved_task_drafts": 0,
+          "business_drafts": 1
+        },
+        "workspaces": {
+          "total": 1,
+          "offset": 0,
+          "limit": 100,
+          "has_more": false,
+          "next_offset": null,
+          "items": [
+            {
+              "tenant": "delivery-tenant",
+              "id": "workspace-default",
+              "project_id": "project-demo",
+              "name": "默认工作空间",
+              "deleted": false
+            }
+          ]
+        }
+      },
+      "original_databases_unchanged": true,
+      "existing_target_rejected_unchanged": true,
+      "restored_server_started": true,
+      "settings_drafts_history_receipts_and_replays_preserved": true,
+      "browser_uses_restored_data": true
+    },
+    "dependency_wheels": {
+      "pyyaml-6.0.3-cp314-cp314-macosx_11_0_arm64.whl": "34d5fcd24b8445fadc33f9cf348c1047101756fd760b4dacb5c3e99755703310"
+    },
+    "browser_results": "/private/tmp/af-1.4.0-installed-20261104-browser/results.json",
+    "browser_suites": {
+      "task_submissions": {
+        "results": "/private/tmp/af-1.4.0-installed-20261104-browser/results.json",
+        "checks": 4,
+        "layouts": 0
+      },
+      "task_opening": {
+        "results": "/private/tmp/af-1.4.0-installed-20261104-browser/task-opening/results.json",
+        "checks": 4,
+        "layouts": 8
+      },
+      "task_names": {
+        "results": "/private/tmp/af-1.4.0-installed-20261104-browser/task-names/results.json",
+        "checks": 7,
+        "layouts": 10,
+        "fixture_tasks": 4
+      },
+      "task_archive": {
+        "results": "/private/tmp/af-1.4.0-installed-20261104-browser/task-archive/results.json",
+        "checks": 7,
+        "layouts": 8,
+        "fixture_tasks": 4
+      },
+      "task_favorites": {
+        "results": "/private/tmp/af-1.4.0-installed-20261104-browser/task-favorites/results.json",
+        "checks": 7,
+        "layouts": 24,
+        "fixture_tasks": 51
+      },
+      "installed_exports": {
+        "results": "/private/tmp/af-1.4.0-installed-20261104-browser/installed-exports/results.json",
+        "checks": 7,
+        "layouts": 16,
+        "fixture_tasks": 2,
+        "fixture_execution_records": 3
+      },
+      "installed_workflows": {
+        "results": "/private/tmp/af-1.4.0-installed-20261104-browser/installed-workflows/results.json",
+        "checks": 7,
+        "layouts": 8,
+        "fixture_workflows": 1,
+        "fixture_workflow_runs": 2,
+        "fixture_child_tasks": 2
+      },
+      "chat_drafts": {
+        "results": "/private/tmp/af-1.4.0-installed-20261104-browser/chat-drafts/results.json",
+        "checks": 13,
+        "layouts": 10
+      }
+    },
+    "workflow_recovery_checks": {
+      "same_browser_created_records": true,
+      "process_restart": true,
+      "backup_restore": true,
+      "reads_before_and_after_grant_replay": true,
+      "original_databases_unchanged": true,
+      "fixture": {
+        "workspace": "workspace-1bab7d964a114c17",
+        "workflow": "workflow-63c31f16ae97439b",
+        "roots": [
+          "flowrun-ac04d49f00c8df8f1efb3c79",
+          "flowrun-9edda793c16f4b7ad04f79e2"
+        ],
+        "children": [
+          "run-06c075a39b22d01f",
+          "run-222664fd1e57e46a"
+        ]
+      },
+      "backup_counts": {
+        "execution_records": 82,
+        "conversations": 72,
+        "agents": 9,
+        "workspaces": 10,
+        "workflows": 1,
+        "workflow_runs": 2,
+        "runtime_configurations": 1,
+        "saved_task_drafts": 0,
+        "business_drafts": 2
+      },
+      "snapshot_sha256": "8bb34964681da9485a0d63af0db133b60f17bdfdee0910aa0b8320c8e0f17a91",
+      "records": [
+        {
+          "id": "flowrun-ac04d49f00c8df8f1efb3c79",
+          "status": "CANCELLED",
+          "snapshot_hash": "baf9aab68537584e96b12296303d88a71c71b4eb294db4a9451b2a4c74241c4e",
+          "child": "run-06c075a39b22d01f",
+          "events_sha256": "2f935191cc9948c961c217fc66522e724b401e21217eeb00754eded2d700611b",
+          "drafts": 0,
+          "external_calls": {
+            "change.read@1.0.0": 1,
+            "standards.read@1.0.0": 1
+          }
+        },
+        {
+          "id": "flowrun-9edda793c16f4b7ad04f79e2",
+          "status": "SUCCEEDED",
+          "snapshot_hash": "baf9aab68537584e96b12296303d88a71c71b4eb294db4a9451b2a4c74241c4e",
+          "child": "run-222664fd1e57e46a",
+          "events_sha256": "7982c69c310fc822b96e43f678e5bcaff007aabe020a2baabb77fcebb96f871d",
+          "drafts": 1,
+          "external_calls": {
+            "change.read@1.0.0": 1,
+            "report.draft.create@1.0.0": 1,
+            "report.read@1.0.0": 1,
+            "standards.read@1.0.0": 1
+          }
+        }
+      ]
+    }
+  },
+  "upgrade": {
+    "verified_at": "2026-11-04T10:01:23.996249+00:00",
+    "from_version": "1.3.0",
+    "to_version": "1.4.0",
+    "old_artifact": "/Users/kurt/Desktop/CodeSpace/AgentFramework/dist/agent-framework-1.3.0.tar.gz",
+    "old_sha256": "32004453ac6355f6fd272edac325d743a21a1f0467ae9048ec27799bb0efbe08",
+    "new_artifact": "/private/tmp/af-1.4.0-final-20261104/agent-framework-1.4.0.tar.gz",
+    "new_sha256": "6ebb7fa34512b6f2fc2a620e50d6762a9d97172c95f88c3e15da90dc46c22d82",
+    "offline_install": true,
+    "actual_bundle_launchers": true,
+    "upgrade_same_data_directory": true,
+    "old_records_preserved": true,
+    "new_task_completed": "task-f14f0adc197b877e546ac7cdf7f10620",
+    "second_new_version_start": true,
+    "rollback": "old-version-with-complete-pre-upgrade-directory-copy",
+    "backup_unchanged": true,
+    "upgraded_data_preserved_during_rollback": true,
+    "waiting_workflow_not_authorized": true,
+    "original_simulated_drafts": 1,
+    "backup_sha256": {
+      "mock-business.sqlite3": "5ef8515aae393c885f7146881bccd580af4858bdeb13d22cc20984221da87c22",
+      "runtime.sqlite3": "e4f39155746a9ece1baddb7a28a00e50dd3f1c406ab3dad53dafddf35a016710"
+    },
+    "test_data": "temporary-isolated-directories",
+    "external_model_calls": 0,
+    "baseline_sha256": "ce03920a72fef936f5cb7f70570ed6c37b0615538949d86083bb9881e13f71dd"
+  },
+  "frontend": {
+    "tests": 1227,
+    "passed": 1227,
+    "failed": 0
+  },
+  "delivery_regressions": 27,
+  "focused_release_regressions": 43,
+  "restart_race_repetitions": 20,
+  "dynamic_pages": {
+    "checks": [
+      "工作流第二页最后一条状态变化后正确显示当前页空白；键盘返回第一页保留筛选并恢复 50 条记录",
+      "工作流真正零匹配使用独立文案，不将所有空页当成分页失效",
+      "评测第二页最后一条结论变化后显示当前页空白，返回第一页保留结论与范围，计数没有虚假区间",
+      "评测真正零匹配仍提供调整筛选的说明",
+      "任务第二页最后一条归档后显示当前页空白；返回第一页保留状态及归档范围",
+      "任务真正零匹配显示清除筛选入口",
+      "三类历史共 24 组桌面主题、宽度及放大文字检查通过，返回第一页仅发 GET"
+    ],
+    "errors": [],
+    "layouts": [
+      {
+        "name": "workflow-empty",
+        "theme": "light",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 570,
+          "right": 674,
+          "top": 756.75,
+          "bottom": 800.75,
+          "font": 14,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "workflow-empty",
+        "theme": "light",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 535,
+          "right": 709,
+          "top": 940.109375,
+          "bottom": 1001.296875,
+          "font": 28,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "workflow-empty",
+        "theme": "light",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 788,
+          "right": 892,
+          "top": 756.75,
+          "bottom": 800.75,
+          "font": 14,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "name": "workflow-empty",
+        "theme": "light",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 753,
+          "right": 927,
+          "top": 893.921875,
+          "bottom": 955.109375,
+          "font": 28,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "name": "workflow-empty",
+        "theme": "dark",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 570,
+          "right": 674,
+          "top": 756.75,
+          "bottom": 800.75,
+          "font": 14,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "workflow-empty",
+        "theme": "dark",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 535,
+          "right": 709,
+          "top": 940.109375,
+          "bottom": 1001.296875,
+          "font": 28,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "workflow-empty",
+        "theme": "dark",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 788,
+          "right": 892,
+          "top": 756.75,
+          "bottom": 800.75,
+          "font": 14,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "name": "workflow-empty",
+        "theme": "dark",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 753,
+          "right": 927,
+          "top": 893.921875,
+          "bottom": 955.109375,
+          "font": 28,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "name": "evaluation-empty",
+        "theme": "light",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 570,
+          "right": 674,
+          "top": 849.53125,
+          "bottom": 893.53125,
+          "font": 14,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "evaluation-empty",
+        "theme": "light",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 535,
+          "right": 709,
+          "top": 815.171875,
+          "bottom": 876.359375,
+          "font": 28,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "evaluation-empty",
+        "theme": "light",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 788,
+          "right": 892,
+          "top": 849.53125,
+          "bottom": 893.53125,
+          "font": 14,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "name": "evaluation-empty",
+        "theme": "light",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 753,
+          "right": 927,
+          "top": 815.234375,
+          "bottom": 876.421875,
+          "font": 28,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "name": "evaluation-empty",
+        "theme": "dark",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 570,
+          "right": 674,
+          "top": 849.53125,
+          "bottom": 893.53125,
+          "font": 14,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "evaluation-empty",
+        "theme": "dark",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 535,
+          "right": 709,
+          "top": 815.171875,
+          "bottom": 876.359375,
+          "font": 28,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "evaluation-empty",
+        "theme": "dark",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 788,
+          "right": 892,
+          "top": 849.53125,
+          "bottom": 893.53125,
+          "font": 14,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "name": "evaluation-empty",
+        "theme": "dark",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 753,
+          "right": 927,
+          "top": 815.234375,
+          "bottom": 876.421875,
+          "font": 28,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "name": "task-empty",
+        "theme": "light",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 570,
+          "right": 674,
+          "top": 599.171875,
+          "bottom": 643.171875,
+          "font": 14,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "task-empty",
+        "theme": "light",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 535,
+          "right": 709,
+          "top": 745.921875,
+          "bottom": 807.109375,
+          "font": 28,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "task-empty",
+        "theme": "light",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 788,
+          "right": 892,
+          "top": 551.171875,
+          "bottom": 595.171875,
+          "font": 14,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "name": "task-empty",
+        "theme": "light",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 753,
+          "right": 927,
+          "top": 651.734375,
+          "bottom": 712.921875,
+          "font": 28,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "name": "task-empty",
+        "theme": "dark",
+        "width": 1024,
+        "scale": 1,
+        "bounds": {
+          "left": 570,
+          "right": 674,
+          "top": 599.171875,
+          "bottom": 643.171875,
+          "font": 14,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "task-empty",
+        "theme": "dark",
+        "width": 1024,
+        "scale": 2,
+        "bounds": {
+          "left": 535,
+          "right": 709,
+          "top": 745.921875,
+          "bottom": 807.109375,
+          "font": 28,
+          "focused": true,
+          "root": 1024
+        }
+      },
+      {
+        "name": "task-empty",
+        "theme": "dark",
+        "width": 1440,
+        "scale": 1,
+        "bounds": {
+          "left": 788,
+          "right": 892,
+          "top": 551.171875,
+          "bottom": 595.171875,
+          "font": 14,
+          "focused": true,
+          "root": 1440
+        }
+      },
+      {
+        "name": "task-empty",
+        "theme": "dark",
+        "width": 1440,
+        "scale": 2,
+        "bounds": {
+          "left": 753,
+          "right": 927,
+          "top": 651.734375,
+          "bottom": 712.921875,
+          "font": 28,
+          "focused": true,
+          "root": 1440
+        }
+      }
+    ],
+    "posts": [
+      "/__test/advance-workflow",
+      "/__test/advance-evaluation",
+      "/api/tasks/history-0000/archive"
+    ]
+  },
+  "history_browser_regression": {
+    "results": [
+      {
+        "suite": "workflow-history-consistency",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "workflow-catalog",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "evaluation-catalog",
+        "passed": true,
+        "exit_code": 0
+      },
+      {
+        "suite": "run-history",
+        "passed": true,
+        "exit_code": 0
+      }
+    ]
+  },
+  "backend_first_attempt": {
+    "tests": 1406,
+    "failures": 1,
+    "failed_case": "test_queued_turn_and_history_resume_after_application_restart",
+    "cause": "Instance-only schedule patch missed an existing scoped Application copy; class-wide test patch preserves queued state through shutdown."
+  },
+  "evidence_archive": "verification-1.4.0.zip",
+  "evidence_archive_sha256": "80e4feb16459a5d73076233db302deba351fa0b47816edb3608883b2e77f0601",
+  "release_scope": "local artifacts; no live-data upgrade or deployment",
+  "real_model_calls": 0,
+  "backend": {
+    "tests": 1406,
+    "passed": 1406,
+    "failed": 0,
+    "duration_seconds": 252.399
+  },
+  "promotion": {
+    "verified_candidate_bytes_preserved": true,
+    "historical_artifacts_preserved": 6,
+    "new_artifacts": 2
+  }
+}

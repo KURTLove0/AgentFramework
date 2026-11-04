@@ -20,17 +20,11 @@ class ExperienceService:
         self.library=Library(store);self.store=self.library.store
 
     def list(self, access):
-        assets=[a for a in self.library.list(access,include_unpublished=True) if a['kind']=='EXPERIENCE']
-        with self.store.connect() as db:
-            for asset in assets:
-                row=db.execute('SELECT data FROM experience_evaluations WHERE tenant=? AND id=? AND version=? ORDER BY rowid DESC LIMIT 1',
-                               (access.tenant,asset['id'],asset['version'])).fetchone()
-                if row:
-                    evaluation=json.loads(row[0]);asset['latest_evaluation']={k:evaluation[k] for k in ('id','passed','created_at')}
-        return assets
+        return self.library.list(access,include_unpublished=True,kind='EXPERIENCE',evaluation_summaries=True)
 
     def evaluate(self, access, ref):
         if 'reviewer' not in access.roles:raise PolicyDenied('experience evaluation requires reviewer role')
+        with self.store.read_snapshot() as db:self.library.assert_writable(db,access)
         asset=self.library.get(access,ref,review=True)
         if asset['kind']!='EXPERIENCE' or asset['status'] not in {'CANDIDATE','EVALUATED'}:
             raise ValueError('experience is not an evaluable candidate')
@@ -125,6 +119,7 @@ class ExperienceService:
                 'passed':bool(sources) and all(s['consistent'] for s in sources) and all(c['passed'] for c in cases),
                 'mode':mode,'live_model_calls':0,'historical_write_replays':0}
         with self.store.transaction() as db:
+            self.library.assert_writable(db,access)
             cursor=db.execute("UPDATE asset_versions SET status='EVALUATED' WHERE tenant=? AND id=? AND version=? AND hash=? AND status IN ('CANDIDATE','EVALUATED')",
                               (access.tenant,asset['id'],asset['version'],asset['content_hash']))
             if cursor.rowcount!=1:raise ValueError('candidate changed during evaluation')

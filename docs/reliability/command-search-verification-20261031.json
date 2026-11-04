@@ -1,0 +1,312 @@
+{
+  "recorded_on": "2026-10-31",
+  "scope": "Current source: independent command-search source states and retries, frozen read scope, stale-result protection, identity-preserving keyboard selection, in-memory query restoration, paged loaded results and exact workflow-definition focus. Existing server matching and access rules remain authoritative. No packaging or release.",
+  "baseline": {
+    "tests": 19,
+    "passed": 1,
+    "failed": 18,
+    "seconds": 0.264216542,
+    "log": "/private/tmp/af-command-baseline-20261031.log",
+    "reason": "The previous active command implementation silently converted catalog failures to emptiness, coupled source completion, reused background run state, dropped content-only matches, lacked retry/paging/context preservation, and opened only the workflow list."
+  },
+  "ui": {
+    "command": "npm test",
+    "tests": 359,
+    "passed": true,
+    "failed": 0,
+    "new_cases": 24,
+    "seconds": 4.311003667,
+    "log": "/private/tmp/af-command-ui-final-20261031.log"
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests -q",
+    "tests": 809,
+    "seconds": 158.618,
+    "passed": true,
+    "failed": 0,
+    "log": "/private/tmp/af-command-full-20261031.log",
+    "traceback_markers": 0,
+    "change": "Only the explicit static resource mapping was extended for commands.js; backend search and access logic were not changed."
+  },
+  "browser": [
+    {
+      "suite": "commands",
+      "passed": true,
+      "exit_code": 0,
+      "results": "/private/tmp/af-command-browser-csp-20261031/commands/results.json",
+      "log": "/private/tmp/af-command-browser-csp-20261031/commands.log",
+      "errors": [],
+      "checks": [
+        "慢工作流读取和技能故障不遮挡31个智能体结果，结果可完整翻页，失败资源可以单独重试",
+        "关闭再打开保留关键词、所选结果与结果页，键盘选择仍指向同一对象",
+        "新查询立即清除旧查询结果，迟到的历史搜索回复不会回退当前结果",
+        "正文命中的资料即使标题不含关键词也能显示，并打开准确资料卡片",
+        "工作流搜索定位并展开对应定义，查看过程不会打开编辑器或启动运行",
+        "251条历史运行可进入完整筛选列表，最早记录可通过关键词直接打开",
+        "技能结果打开只读包内容，切换空间后搜索只返回当前空间可访问的资源",
+        "长错误安全转义，部分失败不会伪装成无结果；8组桌面深浅色与200%文字布局保持可读、重试可达",
+        "故障恢复后保留输入与焦点，中文输入期间回车不会误打开结果，所有搜索与浏览均未提交写入"
+      ],
+      "layout_count": 8,
+      "layouts": [
+        {
+          "theme": "light",
+          "width": 1024,
+          "scale": 1,
+          "bounds": {
+            "root": 1024,
+            "scroll": 638,
+            "client": 638,
+            "top": 227.203125,
+            "bottom": 772.78125,
+            "buttonTop": 458.3125,
+            "buttonBottom": 502.3125,
+            "focused": true,
+            "font": 14
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1024,
+          "scale": 2,
+          "bounds": {
+            "root": 1024,
+            "scroll": 638,
+            "client": 638,
+            "top": 198,
+            "bottom": 802,
+            "buttonTop": 831,
+            "buttonBottom": 895,
+            "focused": true,
+            "font": 28
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "scale": 1,
+          "bounds": {
+            "root": 1440,
+            "scroll": 638,
+            "client": 638,
+            "top": 227.203125,
+            "bottom": 772.78125,
+            "buttonTop": 458.3125,
+            "buttonBottom": 502.3125,
+            "focused": true,
+            "font": 14
+          }
+        },
+        {
+          "theme": "light",
+          "width": 1440,
+          "scale": 2,
+          "bounds": {
+            "root": 1440,
+            "scroll": 638,
+            "client": 638,
+            "top": 198,
+            "bottom": 802,
+            "buttonTop": 831,
+            "buttonBottom": 895,
+            "focused": true,
+            "font": 28
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "scale": 1,
+          "bounds": {
+            "root": 1024,
+            "scroll": 638,
+            "client": 638,
+            "top": 227.203125,
+            "bottom": 772.78125,
+            "buttonTop": 458.3125,
+            "buttonBottom": 502.3125,
+            "focused": true,
+            "font": 14
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1024,
+          "scale": 2,
+          "bounds": {
+            "root": 1024,
+            "scroll": 638,
+            "client": 638,
+            "top": 198,
+            "bottom": 802,
+            "buttonTop": 831,
+            "buttonBottom": 895,
+            "focused": true,
+            "font": 28
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "scale": 1,
+          "bounds": {
+            "root": 1440,
+            "scroll": 638,
+            "client": 638,
+            "top": 227.203125,
+            "bottom": 772.78125,
+            "buttonTop": 458.3125,
+            "buttonBottom": 502.3125,
+            "focused": true,
+            "font": 14
+          }
+        },
+        {
+          "theme": "dark",
+          "width": 1440,
+          "scale": 2,
+          "bounds": {
+            "root": 1440,
+            "scroll": 638,
+            "client": 638,
+            "top": 198,
+            "bottom": 802,
+            "buttonTop": 831,
+            "buttonBottom": 895,
+            "focused": true,
+            "font": 28
+          }
+        }
+      ],
+      "writes": [],
+      "fixture": {
+        "workspace": "workspace-default",
+        "other_workspace": "workspace-90522e1f54734cb7",
+        "agents": 31,
+        "runs": 251,
+        "oldest": "command-history-0000",
+        "workflow": "workflow-4aa5bc88fcd34f2e",
+        "asset": "asset-678fd6a98b4e478c@1",
+        "skill": "skill-b8deb38225cd481b",
+        "external_model_calls": 0
+      },
+      "externalModelCalls": 0
+    },
+    {
+      "suite": "control-routes",
+      "passed": true,
+      "exit_code": 0,
+      "results": "/private/tmp/af-command-browser-20261031/control-routes/results.json",
+      "log": "/private/tmp/af-command-browser-20261031/control-routes.log",
+      "errors": [],
+      "records": 170,
+      "focus_checks": 330,
+      "popover_checks": 20,
+      "command_focus": {
+        "active": true,
+        "outline": "solid",
+        "width": "2px"
+      },
+      "violations": {
+        "overflow": [],
+        "radius": [],
+        "size": [],
+        "focus": [],
+        "popovers": [],
+        "menu": [],
+        "commandFocus": []
+      }
+    },
+    {
+      "suite": "reading-interactions",
+      "passed": true,
+      "exit_code": 0,
+      "results": "/private/tmp/af-command-browser-20261031/reading-interactions/results.json",
+      "log": "/private/tmp/af-command-browser-20261031/reading-interactions.log",
+      "errors": [],
+      "checks": [
+        "后台同步期间保留已读记录并标注状态，主动翻页立即生效，旧同步回复不会把页面退回",
+        "重新搜索同一关键词会建立新的浏览起点，即使后台读取仍在进行也不会忽略操作",
+        "详情立即显示可关闭的等待窗口，关闭后可读另一条；旧回复不会重开或替换当前记录，关闭恢复原入口焦点",
+        "离开评测页会关闭只读详情，迟到失败不会弹出到新页面",
+        "读取已关闭记录的慢回复不会覆盖随后打开的设置，未保存输入与放弃确认仍有效",
+        "长读取错误在8组桌面深浅色和200%文字下可读，重试与关闭按钮可见，用户内容安全转义",
+        "恢复后重试仍读取原评测，成功后焦点回到记录正文；全部浏览、取消和重试没有提交写入"
+      ],
+      "layout_count": 8
+    },
+    {
+      "suite": "journeys",
+      "passed": true,
+      "exit_code": 0,
+      "results": "/private/tmp/af-command-browser-20261031/journeys/results.json",
+      "log": "/private/tmp/af-command-browser-20261031/journeys.log",
+      "errors": [],
+      "checks": [
+        "空工作台引导创建智能体，无演示任务或固定执行链路",
+        "每日模板只填目标和智能体，派发后可明确开始，直接执行一轮",
+        "连续修改保留同一任务，手机可查看任务属性和导出完整对话",
+        "复盘采用最新修订结果，可直接沉淀并进入资料库",
+        "知识草稿、审核、发布和修订可连续完成，修订保留原发布版本",
+        "Skill 可编辑保存、发布和导出",
+        "通用工作流无固定目标或预授权；节点补充信息后自动使用最新结果继续",
+        "12 个模块在桌面、平板及手机深浅色下无页面横向溢出"
+      ],
+      "layout_count": 120
+    }
+  ],
+  "preliminary_browser_attempts": [
+    {
+      "results": "/private/tmp/af-command-browser-20261031/results.json",
+      "outcome": "Three regression suites passed. The command fixture expected 31 total matches, but the existing server also correctly matched an asset body; corrected the check to count the 31 agent results by type."
+    },
+    {
+      "results": "/private/tmp/af-command-browser-fix-20261031/results.json",
+      "outcome": "Four command flows passed. A test selector for workflow details matched the outer disclosure and nested node identity; narrowed it to the direct definition disclosure."
+    },
+    {
+      "results": "/private/tmp/af-command-browser-layout-20261031/results.json",
+      "outcome": "Seven flows passed. The intended no-result Chinese query also matched real asset text through existing token matching; replaced the fixture query with a unique unmatched token."
+    },
+    {
+      "results": "/private/tmp/af-command-browser-final-20261031/results.json",
+      "outcome": "Seven flows and the first layout passed. The application CSP correctly rejected injected inline test CSS. Switched the scaling fixture to an intercepted same-origin stylesheet; the application CSP was not changed."
+    }
+  ],
+  "regression_note": "Control-routes, reading-interactions and journeys passed in the initial batch. A later frontend adjustment clears abandoned workflow-focus intent on route change; the final UI suite and final command browser suite cover the resulting source. Unaffected passing regression suites were not repeated.",
+  "source_sha256": {
+    "agent_framework/web.py": "7222776002ff6a3755bb77dbbeccd954d4c0efb0aef8017856b59851a0514ae1",
+    "agent_framework/webui/app.js": "f4e27c58bdc0fe1b7cc66479abd7f9051469df7754632528f8c6abd23a452b07",
+    "agent_framework/webui/commands.js": "1985116d766f9c525254d3708a42099602d88d9acabde81b0e248182527cbb2a",
+    "agent_framework/webui/index.html": "d512765d0a83e8a44ab41d8c1319afbcd001c064e400e0da6d984023255e68bd",
+    "agent_framework/webui/styles.css": "7cf509125f07c04ba60f9b0e979ccea179d09c5c031c4daf2124cb212e9c60c4",
+    "agent_framework/webui/workflows.js": "36b3defaa669e8e75f1384e0a66d79dc69da9d73fbff8a28544aa29cad0468a9",
+    "agent_framework/webui/journeys.js": "2ec5c85ac589e37330badf6069a744843a5eca3da544a35e740ce1eb64d60103",
+    "tests/test_command_interactions.js": "f60deea16c2122135081e356e3b1bda8a910a2c81106c0d6613747b76b91e560",
+    "tests/serve_command_fixture.py": "005a8265c5e925ad3a925988c32302113aab94a76e000a7cbe80b5aeb76aae97",
+    "tests/verify_commands.cjs": "0685029eee689bf21bf01b6e5db4fc6f76b8baa5e7a00949aac7a9ed30753e8e",
+    "scripts/run_browser_tests.py": "5993dfad211fec27988bfbc3b6f94a8759ad98c1b1dc5aa93c504eeb74b3c571",
+    "tests/verify_control_routes.cjs": "ec39b562019b21cd6b62750e056b5d55d7e5ae0637a86e86c839cc06e626ceb2",
+    "tests/verify_reading_interactions.cjs": "35e011471d2d232c3593ee2f9bf23102f3c0a71dfeb024dad5647090e259c613",
+    "tests/verify_project_journeys.cjs": "0da8179da56f809d30b6f5fa566f2f1c62ca6fa9b2d2974207fa8240a58234dd"
+  },
+  "screenshots": [
+    {
+      "path": "docs/reliability/command-partial-failure-light.png",
+      "sha256": "06d2426e34998eaa03962b6bde53c80ff794706ae85b10df4bf2493330e39c14"
+    },
+    {
+      "path": "docs/reliability/command-partial-failure-dark.png",
+      "sha256": "a63e7d48a854927e687ead547c83f42ac8a94a8a1a10ae367a6b5b5bf081bf6e"
+    }
+  ],
+  "constraints": [
+    "Run search scans accessible history through the existing endpoint, loads the first 50 matches and offers a complete filtered-history route for additional matches.",
+    "Workflow run search still covers only the existing latest-100 API response. Episodic memory search remains in the knowledge library. Both limits are stated in the command dialog.",
+    "Search context is held in page memory for the same workspace, tenant and principal; reloading the application resets it.",
+    "Closing discards UI ownership of a request; an already-issued GET may still finish.",
+    "The command browser scenario performs zero POST requests and uses no external models. Other regression suites perform isolated fixture mutations as part of their existing flows.",
+    "New layout checks cover 1024 and 1440 desktop widths, light/dark themes and normal/200% text. Existing regression suites retain their prior wider viewport coverage.",
+    "All data used for verification is temporary or synthetic. Existing releases and historical verification records were not rewritten."
+  ]
+}

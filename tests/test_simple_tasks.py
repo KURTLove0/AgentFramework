@@ -35,7 +35,7 @@ class SimpleTaskTests(unittest.TestCase):
         self.temp=tempfile.TemporaryDirectory(prefix='simple-task-',dir='/private/tmp');self.addCleanup(self.temp.cleanup)
         self.app=Application(self.temp.name,lease_seconds=.5,tool_timeout=.2);self.addCleanup(self.app.close)
         self.schedule=patch.object(self.app,'schedule');self.scheduled=self.schedule.start();self.addCleanup(self.schedule.stop)
-        self.scheduled.side_effect=lambda run_id:self.app.jobs.update({run_id:{'active':True,'state':'QUEUED','cancel':threading.Event()}})
+        self.scheduled.side_effect=lambda run_id,**_options:self.app.jobs.update({run_id:{'active':True,'state':'QUEUED','cancel':threading.Event()}})
 
     def agent(self,domain=GENERAL):
         return self.app.agents.save({'name':'客户支持助手','description':'按目标完成撰写和整理','runtime':'mock','model':'builtin',
@@ -51,7 +51,7 @@ class SimpleTaskTests(unittest.TestCase):
         self.assertEqual(run['task']['domain_pack_ref'],GENERAL)
         self.assertEqual(run['snapshot']['agent_profile']['prompt'],agent['prompt'])
         self.assertFalse(created['grant']['valid'])
-        self.scheduled.assert_called_once_with(run['run_id'])
+        self.scheduled.assert_called_once_with(run['run_id'],automatic=True)
         result=self.app.runtime().run(run['run_id'])
         self.assertEqual(result['status'],'SUCCEEDED',result['last_error'])
         self.assertEqual(set(result['checks']),set(CHECKS))

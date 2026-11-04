@@ -8,7 +8,7 @@ from agent_framework.workflow_rules import matches
 from agent_framework.structured import validate
 from agent_framework.workflow_chat import RESPONSE
 from tests import test_workflows as fixtures
-from tests.test_workflows import role,definition
+from tests.test_workflows import role,definition,grant_token
 
 
 class RoutingTests(unittest.TestCase):
@@ -24,7 +24,7 @@ class RoutingTests(unittest.TestCase):
     def test_selected_branch_waits_for_auth_and_skipped_branch_never_writes(self):
         w=self.f.save(self.branching());s=self.f.start(w['id'],{'revision':1,'grant':False,'scenarios':{'n1':'response-lost'}})
         r=self.f.execute(s['id']);self.assertEqual(r['status'],'WAITING_AUTH');self.assertIsNone(r['nodes']['n2']['run_id']);self.assertIsNone(r['nodes']['n3']['run_id'])
-        self.f.grant(s['id'],'n1');r=self.f.execute(s['id']);self.assertEqual(r['status'],'SUCCEEDED')
+        self.f.grant(s['id'],'n1',grant_token(self.app,s['id'],'n1'));r=self.f.execute(s['id']);self.assertEqual(r['status'],'SUCCEEDED')
         self.assertEqual(r['nodes']['n2']['status'],'SKIPPED');self.assertIsNone(r['nodes']['n2']['run_id'])
         self.assertEqual([i['node_id'] for i in r['nodes']['n3']['inputs']],['n1'])
         child=r['nodes']['n1']['run_id'];stats=self.app.runtime().external.stats(self.app.tenant,child)

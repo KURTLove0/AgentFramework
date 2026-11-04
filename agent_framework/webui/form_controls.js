@@ -94,7 +94,7 @@ function createFormPicker(select){
  if(formPickers.has(select))return;
  ensureSelectIdentity(select);
  const wrapper=document.createElement('div');wrapper.className='select-picker';
- const trigger=document.createElement('button');trigger.type='button';trigger.className='select-trigger';trigger.id=select.id+'-picker';trigger.setAttribute('role','combobox');trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-controls',select.id+'-options');
+ const trigger=document.createElement('button');trigger.type='button';trigger.className='select-trigger';trigger.id=select.id+'-picker';trigger.dataset.focusSource=select.id;trigger.setAttribute('role','combobox');trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-controls',select.id+'-options');
  const value=document.createElement('span');value.id=select.id+'-selected';trigger.append(value);trigger.insertAdjacentHTML('beforeend',icon('chevron'));
  trigger.setAttribute('aria-label',controlLabel(select));
  const popup=document.createElement('div');popup.className='select-popover';popup.setAttribute('popover','manual');popup.hidden=true;

@@ -1,0 +1,193 @@
+{
+  "tasks": 600,
+  "turns": 3,
+  "related_tasks": 4,
+  "body_bytes": 32768,
+  "seconds": [
+    0.003077333007240668,
+    0.0026535829820204526,
+    0.002696625015232712,
+    0.0026349580148234963,
+    0.0027075419784523547
+  ],
+  "median_seconds": 0.002696625015232712,
+  "sqlite_instructions_approx": 40100,
+  "candidate_instructions_approx": 2000,
+  "query_plans": [
+    {
+      "sql": "WITH source_runs AS (SELECT ? AS run_id UNION SELECT run_id FROM task_conversation_turns WHERE tenant=? AND task_id=?),\n            linked AS (SELECT r.rowid AS position,r.id,origin.id AS source_run_id,COALESCE(origin_turn.number,1) AS source_turn\n            FROM runs r JOIN runs origin ON origin.tenant_id=r.tenant_id AND origin.id=json_extract(r.state,'$.task.source_run_id')\n            LEFT JOIN task_conversation_turns origin_turn ON origin_turn.tenant=r.tenant_id AND origin_turn.run_id=origin.id\n            LEFT JOIN task_conversation_turns member ON member.tenant=r.tenant_id AND member.run_id=r.id\n            LEFT JOIN task_conversations c ON c.tenant=r.tenant_id AND c.id=r.id\n            WHERE r.tenant_id=? AND json_extract(r.state,'$.task.project_id')=? AND json_extract(r.state,'$.task.principal')=?\n            AND json_valid(r.state)\n            AND json_extract(r.state,'$.task.source_run_id') IS NOT NULL\n            AND json_extract(r.state,'$.task.source_run_id') IN (SELECT run_id FROM source_runs)\n            AND COALESCE(json_extract(r.state,'$.task.conversation_context.turn'),1)=1 AND (member.number IS NULL OR member.number=1)\n            AND (c.id IS NULL OR (c.workspace=? AND c.project=? AND c.principal=?))\n            AND json_extract(origin.state,'$.task.project_id')=? AND json_extract(origin.state,'$.task.principal')=?\n            AND COALESCE(origin_turn.task_id,origin.id)=? AND r.id!=?) SELECT position,id FROM linked ORDER BY position DESC LIMIT 1",
+      "params": [
+        "history-0000",
+        "tenant-demo",
+        "history-0000",
+        "tenant-demo",
+        "project-demo",
+        "demo-user",
+        "workspace-default",
+        "project-demo",
+        "demo-user",
+        "project-demo",
+        "demo-user",
+        "history-0000",
+        "history-0000"
+      ],
+      "plan": [
+        "SEARCH r USING INDEX runs_source (tenant_id=? AND <expr>=?)",
+        "LIST SUBQUERY 3",
+        "MATERIALIZE source_runs",
+        "COMPOUND QUERY",
+        "LEFT-MOST SUBQUERY",
+        "SCAN CONSTANT ROW",
+        "UNION USING TEMP B-TREE",
+        "SEARCH task_conversation_turns USING INDEX sqlite_autoindex_task_conversation_turns_2 (tenant=? AND task_id=?)",
+        "SCAN source_runs",
+        "CREATE BLOOM FILTER",
+        "SEARCH origin USING INDEX sqlite_autoindex_runs_1 (tenant_id=? AND id=?)",
+        "SEARCH origin_turn USING INDEX sqlite_autoindex_task_conversation_turns_3 (tenant=? AND run_id=?) LEFT-JOIN",
+        "SEARCH member USING INDEX sqlite_autoindex_task_conversation_turns_3 (tenant=? AND run_id=?) LEFT-JOIN",
+        "SEARCH c USING INDEX sqlite_autoindex_task_conversations_1 (tenant=? AND id=?) LEFT-JOIN",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "sql": "WITH source_runs AS (SELECT ? AS run_id UNION SELECT run_id FROM task_conversation_turns WHERE tenant=? AND task_id=?),\n            linked AS (SELECT r.rowid AS position,r.id,origin.id AS source_run_id,COALESCE(origin_turn.number,1) AS source_turn\n            FROM runs r JOIN runs origin ON origin.tenant_id=r.tenant_id AND origin.id=json_extract(r.state,'$.task.source_run_id')\n            LEFT JOIN task_conversation_turns origin_turn ON origin_turn.tenant=r.tenant_id AND origin_turn.run_id=origin.id\n            LEFT JOIN task_conversation_turns member ON member.tenant=r.tenant_id AND member.run_id=r.id\n            LEFT JOIN task_conversations c ON c.tenant=r.tenant_id AND c.id=r.id\n            WHERE r.tenant_id=? AND json_extract(r.state,'$.task.project_id')=? AND json_extract(r.state,'$.task.principal')=?\n            AND json_valid(r.state)\n            AND json_extract(r.state,'$.task.source_run_id') IS NOT NULL\n            AND json_extract(r.state,'$.task.source_run_id') IN (SELECT run_id FROM source_runs)\n            AND COALESCE(json_extract(r.state,'$.task.conversation_context.turn'),1)=1 AND (member.number IS NULL OR member.number=1)\n            AND (c.id IS NULL OR (c.workspace=? AND c.project=? AND c.principal=?))\n            AND json_extract(origin.state,'$.task.project_id')=? AND json_extract(origin.state,'$.task.principal')=?\n            AND COALESCE(origin_turn.task_id,origin.id)=? AND r.id!=?) SELECT COUNT(*) FROM linked WHERE position<=?",
+      "params": [
+        "history-0000",
+        "tenant-demo",
+        "history-0000",
+        "tenant-demo",
+        "project-demo",
+        "demo-user",
+        "workspace-default",
+        "project-demo",
+        "demo-user",
+        "project-demo",
+        "demo-user",
+        "history-0000",
+        "history-0000",
+        14
+      ],
+      "plan": [
+        "SEARCH r USING INDEX runs_source (tenant_id=? AND <expr>=? AND rowid<?)",
+        "LIST SUBQUERY 3",
+        "MATERIALIZE source_runs",
+        "COMPOUND QUERY",
+        "LEFT-MOST SUBQUERY",
+        "SCAN CONSTANT ROW",
+        "UNION USING TEMP B-TREE",
+        "SEARCH task_conversation_turns USING INDEX sqlite_autoindex_task_conversation_turns_2 (tenant=? AND task_id=?)",
+        "SCAN source_runs",
+        "CREATE BLOOM FILTER",
+        "SEARCH origin USING INDEX sqlite_autoindex_runs_1 (tenant_id=? AND id=?)",
+        "SEARCH origin_turn USING INDEX sqlite_autoindex_task_conversation_turns_3 (tenant=? AND run_id=?) LEFT-JOIN",
+        "SEARCH member USING INDEX sqlite_autoindex_task_conversation_turns_3 (tenant=? AND run_id=?) LEFT-JOIN",
+        "SEARCH c USING INDEX sqlite_autoindex_task_conversations_1 (tenant=? AND id=?) LEFT-JOIN"
+      ]
+    },
+    {
+      "sql": "WITH source_runs AS (SELECT ? AS run_id UNION SELECT run_id FROM task_conversation_turns WHERE tenant=? AND task_id=?),\n            linked AS (SELECT r.rowid AS position,r.id,origin.id AS source_run_id,COALESCE(origin_turn.number,1) AS source_turn\n            FROM runs r JOIN runs origin ON origin.tenant_id=r.tenant_id AND origin.id=json_extract(r.state,'$.task.source_run_id')\n            LEFT JOIN task_conversation_turns origin_turn ON origin_turn.tenant=r.tenant_id AND origin_turn.run_id=origin.id\n            LEFT JOIN task_conversation_turns member ON member.tenant=r.tenant_id AND member.run_id=r.id\n            LEFT JOIN task_conversations c ON c.tenant=r.tenant_id AND c.id=r.id\n            WHERE r.tenant_id=? AND json_extract(r.state,'$.task.project_id')=? AND json_extract(r.state,'$.task.principal')=?\n            AND json_valid(r.state)\n            AND json_extract(r.state,'$.task.source_run_id') IS NOT NULL\n            AND json_extract(r.state,'$.task.source_run_id') IN (SELECT run_id FROM source_runs)\n            AND COALESCE(json_extract(r.state,'$.task.conversation_context.turn'),1)=1 AND (member.number IS NULL OR member.number=1)\n            AND (c.id IS NULL OR (c.workspace=? AND c.project=? AND c.principal=?))\n            AND json_extract(origin.state,'$.task.project_id')=? AND json_extract(origin.state,'$.task.principal')=?\n            AND COALESCE(origin_turn.task_id,origin.id)=? AND r.id!=?) SELECT COUNT(*) FROM linked WHERE position>?",
+      "params": [
+        "history-0000",
+        "tenant-demo",
+        "history-0000",
+        "tenant-demo",
+        "project-demo",
+        "demo-user",
+        "workspace-default",
+        "project-demo",
+        "demo-user",
+        "project-demo",
+        "demo-user",
+        "history-0000",
+        "history-0000",
+        14
+      ],
+      "plan": [
+        "SEARCH r USING INDEX runs_source (tenant_id=? AND <expr>=? AND rowid>?)",
+        "LIST SUBQUERY 3",
+        "MATERIALIZE source_runs",
+        "COMPOUND QUERY",
+        "LEFT-MOST SUBQUERY",
+        "SCAN CONSTANT ROW",
+        "UNION USING TEMP B-TREE",
+        "SEARCH task_conversation_turns USING INDEX sqlite_autoindex_task_conversation_turns_2 (tenant=? AND task_id=?)",
+        "SCAN source_runs",
+        "CREATE BLOOM FILTER",
+        "SEARCH origin USING INDEX sqlite_autoindex_runs_1 (tenant_id=? AND id=?)",
+        "SEARCH origin_turn USING INDEX sqlite_autoindex_task_conversation_turns_3 (tenant=? AND run_id=?) LEFT-JOIN",
+        "SEARCH member USING INDEX sqlite_autoindex_task_conversation_turns_3 (tenant=? AND run_id=?) LEFT-JOIN",
+        "SEARCH c USING INDEX sqlite_autoindex_task_conversations_1 (tenant=? AND id=?) LEFT-JOIN"
+      ]
+    },
+    {
+      "sql": "WITH source_runs AS (SELECT ? AS run_id UNION SELECT run_id FROM task_conversation_turns WHERE tenant=? AND task_id=?),\n            linked AS (SELECT r.rowid AS position,r.id,origin.id AS source_run_id,COALESCE(origin_turn.number,1) AS source_turn\n            FROM runs r JOIN runs origin ON origin.tenant_id=r.tenant_id AND origin.id=json_extract(r.state,'$.task.source_run_id')\n            LEFT JOIN task_conversation_turns origin_turn ON origin_turn.tenant=r.tenant_id AND origin_turn.run_id=origin.id\n            LEFT JOIN task_conversation_turns member ON member.tenant=r.tenant_id AND member.run_id=r.id\n            LEFT JOIN task_conversations c ON c.tenant=r.tenant_id AND c.id=r.id\n            WHERE r.tenant_id=? AND json_extract(r.state,'$.task.project_id')=? AND json_extract(r.state,'$.task.principal')=?\n            AND json_valid(r.state)\n            AND json_extract(r.state,'$.task.source_run_id') IS NOT NULL\n            AND json_extract(r.state,'$.task.source_run_id') IN (SELECT run_id FROM source_runs)\n            AND COALESCE(json_extract(r.state,'$.task.conversation_context.turn'),1)=1 AND (member.number IS NULL OR member.number=1)\n            AND (c.id IS NULL OR (c.workspace=? AND c.project=? AND c.principal=?))\n            AND json_extract(origin.state,'$.task.project_id')=? AND json_extract(origin.state,'$.task.principal')=?\n            AND COALESCE(origin_turn.task_id,origin.id)=? AND r.id!=?) SELECT * FROM linked WHERE position<=? AND position<? ORDER BY position DESC LIMIT ?",
+      "params": [
+        "history-0000",
+        "tenant-demo",
+        "history-0000",
+        "tenant-demo",
+        "project-demo",
+        "demo-user",
+        "workspace-default",
+        "project-demo",
+        "demo-user",
+        "project-demo",
+        "demo-user",
+        "history-0000",
+        "history-0000",
+        14,
+        15,
+        21
+      ],
+      "plan": [
+        "SEARCH r USING INDEX runs_source (tenant_id=? AND <expr>=? AND rowid<?)",
+        "LIST SUBQUERY 3",
+        "MATERIALIZE source_runs",
+        "COMPOUND QUERY",
+        "LEFT-MOST SUBQUERY",
+        "SCAN CONSTANT ROW",
+        "UNION USING TEMP B-TREE",
+        "SEARCH task_conversation_turns USING INDEX sqlite_autoindex_task_conversation_turns_2 (tenant=? AND task_id=?)",
+        "SCAN source_runs",
+        "CREATE BLOOM FILTER",
+        "SEARCH origin USING INDEX sqlite_autoindex_runs_1 (tenant_id=? AND id=?)",
+        "SEARCH origin_turn USING INDEX sqlite_autoindex_task_conversation_turns_3 (tenant=? AND run_id=?) LEFT-JOIN",
+        "SEARCH member USING INDEX sqlite_autoindex_task_conversation_turns_3 (tenant=? AND run_id=?) LEFT-JOIN",
+        "SEARCH c USING INDEX sqlite_autoindex_task_conversations_1 (tenant=? AND id=?) LEFT-JOIN",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "sql": "WITH targets(id) AS (VALUES (?),(?),(?),(?))\n            SELECT COALESCE(t.task_id,r.id) AS task_id,COALESCE(t.number,1) AS turn,\n            r.id,r.version,json_extract(r.state,'$.status') AS status,\n            json_extract(r.state,'$.cleanup_failure') AS failure\n            FROM runs r LEFT JOIN task_conversation_turns t ON t.tenant=r.tenant_id AND t.run_id=r.id\n            WHERE r.tenant_id=? AND r.id IN (SELECT id FROM targets UNION\n                SELECT child.run_id FROM task_conversation_turns child JOIN targets ON child.task_id=targets.id WHERE child.tenant=?)\n            AND json_type(r.state,'$.cleanup_failure')='object' AND NOT EXISTS(SELECT 1 FROM task_cleanup_reviews review WHERE review.tenant=r.tenant_id AND review.run_id=r.id AND review.run_version=r.version) ORDER BY t.number,r.id",
+      "params": [
+        "history-0001",
+        "history-0002",
+        "history-0003",
+        "history-0004",
+        "tenant-demo",
+        "tenant-demo"
+      ],
+      "plan": [
+        "SEARCH r USING INDEX sqlite_autoindex_runs_1 (tenant_id=? AND id=?)",
+        "LIST SUBQUERY 6",
+        "COMPOUND QUERY",
+        "LEFT-MOST SUBQUERY",
+        "MATERIALIZE targets",
+        "SCAN 4 CONSTANT ROWS",
+        "SCAN targets",
+        "UNION USING TEMP B-TREE",
+        "SEARCH child USING INDEX sqlite_autoindex_task_conversation_turns_3 (tenant=?)",
+        "SCAN targets",
+        "CREATE BLOOM FILTER",
+        "CORRELATED SCALAR SUBQUERY 7",
+        "SEARCH review USING COVERING INDEX sqlite_autoindex_task_cleanup_reviews_1 (tenant=? AND run_id=? AND run_version=?)",
+        "SEARCH t USING INDEX sqlite_autoindex_task_conversation_turns_3 (tenant=? AND run_id=?) LEFT-JOIN",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    }
+  ],
+  "source_sha256": {
+    "agent_framework/task_relations.py": "c2ce7d9268fce69d7655420a8cd152e8755fd585d712813de589b0ca7ae8d736",
+    "agent_framework/store.py": "b698ab588ae8ca3cbe2d4a31b4b6c852a8d0d8b4c5af9e9fd635c838c1a200d3"
+  }
+}

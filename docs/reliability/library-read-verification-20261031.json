@@ -1,0 +1,272 @@
+{
+  "recorded_on": "2026-10-31",
+  "scope": "Current source: exact-version experience evaluation summaries and scoped bounded episode materialization. No build or release.",
+  "baseline": {
+    "tests": 14,
+    "failures": 5,
+    "log": "/private/tmp/af-library-read-baseline-20261031.log"
+  },
+  "backend": {
+    "command": ".venv/bin/python -m unittest discover -s tests -q",
+    "tests": 771,
+    "seconds": 153.729,
+    "passed": true,
+    "log": "/private/tmp/af-library-read-full-20261031.log",
+    "new_read_regressions": 14,
+    "targeted_log": "/private/tmp/af-library-read-targeted-20261031.log"
+  },
+  "ui": {
+    "rerun": false,
+    "ui_source_changes": false,
+    "prior_tests": 290,
+    "prior_record": "docs/reliability/library-search-verification-20261031.json"
+  },
+  "benchmark": {
+    "command": ".venv/bin/python scripts/benchmark_library.py",
+    "fixture": {
+      "assets": 200,
+      "experiences": 200,
+      "memories": 800,
+      "body_bytes": 8192,
+      "repeats": 3
+    },
+    "comparisons": {
+      "all": {
+        "before_median_seconds": 0.063419,
+        "after_median_seconds": 0.020933,
+        "speedup": 3.03,
+        "before_selects": 205,
+        "after_selects": 3,
+        "before_python_json_input_bytes": 11026997,
+        "after_python_json_input_bytes": 2222118,
+        "json_input_reduction_percent": 79.85,
+        "response_bytes": 2375603,
+        "response_sha256": "8aa38b2d62fc1a241897a7c2cfe2598dbb719201cd55cad505f368380289d1db",
+        "responses_identical": true
+      },
+      "benchmarkneedle": {
+        "before_median_seconds": 0.082823,
+        "after_median_seconds": 0.042188,
+        "speedup": 1.963,
+        "before_selects": 206,
+        "after_selects": 6,
+        "before_python_json_input_bytes": 17311772,
+        "after_python_json_input_bytes": 1937294,
+        "json_input_reduction_percent": 88.81,
+        "response_bytes": 177631,
+        "response_sha256": "3cb6faac83fc0c3afa6536bcacea854dbfc1edb616e465096c0a1f834747167a",
+        "responses_identical": true
+      }
+    },
+    "before": "docs/reliability/library-read-before-20261031.json",
+    "after": "docs/reliability/library-read-after-20261031.json",
+    "measurement_note": "Three local synthetic runs per query. SELECT counts are application-issued statements, not inner index probes. JSON input bytes are Python json.loads input, not disk reads or peak RSS."
+  },
+  "browser": {
+    "command": ".venv/bin/python scripts/run_browser_tests.py --suite library-search --suite asset-versions --suite ontology --suite audit-fixes --suite legacy-modules --output /private/tmp/af-library-read-browser-20261031",
+    "suites": [
+      {
+        "suite": "library-search",
+        "passed": true,
+        "exit_code": 0,
+        "results": "/private/tmp/af-library-read-browser-20261031/library-search/results.json",
+        "log": "/private/tmp/af-library-read-browser-20261031/library-search.log",
+        "checks": [
+          "62条知识资料中搜索到准确目标，结果说明标明实际使用的关键词",
+          "搜索失败不显示旧卡片，明确重试使用原关键词，同时保留尚未提交的新输入",
+          "同一搜索等待时不重复派发，新搜索成功后忽略旧失败，不替换结果或弹出过期错误",
+          "可以主动返回上次成功结果，无需新读取；已放弃请求的迟到回复不会覆盖它",
+          "清除搜索的回复不会抢走后续操作焦点，工作记忆和能力方法能区分无匹配与尚未建立资料",
+          "离开知识库后旧搜索失败不会打断新页面，返回后读取当前关键词",
+          "失败提示、长关键词与重试按钮在8组桌面深浅色和200%文字场景下可读、无横向溢出且可键盘访问",
+          "故障恢复后可以正常重试，2000字符关键词的结果说明无横向溢出；搜索、重试和返回均没有提交写入"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "asset-versions",
+        "passed": true,
+        "exit_code": 0,
+        "results": "/private/tmp/af-library-read-browser-20261031/asset-versions/results.json",
+        "log": "/private/tmp/af-library-read-browser-20261031/asset-versions.log",
+        "checks": [
+          "四类手工资料均显示真实 v1/v2，来源版本独立保留；长来源标签和用户文字安全显示",
+          "版本历史标明本次选中的 v1，按新到旧列出 v2/v1，可直接展开核对各自原文",
+          "先前 v1 的慢回复不会替换随后打开的 v2 版本历史",
+          "离开再返回知识库后，旧历史请求不会突然重开窗口；核对历史没有产生写入",
+          "审核 v2 成功后，即使目录读取失败也保留成功结果；后续明确发布只作用于 v2，v1 保留",
+          "正常编辑工作记忆 v2 后保存为 v3，来源仍为1；保存提示与定位卡片均指向 v3",
+          "经验离线评测使用真实评测回执保留名称和版本，可查看原评测；明确审核后发布该版本",
+          "长来源版本与历史正文在8组桌面深浅色和200%文字场景下可读，所选正文可用键盘访问"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "ontology",
+        "passed": true,
+        "exit_code": 0,
+        "results": "/private/tmp/af-library-read-browser-20261031/ontology/results.json",
+        "log": "/private/tmp/af-library-read-browser-20261031/ontology.log",
+        "checks": [
+          {
+            "id": "isolated-mock-fixture",
+            "passed": true
+          },
+          {
+            "id": "add-instance-preserves-disclosure",
+            "passed": true
+          },
+          {
+            "id": "server-error-expands-and-focuses-field",
+            "passed": true
+          },
+          {
+            "id": "error-summary-is-keyboard-target",
+            "passed": true
+          },
+          {
+            "id": "edit-clears-stale-error",
+            "passed": true
+          },
+          {
+            "id": "successful-validation-retains-input-and-focus",
+            "passed": true
+          },
+          {
+            "id": "full-editor-update-retains-disclosures-and-values",
+            "passed": true
+          },
+          {
+            "id": "property-update-retains-focus-and-values",
+            "passed": true
+          },
+          {
+            "id": "desktop-keyboard-focus-with-text-growth",
+            "passed": true
+          },
+          {
+            "id": "revision-preserves-existing-save-contract",
+            "passed": true
+          },
+          {
+            "id": "populated-ontology-layouts",
+            "passed": true
+          }
+        ],
+        "errors": []
+      },
+      {
+        "suite": "audit-fixes",
+        "passed": true,
+        "exit_code": 0,
+        "results": "/private/tmp/af-library-read-browser-20261031/audit-fixes/results.json",
+        "log": "/private/tmp/af-library-read-browser-20261031/audit-fixes.log",
+        "checks": [
+          "Failed generation can be repaired, validated, deposited and published without another generation",
+          "Assertion evidence rejects invented quotations and stores exact offsets with human review",
+          "Assertion evidence dialog fits mobile and desktop in both themes",
+          "JSON-LD download contains the reviewed quotation and source hash",
+          "Withdrawing a replacement does not silently roll back; explicit activation restores the chosen version",
+          "Offline ordinary tasks show no quality score in the evaluation UI",
+          "Expired ontology explains its state and offers no browsing or activation action"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "legacy-modules",
+        "passed": true,
+        "exit_code": 0,
+        "results": "/private/tmp/af-library-read-browser-20261031/legacy-modules/module-results.json",
+        "log": "/private/tmp/af-library-read-browser-20261031/legacy-modules.log",
+        "checks": [
+          {
+            "id": "agent-task",
+            "passed": true
+          },
+          {
+            "id": "knowledge-publish",
+            "passed": true
+          },
+          {
+            "id": "knowledge-revise",
+            "passed": true
+          },
+          {
+            "id": "grounded-result",
+            "passed": true
+          },
+          {
+            "id": "skill-lifecycle",
+            "passed": true
+          },
+          {
+            "id": "skill-import-withdraw",
+            "passed": true
+          },
+          {
+            "id": "workflow-run",
+            "passed": true
+          },
+          {
+            "id": "workflow-chat",
+            "passed": true
+          },
+          {
+            "id": "daily-plan",
+            "passed": true
+          },
+          {
+            "id": "evaluation-loop",
+            "passed": true
+          },
+          {
+            "id": "retrospective",
+            "passed": true
+          },
+          {
+            "id": "ontology-loop",
+            "passed": true
+          }
+        ],
+        "errors": []
+      }
+    ],
+    "results": "/private/tmp/af-library-read-browser-20261031/results.json"
+  },
+  "indexes": {
+    "experience_evaluation_version": "tenant,id,version; the newest rowid uses a covering index",
+    "episode_scope": "tenant,project,environment,principal; newest episodes use the scoped index"
+  },
+  "invariants": [
+    "Default Library.list preserves asset shape; evaluation enrichment is explicit",
+    "Evaluation metadata belongs to the exact authorized tenant, asset ID and version",
+    "The newest inserted evaluation wins even when failed or older by timestamp",
+    "Status and evaluation metadata come from one SQLite statement",
+    "Evaluation cases and sources are not copied into the Python decoder for lists",
+    "Hub reuses authorized asset rows instead of decoding all assets twice",
+    "Episode matching, insertion order and limits remain compatible",
+    "Only matching full episode bodies enter Python for filtered reads",
+    "Episode matching and body reads share a snapshot",
+    "Private and other-scope rows are filtered before parsing",
+    "The historical hub episode count remains capped at 50"
+  ],
+  "boundaries": [
+    "No asset pagination or smaller response payload introduced",
+    "Keyword matching may still scan many summaries or asset bodies",
+    "SQLite still reads JSON for projections",
+    "Agent capability validation and evaluation detail reads are unchanged",
+    "Synthetic temporary data only; no live models, existing business data or release modified"
+  ],
+  "source_sha256": {
+    "agent_framework/knowledge.py": "d0da92205d1efec8b50b47a8145445404bf2250bda75bf112d4bf98e8e3a53a5",
+    "agent_framework/experience.py": "4c015e9199baf2a0487b30ac0f4afa38ad9de0813fe94f9d5b37b0c0673f80e1",
+    "agent_framework/memory.py": "eece7c4139fab2222e1ae7d29a0766ba616208330de470d9f50f8a517e90523f",
+    "agent_framework/knowledge_hub.py": "34895d4ccb3479e0ad16f8731fc6d81a91b0619154d44c1d272220f7775bad65",
+    "tests/test_library_reads.py": "dd4ba783549745399efc8eae9b8546794854a7daf60e85edc253ecfff3ec45ce",
+    "scripts/benchmark_library.py": "a0a972c475a6f40a05c70389c5fc7769ff19ccedb76e4d34418d03179805f170",
+    "README.md": "ee72be67d053acb1c12de0bccbacc547cf93579cf101a4576fbf26d43651c2b2",
+    "docs/reliability/library-read-performance.md": "7994c1a014abd0996ce5cc5080bd61a267502aa9c9cc76ef0167985e443291b1",
+    "docs/reliability/library-read-before-20261031.json": "2e34376f90021d4fdbc0b86ce3a93903e4466813f3b3514001db8b0f9618f8c1",
+    "docs/reliability/library-read-after-20261031.json": "7f05d8c29b18547582ec04187d1620d685a6aaa0ba65986ebf85fba7f1f58b3b"
+  }
+}

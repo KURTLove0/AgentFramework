@@ -1,0 +1,235 @@
+{
+  "recorded_on": "2026-10-31",
+  "scope": "Current source: complete private latest-per-execution evaluation history, period/verdict/agent/search filters, anchored pagination and consistent recent-window aggregates; metadata-only list reads and lazy frozen report details; separate history/alert focus restoration. Existing release artifacts unchanged.",
+  "baseline": {
+    "tests": 10,
+    "errors": 10,
+    "seconds": 1.059,
+    "log": "/private/tmp/af-evaluation-catalog-baseline-20261031.log",
+    "interpretation": "Nine failures exposed absent pagination/API behavior. The legacy mock fixture also lacked the runs.version NOT NULL field; that fixture setup was corrected before verification."
+  },
+  "backend": {
+    "tests": 830,
+    "passed": true,
+    "seconds": 160.617,
+    "log": "/private/tmp/af-evaluation-full-20261031.log",
+    "command": ".venv/bin/python -m unittest discover -s tests -q",
+    "new_cases": 11
+  },
+  "targeted_backend": {
+    "tests": 37,
+    "passed": true,
+    "seconds": 5.792,
+    "log": "/private/tmp/af-evaluation-targeted-20261031.log",
+    "note": "Initial targeted run before the additional mean-rounding regression; the final full suite includes all 11 new cases."
+  },
+  "ui": {
+    "tests": 392,
+    "passed": true,
+    "seconds": 4.739850667,
+    "new_history_cases": 16,
+    "new_detail_focus_cases": 1,
+    "log": "/private/tmp/af-evaluation-ui-final-20261031.log",
+    "command": "npm test"
+  },
+  "browser": [
+    {
+      "suite": "evaluation-catalog",
+      "passed": true,
+      "exit_code": 0,
+      "summary": "/private/tmp/af-evaluation-browser-layout-20261031/results.json",
+      "details": "/private/tmp/af-evaluation-browser-layout-20261031/evaluation-catalog/results.json",
+      "checks": [
+        "267次执行评测可完整翻完6页，每次执行一条最新评测，无重复或遗漏",
+        "旧评测准确加载冻结证据，关闭明细保留第6页并恢复原入口焦点",
+        "历史岗位即使不在当前目录也可筛选，全部历史可找回窗口外评测，近期评分汇总不被扩展",
+        "岗位、结论和关键词在分页前筛选，空结果明确提示调整条件",
+        "主动搜索越过慢后台读取，迟到回复不会回退当前结果",
+        "同页刷新失败保留上次结果并可重试，8组桌面主题与200%文字布局通过，重试保留关键词和焦点",
+        "切换空间清空私有查询与缓存，全部历史浏览未提交写入或调用外部模型"
+      ],
+      "errors": [],
+      "layout_count": 8,
+      "writes": []
+    },
+    {
+      "suite": "alert-inbox",
+      "passed": true,
+      "exit_code": 0,
+      "summary": "/private/tmp/af-evaluation-browser-20261031/results.json",
+      "details": "/private/tmp/af-evaluation-browser-20261031/alert-inbox/results.json",
+      "checks": [
+        "230条较新已确认记录不再遮挡61条未确认提醒，键盘翻页能到达最早记录且焦点可见",
+        "旧提醒能打开当时的评测，再转到原始执行记录，离开时详情窗口正常关闭",
+        "确认成功但后续读取失败仍保留已确认结果，重试只读取列表，待处理数降为60",
+        "已确认历史可完整翻到第231条，原提醒与首次确认时间保留",
+        "历史岗位即使不在当前智能体目录也可筛选，按岗位筛选在分页之前生效",
+        "翻页等待时切换状态，新筛选立即生效，迟到的旧页不会覆盖结果",
+        "长提醒与分页控件在8组桌面深浅色和200%文字下可读、无横向溢出",
+        "提醒按工作空间隔离，空列表有明确说明，浏览和筛选没有产生写入"
+      ],
+      "errors": [],
+      "layout_count": 8
+    },
+    {
+      "suite": "reading-interactions",
+      "passed": true,
+      "exit_code": 0,
+      "summary": "/private/tmp/af-evaluation-browser-second-20261031/results.json",
+      "details": "/private/tmp/af-evaluation-browser-second-20261031/reading-interactions/results.json",
+      "checks": [
+        "后台同步期间保留已读记录并标注状态，主动翻页立即生效，旧同步回复不会把页面退回",
+        "重新搜索同一关键词会建立新的浏览起点，即使后台读取仍在进行也不会忽略操作",
+        "详情立即显示可关闭的等待窗口，关闭后可读另一条；旧回复不会重开或替换当前记录，关闭恢复原入口焦点",
+        "离开评测页会关闭只读详情，迟到失败不会弹出到新页面",
+        "读取已关闭记录的慢回复不会覆盖随后打开的设置，未保存输入与放弃确认仍有效",
+        "长读取错误在8组桌面深浅色和200%文字下可读，重试与关闭按钮可见，用户内容安全转义",
+        "恢复后重试仍读取原评测，成功后焦点回到记录正文；全部浏览、取消和重试没有提交写入"
+      ],
+      "errors": [],
+      "layout_count": 8,
+      "writes": []
+    },
+    {
+      "suite": "legacy-modules",
+      "passed": true,
+      "exit_code": 0,
+      "summary": "/private/tmp/af-evaluation-browser-final-20261031/results.json",
+      "details": "/private/tmp/af-evaluation-browser-final-20261031/legacy-modules/module-results.json",
+      "checks": [
+        {
+          "id": "agent-task",
+          "detail": "当前表单建立通用智能体；兼容夹具完成授权与回读流程",
+          "passed": true
+        },
+        {
+          "id": "knowledge-publish",
+          "detail": "资料从草稿审核发布，保留来源和版本",
+          "passed": true
+        },
+        {
+          "id": "knowledge-revise",
+          "detail": "知识修订产生草稿，旧发布版本继续保留",
+          "passed": true
+        },
+        {
+          "id": "grounded-result",
+          "detail": "兼容只读问答可查看来源和逐字原文",
+          "passed": true
+        },
+        {
+          "id": "skill-lifecycle",
+          "detail": "Skill 资源编辑、校验、发布与 ZIP 导出可连续完成",
+          "passed": true
+        },
+        {
+          "id": "skill-import-withdraw",
+          "detail": "ZIP 夹具随测试生成，导入与撤回不依赖外部临时文件",
+          "passed": true
+        },
+        {
+          "id": "workflow-run",
+          "detail": "当前工作流按目标执行，无过时的预授权向导",
+          "passed": true
+        },
+        {
+          "id": "workflow-chat",
+          "detail": "对话提案经采用后进入画布审查，未自动执行",
+          "passed": true
+        },
+        {
+          "id": "daily-plan",
+          "detail": "当前每日计划可重复派发并复用同一待启动任务",
+          "passed": true
+        },
+        {
+          "id": "evaluation-loop",
+          "detail": "失败提醒可查看冻结检查、确认并保存空间阈值",
+          "passed": true
+        },
+        {
+          "id": "retrospective",
+          "detail": "兼容任务复盘、审阅、沉淀和资料回跳可完成",
+          "passed": true
+        },
+        {
+          "id": "ontology-loop",
+          "detail": "本体生成、审阅、发布、生效与对象浏览形成闭环",
+          "passed": true
+        }
+      ],
+      "errors": []
+    },
+    {
+      "suite": "control-routes",
+      "passed": true,
+      "exit_code": 0,
+      "summary": "/private/tmp/af-evaluation-browser-final-20261031/results.json",
+      "details": "/private/tmp/af-evaluation-browser-final-20261031/control-routes/results.json",
+      "checks": [],
+      "errors": [],
+      "violations": {
+        "overflow": [],
+        "radius": [],
+        "size": [],
+        "focus": [],
+        "popovers": [],
+        "menu": [],
+        "commandFocus": []
+      }
+    }
+  ],
+  "validation_notes": [
+    "Final UI suite includes history paging, stale reads, scope changes, write invalidation, Chinese input and distinct modal-source focus.",
+    "The final layout suite covers panel padding, retained-result errors and retry focus at 1024/1440 widths, light/dark themes, 100%/200% text: 8 configurations.",
+    "The last display-only addition shows the already-tested asof timestamp above the score cards; it followed the full UI and browser runs. JavaScript syntax was checked afterward. It does not alter queries, paging or the captured history panel.",
+    "Alert inbox passed before the distinct modal-source focus fix; the subsequent reading-interactions and evaluation-catalog suites verify both entrances after that fix.",
+    "The isolated evaluation history scenario issued no POST requests and made no external model calls. The established module suite intentionally performs synthetic mutations, including alert acknowledgement and evaluation-policy save."
+  ],
+  "test_helper_corrections": [
+    "The legacy mock-run seed now supplies its required version column.",
+    "The layout helper uses synchronous scrollIntoView on the current element rather than waiting for stability across an ordinary background DOM refresh.",
+    "Read-only detail tests scope reminder-specific selectors to the alert inbox because the same report now also has a legitimate history entrance.",
+    "The legacy module suite waits for the selected workflow detail to succeed, rather than requiring a newly created run to appear inside an older anchored history window."
+  ],
+  "benchmark": {
+    "synthetic_rows": 267,
+    "extra_report_padding_bytes": 8192,
+    "samples": 3,
+    "comparison": "Original overview returns 200 complete reports after decoding 267; paged endpoint returns 50 headers plus catalog statistics. This is not an equal-payload or production-load comparison.",
+    "legacy_overview": {
+      "median_ms": 8.149,
+      "response_bytes": 1770010,
+      "rows": 200,
+      "full_reports_decoded_per_read": 267
+    },
+    "paged_headers": {
+      "median_ms": 11.968,
+      "response_bytes": 23052,
+      "rows": 50,
+      "full_reports_decoded_per_read": 0
+    },
+    "tradeoff": "The new filtered counts and aggregates add local SQL work; the demonstrated gain is reduced complete-body decoding, transfer volume and rendered content, not faster database query latency."
+  },
+  "source_sha256": {
+    "agent_framework/evaluation_catalog.py": "8a626f5211819d67e6615b4d1bd2df4554377211b302005bf8c438d353399dc9",
+    "agent_framework/agent_evaluation.py": "5d7c79ec818bd43f1b1e40ef7b5614e8a1454b1e1beb5f5fbbd6f1a56b41b51d",
+    "agent_framework/web.py": "a964f930ad606d14673eb3fae6900b959c042f2844308989f02f7da50c348766",
+    "agent_framework/webui/evaluation_history.js": "2c8970270f5c4b35533c2f29de6971057cac5bdf39136dd97b380d2ac5ed4a1a",
+    "agent_framework/webui/operations.js": "91b7120e081b7ec515e76eaa4c397d39af7e1bd9b6a124ddd3673feb2a03d342",
+    "agent_framework/webui/operations.css": "31f89c4fb06d00b44fc1d1046e0f0ab28637c3a6293bdadd3d9ad29290a9dd76",
+    "agent_framework/webui/index.html": "4039c8ab137d691e85b780ec5365b4b088588ea13450ccb4ef5f4d6545cbf963",
+    "tests/test_evaluation_catalog.py": "695528588e5b8318b4c8fde942e14576e8ae44b7e6c56b594a38207980b62ff1",
+    "tests/test_evaluation_history_interactions.js": "0d816200b69292d6f1f2840c3cee36881b4e2160506608de62729a938685d4e9",
+    "tests/test_evaluation_record_interactions.js": "d005e7791c812a17c63be3bf37f6f41213047c6e095d9ed592638aa79385673a",
+    "tests/serve_evaluation_catalog_fixture.py": "60d0865c771fa330c3a692430343910254e9808bf67a7fea57c89223fdb9e740",
+    "tests/verify_evaluation_catalog.cjs": "37d73e3331fec94e429d1c645720860057ff60f65c65ba3fc7b88c5ed03c12d3",
+    "tests/verify_reading_interactions.cjs": "01b9cd92fe4fdc1223a31ffd6b94a47cc36bb41f0ee1e5e773074cb4b324f7d1",
+    "tests/verify_ui95_modules.cjs": "3626d8b3e9c51fbf7d6ba3bf8a667714cd3dd9edddf7490967c94effe59a7d4b",
+    "scripts/run_browser_tests.py": "b9f239e02be20dd99e0d4eb40b9c4297b70e2401d8348e1d9b2f0c5c04224288",
+    "docs/operations/evaluation-history.md": "8121dcf0c79f86f02fa1fda5dac71b63d86e97acdae75adea502cafd07ad813c",
+    "docs/operations/evaluation-history-light.png": "035b087f89e638e36640c6c7ecaa436b5145f516fd7664a031de2082ec1ad0fc",
+    "docs/operations/evaluation-history-dark.png": "a2820de5645f2a88087aa19b88c8dea76e0f716c141758fafaf7f6bad2e556a2"
+  },
+  "release": "Source only; no packaging or publishing."
+}

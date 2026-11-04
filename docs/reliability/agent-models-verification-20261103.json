@@ -1,0 +1,231 @@
+{
+  "date": "2026-11-03",
+  "version": "1.3.0",
+  "status": "source-improvement-complete-not-published",
+  "scope": "Preserve current agent model/effort during directory refresh and failure, retain unavailable original values for explicit correction, clear resolved field errors and isolate response/cache ownership.",
+  "frontend": {
+    "new_tests": 11,
+    "full": {
+      "command": "npm test",
+      "tests": 1000,
+      "passed": 1000,
+      "failed": 0,
+      "duration_ms": 11353.683375,
+      "log": {
+        "path": "/private/tmp/af-agent-models-frontend-verified.log",
+        "sha256": "3902bf11f17fa302eec0b1a95bf7571d6677d006fdeab5bad8ffca58f5c2a919"
+      }
+    },
+    "related": {
+      "tests": 30,
+      "passed": 30,
+      "failed": 0,
+      "duration_ms": 834.482709,
+      "log": {
+        "path": "/private/tmp/af-agent-models-related-verified.log",
+        "sha256": "2a34f493d24e7d5903e5a000a75249e5309bfdb531a7c6ae9ac176dfe5293bcf"
+      }
+    },
+    "before": {
+      "tests": 11,
+      "passed": 1,
+      "failed": 10,
+      "log": {
+        "path": "/private/tmp/af-agent-models-before-all.log",
+        "sha256": "075a297e7f565af9a91c297d4e6af645c05038b465f57546b3f3fa9aaaa5f24c"
+      },
+      "source": {
+        "path": "/private/tmp/af-agent-models-original.js",
+        "sha256": "f819e1c84af4ab814dc79bab00bc7fada4e478d7001ef926cf243dac47f4b5f2"
+      },
+      "source_from": {
+        "path": "/private/tmp/af-runtime-detection-source-candidate-20261103-verified/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+        "sha256": "9d6a1e0891e1f0f6336fc4979fad78004232ccd1c07947b2fc2f145c8d0004dc"
+      }
+    },
+    "coverage": [
+      "Last model and effort changes survive pending refresh",
+      "Failed refresh keeps existing choices and edits",
+      "Retired model and unsupported effort are retained and explicitly corrected",
+      "Saved original configuration survives initial directory failure",
+      "Provider/session/workspace/tenant/principal/DOM ownership prevents stale publication",
+      "Older completion cannot release newer pending state",
+      "Resolved field errors are removed",
+      "Client cache and pending requests belong to tenant/principal, shared across workspaces"
+    ]
+  },
+  "backend": {
+    "application_source_changed": false,
+    "full_suite_repeated": false,
+    "prior_verified_source": {
+      "path": "/private/tmp/af-runtime-detection-source-candidate-20261103-verified/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "9d6a1e0891e1f0f6336fc4979fad78004232ccd1c07947b2fc2f145c8d0004dc"
+    },
+    "program_changes_since_prior_candidate": [
+      "agent_framework/webui/agents.js"
+    ],
+    "reason": "Only agent frontend application code changed. Browser suites exercise unchanged HTTP backend; prior 1383 backend passes are not a new run."
+  },
+  "browser": {
+    "passed_suites": {
+      "agent-models": {
+        "result": {
+          "path": "/private/tmp/af-agent-models-browser-native/agent-models/results.json",
+          "sha256": "f3576d05c20c835408158d6ca81cce318539e001fba344a23480feb1130e7ec3"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-agent-models-browser-native/results.json",
+          "sha256": "e20805862556b83c27f5cdf696f60251b1c0e4b0d0a38f42ac45d1ce770ac7f8"
+        },
+        "checks": [
+          "慢目录刷新保留等待期间最后选择的模型与推理强度，恢复副本同步保留，没有自动保存",
+          "刷新失败保留现有目录、模型与强度，仍可编辑并明确重试",
+          "已移除的模型与不再支持的强度保留原值并阻止继续；重新选择有效模型会清除旧字段错误",
+          "更正强度后错误清除，最终保存和未启动任务快照都使用用户最后明确选择的模型与强度",
+          "重新编辑已保存但目录中已移除的模型时，原配置仍可核对，不会变为空白或改写服务器记录"
+        ],
+        "errors": [],
+        "layout_cases": 8,
+        "task_started": false,
+        "real_model_calls": 0
+      },
+      "agent-drafts": {
+        "result": {
+          "path": "/private/tmp/af-agent-models-browser/agent-drafts/results.json",
+          "sha256": "c61e80309cf65a87b176be3311946b3890d1185eba7fa4be3ede020e6348f7c0"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-agent-models-browser/results.json",
+          "sha256": "14037b8fe241ec90bda5497a80cad3e777b5db5d65deb245bf35f29df4b01ac6"
+        },
+        "checks": [
+          "刷新恢复未填完的职责、原始 MCP JSON、不可用技能与工作指令，不发送保存请求",
+          "创建入口不会覆盖现有草稿，同标签页两个工作空间各自保留输入",
+          "浅深主题、四档桌面宽度和两倍文字的 16 组布局可用，保留关闭支持键盘并返回恢复入口",
+          "刷新后保留目录中已移除的模型与推理强度，提示重新选择，避免静默替换配置",
+          "保存已受理但响应丢失后，刷新保留原编号与后续输入；只读核对后明确更新同一智能体，成功清理草稿",
+          "取消放弃保留副本，清理损坏副本不删除服务中的智能体",
+          "浏览器存储失败明确提示并保持编辑窗口，仍可主动保存到服务"
+        ],
+        "errors": []
+      },
+      "agent-saves": {
+        "result": {
+          "path": "/private/tmp/af-agent-models-browser/agent-saves/results.json",
+          "sha256": "1b39e450d8c906b8fdf4afe83c6570e1e354210bde097f1c9d54ec6cf5ba7dca"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-agent-models-browser/results.json",
+          "sha256": "14037b8fe241ec90bda5497a80cad3e777b5db5d65deb245bf35f29df4b01ac6"
+        },
+        "checks": [
+          "创建已提交但回执丢失后，原页重试复用同一回执与智能体，不产生副本",
+          "失败后继续编辑不会另建智能体，核对后的保存仍校验最新版本，冲突保留本页指令",
+          "回执确认前配置已归档时保留输入并显示真实状态，明确另存副本后原归档保持不变",
+          "未被接受的保存可在核对后继续原页重试，输入与保存意图保留"
+        ],
+        "errors": []
+      },
+      "runtime-settings": {
+        "result": {
+          "path": "/private/tmp/af-agent-models-browser/runtime-settings/results.json",
+          "sha256": "c1c478b2b252eb7c6e030408598d13e3f8f54688c29c6f3e5a77e80cb2f1b0dc"
+        },
+        "runner_summary": {
+          "path": "/private/tmp/af-agent-models-browser/results.json",
+          "sha256": "14037b8fe241ec90bda5497a80cad3e777b5db5d65deb245bf35f29df4b01ac6"
+        },
+        "checks": [
+          "未保存配置跨页面与刷新恢复，恢复过程只读取；全局配置草稿保留在当前标签页",
+          "提交已接受但回执丢失后，刷新保留原编号；只读核对确认 v1，不重复保存并恢复键盘焦点",
+          "未送达的保存沿用原内容和编号重试，核对期间的新输入独立保留",
+          "多页面配置冲突展示当前版本与保留输入，明确按新版本继续；浅深主题、两种桌面宽度及 28px 字号布局通过",
+          "原保存之后又有新配置时，准确区分已接受版本与当前版本，采用当前配置需明确操作",
+          "离开再返回后旧保存回执不覆盖新输入，慢配置读取期间的输入仍保留",
+          "迟到模型目录保留等待期间选择的模型和推理强度"
+        ],
+        "errors": []
+      }
+    },
+    "iterations": [
+      {
+        "result": {
+          "path": "/private/tmp/af-agent-models-browser/agent-models/failure.json",
+          "sha256": "6095c2ad630793d7c93f017ddeee005b8ec071dff731bb270c532aa368644bd3"
+        },
+        "note": "Initial option locator isDisabled assertion did not reflect the selected option native disabled property. Final verifier inspects selectedOptions[0].disabled directly and confirms progression is blocked, then correction clears validation. No production code changed for this verifier correction."
+      }
+    ],
+    "screenshots": [
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/agent-models-light.png",
+        "sha256": "b379ee799f2e8e48d3f1c8b7aa71142c43a7831fcf98bb8a3767ec4f86f176b7"
+      },
+      {
+        "path": "/Users/kurt/Desktop/CodeSpace/AgentFramework/docs/reliability/agent-models-dark.png",
+        "sha256": "30caf796fa3c0e9e1b226ad136751a88bcd77fe67f7cd0f2287a515269342793"
+      }
+    ],
+    "visual_review": "Inspected light/dark retained unsupported-effort value, associated error, summary pending state, focused refresh control and footer. Eight desktop cases cover 1024/1440 widths and normal/28px status/error text, focus and horizontal bounds.",
+    "isolation": "Temporary offline runtime fixture, synthetic directory changes and controlled HTTP delays/failures. One agent saved via UI; one unstarted task created via HTTP to inspect frozen agent/planner model and effort. No task execution or real model calls."
+  },
+  "design_guidance": {
+    "skill": "/Users/kurt/.agents/skills/ui-ux-pro-max/SKILL.md",
+    "query": "error recovery --domain ux",
+    "matched": [
+      "Feedback / Error Recovery",
+      "Accessibility / Error Messages",
+      "Forms / Error Placement"
+    ],
+    "application": "Preserved input with explicit retry/correction, existing status announcements, field-associated errors cleared after correction. Existing desktop styling retained."
+  },
+  "candidate": {
+    "build_command": ".venv/bin/python scripts/build_release.py --output-dir /private/tmp/af-agent-models-source-candidate-20261103",
+    "build_log": {
+      "path": "/private/tmp/af-agent-models-build.log",
+      "sha256": "9ae3f5312568c6bbcd8e73d60544b16f5f8777670bc0189bccce26f27f7aef5b"
+    },
+    "verification": {
+      "path": "/private/tmp/af-agent-models-package-check.json",
+      "sha256": "d68607f5163c637bf73c8b1a691c5e35bb1a049fe3755e6e01dd0eb359d8d9f1"
+    },
+    "program_files": 166,
+    "bundle": {
+      "path": "/private/tmp/af-agent-models-source-candidate-20261103/agent-framework-1.3.0.tar.gz",
+      "sha256": "3b6b5ede5004a23cd89f7249c7a0221db89bd7574c0fcb8a242e06aa6358a994"
+    },
+    "wheel": {
+      "path": "/private/tmp/af-agent-models-source-candidate-20261103/bounded_agent_mvp-1.3.0-py3-none-any.whl",
+      "sha256": "a56c504c82686eaa7bf7564fffdbb8ad69a381da2c2b864fc434810aa8eb9331"
+    },
+    "checksums": {
+      "path": "/private/tmp/af-agent-models-source-candidate-20261103/SHA256SUMS",
+      "sha256": "6e78ce6236a558bb755711f6b32eaea5e0e501d1ff434b5416c228e67feecae2"
+    },
+    "published": false,
+    "fresh_install_repeated": false
+  },
+  "source_files": {
+    "agent_framework/webui/agents.js": "0b98076d9effa3b244b0737a5a627a2fb856604ff5526e0b47fca82be196392d",
+    "agent_framework/webui/app.js": "72bc14857d4e0c433aa92f41ae31f57eaf0a6453afc10bd20f98f745dabb56de",
+    "agent_framework/webui/form_controls.js": "affc8408b33472e72638e7505639f9fe6ba4606f277cc360f4acd232469c7e0b",
+    "agent_framework/webui/agent_draft.js": "014f85588cf41a6bd7405612c0ead71278bb67460c8bdb369a957f90f182288b",
+    "tests/test_agent_model_interactions.js": "211f37eda9dc7a0b4c9f7e901f8f6c82b7e10e700fc6598ba6460c240c4c5331",
+    "tests/test_agent_opening.js": "37e7ccbf38cdad2cccfbfadb6c104f8ae6811ada4a599a7253f37be400aa31ef",
+    "tests/verify_agent_models.cjs": "f37a3edba97192c352798bcdb58a3309dac8dfafab5554076e1e222720364927",
+    "tests/serve_runtime_settings_fixture.py": "e14136b483ed6a77239bd4fffb16e292b087ace80387afe00a8c47170cb4ed98",
+    "scripts/run_browser_tests.py": "d0f3ed2e3cd324927b1991063809e2016bb253405a1a8e29c906d8a183b880b5",
+    "scripts/build_release.py": "615b9c1cce8eb277dab1f9007958b2b95b22dd5465dde3a774e31894c417dcf9",
+    "pyproject.toml": "45c6c8059a6ea7e0c61b4fb0339db387c2f35a322b002a9dadd8b4986fd01783",
+    "README.md": "6ffe88462eab8d99963a3ba1323d8599f4c2bc1e4d8aeb301109f2dcc27c1b78",
+    "design.md": "c1b71a6e4c9b06a526dd3d6d1eb1d0566903fc490b00aec9510ce17585426de3",
+    "docs/reliability/agent-models.md": "8fdc2ff82c1100c8c73dd8cf4c81db91a790659e2b048a978f944babe4f34ebd"
+  },
+  "limits": [
+    "Directory contents do not prove current model access permissions.",
+    "After failed refresh, previously available options remain usable; missing or unverified original values require correction or successful refresh.",
+    "No new automatic expiry for browser model caches; refresh remains explicit.",
+    "Browser task snapshot is an unstarted task, not a real model execution.",
+    "Backend full unit suite and fresh installation were not repeated; version remains 1.3.0 and candidate is unpublished."
+  ]
+}

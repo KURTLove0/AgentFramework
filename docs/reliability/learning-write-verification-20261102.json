@@ -1,0 +1,196 @@
+{
+  "date": "2026-11-02",
+  "status": "source_verified_not_packaged",
+  "release_version_unchanged": "1.3.0",
+  "scope": "Atomic proposal review/deposit receipts, exact replay, original versus current proposal inspection and scoped recovery of later edits and selections",
+  "checks": {
+    "backend": {
+      "command": "PYTHONPATH=tests .venv/bin/python -m unittest tests.test_learning_write_recovery tests.test_learning tests.test_learning_acceptance tests.test_ontology_save_recovery tests.test_ontology_regressions tests.test_backups tests.test_web",
+      "tests": 118,
+      "new_tests": 11,
+      "seconds": 32.312,
+      "passed": true,
+      "log": "/private/tmp/af-learning-writes-backend-verified.log"
+    },
+    "frontend": {
+      "command": "npm test",
+      "tests": 669,
+      "new_tests": 18,
+      "seconds": 7.331366583,
+      "passed": true,
+      "log": "/private/tmp/af-learning-writes-ui-complete.log"
+    },
+    "browser": [
+      {
+        "suite": "learning-writes",
+        "passed": true,
+        "exit_code": 0,
+        "result_file": "/private/tmp/af-learning-writes-browser-complete/learning-writes/results.json",
+        "log": "/private/tmp/af-learning-writes-browser-complete/learning-writes.log",
+        "checks": [
+          "保存回复丢失后刷新恢复原请求、后续审阅和勾选；核对区分本次保存与其他页面的最新审阅",
+          "采用结果前保护后续修改；明确保留本页审阅后，以新请求保存到最新版本，勾选保持不变",
+          "未送达沉淀沿用原请求、版本和选项重试，只沉淀原先勾选的一项；后续输入和勾选继续保留",
+          "服务已沉淀时仍可恢复本页后续修改；迟到核对不影响新窗口，明确采用后显示唯一沉淀回执"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "learning-reads",
+        "passed": true,
+        "exit_code": 0,
+        "result_file": "/private/tmp/af-learning-writes-browser-complete/learning-reads/results.json",
+        "log": "/private/tmp/af-learning-writes-browser-complete/learning-reads.log",
+        "checks": [
+          "慢读取冻结编辑与写入，保留关闭入口；取消等待并继续编辑后，旧回复不覆盖输入或切换空间",
+          "读取失败保留未保存内容并恢复操作，不把读取错误当作未知写入",
+          "采用已存提案前明确确认；继续编辑保留输入，接受替换后采用保存版本，全程无写入或模型重放",
+          "其他页面修订本体后，四种桌面场景均先确认替换；拒绝保留原输入，接受后采用 v2 且不产生额外版本",
+          "初次加载可以关闭并重开；旧加载失败不会替换新窗口或清除新输入"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "learning-requests",
+        "passed": true,
+        "exit_code": 0,
+        "result_file": "/private/tmp/af-learning-writes-browser-final/learning-requests/results.json",
+        "log": "/private/tmp/af-learning-writes-browser-final/learning-requests.log",
+        "checks": [
+          "模型仍在处理时可关闭并刷新，原请求与后续要求恢复；只读核对不增加生成调用",
+          "原结果明确采用后进入审阅，后续要求保留；四种宽度和明暗主题的恢复操作均可见",
+          "未送达请求按原编号、内容与来源重试，后续编辑不混入请求，只产生一份新提案",
+          "切换工作空间不显示其他空间的原请求；返回后保留未发送的后续要求",
+          "复盘迟到回复不能覆盖重新打开的窗口；切换页面保留入口，核对后仅恢复同一份结果"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "ontology-saves",
+        "passed": true,
+        "exit_code": 0,
+        "result_file": "/private/tmp/af-learning-writes-browser-final/ontology-saves/results.json",
+        "log": "/private/tmp/af-learning-writes-browser-final/ontology-saves.log",
+        "checks": [
+          "保存回复丢失并刷新后恢复原请求与后续输入；一次只读核对同时区分自己的 v2 和另一页面的 v3",
+          "采用已保存结果前保护后续修改；明确保留本页内容后基于 v3 保存为 v4，八种桌面布局均可操作",
+          "未送达保存沿用原编号、原版本和原内容重试，只新增 v5；后来输入独立保留",
+          "慢核对可关闭，迟到回复不覆盖新窗口；其他空间不显示这份编辑，返回后仍可恢复",
+          "另一页面抢先保存时不把其 v6 误认作自己的提交；保留内容并明确基于新版本继续后保存为 v7"
+        ],
+        "errors": []
+      },
+      {
+        "suite": "audit-fixes",
+        "passed": true,
+        "exit_code": 0,
+        "result_file": "/private/tmp/af-learning-writes-browser-final/audit-fixes/results.json",
+        "log": "/private/tmp/af-learning-writes-browser-final/audit-fixes.log",
+        "checks": [
+          "Failed generation can be repaired, validated, deposited and published without another generation",
+          "Assertion evidence rejects invented quotations and stores exact offsets with human review",
+          "Assertion evidence dialog fits mobile and desktop in both themes",
+          "JSON-LD download contains the reviewed quotation and source hash",
+          "Withdrawing a replacement does not silently roll back; explicit activation restores the chosen version",
+          "Offline ordinary tasks show no quality score in the evaluation UI",
+          "Expired ontology explains its state and offers no browsing or activation action"
+        ],
+        "errors": []
+      }
+    ],
+    "browser_commands": [
+      ".venv/bin/python scripts/run_browser_tests.py --suite learning-writes --suite learning-reads --suite learning-requests --suite ontology-saves --suite audit-fixes --output /private/tmp/af-learning-writes-browser-final",
+      ".venv/bin/python scripts/run_browser_tests.py --suite learning-reads --suite learning-writes --output /private/tmp/af-learning-writes-browser-complete"
+    ],
+    "browser_note": "The read suite was corrected to inspect modal feedback and gate only the first delayed request, then rerun with the new write suite against final UI source. The other three suites passed in the prior combined run.",
+    "write_posts": 4,
+    "deposited_assets": 1,
+    "own_revision": 3,
+    "other_revision": 4,
+    "layouts": [
+      {
+        "theme": "light",
+        "width": 1024,
+        "overflow": false,
+        "visible": true
+      },
+      {
+        "theme": "light",
+        "width": 1280,
+        "overflow": false,
+        "visible": true
+      },
+      {
+        "theme": "light",
+        "width": 1440,
+        "overflow": false,
+        "visible": true
+      },
+      {
+        "theme": "light",
+        "width": 1920,
+        "overflow": false,
+        "visible": true
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "overflow": false,
+        "visible": true
+      },
+      {
+        "theme": "dark",
+        "width": 1280,
+        "overflow": false,
+        "visible": true
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "overflow": false,
+        "visible": true
+      },
+      {
+        "theme": "dark",
+        "width": 1920,
+        "overflow": false,
+        "visible": true
+      }
+    ],
+    "syntax": true,
+    "diff_check": true,
+    "visual_review": [
+      "docs/reliability/learning-review-light.png",
+      "docs/reliability/learning-review-dark.png"
+    ]
+  },
+  "constraints": [
+    "No external model calls; browser suites use disposable isolated fixtures.",
+    "Tab recovery uses sessionStorage and does not guarantee survival after closing the browser tab.",
+    "Receipt snapshots reflect acceptance time; latest proposal state is returned separately.",
+    "No release package, version change, deployment or source-control commit."
+  ],
+  "files": {
+    "agent_framework/learning.py": "7911c022defb8243e0198f642b167669f2c596b7ed6bfe46df195c481cd86581",
+    "agent_framework/learning_writes.py": "1a6996f966806909b0537f64fc5bb390fa4d4d9adcbc2fb33db9eb6f8e90ab66",
+    "agent_framework/web.py": "a8f81a2b63b7c62f3d409ac70929c37f25da9eaf8aaf20fd7ac0c72d925cb6ec",
+    "agent_framework/webui/learning.js": "041c78b81982b1cacb4d6a995802d25a5053a373e95b15ffa3ee4ff6c3d37bf0",
+    "agent_framework/webui/learning_review.js": "c17900e928918d877538725ffb5cc3ce8858c9685b52ce7f3acd074c6256bb2f",
+    "agent_framework/webui/ontology_save.js": "b3161448a89f23d2b0e203db4838e262858b94ff9c4f3928dafbe323dfb745d6",
+    "agent_framework/webui/app.js": "87f28108d4ecc79318aa9f397201062e6d09a89c4dd472979660cd14ce66d01a",
+    "agent_framework/webui/index.html": "a85fb5549182d4d8a83193627c97ade7dcaf7c4d62740b64570c8761236961fb",
+    "tests/learning_ui_harness.cjs": "5498e8252a0adde83b75a9fa5909f6520a4989fb6e65a004d0d02ebe92ce7df5",
+    "tests/test_learning_interactions.js": "4aadc7c761855f7af1b63ee7576a4fcd442de986ea756e7052ca202fc9c6535e",
+    "tests/test_learning_writes.js": "75b7c168ae06200d83c7788c544523a4e3cb1e79fe94bdf0abd365f9baf59b22",
+    "tests/test_learning_write_recovery.py": "ba7ca3f3313f26cc783434ea59a6583171e18b78577c8cfcd8bfc06054d1ddd7",
+    "tests/verify_learning_writes.cjs": "44c57464a14660c4dd58e26150d2350374b8e7d64a86af227cd379bac074006a",
+    "tests/verify_learning_reads.cjs": "b0dd250e3d3a6d5e77ebb7d92b0bc828fad3f52855f6a8274183b3c37ae85e4d",
+    "scripts/run_browser_tests.py": "fcf8aa68a366c095dc50aeb5650587d19c2c93bd7f7e4bdfd495f12ce3dedd0e",
+    "README.md": "036990699d2a19185546c62afb5e20339cfe6c72fa84be09fa77ebe1e367eece",
+    "design.md": "bbddf8fa568012cfa78264d537c07402f94bfaa6fc4d37fae2fc7fa476cf4090",
+    "docs/learning/implementation.md": "a4f3def33637b8c412de4b40b919247b6be34e6892c29e05edfe55200b99165a",
+    "docs/reliability/learning-write-recovery.md": "d094f1fb868385dfb0d9d0e6f8ca8561de3b10d7318d310bff3eaf50db983dd2",
+    "docs/reliability/learning-review-light.png": "3d9eb5aa5176fe3d974347d7a6afb39107cb7bbc3b5b5d2f12112f0d2c1b16cb",
+    "docs/reliability/learning-review-dark.png": "50e3bb170e53571526c447b420c64fdce55beb573a2eac3a1166e12e86b3e75c"
+  }
+}

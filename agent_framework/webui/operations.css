@@ -3,6 +3,7 @@
 .operations-overview p {margin:8px 0 0;max-width:80ch}
 .operations-note {margin:0 0 24px;max-width:95ch}
 .daily-plan,.operations-alerts {margin-bottom:24px}
+.daily-plan>.field-help {margin:16px 24px}
 .operations-items {padding:0 24px}
 .operations-item {display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding:20px 0;border-bottom:1px solid var(--border);min-width:0}
 .operations-item:last-child {border-bottom:0}
@@ -17,6 +18,15 @@
 .operations-recovery>.field-help {max-width:75ch;margin:0 0 12px;white-space:normal;overflow-wrap:anywhere}
 .operations-recovery>.toolbar {justify-content:flex-start}
 .operations-alerts>.operations-item {margin:0 24px}
+.operations-alerts [data-alert-id] {margin:0 24px}
+.evaluation-alert-filters,.evaluation-alert-pager {display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:16px 24px}
+.evaluation-alert-pager {justify-content:space-between}
+.evaluation-alert-pager p {margin:0;font-size:14px;line-height:1.6}
+.evaluation-alert-state,.evaluation-alert-feedback {margin:20px 24px;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.evaluation-alert-feedback {padding:12px 16px;border:1px solid var(--border);border-radius:8px;background:var(--subtle)}
+#evaluation-alert-title {scroll-margin-top:24px}
+#operations-dialog[data-mode="evaluation-record"] .dialog-body {min-width:0}
+#operations-dialog[data-mode="evaluation-record"] .inline-error {overflow-wrap:anywhere;max-width:100%}
 .operations-warning {border-left:3px solid var(--amber);padding-left:16px}
 .evaluation-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;margin:24px 0}
 .evaluation-score {padding:24px}
@@ -72,3 +82,23 @@
 #ontology-evidence-form {min-width:0}
 #ontology-evidence-form :is(select,textarea) {width:100%;min-width:0;max-width:100%;box-sizing:border-box}
 #ontology-evidence-dialog :is(pre,blockquote) {max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere}
+.evaluation-history-filters{display:flex;align-items:end;flex-wrap:wrap;gap:12px;margin:16px 0}
+.evaluation-history-filters label{display:grid;gap:6px;min-width:0;flex:1 1 160px}
+.evaluation-history-filters label:first-child{flex:2 1 240px}
+.evaluation-history-filters input,.evaluation-history-filters select{width:100%;min-width:0}
+.evaluation-history-status,.evaluation-history-error{overflow-wrap:anywhere;margin:16px 0}
+.evaluation-history-row{display:flex;align-items:start;justify-content:space-between;gap:24px;padding:22px 0;border-top:1px solid var(--border)}
+.evaluation-history-row>div{min-width:0;overflow-wrap:anywhere}
+.evaluation-history-row h3{font-size:16px;margin:0 0 8px}
+.evaluation-history-actions{display:flex;align-items:flex-end;flex-direction:column;gap:12px;flex:0 0 auto}
+.evaluation-history-pager{display:flex;justify-content:flex-end;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}
+@media(max-width:1100px){.evaluation-history-row{flex-wrap:wrap}.evaluation-history-actions{flex-direction:row;flex-wrap:wrap;align-items:center;flex-basis:100%}}
+#evaluation-history-panel{padding:0 24px 24px}
+#evaluation-history-panel>.panel-heading{margin-inline:-24px}
+.evaluation-window-heading{font-size:18px;margin:24px 0 16px}
+.operation-current{padding:16px;margin-top:16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--subtle);overflow-wrap:anywhere}
+.operation-current-task{border-top:1px solid var(--border);margin-top:16px;padding-top:12px}
+.operation-current-task h4{margin:0 0 12px}
+#operations-error,#operation-settings-feedback{overflow-wrap:anywhere}
+#operation-settings-feedback>div{min-width:0}
+#operation-settings-feedback .toolbar{flex-wrap:wrap}

@@ -67,7 +67,8 @@ def main(argv=None):
             runtime=Runtime(directory)
             crash_exit=None;identity_unchanged=True
             if scenario=='crash-after-write':
-                command=[sys.executable,'-m','agent_framework.p0_evaluate','--worker','--output',str(directory),'--adapter',adapter]
+                from .processes import module_command
+                command=[*module_command('agent_framework.p0_evaluate'),'--worker','--output',str(directory),'--adapter',adapter]
                 if mode=='legacy':command.append('--legacy')
                 crashed=subprocess.run(command,text=True,capture_output=True,timeout=15)
                 crash_exit=crashed.returncode
@@ -76,7 +77,7 @@ def main(argv=None):
                 before=json.loads((directory/'before-restart.json').read_text())
                 time.sleep(.85)
                 # New interpreter restores the persisted snapshot, not a passed planner/config.
-                resumed=subprocess.run([sys.executable,'-m','agent_framework','--data-dir',str(directory),'resume',run_id],
+                resumed=subprocess.run([*module_command('agent_framework'),'--data-dir',str(directory),'resume',run_id],
                                        text=True,capture_output=True,timeout=15)
                 if resumed.returncode:raise RuntimeError(resumed.stderr+resumed.stdout)
                 result=runtime.store.result('tenant-demo',run_id)

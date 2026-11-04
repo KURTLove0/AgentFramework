@@ -1,4 +1,4 @@
-# Agent Framework 1.3.0 安装与运行
+# Agent Framework 1.4.0 安装与运行
 
 本版本是单用户 Agent 工作台，包含岗位配置、标准 Skills、知识/记忆/经验管理、可视化 Agent 工作流，以及规划、授权、验收与持久化恢复。
 
@@ -9,8 +9,8 @@
 需要 macOS/Linux、Python 3.11+（含 venv/pip）和首次安装时访问 Python 包索引的网络。无需 Node 或独立数据库。安装包依赖固定为 PyYAML 6.0.3。
 
 ```sh
-tar -xzf agent-framework-1.3.0.tar.gz
-cd agent-framework-1.3.0
+tar -xzf agent-framework-1.4.0.tar.gz
+cd agent-framework-1.4.0
 # macOS：shasum -a 256 -c SHA256SUMS
 # Linux：sha256sum -c SHA256SUMS
 sh scripts/install.sh
@@ -48,6 +48,18 @@ ssh -N -L 8787:127.0.0.1:8787 your-ssh-host
 1. 停止接收新任务，确认工作台无活跃任务，按 Ctrl+C 停止服务。
 2. 同时备份整个数据目录（包括两个 SQLite 库和可能存在的 WAL 文件）。不要仅备份运行库，否则会丢失外部草稿与幂等核对事实。
 3. 将新版本解压到新目录，安装后指向相同的外部数据目录、租户与主体启动。已有任务保持冻结的岗位、Skill、提示词和能力契约；不要新建任务来替代未决写入恢复。
-4. 回退时停止服务，使用对应版本及其完整的数据备份启动。不要将新旧运行库和模拟业务库交叉组合。
+4. 回退时停止服务，另存升级后的完整数据目录，再把升级前备份复制到一个新目录，使用原版本及其原虚拟环境指向该目录启动。不要让旧版直接打开升级后的数据库，不要将新旧运行库和模拟业务库交叉组合。
+
+1.4.0 已验收从原版 1.3.0 升级：旧任务、草稿、模拟业务结果与等待授权工作流保持不变，新任务可以完成；使用升级前完整备份回退后旧版可正常读取。回退后的工作台仅包含备份时的数据，升级后产生的记录仍留在单独保存的新数据目录，不会自动合并回旧版。
+
+1.4.0 也提供完整备份与内容核对命令。先停止服务，在安装目录运行（输出路径必须尚不存在）：
+
+```sh
+.venv/bin/python -I -m agent_framework --data-dir /absolute/path/agent-data backup /absolute/path/agent-backup.zip
+.venv/bin/python -I -m agent_framework verify-backup /absolute/path/agent-backup.zip
+.venv/bin/python -I -m agent_framework restore-backup /absolute/path/agent-backup.zip /absolute/path/restored-data
+```
+
+如果设置了 `AGENT_VENV_DIR`，使用该目录中的 `bin/python`。恢复后用相同租户、主体及 `AGENT_DATA_DIR=/absolute/path/restored-data` 启动；恢复命令拒绝覆盖已有目标目录。原版 1.3.0 没有这组命令，升级前使用停止服务后的整个数据目录副本。
 
 测试/验收请使用另一个数据目录。源代码仓库中的 tests、examples 与 docs 验收证据作为开发资料保留；正式安装包不含这些资料、旧数据库、日志、模型载荷或本机凭据。

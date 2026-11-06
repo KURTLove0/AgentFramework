@@ -1,5 +1,0 @@
-PASS agent
-PASS skill-save
-PASS workflow-start
-PASS workflow-chat
-PASS private-preference

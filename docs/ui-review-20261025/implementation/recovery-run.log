@@ -1,8 +1,0 @@
-PASS authorization
-PASS missing-materials
-PASS failure
-PASS unverifiable
-PASS tampered-draft
-PASS expired
-PASS cancelled
-PASS interrupted

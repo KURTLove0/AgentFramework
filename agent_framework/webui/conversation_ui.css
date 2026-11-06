@@ -37,7 +37,7 @@
 .is-user .task-message-avatar {display:none}
 .is-user .task-message-main>header {justify-content:flex-end; margin-bottom:6px}
 .is-user .task-message-main>header strong {font-weight:400; color:var(--muted); font-size:12px}
-#content .task-user-content {padding:12px 18px; margin:0; border-radius:16px 4px 16px 16px; background:var(--chat-user-surface); color:var(--ink); font-size:var(--type-reading); line-height:var(--line-reading)}
+#content .task-user-content {padding:12px 18px; margin:0; border-radius:16px 4px 16px 16px; background:var(--chat-user-surface); color:var(--ink); font-size:var(--type-reading); line-height:var(--line-reading); text-wrap:pretty}
 .is-assistant .task-message-avatar {margin-top:0}
 .is-assistant .task-message-main>header {margin-bottom:4px}
 .chat-round {font-size:12px}
@@ -51,15 +51,18 @@
 .chat-process-body li {padding:5px 0; font-size:13px; line-height:1.7}
 #content .task-chat-answer {font-size:var(--type-reading); line-height:var(--line-reading); max-inline-size:var(--reading-measure)}
 #content .task-chat-answer :is(p,li) {font-size:inherit; line-height:var(--line-reading)}
-#content .task-chat-answer h3 {font-size:22px; line-height:1.5}
-#content .task-chat-answer h4 {font-size:20px; line-height:1.5}
-#content .task-chat-answer h5 {font-size:18px; line-height:1.5}
+#content .task-chat-answer h3 {font-size:1.375rem; line-height:1.5}
+#content .task-chat-answer h4 {font-size:1.25rem; line-height:1.5}
+#content .task-chat-answer h5 {font-size:1.125rem; line-height:1.5}
 #content .task-chat-answer h6 {font-size:var(--type-reading); line-height:1.5}
-.task-chat-answer p {margin:12px 0}
+.task-chat-answer p {margin:.85em 0;text-wrap:pretty}
 .task-chat-answer :is(h3,h4,h5,h6) {margin:1.4em 0 .6em}
 .task-chat-answer>:first-child {margin-top:0}
-.task-chat-answer li+li {margin-top:6px}
-.task-chat-answer pre {background:var(--subtle); border-color:var(--border); border-radius:10px; font-size:13px}
+.task-chat-answer li+li {margin-top:.4em}
+.task-chat-answer :is(ul,ol) {padding-inline-start:1.6em}
+.task-chat-answer li::marker {color:var(--muted)}
+.task-chat-answer a {text-decoration-thickness:1px;text-underline-offset:.2em}
+.task-chat-answer pre {background:var(--subtle); border-color:var(--border); border-radius:10px; font-size:var(--type-help)}
 .chat-answer-actions {gap:16px; margin-top:14px; border:0}
 .chat-answer-actions .text-button {font-size:12px; min-height:36px; color:var(--muted); opacity:1}
 .chat-answer-actions .text-button svg {width:14px; height:14px}

@@ -2,30 +2,50 @@
 /* Shared roles keep text legible without turning metadata into body copy. */
 /* Hallmark · pre-emit critique: P4 H5 E4 S5 R5 V4 · reviewed as a productivity application */
 :root {
- --type-title:28px; --type-section:18px; --type-card-title:16px; --type-dialog:20px;
- --type-body:14px; --type-label:14px; --type-help:13px; --type-meta:12px;
- --type-prose:15px; --type-reading:16px; --line-reading:1.8; --reading-measure:72ch;
- --line-body:1.65; --line-help:1.6; --empty-space:32px;
+ --type-title:1.875rem; --type-section:1.25rem; --type-card-title:1.0625rem; --type-dialog:1.375rem;
+ --type-subheading:1rem; --type-body:1rem; --type-label:.875rem; --type-action:.9375rem; --type-help:.8125rem; --type-meta:.75rem;
+ --type-prose:1rem; --type-reading:1rem; --line-reading:1.8; --reading-measure:72ch;
+ --line-body:1.6; --line-help:1.6; --line-heading:1.5; --empty-space:32px;
  --control-line-height:1.5; --control-padding:8px 12px;
 }
-body {font-size:var(--type-body)}
+body {font-size:var(--type-body);line-height:var(--line-body)}
+/* Controls keep their compact density while copy gets a comfortable reading size. */
+:is(.button,.text-button) {font-size:var(--type-action);font-weight:500;letter-spacing:normal}
+:is(.tab,.hub-tabs .button,.sidebar nav a,.sidebar-help) {font-size:var(--type-label);font-weight:500;letter-spacing:normal}
+.button.primary {font-weight:500}
+:is(.button,.text-button) {line-height:1.5}
+:is(.sidebar nav a.active,.tab.active,.hub-tabs [aria-selected=true]) {font-weight:500}
+:is(.sidebar nav .nav-label,.sidebar .workspace-picker-label,.sidebar #version,.footer,.table-bottom) {font-size:var(--type-meta);line-height:1.6}
+:is(input,textarea)::placeholder {font-weight:400}
 :is(#content,dialog) :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]),textarea,select:not(.enhanced-select)) {font-size:var(--control-font-size);line-height:var(--control-line-height)}
 #content :not(pre)>code {font-size:max(.9em,12px)}
-#content :is(.page-head,.agent-directory-head,.agent-detail-title) h1 {font-size:var(--type-title);line-height:1.35;letter-spacing:normal}
-#content h2 {font-size:var(--type-section);line-height:1.5}
-#content h3 {font-size:16px;line-height:1.5}
+#content :is(.page-head,.agent-directory-head,.agent-detail-title,.route-loading,.route-error) h1 {font-size:var(--type-title);line-height:var(--line-heading);letter-spacing:normal;font-weight:500;text-wrap:balance}
+#content h2 {font-size:var(--type-section);line-height:var(--line-heading)}
+#content h3 {font-size:var(--type-subheading);line-height:1.5}
 /* Card headings and their supporting copy share roles across every directory. */
-#content :is(.panel-heading h2,.mini-heading h2,.operations-overview h2,.skill-card h2) {font-family:var(--font);font-size:var(--type-card-title);font-weight:600;line-height:1.5;letter-spacing:normal}
-:is(#content,dialog) :is(.panel-heading p,.panel-heading h2 small,.mini-heading small,.operations-overview .muted,.operations-footer>.field-help) {font-family:var(--font);font-size:var(--type-help);font-weight:400;line-height:var(--line-help);letter-spacing:normal}
+#content :is(.panel-heading h2,.mini-heading h2,.operations-overview h2,.skill-card h2,.flow-directory-card h2,.workspace-card-header h2,.agent-detail-section h2,.agent-detail-inspector h2,.library-asset h3,.domain-builtin-grid h3) {font-family:var(--font);font-size:var(--type-card-title);font-weight:500;line-height:1.5;letter-spacing:normal}
+:is(#content,dialog) :is(.panel-heading p,.panel-heading h2 small,.mini-heading small,.operations-overview .muted,.operations-footer>.field-help,.asset-subtitle,.agent-detail-meta) {font-family:var(--font);font-size:var(--type-help);font-weight:400;line-height:var(--line-help);letter-spacing:normal}
+:is(#content,dialog) :is(.panel-heading,.mini-heading) h2+p {margin-top:6px}
 :is(#content,dialog) :where(p:not(.eyebrow):not(.evaluation-number),li) {font-size:var(--type-body);line-height:var(--line-body)}
 #content .evaluation-number {font-size:44px;line-height:1.25}
 :is(#content,dialog) label {font-size:var(--type-label);line-height:1.5;font-weight:500}
 :is(#content,dialog) :is(.field-help,.field-validation,.field-validation-error,.required-note,.inline-error,.resource-results,.context-indicator,.operations-note,.runtime-detection,.runtime-auth p,.runtime-boundary,.agent-section-copy,.agent-version-note,.agent-live-note,.agent-live-facts .fact,.agent-live-checks li,.task-selected-agent p,.task-agent-execution p,.readiness-list li,.evaluation-detail small) {font-size:var(--type-help);line-height:var(--line-help)}
-#content .page-head p:not(.eyebrow),#content .library-module-heading p {font-size:var(--type-body);line-height:var(--line-body)}
-dialog .dialog-head h2 {font-size:var(--type-dialog);line-height:1.4}
+#content .page-head p:not(.eyebrow),#content .library-module-heading p {font-size:var(--type-body);line-height:var(--line-body);color:var(--muted);text-wrap:pretty}
+dialog .dialog-head h2 {font-size:var(--type-dialog);line-height:var(--line-heading);font-weight:500;text-wrap:balance}
+dialog .dialog-head p:not(.eyebrow) {margin-top:8px;color:var(--muted);font-size:var(--type-help);line-height:var(--line-help)}
 :is(#agent-dialog,#create-dialog) :is(.field-help,.field-validation-error,.agent-form-state,.agent-config-overview p,.agent-form-next-hint) {font-size:var(--type-help);line-height:var(--line-help)}
 :is(#content,dialog) :is(.field-meter,.pill,.run-filter-count,.agent-row-version,.agent-detail-meta>span,.task-message-main time,.chat-process-count,.chat-agent-label,.chat-queued-label,.select-result-count) {font-size:var(--type-meta)}
 #content :is(.tool-row small,.capability-list small,.registry-grid small,.agent-duty-list small,.agent-detail-skills p,.agent-detail-inspector>.fact,.runtime-choice small) {font-size:var(--type-help);line-height:var(--line-help)}
+/* Table labels, status text and form hints should never inherit heading emphasis. */
+:is(#content,dialog) :is(.field-help,.check-label small,.required-note,.field-meter) {font-weight:400}
+:is(#content,dialog) .check-label small {font-size:var(--type-help);line-height:var(--line-help)}
+#content :is(.agent-directory-table,.domain-table,.run-list-panel table) {font-size:var(--type-label);line-height:var(--line-body)}
+#content .run-list-panel td {font-size:var(--type-label)}
+#content .run-updated-time {font-size:var(--type-help);line-height:var(--line-help);font-weight:400}
+#content :is(.agent-row-identity strong,.task-link,.flow-run-row strong) {font-size:var(--type-body);font-weight:500;line-height:1.6}
+#content :is(.agent-row-description,.domain-table td p,.daily-plan-match p,.daily-item-number,.agent-directory-footer,.domain-list-footer) {font-size:var(--type-help);line-height:var(--line-help)}
+:is(.pill,.agent-status,.agent-row-version,.chat-task-status) {font-weight:500;line-height:1.5;letter-spacing:normal}
+#content :is(.field-help,.operations-note,.domain-explanation,.skill-description,.flow-directory-description) {text-wrap:pretty}
 
 /* A compound field includes its border in the same height as its neighbours. */
 :is(.filter-input,.resource-search) {height:max(var(--control-height),calc(1.5em + 18px));min-height:var(--control-height);box-sizing:border-box}

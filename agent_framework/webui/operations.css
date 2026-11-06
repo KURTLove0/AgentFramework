@@ -71,7 +71,7 @@
 .operations-warning {border-left:3px solid var(--amber);padding-left:16px}
 .evaluation-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;margin:24px 0}
 .evaluation-score {padding:24px}
-.evaluation-number {font:600 44px/1.3 var(--display);margin:16px 0;letter-spacing:-1px}
+.evaluation-number {font:600 44px/1.3 var(--display);margin:16px 0;letter-spacing:-.02em}
 .evaluation-number small {font:400 var(--type-body)/var(--line-body) var(--font);letter-spacing:normal;margin-left:8px;color:var(--muted)}
 .evaluation-detail {margin:0 24px;border-bottom:1px solid var(--border)}
 .evaluation-detail:last-child {border-bottom:0}
@@ -169,3 +169,26 @@
 #operations-error,#operation-settings-feedback{overflow-wrap:anywhere}
 #operation-settings-feedback>div{min-width:0}
 #operation-settings-feedback .toolbar{flex-wrap:wrap}
+
+/* Plan progress and evaluation scores retain their exact numeric equivalents. */
+.daily-plan-progress {margin:0 24px 20px;min-width:0}
+.daily-plan-progress-heading {display:flex;align-items:baseline;justify-content:space-between;gap:8px 16px;flex-wrap:wrap}
+.daily-plan-progress-heading strong {font-size:var(--type-label);line-height:1.5}
+.daily-plan-progress-heading span {color:var(--muted);font-size:var(--type-help);line-height:var(--line-help)}
+.daily-plan-progress .run-composition-track {margin:12px 0 10px}
+.daily-plan-progress-legend .run-composition-item {padding-inline:0}
+.evaluation-score-heading {display:flex;align-items:flex-start;justify-content:space-between;gap:8px 16px;flex-wrap:wrap}
+.evaluation-score-heading .pill {max-width:100%;white-space:normal}
+.evaluation-score-summary {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0 20px;padding:12px 0;border-block:1px solid var(--border)}
+.evaluation-score-summary span {min-width:0;color:var(--muted);font-size:var(--type-help);line-height:1.5}
+.evaluation-score-summary strong {display:block;color:var(--ink);font:600 20px/1.4 var(--display);font-variant-numeric:tabular-nums}
+.evaluation-score-track {display:block;width:100%;height:9px;margin-top:20px;overflow:hidden;border:1px solid var(--border);border-radius:999px;background:var(--subtle)}
+.evaluation-score-fill.good {fill:var(--green)}
+.evaluation-score-fill.warn {fill:var(--amber)}
+.evaluation-score-fill.neutral {fill:var(--border-strong)}
+.evaluation-score-threshold {stroke:var(--ink);stroke-width:2px}
+.evaluation-score-scale {display:flex;justify-content:space-between;gap:8px;margin-top:8px;color:var(--muted);font-size:var(--type-meta);line-height:1.5}
+.evaluation-score-scale span:nth-child(2) {text-align:center}
+.evaluation-score-scale span:last-child {text-align:right}
+.evaluation-score>.field-help:last-child {margin-bottom:0}
+@media(max-width:700px){.daily-plan-progress {margin:0 20px 16px}.daily-plan-progress-heading {align-items:flex-start;flex-direction:column}.evaluation-score-summary {gap:8px}}

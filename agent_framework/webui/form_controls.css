@@ -135,7 +135,7 @@ dialog.structured-dialog {position:fixed;inset:0;margin:auto;height:fit-content;
 }
 
 /* Compact choices open directly; large catalogs keep search and keyboard help. */
-.select-keyboard-hints {display:flex;justify-content:space-between;gap:12px;flex:none;margin-top:4px;padding:8px 8px 2px;border-top:1px solid var(--border);color:var(--muted);font:12px var(--mono)}
+.select-keyboard-hints {display:flex;justify-content:space-between;gap:12px;flex:none;margin-top:4px;padding:8px 8px 2px;border-top:1px solid var(--border);color:var(--muted);font:400 13px/1.6 var(--font)}
 @media(max-width:700px){
  :root {--control-height:44px;--control-font-size:16px;--control-line-height:24px;--option-height:44px}
  .select-popover {top:auto!important;left:12px!important;right:12px;bottom:max(12px,env(safe-area-inset-bottom));width:auto!important;max-height:min(72dvh,var(--picker-viewport-height,72dvh))!important;border-radius:var(--popover-radius)}

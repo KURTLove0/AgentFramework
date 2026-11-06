@@ -33,6 +33,9 @@ def generate(transport,prompt,schema,config,timeout):
         if '对话版式验收' in goal or '整理会议纪要' in goal:
             content='## 会议纪要\n\n本次讨论已整理为以下三项行动，便于继续确认与跟进。\n\n### 已确认事项\n\n- **产品方案**：周五前完成第一版，标明已确认内容与待讨论事项。\n- **客户沟通**：先确认问题，再发送简洁的进展说明。\n- **后续安排**：明确负责人、交付时间和完成标准。\n\n### 建议下一步\n\n1. 由各负责人补充尚未确认的信息。\n2. 核对时间安排后，再形成最终版本。\n\n```json\n{"status": "待确认", "owner": "待补充"}\n```\n\n你可以继续补充要求，我会在同一任务中更新这份纪要。'
         if '细节排版验收' in goal:content='# 执行摘要\n\n'+content+'\n\n### 补充说明\n\n请核对尚未确认的信息。'
+        if '字体排版验收' in goal:
+            content+='\n\n### 中英文长段落\n\n'+('中文正文与 English typography 共用清晰的阅读节奏。API v1.4.0、日期 2026-11-06 与 1,349 项记录需要易于区分；**重要结论**和 *补充说明* 保留原有含义。'*8)
+            content+='\n\n#### 标识与数据\n\n长标识：`request-'+('abcdef0123456789'*20)+'`。\n\n| 指标 Metric | 数量 Count | 说明 Notes |\n| --- | ---: | --- |\n| 前端检查 | 1,349 | 仅为排版合成记录 |\n| 窗口宽度 | 1,440 | CSS pixels |\n'
         if history.get('messages'):content+='\n已有对话：'+str(len(history['messages']))+' 条。'
         for item in task.get('workflow_inputs',[]):content+='\n上游结果：'+item['artifact']['content']
         value={'kind':'result','summary':'已按目标整理本轮结果。','result':{'title':'本轮结果','content':content,'citations':[],'limitations':[]}}

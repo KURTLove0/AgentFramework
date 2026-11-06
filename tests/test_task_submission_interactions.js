@@ -158,3 +158,33 @@ test('failed storage cleanup does not resurrect the completed request in the sam
 test('an unavailable restored agent stays visible and cannot start a new task until corrected',async()=>{
  const a=sandbox();a.handle(lost);await a.submit();const b=sandbox(a.storage),select=b.form.agent_id;let value='';const options=[];Object.defineProperty(select,'value',{get:()=>value,set:v=>{value=options.some(o=>o.value===v)?v:'';}});select.add=o=>options.push(o);Object.defineProperty(select,'selectedOptions',{get:()=>options.filter(o=>o.value===value)});b.state.agents=[];b.run('initializeTaskSubmission()');assert.equal(select.value,'agent-a');assert(select.selectedOptions[0].disabled);b.journey.submissionIssue=null;b.run('showTaskFieldError=()=>{}');assert.equal(b.run('taskSubmitGate({})'),false);assert.equal(b.calls.filter(c=>c.data).length,0);
 });
+
+function submissionNavigation(s){
+ const panel=s.node('task-submission-status'),review=s.node('task-submission-review'),retry=s.node('task-submission-retry');
+ const actions=[review,retry,s.node('task-submission-open'),s.node('task-submission-copy'),s.node('task-submission-use')];
+ panel.contains=el=>actions.includes(el);s.context.document.body={};
+ let html=panel.innerHTML,writes=0;Object.defineProperty(panel,'innerHTML',{get:()=>html,set:value=>{writes++;html=value;if(panel.contains(s.context.document.activeElement))s.context.document.activeElement=s.context.document.body;}});
+ const all=s.context.$$;s.context.$$=(selector,element)=>selector==='button'&&element===panel?actions:all(selector,element);
+ return {panel,review,retry,writes:()=>writes};
+}
+test('pending submission review retains readable content and focused controls while blocking repeated actions',async()=>{
+ const s=sandbox();s.handle(lost);await s.submit();const n=submissionNavigation(s),before=n.writes(),payload=JSON.stringify(s.journey.submission.payload);let finish;
+ s.handle(()=>new Promise(resolve=>finish=resolve));n.review.focus();const pending=s.run('reviewTaskSubmission()');
+ assert.equal(n.writes(),before);assert.match(n.panel.innerHTML,/本页目标/);assert.equal(s.context.document.activeElement,n.review);assert.equal(n.review.disabled,false);assert.equal(n.review.attributes['aria-busy'],'true');assert.equal(n.retry.attributes['aria-disabled'],'true');
+ await s.run('reviewTaskSubmission();retryTaskSubmission();useReviewedTaskConfiguration();resolveAcceptedTaskSubmission(true)');assert.equal(s.calls.filter(c=>c.url).length,2);assert.equal(JSON.stringify(s.journey.submission.payload),payload);
+ finish(receipt(s));await pending;assert.equal(n.review.attributes['aria-busy'],undefined);assert.equal(n.retry.attributes['aria-disabled'],undefined);
+});
+test('an accepted review keeps focus on review instead of jumping to the newly available open action',async()=>{
+ const s=sandbox();s.handle(lost);await s.submit();const n=submissionNavigation(s);n.review.focus();s.handle(async()=>receipt(s));await s.run('reviewTaskSubmission()');
+ assert.equal(s.context.document.activeElement,n.review);assert.match(n.panel.innerHTML,/查看已受理任务/);assert.equal(s.form.goal.value,'本页目标');assert.equal(s.calls.filter(c=>c.data).length,1);assert(!s.calls.some(c=>c.navigate));
+});
+test('failed review releases its waiting state and respects newer input focus before retry',async()=>{
+ const s=sandbox();s.handle(lost);await s.submit();const n=submissionNavigation(s);let reject;n.review.focus();s.handle(()=>new Promise((resolve,fail)=>reject=fail));const pending=s.run('reviewTaskSubmission()');
+ s.form.goal.value='等待时编辑的目标';s.form.goal.focus();reject(Error('服务暂时不可用'));await pending;assert.equal(s.context.document.activeElement,s.form.goal);assert.equal(s.form.goal.value,'等待时编辑的目标');assert.equal(n.review.attributes['aria-busy'],undefined);assert.match(n.panel.innerHTML,/服务暂时不可用/);
+ s.handle(async()=>receipt(s));n.review.focus();await s.run('reviewTaskSubmission()');assert.equal(s.context.document.activeElement,n.review);assert.equal(s.calls.filter(c=>c.data).length,1);
+});
+test('an old review cannot repaint or release controls belonging to a newer editor',async()=>{
+ const s=sandbox();s.handle(lost);await s.submit();const n=submissionNavigation(s);let finish;s.handle(()=>new Promise(resolve=>finish=resolve));n.review.focus();const pending=s.run('reviewTaskSubmission()');const accepted=receipt(s);
+ s.journey.editorSession++;s.journey.submission={scope:s.run('taskSubmissionScope()'),payload:{...s.journey.submission.payload,request_id:'new-editor-request'}};s.journey.submissionIssue={message:'新窗口保留的状态'};s.journey.submissionReviewing=true;s.run('renderTaskSubmission()');s.form.goal.focus();const html=n.panel.innerHTML,writes=n.writes();finish(accepted);await pending;
+ assert.equal(n.panel.innerHTML,html);assert.equal(n.writes(),writes);assert.equal(n.review.attributes['aria-busy'],'true');assert.equal(s.journey.submissionReviewing,true);assert.equal(s.context.document.activeElement,s.form.goal);
+});

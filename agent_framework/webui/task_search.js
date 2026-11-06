@@ -13,8 +13,9 @@ function taskSearchHoldsReading(){const h=taskSearchState();return !!h?.open&&!!
 function taskSearchToggle(){const h=taskSearchState();return h?`<button type="button" id="task-search-toggle" class="text-button task-search-toggle" data-task-search="open" aria-expanded="${h.open}" aria-controls="task-search-panel">${icon('search')}查找对话</button>`:'';}
 function taskSearchPanel(){
  const h=taskSearchState();if(!h)return '';
- return `<section class="task-search-panel" id="task-search-panel" role="search" aria-label="查找当前对话" ${h.open?'':'hidden'}><div class="task-search-controls"><label for="task-search-input">查找文字<input id="task-search-input" type="search" maxlength="200" value="${esc(h.query)}" placeholder="输入本任务中的文字" aria-describedby="task-search-status" autocomplete="off"></label><div class="task-search-actions"><button type="button" class="button secondary" data-task-search="previous" id="task-search-previous" aria-label="上一处匹配">上一处</button><button type="button" class="button secondary" data-task-search="next" id="task-search-next" aria-label="下一处匹配">下一处</button><button type="button" class="text-button" data-task-search="close" id="task-search-close" aria-label="关闭对话查找">关闭</button></div></div><p id="task-search-status" role="status" aria-live="polite">输入文字，查找本任务的要求、回复和生成片段。</p></section>`;
+ return `<section class="task-search-panel" id="task-search-panel" role="search" aria-label="查找当前对话" ${h.open?'':'hidden'}><div class="task-search-controls"><label for="task-search-input"><span class="sr-only">查找文字</span><input id="task-search-input" type="search" maxlength="200" value="${esc(h.query)}" placeholder="查找本任务中的文字" aria-describedby="task-search-status" autocomplete="off"></label><div class="task-search-actions"><button type="button" class="button secondary" data-task-search="previous" id="task-search-previous" aria-label="上一处匹配" title="上一处匹配（Shift+Enter）">${icon('chevron')}</button><button type="button" class="button secondary" data-task-search="next" id="task-search-next" aria-label="下一处匹配" title="下一处匹配（Enter）">${icon('chevron')}</button><button type="button" class="text-button" data-task-search="close" id="task-search-close" aria-label="关闭对话查找" title="关闭对话查找（Esc）">${icon('close')}</button></div></div><p id="task-search-status" role="status" aria-live="polite">输入文字，查找本任务的要求、回复和生成片段。</p></section>`;
 }
+function taskSearchComposerReturn(){const h=taskSearchState();return `<div class="task-search-composer-return" id="task-search-composer-return" ${h?.open?'':'hidden'}><span>输入内容保留在原处</span><button type="button" id="task-search-compose" class="button secondary" data-task-search="compose" aria-controls="task-chat-form">返回输入区</button></div>`;}
 function taskSearchOffsets(text,query,limit=TASK_SEARCH_LIMIT){
  const value=query.trim();if(!value)return {hits:[],capped:false};
  const pattern=new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'giu'),hits=[];let match;
@@ -90,7 +91,8 @@ function taskSearchStatus(h){
 }
 function updateTaskSearchControls(h){
  if(!taskSearchCurrent(h))return;const status=document.getElementById('task-search-status');if(status&&status.textContent!==taskSearchStatus(h))status.textContent=taskSearchStatus(h);
- for(const button of document.querySelectorAll('[data-task-search="previous"],[data-task-search="next"]'))button.disabled=h.composing||!h.matches.length;
+ const returning=document.getElementById('task-search-composer-return');if(returning)returning.hidden=!h.open;
+ for(const button of document.querySelectorAll('[data-task-search="previous"],[data-task-search="next"]')){const focused=document.activeElement===button;button.disabled=h.composing||!h.matches.length;if(focused&&button.disabled)document.getElementById('task-search-input')?.focus({preventScroll:true});}
 }
 function refreshTaskSearch({adopt=false,jump=false}={}){
  const h=taskSearchState();if(!taskSearchCurrent(h)||!h.open){clearTaskSearchHighlights();return;}if(h.composing)return;
@@ -122,8 +124,9 @@ function locateTaskSearch(h=taskSearchState()){
 function openTaskSearch(){
  const h=taskSearchState();if(!taskSearchCurrent(h))return;h.open=true;const panel=document.getElementById('task-search-panel');panel.hidden=false;document.getElementById('task-search-toggle').setAttribute('aria-expanded','true');refreshTaskSearch({adopt:true,jump:true});const input=document.getElementById('task-search-input');input.focus({preventScroll:true});input.select();
 }
-function closeTaskSearch(){
- const h=taskSearchState();if(!taskSearchCurrent(h)||!h.open)return;h.open=false;h.composing=false;clearTimeout(h.timer);h.timer=null;h.matches=[];releaseTaskSearchIndex(h);clearTaskSearchHighlights();document.getElementById('task-search-panel').hidden=true;const toggle=document.getElementById('task-search-toggle');toggle.setAttribute('aria-expanded','false');toggle.focus({preventScroll:true});
+function closeTaskSearch({compose=false}={}){
+ const h=taskSearchState();if(!taskSearchCurrent(h)||!h.open)return;h.open=false;h.composing=false;clearTimeout(h.timer);h.timer=null;h.matches=[];releaseTaskSearchIndex(h);clearTaskSearchHighlights();document.getElementById('task-search-panel').hidden=true;const returning=document.getElementById('task-search-composer-return');if(returning)returning.hidden=true;const toggle=document.getElementById('task-search-toggle');toggle.setAttribute('aria-expanded','false');
+ const input=document.getElementById('task-chat-input');if(input){input.style.height='auto';input.style.height=Math.min(180,Math.max(64,input.scrollHeight))+'px';}(compose&&input&&!input.disabled?input:toggle).focus({preventScroll:true});
 }
 function moveTaskSearch(direction){
  const h=taskSearchState();if(!taskSearchCurrent(h)||!h.open||h.composing)return;clearTimeout(h.timer);h.timer=null;
@@ -136,12 +139,12 @@ function scheduleTaskSearch(){
  h.timer=setTimeout(()=>{h.timer=null;if(taskSearchCurrent(h)&&h.open&&!h.composing)refreshTaskSearch({adopt:true,jump:true});},160);
 }
 function leaveTaskSearch(){for(const h of taskSearches.values()){clearTimeout(h.timer);h.timer=null;h.matches=[];h.composing=false;releaseTaskSearchIndex(h);if(h.applied!==h.query){h.applied=h.query;h.selected=null;h.index=0;}}clearTaskSearchHighlights();}
-document.addEventListener('click',event=>{const button=event.target.closest('[data-task-search]');if(!button||button.disabled)return;event.preventDefault();const action=button.dataset.taskSearch;if(action==='open')openTaskSearch();else if(action==='close')closeTaskSearch();else moveTaskSearch(action==='previous'?-1:1);});
+document.addEventListener('click',event=>{const button=event.target.closest('[data-task-search]');if(!button||button.disabled)return;event.preventDefault();const action=button.dataset.taskSearch;if(action==='open')openTaskSearch();else if(action==='close'||action==='compose')closeTaskSearch({compose:action==='compose'});else moveTaskSearch(action==='previous'?-1:1);});
 document.addEventListener('input',event=>{if(event.target.id==='task-search-input')scheduleTaskSearch();});
 document.addEventListener('compositionstart',event=>{if(event.target.id!=='task-search-input')return;const h=taskSearchState();if(h){h.composing=true;clearTimeout(h.timer);h.timer=null;updateTaskSearchControls(h);}});
 document.addEventListener('compositionend',event=>{if(event.target.id!=='task-search-input')return;const h=taskSearchState();if(h){h.composing=false;h.compositionEnded=Date.now();scheduleTaskSearch();}});
 document.addEventListener('keydown',event=>{
- if(event.target.id!=='task-search-input')return;const h=taskSearchState();if(!h||event.isComposing||event.keyCode===229||h.composing||Date.now()-h.compositionEnded<150)return;
+ if(!['task-search-input','task-search-previous','task-search-next','task-search-close','task-search-compose'].includes(event.target.id))return;const h=taskSearchState();if(!taskSearchCurrent(h)||!h.open||event.isComposing||event.keyCode===229||h.composing||Date.now()-h.compositionEnded<150)return;
  if(event.key==='Escape'){event.preventDefault();event.stopPropagation();closeTaskSearch();}
- else if(event.key==='Enter'){event.preventDefault();moveTaskSearch(event.shiftKey?-1:1);}
+ else if(event.key==='Enter'&&event.target.id==='task-search-input'){event.preventDefault();moveTaskSearch(event.shiftKey?-1:1);}
 });

@@ -8,7 +8,7 @@ function skillSaveComparison(record){
 function renderSkillSaveRecovery(){
  const target=$('#skill-save-recovery'),editor=skillEditor;if(!target||!editor)return;
  const issue=editor.saveRecovery;target.hidden=!issue;if(!issue){target.innerHTML='';return;}
- const receipt=issue.receipt,latest=issue.latest,pending=editor.saving||editor.reviewing,disabled=pending?'disabled':'';
+ const receipt=issue.receipt,latest=issue.latest,pending=editor.saving||editor.reviewing||!!editor.resourceUpload,disabled=pending?'disabled':'';
  const actions=['review','retry','keep','copy','use','reset'],active=document.activeElement;
  const focused=target.contains?.(active)&&actions.find(action=>active?.hasAttribute?.('data-skill-save-'+action));
  if(focused)editor.recoveryFocus=focused;
@@ -18,13 +18,15 @@ function renderSkillSaveRecovery(){
 }
 async function saveSkillEditor(retryOriginal=false){
  let editor=skillEditor;if(!editor||editor.saving||editor.reviewing)return;
+ if(editor.resourceUpload){toast('资源正在读取，请等待完成或取消后再保存。');return;}
  if(!skillSaveCurrent(editor)){skillEditorError(Error('工作空间或身份已变化，请重新打开技能编辑器。'));return;}
+ cancelSkillOpening();
  if(editor.saveRecovery?.latest||editor.saveRecovery?.receipt){skillEditorError(Error('请先核对已保存版本，再选择如何保存本页文件。'));return;}
  if(editor.id&&!editor.dirty&&!editor.saveAttempt){toast('当前版本没有未保存的更改。');return;}
  const data=skillPayload(),snapshot=JSON.stringify(data);
  if(editor.saveAttempt&&editor.saveAttempt.snapshot!==snapshot&&!retryOriginal){editor.saveRecovery={message:'本页内容在上次提交后发生了变化，请先核对原保存，或重试原保存以确认结果。'};renderSkillSaveRecovery();skillEditorError(Error('请先核对上次保存结果，本页后续更改不会被覆盖。'));return;}
  if(!editor.saveAttempt)editor.saveAttempt={key:'skill-save-'+crypto.randomUUID(),identity:editor.id,payload:structuredClone(data),snapshot};
- const attempt=editor.saveAttempt,path=editor.path,callback=editor.onPublish;editor.saving=true;updateSkillEditorChrome();
+ const attempt=editor.saveAttempt,callback=editor.onPublish;editor.saving=true;updateSkillEditorChrome();
  $('#skill-editor-form').setAttribute('aria-busy','true');const unlock=typeof lockFormSubmission==='function'?lockFormSubmission($('#skill-editor-form')):()=>{};
  try{
   const body={...attempt.payload,request_id:attempt.key},packet=await api('/api/skills'+(attempt.identity?'/'+attempt.identity:''),body,15000,true,{workspace:editor.workspace,payload:JSON.stringify(body)});
@@ -36,9 +38,10 @@ async function saveSkillEditor(retryOriginal=false){
     message:changed?'原保存已确认，本页后续更改仍保留。':'此次保存已完成，技能包随后发生了变化，请核对当前版本。'};
    renderSkillSaveRecovery();return;
   }
+  rememberSkillFilePosition();const path=editor.path,positions=editor.filePositions,query=editor.fileQuery;
   editor.saving=false;const opened=await openSkillEditor(packet.id,'edit',packet.version,callback,packet);
   if(!opened)return;editor=opened;editor.saving=true;
-  if(editor.files[path])showSkillFile(path);
+  editor.filePositions=positions;editor.fileQuery=query;editor.path=null;showSkillFile(editor.files[path]?path:'SKILL.md');
   $('#skill-validation-result').textContent='已保存 v'+packet.version+' 草稿。检查完成后，可发布此版本。'+(packet.warnings||[]).join('；');setSkillFeedback(packet,'save');
   try{await loadSkills();}catch(error){if(skillSaveCurrent(editor))toast('草稿已保存，目录刷新失败：'+error.message);}
   if(skillSaveCurrent(editor)&&state.view==='skills')render();
@@ -52,6 +55,8 @@ async function saveSkillEditor(retryOriginal=false){
 }
 async function reviewSkillSave(){
  const editor=skillEditor;if(!editor||editor.saving||editor.reviewing||!skillSaveCurrent(editor))return;
+ if(editor.resourceUpload){toast('资源正在读取，请等待完成或取消后再核对。');return;}
+ cancelSkillOpening();
  const attempt=editor.saveAttempt;if(!attempt&&!editor.id)return;
  editor.reviewing=true;editor.saveRecovery={...editor.saveRecovery,message:'正在核对原保存与当前版本。'};updateSkillEditorChrome();
  const read=path=>api(path,undefined,15000,true,{workspace:editor.workspace,payload:undefined});let receipt=null;
@@ -67,8 +72,8 @@ async function reviewSkillSave(){
  finally{editor.reviewing=false;if(skillSaveCurrent(editor))updateSkillEditorChrome();}
 }
 async function resolveSkillSave(choice){
- const editor=skillEditor;if(!editor||editor.saving||editor.reviewing||!skillSaveCurrent(editor))return;
- const issue=editor.saveRecovery,latest=issue?.latest,record=latest||issue?.receipt;if(!issue)return;flushSkillFile();
+ const editor=skillEditor;if(!editor||editor.saving||editor.reviewing||editor.resourceUpload||!skillSaveCurrent(editor))return;
+ const issue=editor.saveRecovery,latest=issue?.latest,record=latest||issue?.receipt;if(!issue)return;flushSkillFile();rememberSkillFilePosition();
  if(choice==='reset'){
   if(!issue.rejected||record)return;editor.saveAttempt=null;editor.saveRecovery=null;editor.dirty=true;updateSkillEditorChrome();return;
  }

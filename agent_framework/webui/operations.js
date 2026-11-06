@@ -13,20 +13,72 @@ async function loadOperations({force=false}={}){
  state.agents=agents.agents;
  if(state.view==='daily')state.dailyOperations=data;
 }
+function dailyPlanNavigation(){
+ const scope=operationSettingsScope();
+ if(state.dailyPlanNavigation?.scope!==scope)state.dailyPlanNavigation={scope,plans:new Map(),returnFocus:null};
+ return state.dailyPlanNavigation;
+}
+function dailyPlanView(id){
+ const navigation=dailyPlanNavigation();
+ if(!navigation.plans.has(id))navigation.plans.set(id,{query:'',status:'all',expanded:new Set()});
+ return navigation.plans.get(id);
+}
+function captureDailyPlanDetails(){
+ // Snapshot native disclosure state before a redraw; filtered-out rows retain theirs.
+ const navigation=dailyPlanNavigation();
+ for(const card of document.querySelectorAll?.('[data-daily-plan]')||[]){
+  if(card.dataset.dailyScope!==navigation.scope)continue;
+  const view=dailyPlanView(card.dataset.dailyPlan);
+  for(const detail of card.querySelectorAll('details[data-daily-detail]')){const key=detail.dataset.dailyDetail;if(detail.open)view.expanded.add(key);else view.expanded.delete(key);}
+ }
+}
+function dailyPlanMatches(item,view){
+ const tokens=view.query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean),text=[item.task.goal,item.agent_name,item.reason].join(' ').toLocaleLowerCase();
+ return (view.status==='all'||item.status===view.status)&&tokens.every(token=>text.includes(token));
+}
+function dailyPlanControl(plan,kind,item=''){return 'daily-'+kind+'-'+plan+(item?'-'+item:'');}
+function dailyPlanReturnFocus(run){
+ const navigation=dailyPlanNavigation(),back=navigation.returnFocus;
+ if(!back||back.run!==run||back.route!==location.hash)return null;
+ state.dailyPlanReturnRoute=state.routeVersion;state.routePosition={top:back.top};
+ return back.control;
+}
+function dailyGoalContent(goal,plan,key){
+ const original=String(goal||''),flat=original.replace(/\s+/g,' ').trim(),chars=Array.from(flat),preview=chars.slice(0,160).join('')+(chars.length>160?'…':''),full=preview!==original,view=dailyPlanView(plan);
+ return '<strong class="daily-goal-preview'+(full?' is-shortened':'')+'">'+esc(preview)+'</strong>'+(full?'<details class="daily-goal-detail" data-key="'+esc(dailyPlanControl(plan,'goal',key))+'" data-daily-detail="'+esc(key)+'" '+(view.expanded.has(key)?'open':'')+'><summary id="'+esc(dailyPlanControl(plan,'goal',key))+'">完整目标</summary><p class="daily-goal-copy">'+esc(original)+'</p></details>':'');
+}
+function dailyItemCard(plan,item,index){
+ const labels={READY:'可派发',BLOCKED:'受阻',SKIPPED:'复用待办',DISPATCHED:'已派发'},run=item.run_id||item.existing_run_id;
+ return '<section class="operations-item daily-plan-item" data-daily-item="'+esc(item.id)+'"><div><p class="daily-item-number">任务 '+(index+1)+' · '+esc(labels[item.status]||item.status)+'</p>'+dailyGoalContent(item.task.goal,plan.id,item.id)+'<p class="field-help">'+esc(item.agent_name)+' · 固定 v'+esc(item.task.agent_revision)+(item.task.execution_mode==='conversation'?' · 按目标执行':item.task.grant?' · 已授予草稿创建权限':' · 业务写入需逐项授权')+'</p>'+(item.reason?'<p class="operations-reason">'+esc(item.reason)+'</p>':'')+'</div><div class="operations-item-end">'+(run?(item.run_id?statusPill(plan.auto_start&&plan.dispatch?.state==='PENDING'&&(item.run_status||'CREATED')==='CREATED'?'QUEUED':item.run_status||'CREATED'):'')+'<a id="'+esc(dailyPlanControl(plan.id,'link',item.id))+'" data-daily-run="'+esc(run)+'" class="button secondary" href="#/workbench/'+encodeURIComponent(run)+'">'+(item.run_id?'查看任务':'处理原任务')+'</a>':'<span class="pill '+(item.status==='BLOCKED'?'warn':'')+'">'+esc(labels[item.status]||item.status)+'</span>')+'</div></section>';
+}
+function dailyPlanItems(plan){
+ const view=dailyPlanView(plan.id),matches=plan.items.map((item,index)=>({item,index})).filter(({item})=>dailyPlanMatches(item,view)),filtered=!!view.query||view.status!=='all';
+ if(!plan.items.length)return '<div class="operations-items"><p class="muted">尚未配置任务模板。保存设置后重新生成今日计划。</p></div>';
+ return '<div class="daily-plan-tools"><label for="'+esc(dailyPlanControl(plan.id,'search'))+'">查找计划内任务<input type="search" id="'+esc(dailyPlanControl(plan.id,'search'))+'" data-daily-search="'+esc(plan.id)+'" maxlength="2000" placeholder="搜索目标、Agent 或受阻原因" value="'+esc(view.query)+'"></label><div class="daily-plan-filters" role="group" aria-label="条目状态">'+[['all','全部'],['READY','可派发'],['BLOCKED','受阻'],['DISPATCHED','已派发'],['SKIPPED','复用待办']].map(([value,label])=>'<button type="button" id="'+esc(dailyPlanControl(plan.id,'filter',value))+'" class="button '+(view.status===value?'secondary':'text-button')+'" aria-pressed="'+(view.status===value)+'" data-daily-filter="'+value+'">'+label+' <span>'+ (value==='all'?plan.items.length:plan.items.filter(item=>item.status===value).length)+'</span></button>').join('')+'</div><div class="daily-plan-match"><p role="status" aria-live="polite">显示 '+matches.length+' / '+plan.items.length+' 项'+(filtered?' · 已应用查看条件':'')+'</p>'+(filtered?'<button type="button" class="text-button" id="'+esc(dailyPlanControl(plan.id,'clear'))+'" data-daily-clear>清除条件</button>':'')+'</div></div><div class="operations-items">'+(matches.length?matches.map(({item,index})=>dailyItemCard(plan,item,index)).join(''):'<div class="daily-plan-empty"><p>没有符合条件的任务</p><p class="field-help">可更换关键词或条目状态，清除条件可查看整份计划。</p><button class="button secondary" data-daily-clear id="'+esc(dailyPlanControl(plan.id,'clear-empty'))+'">查看全部任务</button></div>')+'</div>';
+}
+function changeDailyPlanQuery(target){
+ if(!target.matches?.('[data-daily-search]'))return;
+ dailyPlanView(target.dataset.dailySearch).query=target.value;render();
+}
+document.addEventListener('input',event=>{if(!event.isComposing)changeDailyPlanQuery(event.target);});
+document.addEventListener('compositionend',event=>changeDailyPlanQuery(event.target));
+document.addEventListener('click',event=>{
+ const card=event.target.closest('[data-daily-plan]');if(!card||state.view!=='daily')return;
+ const filter=event.target.closest('[data-daily-filter]'),clear=event.target.closest('[data-daily-clear]');
+ if(filter||clear){const view=dailyPlanView(card.dataset.dailyPlan);if(clear){view.query='';view.status='all';}else view.status=filter.dataset.dailyFilter;render();document.getElementById(clear?dailyPlanControl(card.dataset.dailyPlan,'search'):filter.id)?.focus({preventScroll:true});return;}
+ const link=event.target.closest('a[data-daily-run]');if(!link||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+ captureDailyPlanDetails();dailyPlanNavigation().returnFocus={route:state.routeHash,run:link.dataset.dailyRun,control:link.id,plan:card.dataset.dailyPlan,top:window.scrollY};
+});
 function focusDailyPlan(){
  if(state.view!=='daily'||!state.selected)return;
  const target=document.getElementById('daily-plan-'+state.selected)||document.getElementById('daily-plan-unavailable');if(!target)return;
  const key=JSON.stringify([state.workspaceId,state.routeVersion,state.selected,target.id]);if(state.dailyPlanFocused===key)return;
- state.dailyPlanFocused=key;target.focus({preventScroll:true});target.scrollIntoView({block:'start',behavior:'instant'});
+ state.dailyPlanFocused=key;if(state.dailyPlanReturnRoute!=null&&state.dailyPlanReturnRoute===state.routeVersion)return;if(document.activeElement&&document.activeElement!==document.body&&document.activeElement!==$('#content')&&!document.activeElement.closest('#content'))return;target.focus({preventScroll:true});target.scrollIntoView({block:'start',behavior:'instant'});
 }
 function dailyPage(){
  const data=state.dailyOperations;if(!data)return '<div class="loading" role="status">正在载入每日计划…</div>';
- const config=data.settings;
- return `<div class="page-head"><div><p class="eyebrow">DAILY PLANNING</p><h1>每日任务</h1><p>汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。</p></div><div class="toolbar"><button class="button secondary" data-operation="schedule-edit">${icon('sliders')}计划设置</button><button class="button primary" data-operation="plan-generate">${icon('plus')}生成今日计划</button></div></div>${operationSettingsFeedback()}${data.selected_plan_error?`<section id="daily-plan-unavailable" class="notice bad" role="alert" tabindex="-1"><p>所选计划暂不可读：${esc(data.selected_plan_error)}</p><button type="button" class="button secondary" data-action="refresh">重试读取</button><a class="text-button" href="#/daily">查看近期计划</a></section>`:''}<section class="panel operations-overview"><div><h2>${config.enabled?'自动定时已开启':'自动定时未开启'}</h2><p class="muted">每天 ${esc(config.daily_time)} · ${esc(config.timezone)} · ${config.tasks.length} 项任务模板</p><p>${config.auto_start?'派发后自动启动任务':'派发为待启动任务，可在工作台逐项启动'}${data.catch_up_pending?' · 今日计划等待后台补执行':data.next_run_at?' · 下次 '+time(data.next_run_at,true):''}</p></div><span class="pill ${config.enabled?'good':''}">${config.enabled?'定时运行中':'可手动生成'}</span></section><p class="field-help operations-note">定时执行需要本地服务保持运行。服务恢复后只为当日生成新计划；已接受的派发跨日继续，修改或关闭定时不取消原任务。可在任务详情停止执行，等待授权或材料时仍会停下。</p>${data.plans.length?data.plans.map(dailyPlanCard).join(''):`<section class="panel resource-empty"><h2>从每日可执行的工作开始</h2><p>在计划设置中选择 Agent、填写每日目标。生成计划后核对任务列表，再派发任务。</p><button class="button primary" data-operation="schedule-edit">配置每日计划</button></section>`}`;
-}
-function dailyPlanSummary(plan){
- const count=status=>plan.items.filter(item=>item.status===status).length;
- return `待派发 ${count('READY')} 项 · 已派发 ${count('DISPATCHED')} 项 · 受阻 ${count('BLOCKED')} 项 · 复用待办 ${count('SKIPPED')} 项`;
+ captureDailyPlanDetails();const config=data.settings;
+ return `<div class="page-head"><div><p class="eyebrow">DAILY PLANNING</p><h1 id="daily-heading" tabindex="-1">每日任务</h1><p>汇总空间待办，按岗位与任务模板生成每日计划，再派发给 Agent。</p></div><div class="toolbar"><button class="button secondary" data-operation="schedule-edit">${icon('sliders')}计划设置</button><button class="button primary" data-operation="plan-generate">${icon('plus')}生成今日计划</button></div></div>${operationSettingsFeedback()}${data.selected_plan_error?`<section id="daily-plan-unavailable" class="notice bad" role="alert" tabindex="-1"><p>所选计划暂不可读：${esc(data.selected_plan_error)}</p><button type="button" class="button secondary" data-action="refresh">重试读取</button><a class="text-button" href="#/daily">查看近期计划</a></section>`:''}<section class="panel operations-overview"><div><h2>${config.enabled?'自动定时已开启':'自动定时未开启'}</h2><p class="muted">每天 ${esc(config.daily_time)} · ${esc(config.timezone)} · ${config.tasks.length} 项任务模板</p><p>${config.auto_start?'派发后自动启动任务':'派发为待启动任务，可在工作台逐项启动'}${data.catch_up_pending?' · 今日计划等待后台补执行':data.next_run_at?' · 下次 '+time(data.next_run_at,true):''}</p></div><span class="pill ${config.enabled?'good':''}">${config.enabled?'定时运行中':'可手动生成'}</span></section><p class="field-help operations-note">定时执行需要本地服务保持运行。服务恢复后只为当日生成新计划；已接受的派发跨日继续，修改或关闭定时不取消原任务。可在任务详情停止执行，等待授权或材料时仍会停下。</p>${data.plans.length?data.plans.map(dailyPlanCard).join(''):`<section class="panel resource-empty"><h2>从每日可执行的工作开始</h2><p>在计划设置中选择 Agent、填写每日目标。生成计划后核对任务列表，再派发任务。</p><button class="button primary" data-operation="schedule-edit">配置每日计划</button></section>`}`;
 }
 function dailyDispatchControl(plan){
  const request=plan.dispatch?.state;
@@ -53,7 +105,7 @@ function dailyPlanCard(plan){
  const labels={PLANNED:'待派发',PARTIAL:'部分阻塞',DISPATCHED:'已派发',QUEUED:'排队中',READY:'可派发',BLOCKED:'受阻',SKIPPED:'复用待办'},request=plan.dispatch?.state;
  const current=plan.day===state.dailyOperations.today,stale=plan.schedule_revision!==state.dailyOperations.settings.revision;
  const blocked=plan.items.some(item=>item.status==='BLOCKED'),dispatched=plan.items.some(item=>item.run_id);
- return `<article id="daily-plan-${esc(plan.id)}" tabindex="-1" class="panel daily-plan" data-daily-plan="${esc(plan.id)}"><div class="panel-heading"><div><h2>${esc(plan.day)} <small>${esc(plan.timezone)}</small></h2><p>${dailyPlanSummary(plan)}</p></div><span class="pill ${plan.status==='PARTIAL'||request==='FAILED'?'warn':plan.status==='DISPATCHED'?'good':''}">${request==='FAILED'?'派发中断':labels[plan.status]||esc(plan.status)}</span></div>${plan.error?`<p class="notice bad" role="alert">${esc(plan.error)}。自动重试已暂停，可重试原计划，已创建的任务继续复用。</p>`:''}${request==='PENDING'?`<p class="notice" role="status">${plan.status==='QUEUED'?'自动启动请求已保存，正在排队。服务运行时会继续原任务，无需重复派发。':'派发请求已保存，服务会继续核对原任务，等待授权或材料时会停下。'}</p>`:''}${stale&&['PENDING','FAILED'].includes(request)?'<p class="field-help">已接受的计划保留原目标与版本，新设置用于后续计划。</p>':''}<div class="operations-items">${plan.items.map(item=>`<section class="operations-item"><div><strong>${esc(item.task.goal)}</strong><p class="field-help">${esc(item.agent_name)} · 固定 v${item.task.agent_revision}${item.task.execution_mode==='conversation'?' · 按目标执行':item.task.grant?' · 已授予草稿创建权限':' · 业务写入需逐项授权'}</p>${item.reason?`<p class="operations-reason">${esc(item.reason)}</p>`:''}</div><div class="operations-item-end">${item.run_id?`${statusPill(plan.auto_start&&request==='PENDING'&&(item.run_status||'CREATED')==='CREATED'?'QUEUED':item.run_status||'CREATED')}<a class="button secondary" href="#/workbench/${encodeURIComponent(item.run_id)}">查看任务</a>`:item.existing_run_id?`<a class="button secondary" href="#/workbench/${encodeURIComponent(item.existing_run_id)}">处理原任务</a>`:`<span class="pill ${item.status==='BLOCKED'?'warn':''}">${labels[item.status]||esc(item.status)}</span>`}</div></section>`).join('')||'<p class="muted">尚未配置任务模板。保存设置后重新生成今日计划。</p>'}</div>${plan.pending_runs.length?`<details class="operations-pending" data-key="pending-${esc(plan.id)}"><summary>生成时的空间待办 · ${plan.pending_runs.length} 项</summary>${plan.pending_runs.map(r=>`<p><a class="text-button" href="#/workbench/${encodeURIComponent(r.run_id)}">${esc(r.goal)}</a> ${statusPill(r.status)}</p>`).join('')}</details>`:''}<div class="operations-footer"><small class="field-help">配置 v${plan.schedule_revision} · ${time(plan.created_at)}</small>${blocked&&current?`<div class="operations-recovery"><p class="field-help">${dispatched?'已派发部分保留原版本。调整设置用于后续计划；今日需更换岗位时，请新建任务并重新审查许可。':'请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。'}</p><div class="toolbar"><button class="button secondary" data-operation="schedule-edit">调整计划设置</button><a class="button secondary" href="#/agents">检查 Agent</a>${dispatched?'<button class="button secondary" data-action="new">新建今日任务</button>':''}</div></div>`:''}${dailyDispatchControl(plan)}</div></article>`;
+ return `<article id="daily-plan-${esc(plan.id)}" tabindex="-1" class="panel daily-plan" data-daily-plan="${esc(plan.id)}" data-daily-scope="${esc(operationSettingsScope())}"><div class="panel-heading"><div><h2>${esc(plan.day)} <small>${esc(plan.timezone)}</small></h2><p>${plan.items.length} 项任务 · 固定计划目标与岗位版本</p></div><span class="pill ${plan.status==='PARTIAL'||request==='FAILED'?'warn':plan.status==='DISPATCHED'?'good':''}">${request==='FAILED'?'派发中断':labels[plan.status]||esc(plan.status)}</span></div>${plan.error?`<p class="notice bad" role="alert">${esc(plan.error)}。自动重试已暂停，可重试原计划，已创建的任务继续复用。</p>`:''}${request==='PENDING'?`<p class="notice" role="status">${plan.status==='QUEUED'?'自动启动请求已保存，正在排队。服务运行时会继续原任务，无需重复派发。':'派发请求已保存，服务会继续核对原任务，等待授权或材料时会停下。'}</p>`:''}${stale&&['PENDING','FAILED'].includes(request)?'<p class="field-help">已接受的计划保留原目标与版本，新设置用于后续计划。</p>':''}${dailyPlanItems(plan)}${plan.pending_runs.length?`<details class="operations-pending" data-key="pending-${esc(plan.id)}" data-daily-detail="pending" ${dailyPlanView(plan.id).expanded.has('pending')?'open':''}><summary id="${esc(dailyPlanControl(plan.id,'pending'))}">生成时的空间待办 · ${plan.pending_runs.length} 项</summary>${plan.pending_runs.map(r=>`<p><a id="${esc(dailyPlanControl(plan.id,'link-pending',r.run_id))}" data-daily-run="${esc(r.run_id)}" class="text-button" href="#/workbench/${encodeURIComponent(r.run_id)}">${esc(r.goal)}</a> ${statusPill(r.status)}</p>`).join('')}</details>`:''}<div class="operations-footer">${dailyPlanView(plan.id).query||dailyPlanView(plan.id).status!=='all'?'<p class="daily-dispatch-scope field-help">查看条件只影响列表；派发仍处理整份计划中的可执行任务。</p>':''}<small class="field-help">配置 v${plan.schedule_revision} · ${time(plan.created_at)}</small>${blocked&&current?`<div class="operations-recovery"><p class="field-help">${dispatched?'已派发部分保留原版本。调整设置用于后续计划；今日需更换岗位时，请新建任务并重新审查许可。':'请修正任务模板并保存设置，再重新生成今日计划。受阻条目不会因重复派发而自动修复。'}</p><div class="toolbar"><button class="button secondary" data-operation="schedule-edit">调整计划设置</button><a class="button secondary" href="#/agents">检查 Agent</a>${dispatched?'<button class="button secondary" data-action="new">新建今日任务</button>':''}</div></div>`:''}${dailyDispatchControl(plan)}</div></article>`;
 }
 function evaluationsPage(){
  const data=state.evaluations;if(!data)return '<div class="page-head"><h1>岗位评测</h1></div>'+operationSettingsFeedback()+evaluationHistoryPanel();
@@ -118,7 +170,7 @@ function operationSettingsError(s,message){s.error.textContent=message;s.error.h
 function operationSettingsFreeze(s){
  if(s.phase==='editing'){for(const field of s.frozen||[])field.disabled=false;s.frozen=[];return;}
  s.frozen=s.frozen||[];
- for(const field of s.form.querySelectorAll('input,select,textarea,#daily-task-add,[data-remove-daily-task]'))if(!field.disabled){field.disabled=true;s.frozen.push(field);}
+ for(const field of s.form.querySelectorAll('input,select,textarea,#daily-task-add,#daily-task-undo,[data-remove-daily-task]'))if(!field.disabled){field.disabled=true;s.frozen.push(field);}
 }
 async function checkOperationSettings(s){
  if(!operationSettingsCurrent(s)||s.busy||!s.attempt)return;
@@ -162,14 +214,46 @@ function operationDialog(title,body,saveLabel,collect,spec={}){
 }
 function openScheduleSettings(){
  if($('#operations-dialog')?.open&&$('#operations-dialog').dataset.mode==='settings')return toast('请先完成或关闭当前设置。');
- const config=state.dailyOperations.settings;state.dailyTaskDraft=structuredClone(config.tasks);
- operationDialog('每日计划设置',`<p class="muted">每天汇总当前空间待办，并将以下任务派发给指定版本的 Agent。</p><div class="form-grid"><label for="schedule-time">每日执行时间<input id="schedule-time" type="time" value="${esc(config.daily_time)}" required></label><label for="schedule-zone">时区<input id="schedule-zone" value="${esc(config.timezone)}" required maxlength="80"></label></div><label class="check-label"><input id="schedule-enabled" type="checkbox" ${config.enabled?'checked':''}><span>开启每日定时汇总与派发<small>本地服务需保持运行；关闭后停止生成后续计划，已接受的派发仍会继续。需要停止时请进入原任务。</small></span></label><label class="check-label"><input id="schedule-autostart" type="checkbox" ${config.auto_start?'checked':''}><span>派发后自动启动任务<small>未选中时，任务进入工作台，等待手动启动。</small></span></label><div class="mini-heading"><h3>每日任务模板</h3><button class="button secondary" type="button" id="daily-task-add">${icon('plus')}添加任务</button></div><div id="daily-task-fields"></div><p class="field-help">Agent 编辑后需重新选择并保存版本。相同目标已有未完成任务时会跳过新建。保存后将按目标和所选智能体的固定版本执行；模型会接收任务与该智能体范围内的上下文。</p>`, '保存计划设置',()=>{
+ const config=state.dailyOperations.settings;state.dailyTaskDraft=structuredClone(config.tasks);state.dailyTaskRemoval=null;
+ operationDialog('每日计划设置',`<p class="muted">每天汇总当前空间待办，并将以下任务派发给指定版本的 Agent。</p><div class="form-grid"><label for="schedule-time">每日执行时间<input id="schedule-time" type="time" value="${esc(config.daily_time)}" required></label><label for="schedule-zone">时区<input id="schedule-zone" value="${esc(config.timezone)}" required maxlength="80"></label></div><label class="check-label"><input id="schedule-enabled" type="checkbox" ${config.enabled?'checked':''}><span>开启每日定时汇总与派发<small>本地服务需保持运行；关闭后停止生成后续计划，已接受的派发仍会继续。需要停止时请进入原任务。</small></span></label><label class="check-label"><input id="schedule-autostart" type="checkbox" ${config.auto_start?'checked':''}><span>派发后自动启动任务<small>未选中时，任务进入工作台，等待手动启动。</small></span></label><section class="daily-template-editor" aria-labelledby="daily-template-title"><div class="daily-template-toolbar"><div class="mini-heading"><h3 id="daily-template-title">每日任务模板 <small id="daily-template-count"></small></h3><button class="button secondary" type="button" id="daily-task-add">${icon('plus')}添加任务</button></div><label for="daily-template-jump" class="sr-only">查找并定位每日任务</label><select id="daily-template-jump" data-picker-search="true" aria-label="查找并定位每日任务"></select></div><div id="daily-task-fields"></div></section><p class="field-help">Agent 编辑后需重新选择并保存版本。相同目标已有未完成任务时会跳过新建。保存后将按目标和所选智能体的固定版本执行；模型会接收任务与该智能体范围内的上下文。</p>`, '保存计划设置',()=>{
   captureDailyTasks();return {revision:config.revision,enabled:$('#schedule-enabled').checked,daily_time:$('#schedule-time').value,timezone:$('#schedule-zone').value,auto_start:$('#schedule-autostart').checked,tasks:state.dailyTaskDraft};
  },{path:'/api/workspace-schedule',kind:'schedule'});
- $('#daily-task-add').onclick=()=>{captureDailyTasks();if(state.dailyTaskDraft.length>=16)return toast('每天最多 16 项任务');const a=state.agents.find(a=>!a.archived);if(!a)return toast('请先创建一个可用 Agent');state.dailyTaskDraft.push({agent_id:a.id,agent_revision:a.revision,goal:'',change_id:'daily-'+crypto.randomUUID(),grant:false,consent:true,mcp_consent:true,execution_mode:'conversation'});renderDailyTaskFields();};renderDailyTaskFields();
+ $('#daily-task-add').onclick=addDailyTemplate;renderDailyTaskFields();
 }
 function captureDailyTasks(){
  $$('#daily-task-fields [data-daily-task]').forEach(row=>{const item=state.dailyTaskDraft[Number(row.dataset.dailyTask)];if(!item)return;for(const key of ['agent_id','goal','change_id']){const field=row.querySelector('[data-task-field="'+key+'"]');if(field)item[key]=field.value;}const select=row.querySelector('select');item.agent_revision=Number(select.selectedOptions[0]?.dataset.revision||item.agent_revision);for(const key of ['grant','consent','mcp_consent'])item[key]=item.execution_mode==='conversation'?key!=='grant':Boolean(row.querySelector('[data-task-field="'+key+'"]')?.checked);});
+}
+function canEditDailyTemplates(){const s=operationSettingsSession;return !!(s&&operationSettingsCurrent(s)&&s.spec.kind==='schedule'&&s.phase==='editing'&&!s.busy);}
+function focusDailyTemplate(index){
+ const target=index==='settings'?$('#schedule-time'):$('#daily-goal-'+index);if(!target)return;
+ target.focus({preventScroll:true});target.scrollIntoView({block:'center',behavior:'instant'});
+}
+function refreshDailyTemplateNavigation(){
+ const select=$('#daily-template-jump');if(!select)return;
+ const tasks=state.dailyTaskDraft||[],options='<option value="">查找或跳转到任务…</option><option value="settings">执行时间与启动设置</option>'+tasks.map((task,index)=>{
+  const goal=$('#daily-goal-'+index)?.value??task.goal,title=goal.trim().replace(/\s+/g,' ');
+  return `<option value="${index}">任务 ${index+1} · ${esc(title||'尚未填写目标')}</option>`;
+ }).join('');
+ if(select.innerHTML!==options)select.innerHTML=options;select.value='';
+ const count=$('#daily-template-count');if(count)count.textContent=tasks.length+' / 16';
+ const add=$('#daily-task-add');if(add){add.disabled=tasks.length>=16;add.textContent=tasks.length>=16?'已达 16 项上限':'添加任务';}
+}
+function addDailyTemplate(){
+ if(!canEditDailyTemplates())return;captureDailyTasks();if(state.dailyTaskDraft.length>=16)return;
+ const agent=state.agents.find(a=>!a.archived);if(!agent)return toast('请先创建一个可用 Agent');
+ state.dailyTaskRemoval=null;
+ state.dailyTaskDraft.push({agent_id:agent.id,agent_revision:agent.revision,goal:'',change_id:'daily-'+crypto.randomUUID(),grant:false,consent:true,mcp_consent:true,execution_mode:'conversation'});
+ renderDailyTaskFields();focusDailyTemplate(state.dailyTaskDraft.length-1);
+}
+function removeDailyTemplate(index){
+ if(!canEditDailyTemplates()||!Number.isInteger(index)||index<0||index>=state.dailyTaskDraft.length)return;
+ captureDailyTasks();state.dailyTaskRemoval={index,task:structuredClone(state.dailyTaskDraft[index])};state.dailyTaskDraft.splice(index,1);renderDailyTaskFields();
+ const undo=$('#daily-task-undo');undo?.focus({preventScroll:true});undo?.scrollIntoView({block:'center',behavior:'instant'});
+}
+function undoDailyTemplateRemoval(){
+ const removed=state.dailyTaskRemoval;if(!canEditDailyTemplates()||!removed||state.dailyTaskDraft.length>=16)return;
+ captureDailyTasks();const index=Math.min(removed.index,state.dailyTaskDraft.length);state.dailyTaskDraft.splice(index,0,structuredClone(removed.task));state.dailyTaskRemoval=null;
+ renderDailyTaskFields();focusDailyTemplate(index);
 }
 function renderDailyTaskFields(){
  $('#daily-task-fields').innerHTML=state.dailyTaskDraft.map((t,index)=>{
@@ -178,6 +262,12 @@ function renderDailyTaskFields(){
   const readOnly=agent?.definition?.domain_pack_ref==='knowledge-answer@1.0.0',live=agent?.runtime!=='mock',needsMcp=Boolean(agent?.definition?.native_read_refs?.length||agent?.mcp_servers?.some(s=>s.enabled));
   return `<fieldset class="daily-task-field" data-daily-task="${index}"><legend>任务 ${index+1}</legend><div class="mini-heading"><label for="daily-agent-${index}">执行 Agent<select id="daily-agent-${index}" data-task-field="agent_id" required>${!found?`<option value="${esc(t.agent_id)}" data-revision="${t.agent_revision}" selected>原固定版本 v${t.agent_revision} 已变化，请重新选择</option>`:''}${state.agents.filter(a=>!a.archived).map(a=>`<option value="${esc(a.id)}" data-revision="${a.revision}" ${found&&a.id===t.agent_id?'selected':''}>${esc(a.name)} · v${a.revision} · ${esc(runtimeLabel(a.runtime))}</option>`).join('')}</select></label><button class="text-button danger-text" type="button" data-remove-daily-task="${index}" aria-label="删除任务 ${index+1}">删除</button></div><label for="daily-goal-${index}">每日目标<textarea id="daily-goal-${index}" data-task-field="goal" maxlength="2000" required rows="2">${esc(t.goal)}</textarea></label><label for="daily-change-${index}">变更 / 对象标识<input id="daily-change-${index}" data-task-field="change_id" value="${esc(t.change_id)}" required maxlength="100" pattern="[A-Za-z0-9][A-Za-z0-9_.\\-]*"></label>${readOnly?'':`<label class="check-label"><input data-task-field="grant" type="checkbox" ${t.grant?'checked':''}><span>允许此模板每日任务创建模拟草稿<small>限当前空间、指定对象与 test 环境。只读岗位无需选择。</small></span></label>`}${live?`<label class="check-label"><input data-task-field="consent" type="checkbox" ${t.consent?'checked':''}><span>允许真实模型接收任务、证据、范围内知识与本人记忆<small>仅真实模型 Agent 需要；使用所选 CLI 的模型服务和登录态。</small></span></label>`:''}${needsMcp?`<label class="check-label"><input data-task-field="mcp_consent" type="checkbox" ${t.mcp_consent?'checked':''}><span>允许该 Agent 的受控 MCP 读取<small>仅配置了受控读取能力的 Agent 需要。</small></span></label>`:''}</fieldset>`;
  }).join('')||'<p class="muted">暂无任务模板。添加任务后可每日派发；空计划仍可汇总空间待办。</p>';
+ const removed=state.dailyTaskRemoval;if(removed){
+  const chars=Array.from(removed.task.goal||'尚未填写目标'),title=chars.slice(0,100).join('')+(chars.length>100?'…':'');
+  const notice=`<div id="daily-task-removal" class="daily-task-removal" role="status"><div><strong>已移除任务 ${removed.index+1}</strong><p>${esc(title)}</p><small>保存后生效；下次新增或移除任务前，可以撤销。</small></div><button id="daily-task-undo" type="button" class="button secondary" ${state.dailyTaskDraft.length>=16?'disabled':''}>撤销移除</button></div>`;
+  const next=$('#daily-task-fields [data-daily-task="'+removed.index+'"]');if(next)next.insertAdjacentHTML('beforebegin',notice);else $('#daily-task-fields').insertAdjacentHTML('beforeend',notice);
+ }
+ refreshDailyTemplateNavigation();
 }
 function openEvaluationPolicy(){const p=state.evaluations.policy;operationDialog('评测设置',`<p class="muted">修改后的规则用于后续自动评测与手动补评。历史报告和提醒保留原评测依据。</p><div class="form-grid"><label for="evaluation-threshold">基础分数阈值<input id="evaluation-threshold" type="number" min="1" max="100" value="${p.threshold}" required></label><label for="evaluation-window">历史窗口（天）<input id="evaluation-window" type="number" min="1" max="365" value="${p.window_days}" required></label></div><label class="check-label"><input id="evaluation-automatic" type="checkbox" ${p.automatic?'checked':''}><span>任务结束后自动评测并提醒<small>基础验收失败始终提醒，即使总分高于阈值。</small></span></label>`, '保存评测设置',()=>({revision:p.revision,threshold:Number($('#evaluation-threshold').value),window_days:Number($('#evaluation-window').value),automatic:$('#evaluation-automatic').checked}),{path:'/api/evaluation-policy',kind:'policy'});}
 const operationRequests=new Set();
@@ -194,7 +284,8 @@ async function performOperation(button,callback,message,requestKey=null){
 }
 document.addEventListener('click',e=>{
  const close=e.target.closest('#operations-dialog [data-close]');if(close&&$('#operations-dialog').dataset.saving==='true'){e.preventDefault();return;}
- const remove=e.target.closest('[data-remove-daily-task]');if(remove){captureDailyTasks();state.dailyTaskDraft.splice(Number(remove.dataset.removeDailyTask),1);renderDailyTaskFields();return;}
+ if(e.target.closest('#daily-task-undo')){undoDailyTemplateRemoval();return;}
+ const remove=e.target.closest('[data-remove-daily-task]');if(remove){removeDailyTemplate(Number(remove.dataset.removeDailyTask));return;}
  const action=e.target.closest('[data-operation]');if(action){if(action.dataset.operation==='schedule-edit')openScheduleSettings();if(action.dataset.operation==='role-evaluation-edit')openRoleEvaluationSettings(state.selected||state.agents.find(a=>!a.archived)?.id).catch(error=>toast(error.message));if(action.dataset.operation==='policy-edit')openEvaluationPolicy();if(action.dataset.operation==='plan-generate')performOperation(action,()=>api('/api/daily-plans/generate',{}),'今日计划已汇总，可审查后派发');if(action.dataset.operation==='evaluate-history')performOperation(action,evaluateHistory,'执行历史已评测');return;}
  const dispatch=e.target.closest('[data-dispatch-plan]');if(dispatch)dispatchDailyPlan(dispatch);
  const record=e.target.closest('[data-view-evaluation]');if(record)openEvaluationRecord(record).catch(error=>toast(error.message));
@@ -207,6 +298,10 @@ document.addEventListener('click',event=>{
  event.preventDefault();const [view,identity]=link.getAttribute('href').slice(2).split('/');dialog.close();navigate(view,identity?decodeURIComponent(identity):undefined);
 });
 document.addEventListener('change',e=>{
+ if(e.target.id==='daily-template-jump'){
+  const value=e.target.value;e.target.value='';if(typeof refreshFormControls==='function')refreshFormControls();
+  if(canEditDailyTemplates()&&(value==='settings'||/^\d+$/.test(value)&&Number(value)<state.dailyTaskDraft.length))focusDailyTemplate(value);return;
+ }
  if(e.target.id==='evaluation-agent-filter')navigate('evaluations',e.target.value||undefined);
  if(e.target.closest('#daily-task-fields select')){
   const row=e.target.closest('[data-daily-task]'),index=Number(row.dataset.dailyTask);
@@ -214,6 +309,7 @@ document.addEventListener('change',e=>{
   captureDailyTasks();renderDailyTaskFields();$('#daily-goal-'+index)?.focus({preventScroll:true});
  }
 });
+document.addEventListener('input',event=>{if(event.target.matches?.('#daily-task-fields [data-task-field="goal"]')&&canEditDailyTemplates())refreshDailyTemplateNavigation();});
 
 document.addEventListener('click',e=>{if(e.target.closest('#operations-dialog [data-close]')){e.preventDefault();e.stopImmediatePropagation();requestOperationClose();}},true);
 
@@ -292,7 +388,7 @@ async function openRoleEvaluationSettings(identity){
 }
 document.addEventListener('input',e=>{if(e.target.matches?.('[data-job-weight]')){const sum=$$('[data-job-weight]').reduce((total,field)=>total+Number(field.value),0);$('#job-weight-total').textContent=String(sum);}});
 
-function operationFormSnapshot(form){return JSON.stringify([...form.elements].filter(el=>['INPUT','SELECT','TEXTAREA'].includes(el.tagName)).map(el=>[el.id||el.name,el.type==='checkbox'?el.checked:el.value]));}
+function operationFormSnapshot(form){return JSON.stringify([...form.elements].filter(el=>['INPUT','SELECT','TEXTAREA'].includes(el.tagName)&&el.id!=='daily-template-jump'&&!el.closest?.('.select-popover')).map(el=>[el.id||el.name,el.type==='checkbox'?el.checked:el.value]));}
 function requestOperationClose(){
  const dialog=$('#operations-dialog');if(!dialog?.open||dialog.dataset.saving==='true')return;
  if(dialog.dataset.mode==='evaluation-record'){evaluationRecordRequest++;dialog.close();return;}

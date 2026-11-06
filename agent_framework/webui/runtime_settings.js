@@ -26,7 +26,7 @@ function runtimeDirty(e){return JSON.stringify(e.raw)!==JSON.stringify(runtimeRa
 function runtimeChanges(e){const base=runtimeRawFrom(e.base);return runtimeFields.filter(name=>e.raw[name]!==base[name]).map(name=>({name,before:base[name],after:e.raw[name]}));}
 function runtimeChangeLabel(name){if(name==='default_runtime')return '新建智能体默认运行时';const [provider,field]=name.split('_');return runtimeLabel(provider)+' · '+{model:'模型',timeout:'超时（秒）',attempts:'修复上限（次）',effort:'推理强度'}[field];}
 function runtimeChangeValue(name,value){return value===''?'尚未填写':name==='default_runtime'?runtimeLabel(value):value;}
-function runtimeChangesSummary(e,changes){return changes.length?`<details data-runtime-details="changes"><summary id="runtime-changes-summary">查看 ${changes.length} 项未保存修改</summary><div class="runtime-settings-table" tabindex="0" aria-label="本页未保存修改"><table><thead><tr><th scope="col">参数</th><th scope="col">编辑基准 · v${e.base.revision}</th><th scope="col">本页输入</th></tr></thead><tbody>${changes.map(change=>`<tr><th scope="row">${esc(runtimeChangeLabel(change.name))}</th><td>${esc(runtimeChangeValue(change.name,change.before))}</td><td>${esc(runtimeChangeValue(change.name,change.after))}</td></tr>`).join('')}</tbody></table></div></details>`:'';}
+function runtimeChangesSummary(e,changes){return changes.length?`<details data-runtime-details="changes"><summary id="runtime-changes-summary">查看 ${changes.length} 项未保存修改</summary><div class="runtime-settings-table" tabindex="0" aria-label="本页未保存修改"><table><thead><tr><th scope="col">参数</th><th scope="col">编辑基准 · v${e.base.revision}</th><th scope="col">本页输入</th></tr></thead><tbody>${changes.map(change=>`<tr><th scope="row"><button type="button" id="runtime-change-${change.name}" class="text-button runtime-change-link" data-runtime-change="${change.name}" aria-label="编辑 ${esc(runtimeChangeLabel(change.name))}">${esc(runtimeChangeLabel(change.name))}</button></th><td>${esc(runtimeChangeValue(change.name,change.before))}</td><td>${esc(runtimeChangeValue(change.name,change.after))}</td></tr>`).join('')}</tbody></table></div></details>`:'';}
 function runtimeApplyRaw(e){for(const name of runtimeFields){const field=e.form.elements[name],value=e.raw[name];if(field.tagName==='SELECT'&&![...field.options].some(o=>o.value===value)){field.insertAdjacentHTML('beforeend',`<option value="${esc(value)}">${esc(value||'尚未配置')}</option>`);}field.value=value;}e.form.dataset.revision=e.base.revision;if(typeof refreshFormControls==='function')refreshFormControls();}
 function persistRuntimeSettings(e){
  if(!runtimeSettingsCurrent(e)||e.invalid)return;
@@ -39,6 +39,72 @@ function clearRuntimeSettings(e){
  catch{e.storageError='浏览器未能清除恢复记录。请保留本页，稍后重试；刷新后可能再次显示原记录。';return false;}
 }
 function runtimeSettingsSummary(raw){return `<div class="runtime-settings-table" tabindex="0" aria-label="运行时配置内容"><table><thead><tr><th>运行时</th><th>模型 / 参数</th></tr></thead><tbody>${['codex','cursor','qoder'].map(id=>`<tr><th>${esc(runtimeLabel(id))}</th><td>${esc(raw[id+'_model']||'未配置模型')}<br>超时 ${esc(raw[id+'_timeout'])} 秒 · 修复 ${esc(raw[id+'_attempts'])} 次${id==='codex'?' · 推理强度 '+esc(raw.codex_effort):''}</td></tr>`).join('')}</tbody></table><p>新建智能体默认：${esc(runtimeLabel(raw.default_runtime))}</p></div>`;}
+function runtimeSaveStatus(e,changes){
+ if(e.busy)return {title:e.operation==='save'?'正在保存全部配置…':'正在核对配置…',detail:'全部运行时与默认选项将一并保存。'};
+ if(e.invalid||e.storageError)return {title:e.invalid?'恢复记录需要处理':'恢复副本需要处理',detail:'关闭或刷新前，请查看处理方式。',review:'查看处理方式'};
+ if(e.review||e.attempt)return {title:e.attempt?'保存结果待核对':'配置需要核对',detail:'本页输入已保留，核对后再继续保存。',review:'查看核对结果'};
+ if(e.error)return {title:'配置尚未保存',detail:'请检查配置中的错误后再保存。',review:'查看错误'};
+ if(changes.length)return {title:changes.length+' 项未保存修改',detail:'全部运行时与默认选项将一并保存。',review:'查看修改'};
+ return {title:e.message?.startsWith('保存已确认')?'全部配置已保存':'没有未保存修改',detail:'此设备的所有工作空间共用。'};
+}
+function renderRuntimeSettingsNavigation(e,changes){
+ const title=$('#runtime-save-state-title');if(!title)return;
+ const status=runtimeSaveStatus(e,changes),detail=$('#runtime-save-state-detail'),review=$('#runtime-review-changes');
+ if(title.textContent!==status.title)title.textContent=status.title;
+ if(detail.textContent!==status.detail)detail.textContent=status.detail;
+ review.hidden=!status.review;review.textContent=status.review||'查看修改';review.disabled=!!e.busy;
+ for(const marker of e.form.querySelectorAll('[data-runtime-changes]')){
+  const count=changes.filter(change=>change.name.startsWith(marker.dataset.runtimeChanges+'_')).length;
+  marker.hidden=!count;marker.textContent=count+' 项未保存';
+ }
+ const defaults=$('#runtime-default-changes');defaults.hidden=!changes.some(change=>change.name==='default_runtime');defaults.textContent='默认选项有未保存修改';
+}
+function measureRuntimeSettingsNavigation(e=runtimeSettingsEditor){
+ if(!e||!runtimeSettingsCurrent(e))return;const foot=$('#runtime-form-foot');if(!foot)return;
+ // A very tall footer returns to document flow so enlarged text and short
+ // windows always retain enough space to read and edit configuration fields.
+ foot.classList.toggle('runtime-foot-static',foot.getBoundingClientRect().height>innerHeight*.4);
+ const height=getComputedStyle(foot).position==='sticky'?foot.getBoundingClientRect().height:0;
+ e.form.style.setProperty('--runtime-foot-height',height+'px');
+ revealRuntimeSettingsControl(document.activeElement,e);
+}
+function attachRuntimeSettingsNavigation(e){
+ const foot=$('#runtime-form-foot');if(!foot||typeof ResizeObserver==='undefined')return;
+ e.navigationObserver?.disconnect();e.navigationObserver=new ResizeObserver(()=>measureRuntimeSettingsNavigation(e));e.navigationObserver.observe(foot);measureRuntimeSettingsNavigation(e);
+}
+function revealRuntimeSettingsControl(target,e=runtimeSettingsEditor){
+ if(!target||!e||!runtimeSettingsCurrent(e)||!e.form.contains(target)||target.closest('#runtime-form-foot,.select-popover'))return;
+ requestAnimationFrame(()=>{
+  if(!runtimeSettingsCurrent(e)||document.activeElement!==target)return;
+  const foot=$('#runtime-form-foot'),bounds=target.getBoundingClientRect(),header=document.querySelector('.topbar')?.getBoundingClientRect(),top=Math.max(0,header?.bottom||0)+12;
+  let bottom=innerHeight-12;
+  if(foot&&getComputedStyle(foot).position==='sticky'){const bar=foot.getBoundingClientRect();if(bar.bottom>top&&bar.top<bottom)bottom=bar.top-12;}
+  const delta=bounds.height>bottom-top||bounds.top<top?bounds.top-top:bounds.bottom>bottom?bounds.bottom-bottom:0;
+  if(delta)window.scrollBy({top:delta,behavior:'instant'});
+ });
+}
+function focusRuntimeSettingsField(name){
+ const e=runtimeSettingsEditor;if(!e||!runtimeSettingsCurrent(e)||e.busy||e.invalid||!runtimeFields.includes(name))return;
+ const field=e.form.elements[name];if(!field)return;
+ if(name!=='default_runtime')selectRuntimeProvider(name.split('_')[0]);
+ refreshFormControls();focusFormControl(field);revealRuntimeSettingsControl(document.activeElement,e);
+}
+function reviewRuntimeSettings(){
+ const e=runtimeSettingsEditor;if(!e||!runtimeSettingsCurrent(e)||e.busy)return;
+ if(e.validationField&&!e.invalid&&!e.storageError&&!e.review&&!e.attempt)return focusRuntimeSettingsField(e.validationField);
+ let target=$('#runtime-settings-recovery');
+ if(!e.review&&!e.attempt&&!e.invalid&&!e.storageError){
+  if(e.error)target=$('#runtime-form-error');
+  else{target=$('#runtime-changes-summary')||target;const details=target.closest('details');if(details)details.open=true;}
+ }
+ target.focus({preventScroll:true});target.scrollIntoView({block:'center',behavior:'instant'});revealRuntimeSettingsControl(target,e);
+}
+document.addEventListener('focusin',event=>revealRuntimeSettingsControl(event.target));
+document.addEventListener('click',event=>{
+ const change=event.target.closest('[data-runtime-change]');if(change)focusRuntimeSettingsField(change.dataset.runtimeChange);
+ if(event.target.closest('[data-runtime-review]'))reviewRuntimeSettings();
+});
+window.addEventListener('resize',()=>measureRuntimeSettingsNavigation());
 function renderRuntimeSettings(e=runtimeSettingsEditor){
  if(!e||!runtimeSettingsCurrent(e))return;const box=$('#runtime-settings-recovery');if(!box)return;
  const focus=box.contains?.(document.activeElement)?document.activeElement.id:null;
@@ -48,7 +114,8 @@ function renderRuntimeSettings(e=runtimeSettingsEditor){
  box.innerHTML=e.invalid?`<h3>恢复记录无法读取</h3><p role="alert">未自动应用或提交恢复记录，请核对当前已保存配置后明确清除。</p>${button('forget','清除此恢复记录')}${e.storageError?`<p role="alert">${esc(e.storageError)}</p>`:''}`:`<p role="status">${esc(e.busy?'正在'+(e.operation==='save'?'保存配置':'核对配置')+'…':message)}</p>${e.storageError?`<p class="inline-error" role="alert">${esc(e.storageError)}</p><details data-runtime-details="copy"><summary id="runtime-copy-summary">本页配置（可选择复制）</summary>${runtimeSettingsSummary(e.raw)}</details>`:''}${runtimeChangesSummary(e,changes)}${e.attempt?`<details data-runtime-details="original"><summary id="runtime-original-summary">原保存提交 · 基于 v${e.attempt.payload.revision}</summary>${runtimeSettingsSummary(e.attempt.raw)}</details>`:''}${e.review?`<div class="toolbar">${button('check',e.attempt?'核对原保存':'核对当前配置')}${e.checked?.found===false&&e.latest?.settings.revision===e.attempt?.payload.revision?button('retry','使用原内容重试'):''}</div>`:''}${e.latest&&e.review?`<details data-runtime-details="current" open><summary id="runtime-current-summary">当前已保存配置 · v${e.latest.settings.revision}</summary>${runtimeSettingsSummary(runtimeRawFrom(e.latest.settings))}</details>${e.canResolve?`<div class="toolbar">${button('adopt','采用当前配置')}${button('keep','保留输入，按当前版本继续')}</div>`:''}`:''}`;
  for(const node of box.querySelectorAll?.('details[data-runtime-details]')||[]){if(disclosures.has(node.dataset.runtimeDetails))node.open=disclosures.get(node.dataset.runtimeDetails);}
  const version=$('#runtime-config-version');if(version)version.textContent='当前配置版本 '+state.runtimeConfig.settings.revision;
- const save=$('#runtime-save');save.disabled=!!(e.busy||e.review||e.attempt||e.invalid);save.textContent=e.busy&&e.operation==='save'?'保存中…':'保存配置';
+ const save=$('#runtime-save');save.disabled=!!(e.busy||e.review||e.attempt||e.invalid);save.textContent=e.busy&&e.operation==='save'?'保存中…':'保存全部配置';
+ renderRuntimeSettingsNavigation(e,changes);
  if(focus)document.getElementById(focus)?.focus({preventScroll:true});
  const error=$('#runtime-form-error');if(error){error.hidden=!e.error;error.textContent=e.error||'';}
 }
@@ -96,14 +163,14 @@ async function saveRuntimeSettings(form,retry=false){
  catch(error){if(runtimeSettingsCurrent(e)){e.error=error.message||'保存未确认';e.message='尚未确认本次保存。请核对原保存，再决定重试或继续修改。';if([400,422].includes(error.status)){e.attempt=null;e.review=false;e.validationRejected=true;e.message='配置未被接受，请修正本页输入后再保存。';}persistRuntimeSettings(e);}}
  finally{e.busy=false;if(runtimeSettingsCurrent(e)){state.runtimeSaving=false;setRuntimePending(false);renderRuntimeSettings(e);if(restoreFocus&&document.activeElement===document.body)document.getElementById(e.review?'runtime-recovery-check':'runtime-save')?.focus({preventScroll:true});}}
 }
-function leaveRuntimeSettings(){const e=runtimeSettingsEditor;if(e&&runtimeSettingsCurrent(e)){e.raw=runtimeRaw(e.form);if(e.attempt||runtimeDirty(e))persistRuntimeSettings(e);}runtimeSettingsEditor=null;state.runtimeSaving=false;}
+function leaveRuntimeSettings(){const e=runtimeSettingsEditor;e?.navigationObserver?.disconnect();if(e&&runtimeSettingsCurrent(e)){e.raw=runtimeRaw(e.form);if(e.attempt||runtimeDirty(e))persistRuntimeSettings(e);}runtimeSettingsEditor=null;state.runtimeSaving=false;}
 function attachRuntimeSettings(){
  const form=$('#runtime-form');if(runtimeSettingsPageHidden||!form||state.view!=='runtimes')return;if(runtimeSettingsEditor&&runtimeSettingsCurrent(runtimeSettingsEditor))return;form.noValidate=true;
  const e={scope:runtimeSettingsScope(),workspace:state.workspaceId,route:state.routeVersion,form,base:structuredClone(state.runtimeConfig.settings),raw:runtimeRaw(form),attempt:null,busy:false,review:false,canResolve:false,stored:null};runtimeSettingsEditor=e;
  let stored=null;try{stored=sessionStorage.getItem(runtimeSettingsKey(e.scope));e.stored=stored;}catch{e.storageError='浏览器无法读取恢复副本。本页仍可编辑，关闭或刷新前请复制配置。';}
  try{const raw=runtimeDraftMemory.get(e.scope)||stored;if(raw){const r=JSON.parse(raw);if(r?.v!==1||r.scope!==e.scope||!runtimeValidSettings(r.base)||!runtimeValidRaw(r.raw)||r.attempt&&(!runtimeValidRaw(r.attempt.raw)||typeof r.attempt.payload?.request_id!=='string'||!/^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$/.test(r.attempt.payload.request_id)||JSON.stringify(runtimePayload(r.attempt.raw,r.base.revision))!==JSON.stringify(Object.fromEntries(Object.entries(r.attempt.payload).filter(([k])=>k!=='request_id')))))throw Error('invalid');Object.assign(e,{base:r.base,raw:r.raw,attempt:r.attempt||null,review:!!r.attempt,message:r.attempt?'已恢复原保存编号，请先核对保存结果。':'已恢复本标签页未保存的配置。'});runtimeApplyRaw(e);}}
  catch{e.invalid=true;}
- renderRuntimeSettings(e);if(typeof renderRuntimeDetection==='function')renderRuntimeDetection(e);if(!e.attempt&&!e.invalid)void readRuntimeSettings(e,true);
+ attachRuntimeSettingsNavigation(e);renderRuntimeSettings(e);if(typeof renderRuntimeDetection==='function')renderRuntimeDetection(e);if(!e.attempt&&!e.invalid)void readRuntimeSettings(e,true);
 }
 function resolveRuntimeSettings(action){
  const e=runtimeSettingsEditor;if(!e||!runtimeSettingsCurrent(e)||e.busy)return;

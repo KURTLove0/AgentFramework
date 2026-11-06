@@ -14,13 +14,13 @@ function taskArchiveAction(detail){
  if(!detail?.run)return '';const c=detail.conversation,archive=taskArchiveValue(detail),record=taskArchiveOperation();
  const ended=['SUCCEEDED','FAILED','EXPIRED','CANCELLED'].includes(c?.status||detail.run.status)&&!c?.active&&!c?.queued_count&&!detail.job?.active;
  if(!archive.archived&&!ended)return '';
- return `<button id="task-archive-action" type="button" class="button secondary" data-task-archive ${record?.pending||record?.needsReview?'disabled':''}>${record?.pending?'正在处理…':archive.archived?'移回任务列表':'归档任务'}</button>`;
+ return `<button id="task-archive-action" type="button" class="button secondary" data-task-archive ${record?.needsReview?'disabled':record?.pending?'aria-disabled="true" aria-busy="true"':''}>${record?.pending?'正在处理…':archive.archived?'移回任务列表':'归档任务'}</button>`;
 }
 function taskArchiveNotice(detail){
  const archive=taskArchiveValue(detail),record=taskArchiveOperation();
  const text=(record&&(record.needsReview||record.observedRevision===archive.revision)?record.message:'')||(archive.archived?'此任务已归档，结果与对话仍保留。发送新消息会移回任务列表。':'');
  if(!text&&!record?.pending)return '';
- return `<section class="notice task-archive-notice" aria-label="任务归档状态"><div role="status">${esc(record?.pending?'正在核对任务归档状态…':text)}</div>${record?.needsReview?`<button id="task-archive-review" type="button" class="button secondary" data-task-archive-review ${record.pending?'disabled':''}>核对当前状态</button>`:''}</section>`;
+ return `<section class="notice task-archive-notice" aria-label="任务归档状态"><div role="status">${esc(record?.pending?(record.needsReview?'正在核对任务归档状态…':'正在更新任务归档状态…'):text)}</div>${record?.needsReview?`<button id="task-archive-review" type="button" class="button secondary" data-task-archive-review ${record.pending?'aria-disabled="true" aria-busy="true"':''}>${record.pending?'正在核对…':'核对当前状态'}</button>`:''}</section>`;
 }
 function taskArchiveCurrent(record){return taskArchiveKey()===record.key&&state.routeVersion===record.route&&taskArchiveOperations.get(record.key)===record;}
 function redrawTaskArchive(record){if(taskArchiveCurrent(record)){state.fingerprint='';render();}}

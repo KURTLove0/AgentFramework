@@ -45,40 +45,51 @@ function applyRunActionDetail(record,detail){
 }
 function renderRunAction(record){
  if(!runActionCurrent(record))return;
+ const body=$('#confirm-body'),active=document.activeElement,focus=active?.id,top=body.scrollTop;
  const d=record.detail,r=d.run,pending=r.actions.find(a=>a.tool_ref==='report.draft.create@1.0.0'&&a.status==='PREPARED'),direct=r.task.execution_mode==='direct';
  const copy={grant:['授权并继续运行','请审查以下具体提案。确认只适用于显示的任务、参数与授权状态；内容变化后需要重新核对。','授权并继续'],cancel:['取消当前运行',direct?'停止当前模型调用，保留已收到的输出和运行记录。':'当前动作返回后会先核对结果再停止。已经创建的草稿与执行记录会保留。','确认取消'],revoke:['撤销写入授权','后续写入会重新检查授权。已经开始的动作可能完成，其结果仍会被核对。','撤销授权']}[record.action];
  $('#confirm-title').textContent=copy[0];$('#confirm-submit').className='button '+(record.action==='cancel'?'danger':'primary');
  const finished=record.review&&terminal.has(runActionDetail(record.review)?.run?.status);
- $('#confirm-submit').disabled=record.busy||record.blocked||!runActionReady(record.action,d);$('#confirm-submit').textContent=record.busy?'正在处理…':finished?'本次运行已结束':record.blocked?'请先核对状态':copy[2];
- $('#confirm-submit').toggleAttribute('aria-busy',record.busy);
- $('#confirm-body').innerHTML=`<p class="confirm-copy">${copy[1]}</p><div class="confirm-scope"><dl class="facts">${fact('运行',r.run_id,true)}${fact('任务',r.task.goal)}${direct?fact('执行智能体',r.snapshot.agent_profile?.name||r.snapshot.agent.identity.name):fact('变更',r.task.change_id,true)+fact('项目',r.task.project_id,true)+fact('环境',r.task.environment,true)}${record.action==='grant'?fact('参数摘要',pending?.args_hash,true):''}</dl>${record.action==='grant'?`<details><summary>审查工具参数</summary><pre>${json(pending?.args)}</pre></details>`:''}</div>${record.issue?`<section class="run-action-recovery" aria-label="核对运行操作"><p role="status">${esc(record.issue)}</p><div class="toolbar"><button type="button" class="button secondary" data-run-action-review ${record.busy?'disabled':''}>${record.busy?'正在核对…':'核对当前状态'}</button>${record.review&&runActionReady(record.action,runActionDetail(record.review))?`<button type="button" class="button secondary" data-run-action-prepare ${record.busy?'disabled':''}>重新审查当前内容</button>`:''}</div></section>`:''}`;
+ $('#confirm-submit').disabled=record.blocked||!runActionReady(record.action,d);$('#confirm-submit').textContent=record.busyKind==='submit'?'正在提交…':finished?'本次运行已结束':record.blocked?(record.review?(runActionReady(record.action,runActionDetail(record.review))?'等待重新审查':'当前不可提交'):'请先核对状态'):copy[2];
+ if(record.busyKind==='submit')$('#confirm-submit').setAttribute('aria-busy','true');else $('#confirm-submit').removeAttribute('aria-busy');
+ if(!record.scopeNode||!body.contains(record.scopeNode)){
+  body.innerHTML=`<p class="confirm-copy">${copy[1]}</p><div id="run-action-scope" class="confirm-scope"><dl class="facts">${fact('运行',r.run_id,true)}${fact('任务',r.task.goal)}${direct?fact('执行智能体',r.snapshot.agent_profile?.name||r.snapshot.agent.identity.name):fact('变更',r.task.change_id,true)+fact('项目',r.task.project_id,true)+fact('环境',r.task.environment,true)}${record.action==='grant'?fact('参数摘要',pending?.args_hash,true):''}</dl>${record.action==='grant'?`<details id="run-action-proposal"><summary id="run-action-proposal-summary">审查工具参数</summary><pre id="run-action-args" tabindex="0" role="region" aria-label="待审查工具参数">${json(pending?.args)}</pre></details>`:''}</div><div id="run-action-feedback"></div>`;
+  record.scopeNode=$('#run-action-scope');
+ }
+ $('#run-action-feedback').innerHTML=record.issue?`<section class="run-action-recovery" aria-label="核对运行操作"><p role="status">${esc(record.issue)}</p><div class="toolbar"><button id="run-action-review" type="button" class="button secondary" data-run-action-review ${record.busy?'aria-disabled="true" aria-busy="true"':''}>${record.busyKind==='review'?'正在核对…':'核对当前状态'}</button>${record.review&&runActionReady(record.action,runActionDetail(record.review))?`<button id="run-action-prepare" type="button" class="button secondary" data-run-action-prepare ${record.busy?'disabled':''}>重新审查当前内容</button>`:''}</div></section>`:'';
+ body.scrollTop=top;
+ if(focus&&(active!==document.activeElement||!active.isConnected||active.disabled)){
+  const target=focus==='confirm-submit'&&$('#confirm-submit').disabled?$('#run-action-review'):focus==='run-action-prepare'&&!$('#run-action-prepare')?$('#confirm-title'):$('#'+focus);
+  if(target&&!target.disabled){if(target===$('#confirm-title'))target.tabIndex=-1;target.focus({preventScroll:true});if(focus==='confirm-submit'&&target.id==='run-action-review')target.scrollIntoView({block:'nearest'});}
+ }
  $('#confirm-error').hidden=true;
 }
 function openRunAction(action,packet=state.detail){
  if(!['grant','cancel','revoke'].includes(action)||!packet)return;
  const detail=runActionDetail(packet);if(!detail?.run)return;
- const record=runActionContext={action,detail:structuredClone(detail),workspace:state.workspaceId,tenant:state.meta?.tenant,principal:state.meta?.principal,selected:state.selected,route:state.routeVersion,busy:false,blocked:false,review:null,issue:null};
+ const previous=runActionContext,returnTo=previous&&runActionCurrent(previous)?previous.returnTo:typeof captureTaskDialogReturn==='function'?captureTaskDialogReturn():null;
+ const record=runActionContext={returnTo,action,detail:structuredClone(detail),workspace:state.workspaceId,tenant:state.meta?.tenant,principal:state.meta?.principal,selected:state.selected,route:state.routeVersion,busy:false,busyKind:null,blocked:false,review:null,issue:null};
  record.payload=action==='cancel'?{}:{proof:detail.permissions?.[action+'_token']};record.handler=()=>submitRunAction(record);
- $('#confirm-submit').onclick=record.handler;$('#confirm-dialog').showModal();
+ $('#confirm-submit').onclick=record.handler;$('#confirm-dialog').addEventListener('close',()=>{if($('#confirm-dialog').open||runActionContext!==record||$('#confirm-submit').onclick!==record.handler)return;$('#confirm-submit').removeAttribute('aria-busy');if(typeof restoreTaskDialogReturn==='function')restoreTaskDialogReturn(record.returnTo,$('#confirm-dialog'));},{once:true});$('#confirm-dialog').showModal();
  if(!runActionReady(action,detail)){record.blocked=true;record.issue='当前状态尚不能执行此操作，请先核对；没有提交请求。';}
  renderRunAction(record);
 }
 async function submitRunAction(record=runActionContext){
  if(!record||!runActionCurrent(record)||record.busy||record.blocked||!runActionReady(record.action,record.detail))return;
- record.busy=true;renderRunAction(record);
+ record.busy=true;record.busyKind='submit';renderRunAction(record);
  try{
   const detail=await api('/api/runs/'+encodeURIComponent(record.detail.run.run_id)+'/'+record.action,record.payload,15000,true,{workspace:record.workspace,payload:JSON.stringify(record.payload)});
   if(!runActionCurrent(record))return;
-  applyRunActionDetail(record,detail);record.busy=false;$('#confirm-submit').disabled=false;$('#confirm-submit').removeAttribute('aria-busy');$('#confirm-dialog').close();
+  applyRunActionDetail(record,detail);record.busy=false;record.busyKind=null;$('#confirm-submit').disabled=false;$('#confirm-submit').removeAttribute('aria-busy');$('#confirm-dialog').close();
   toast(record.action==='grant'?'授权请求已保存，可查看实际执行进度':record.action==='cancel'?'停止请求已保存，已有结果保留':'撤销请求已保存，已在途的操作仍会被核对');await refresh();
  }catch(error){
   if(!runActionCurrent(record))return;
   record.blocked=true;record.issue=(['TypeError','TimeoutError','SyntaxError'].includes(error.name)?'暂时无法确认操作结果。':error.message+'。')+'请先核对当前状态，核对不会重复提交。';
- }finally{record.busy=false;if(runActionCurrent(record))renderRunAction(record);}
+ }finally{record.busy=false;record.busyKind=null;if(runActionCurrent(record))renderRunAction(record);}
 }
 async function reviewRunAction(){
  const record=runActionContext;if(!record||!runActionCurrent(record)||record.busy)return;
- record.busy=true;renderRunAction(record);
+ record.busy=true;record.busyKind='review';renderRunAction(record);
  try{
   const detail=await api('/api/runs/'+encodeURIComponent(record.selected),undefined,15000,true,{workspace:record.workspace,payload:undefined});if(!runActionCurrent(record))return;
   if(detail?.run?.run_id!==record.selected&&detail?.conversation?.id!==record.selected)throw Error('返回的任务记录不匹配');
@@ -86,7 +97,7 @@ async function reviewRunAction(){
   const latest=runActionDetail(record.review),request=latest.permissions?.request;
   record.issue=request?(request.error||(request.state==='RUNNING'?'授权已经保存，正在执行；无需再次授权。':'授权已经保存，正在等待执行；无需再次授权。')):latest.run.cancellation?.pending?'停止请求已保存，正在处理。':terminal.has(latest.run.status)?'本次运行已结束，可关闭窗口查看结果。':record.action==='revoke'&&!latest.grant?.valid?'当前授权已失效或已撤销，无需重复提交。':'已读取当前状态。如仍需操作，请先选择“重新审查当前内容”，确认后再提交。';
  }catch(error){if(runActionCurrent(record)){record.blocked=true;record.issue='核对暂未完成：'+error.message+'。原审查内容保留，可稍后重试核对。';}}
- finally{record.busy=false;if(runActionCurrent(record)){renderRunAction(record);$('.run-action-recovery')?.scrollIntoView({block:'nearest'});}}
+ finally{record.busy=false;record.busyKind=null;if(runActionCurrent(record)){renderRunAction(record);if(document.activeElement===$('#run-action-review'))$('#run-action-review')?.scrollIntoView({block:'nearest'});}}
 }
 function runPermissionNotice(detail){
  const run=detail?.run,request=detail?.permissions?.request;if(!run||terminal.has(run.status)||run.cancellation?.pending)return '';

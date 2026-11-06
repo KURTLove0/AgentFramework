@@ -84,7 +84,7 @@ const signature=view=>({id:view.id,revision:view.revision,status:view.status,tas
   const before=await counts(),event=page.waitForEvent('download');event.catch(()=>{});await page.locator('#task-export-download').focus();await page.keyboard.press('Enter');await entered.promise;
   assert.equal(await page.evaluate(()=>document.activeElement.id),'task-export-download');assert.equal(await page.locator('#task-export-download').getAttribute('aria-disabled'),'true');
   await page.keyboard.press('Enter');await page.keyboard.press('Space');assert.equal(requests.length,before.requests+1);await layout(true);
-  await page.keyboard.press('Shift+Tab');await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'task-export-dismiss');
+  await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'task-export-cancel');await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'task-export-close');await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'task-export-dismiss');
   go.resolve();await save(await event,'bundle','keyboard-task',before);release=null;assert.equal(await page.evaluate(()=>document.activeElement.id),'task-export-dismiss');await page.unroute(endpoint);
   focusChecks.push({outcome:'success',target:'task-export-dismiss',requests:1});
   pass('安装后的等待按钮保留焦点，重复 Enter/空格不重发；成功后保留顶部关闭焦点，16 组就绪与等待布局通过');
@@ -93,7 +93,7 @@ const signature=view=>({id:view.id,revision:view.revision,status:view.status,tas
    await choose(kind);const url=base+'/api/tasks/'+a+'/export?kind='+kind,held=deferred(),respond=deferred();release=respond.resolve;
    await page.route(url,async route=>{held.resolve();await respond.promise;await route.fulfill({status,contentType:'application/json',body:JSON.stringify(body)}).catch(()=>{});});
    const count=downloads.length,requestCount=requests.length;await page.locator('#task-export-download').focus();await page.keyboard.press('Enter');await held.promise;
-   await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'task-export-close');respond.resolve();await page.waitForFunction(()=>!!taskExportRequest?.error&&!taskExportRequest.loading);release=null;
+   await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'task-export-cancel');await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'task-export-close');respond.resolve();await page.waitForFunction(()=>!!taskExportRequest?.error&&!taskExportRequest.loading);release=null;
    assert.equal(await page.evaluate(()=>document.activeElement.id),'task-export-close');assert.equal(downloads.length,count);assert.equal(requests.length,requestCount+1);
    assert.match(await dialog.innerText(),kind==='markdown'?/安装后导出暂时不可用/:/记录不完整|编号不一致/);await page.unroute(url);await download(kind,'retry-'+kind);
    focusChecks.push({kind,outcome:'failure',target:'task-export-close',requests:1});

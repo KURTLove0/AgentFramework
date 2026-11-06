@@ -1,4 +1,18 @@
 'use strict';
+let evaluationNavigationObserver=null,evaluationNavigationNode=null;
+function syncEvaluationHistoryNavigation(){
+ const navigation=$('#evaluation-history-navigation');if(navigation===evaluationNavigationNode)return;
+ evaluationNavigationObserver?.disconnect();evaluationNavigationObserver=null;evaluationNavigationNode=navigation;
+ if(!navigation||typeof ResizeObserver==='undefined')return;
+ const measure=()=>{if(navigation.isConnected)navigation.closest('#evaluation-history-panel').style.setProperty('--evaluation-navigation-height',(getComputedStyle(navigation).position==='sticky'?navigation.getBoundingClientRect().height:0)+'px');};
+ measure();evaluationNavigationObserver=new ResizeObserver(measure);evaluationNavigationObserver.observe(navigation);
+}
+function evaluationHistoryControlId(id,kind='record'){return 'evaluation-history-'+kind+'-'+Array.from(String(id),character=>character.codePointAt(0).toString(16)).join('-');}
+function evaluationHistoryReturnFocus(run){
+ const h=state.evaluationHistory,back=h?.returnFocus;
+ if(!back||h.scope!==evaluationHistoryScope()||back.run!==run||back.route!==location.hash)return null;
+ return evaluationHistoryControlId(back.record,back.kind);
+}
 function evaluationHistoryScope(){return JSON.stringify([state.workspaceId,state.meta?.tenant,state.meta?.principal]);}
 function evaluationHistoryState(){
  const scope=evaluationHistoryScope(),agent=state.selected||null,prior=state.evaluationHistory;
@@ -43,7 +57,12 @@ function changeEvaluationHistory(action,value){
   renderEvaluationHistory();h.timer=setTimeout(()=>{h.timer=null;if(h===evaluationHistoryState()&&state.view==='evaluations')loadEvaluationHistory();},260);
  }else{
   const promise=loadEvaluationHistory();
-  if(['next','previous','latest'].includes(action)&&!$$('dialog[open]').length)$('#evaluation-history-title')?.focus({preventScroll:true});
+  if(['next','previous','latest'].includes(action)&&!$$('dialog[open]').length){
+   const route=state.routeVersion,request=h.request;
+   const reveal=()=>$('#evaluation-history-title')?.scrollIntoView?.({block:'start',behavior:'instant'});
+   $('#evaluation-history-title')?.focus({preventScroll:true});reveal();
+   promise.then(()=>{if(state.view==='evaluations'&&state.routeVersion===route&&state.evaluationHistory===h&&h.request===request&&document.activeElement?.id==='evaluation-history-title')reveal();});
+  }
   return promise;
  }
 }
@@ -55,7 +74,7 @@ function invalidateEvaluationHistory(scope){
 async function evaluateHistory(){const scope=evaluationHistoryScope(),result=await api('/api/agent-evaluations/evaluate',{},60000);invalidateEvaluationHistory(scope);return result;}
 function evaluationHistoryCard(r){
  const structural=r.assessment?.scope==='STRUCTURAL',label=r.verdict==='SIMULATED'?'离线演示不计分':r.verdict==='EXCLUDED'?'取消不计分':(structural?'结构检查 ':'业务规则检查 ')+r.score+' 分 · '+(r.verdict==='PASS'?'达标':'未达标');
- return `<article class="evaluation-history-row" data-evaluation-id="${esc(r.id)}"><div><h3>${esc(r.goal)}</h3><p class="field-help">${esc(r.agent_name)} · ${r.agent_revision?'v'+r.agent_revision:'内置岗位'} · 评测于 ${time(r.created_at,true)}</p><p class="field-help">${r.verdict==='SIMULATED'?'离线执行仅验证流程，不计入平均分。':r.verdict==='EXCLUDED'?'人工取消的任务不计入平均分。':structural?'检查交付结构、引用和执行边界，目标达成质量尚未评估。':'依据执行时冻结的职责与客观验收规则。'}</p></div><div class="evaluation-history-actions"><span class="pill ${r.verdict==='FAIL'?'warn':r.verdict==='PASS'?'good':''}">${esc(label)}</span><button type="button" class="button secondary" data-view-evaluation="${esc(r.id)}" data-evaluation-origin="history">查看评测明细</button><a class="text-button" href="#/workbench/${encodeURIComponent(r.run_id)}">查看原执行记录</a></div></article>`;
+ return `<article class="evaluation-history-row" data-evaluation-id="${esc(r.id)}"><div><h3><button type="button" id="${evaluationHistoryControlId(r.id)}" class="evaluation-history-title-button" data-view-evaluation="${esc(r.id)}" data-evaluation-origin="history" aria-label="查看评测明细：${esc(r.goal)}" title="${esc(r.goal)}"><span>${esc(r.goal)}</span></button></h3><p class="field-help">${esc(r.agent_name)} · ${r.agent_revision?'v'+r.agent_revision:'内置岗位'} · ${time(r.created_at,true)}</p><p class="field-help">${r.verdict==='SIMULATED'?'离线执行仅验证流程，不计入平均分。':r.verdict==='EXCLUDED'?'人工取消的任务不计入平均分。':structural?'目标达成质量尚未评估。':'依据执行时冻结的职责与客观验收规则。'}</p></div><div class="evaluation-history-actions"><span class="pill ${r.verdict==='FAIL'?'warn':r.verdict==='PASS'?'good':''}">${esc(label)}</span><a id="${evaluationHistoryControlId(r.id,'run')}" class="text-button evaluation-history-run-link" href="#/workbench/${encodeURIComponent(r.run_id)}" aria-label="查看原执行记录：${esc(r.goal)}">查看原执行记录</a></div></article>`;
 }
 function evaluationHistoryPanel(){
  const h=evaluationHistoryState(),data=h.data,days=state.evaluations?.policy?.window_days;
@@ -63,9 +82,19 @@ function evaluationHistoryPanel(){
  const count=data?(data.reports.length?`显示 ${data.offset+1}–${data.offset+data.reports.length} / ${data.filtered_total} 条匹配；当前历史范围共 ${data.total} 次执行。`:`当前页 0 条，${data.filtered_total} 条匹配；当前历史范围共 ${data.total} 次执行。`):'';
  const status=h.pending?(data?'正在刷新，以下为上次读取的结果。':'正在读取评测历史…'):h.error?(data?'读取失败，以下为上次读取的结果。':'评测历史读取失败。'):data?count:'尚未读取评测历史。';
  const empty=!data||h.pending||h.error?'':data.filtered_total>0||data.newer_count>0?`<div class="empty"><h3>当前页没有记录</h3><p>${data.filtered_total>0?'评测结论或位置已变化，仍有 '+data.filtered_total+' 条匹配记录。':'有新评测，返回第一页可重新核对筛选结果。'}</p><button type="button" class="button secondary" data-evaluation-history="latest">返回第一页</button></div>`:'<div class="empty"><h3>没有符合条件的评测</h3><p>可缩短关键词、选择其他结论，或切换到全部历史。尚未评测的执行可使用页面上方的“评测执行历史”。</p></div>';
- return `<section class="panel" id="evaluation-history-panel" aria-labelledby="evaluation-history-title"><div class="panel-heading"><div><h2 id="evaluation-history-title" tabindex="-1">执行评测明细</h2><p class="field-help">每次执行展示最近一次评测。历史筛选不改变上方近期评分汇总；提醒仍可打开产生时的旧评测。</p></div></div><div class="evaluation-history-filters"><label for="evaluation-history-search">搜索历史<input type="search" id="evaluation-history-search" maxlength="2000" value="${esc(h.search)}" placeholder="目标、岗位、运行或评测标识"></label><label for="evaluation-history-period">历史范围<select id="evaluation-history-period"><option value="window" ${h.period==='window'?'selected':''}>${days?'近 '+days+' 天执行':'近期窗口'}</option><option value="all" ${h.period==='all'?'selected':''}>全部历史</option></select></label><label for="evaluation-history-verdict">评测结论<select id="evaluation-history-verdict">${verdicts.map(([value,name])=>`<option value="${value}" ${h.verdict===value?'selected':''}>${name}</option>`).join('')}</select></label><button type="button" class="button secondary" id="evaluation-history-refresh" data-evaluation-history="retry" ${h.pending?'disabled':''}>刷新本页</button></div><p class="evaluation-history-status" role="status">${status}</p>${h.error?`<div class="evaluation-history-error"><p class="inline-error" role="alert">${esc(h.error)}</p><div class="toolbar"><button type="button" class="button secondary" id="evaluation-history-retry" data-evaluation-history="retry">重试读取</button><button type="button" class="text-button" data-evaluation-history="latest">返回最新评测</button></div></div>`:''}${data?.newer_count?`<p class="field-help">有 ${data.newer_count} 份新评测。<button type="button" class="text-button" data-evaluation-history="latest">查看最新评测</button></p>`:''}<div aria-busy="${h.pending}">${data?data.reports.map(evaluationHistoryCard).join('')||empty:''}</div><nav class="evaluation-history-pager" aria-label="评测历史分页"><button type="button" class="button secondary" id="evaluation-history-previous" data-evaluation-history="previous" ${h.pending||!h.stack.length?'disabled':''}>上一页</button><span>第 ${h.stack.length+1} 页</span><button type="button" class="button secondary" id="evaluation-history-next" data-evaluation-history="next" ${h.pending||!data?.has_more?'disabled':''}>下一页</button></nav></section>`;
+ return `<section class="panel" id="evaluation-history-panel" aria-labelledby="evaluation-history-title"><div class="panel-heading"><div><h2 id="evaluation-history-title" tabindex="-1">执行评测明细</h2><p class="field-help">选择目标查看完整明细，每次执行展示最近一次评测。历史筛选不改变上方近期评分汇总；提醒仍可打开产生时的旧评测。</p></div></div><div class="evaluation-history-filters"><label for="evaluation-history-search">搜索历史<input type="search" id="evaluation-history-search" maxlength="2000" value="${esc(h.search)}" placeholder="目标、岗位、运行或评测标识"></label><label for="evaluation-history-period">历史范围<select id="evaluation-history-period"><option value="window" ${h.period==='window'?'selected':''}>${days?'近 '+days+' 天执行':'近期窗口'}</option><option value="all" ${h.period==='all'?'selected':''}>全部历史</option></select></label><label for="evaluation-history-verdict">评测结论<select id="evaluation-history-verdict">${verdicts.map(([value,name])=>`<option value="${value}" ${h.verdict===value?'selected':''}>${name}</option>`).join('')}</select></label><button type="button" class="button secondary" id="evaluation-history-refresh" data-evaluation-history="retry" ${h.pending?'disabled':''}>刷新本页</button></div><p class="evaluation-history-status" role="status">${status}</p>${h.error?`<div class="evaluation-history-error"><p class="inline-error" role="alert">${esc(h.error)}</p><div class="toolbar"><button type="button" class="button secondary" id="evaluation-history-retry" data-evaluation-history="retry">重试读取</button><button type="button" class="text-button" data-evaluation-history="latest">返回最新评测</button></div></div>`:''}${data?.newer_count?`<p class="field-help">有 ${data.newer_count} 份新评测。<button type="button" class="text-button" data-evaluation-history="latest">查看最新评测</button></p>`:''}<nav class="evaluation-history-pager" id="evaluation-history-navigation" aria-label="评测历史分页"><button type="button" class="text-button" id="evaluation-history-first" data-evaluation-history="latest" ${h.pending||!h.stack.length?'disabled':''}>第一页</button><div class="evaluation-history-page-actions"><button type="button" class="button secondary" id="evaluation-history-previous" data-evaluation-history="previous" ${h.pending||!h.stack.length?'disabled':''}>上一页</button><span class="evaluation-history-page-number">第 ${h.stack.length+1} 页</span><button type="button" class="button secondary" id="evaluation-history-next" data-evaluation-history="next" ${h.pending||!data?.has_more?'disabled':''}>下一页</button></div></nav><div id="evaluation-history-rows" aria-busy="${h.pending}">${data?data.reports.map(evaluationHistoryCard).join('')||empty:''}</div></section>`;
 }
 document.addEventListener('input',event=>{if(event.target.id==='evaluation-history-search'&&!event.isComposing)changeEvaluationHistory('search',event.target.value);});
 document.addEventListener('compositionend',event=>{if(event.target.id==='evaluation-history-search')changeEvaluationHistory('search',event.target.value);});
 document.addEventListener('change',event=>{if(event.target.id==='evaluation-history-period')changeEvaluationHistory('period',event.target.value);if(event.target.id==='evaluation-history-verdict')changeEvaluationHistory('verdict',event.target.value);});
 document.addEventListener('click',event=>{const button=event.target.closest('[data-evaluation-history]');if(button)changeEvaluationHistory(button.dataset.evaluationHistory);});
+document.addEventListener('click',event=>{
+ if(state.view!=='evaluations'||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+ const link=event.target.closest('a[href^="#/workbench/"]');if(!link)return;
+ const row=link.closest('[data-evaluation-id]'),record=typeof evaluationRecordState!=='undefined'?evaluationRecordState:null;
+ const identity=row?.dataset.evaluationId||(record?.origin==='history'&&link.closest('#operations-dialog')?record.identity:null);
+ const h=evaluationHistoryState(),report=h.data?.reports.find(r=>r.id===identity);if(!report)return;
+ // The dialog's link handler may already have changed location.hash.
+ if(state.evaluationAlertList)state.evaluationAlertList.returnFocus=null;
+ h.returnFocus={route:state.routeHash,run:report.run_id,record:identity,kind:row?'run':'record'};
+});

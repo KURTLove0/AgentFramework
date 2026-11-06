@@ -22,17 +22,18 @@ function taskFavoriteOperation(){
 function taskFavoriteButton(detail=state.detail){
  if(!taskFavoriteIdentity(detail)||detail?.run?.task?.principal!==state.meta?.principal)return '';
  const record=taskFavoriteOperation(),value=taskFavoriteValue(detail);
- return `<button id="task-favorite-action" type="button" class="button secondary" data-task-favorite aria-pressed="${value.favorited}" ${record?.pending||record?.needsReview?'disabled':''}>${record?.pending?'正在处理…':value.favorited?'取消收藏':'收藏任务'}</button>`;
+ return `<button id="task-favorite-action" type="button" class="button secondary" data-task-favorite aria-pressed="${value.favorited}" ${record?.needsReview?'disabled':record?.pending?'aria-disabled="true" aria-busy="true"':''}>${record?.pending?'正在处理…':value.favorited?'取消收藏':'收藏任务'}</button>`;
 }
 function taskFavoriteNotice(){
  const record=taskFavoriteOperation();if(!record)return '';
  if(!record.pending&&!record.needsReview&&!record.cleanupPending&&record.observedRevision!==taskFavoriteValue().revision)return '';
  const message=record.cleanupPending&&record.observedRevision!==taskFavoriteValue().revision?'当前收藏状态已有更新，本页恢复记录仍待清理。':record.message;
- return `<section class="notice${record.needsReview||record.cleanupPending?'':' info'} task-favorite-notice" aria-label="任务收藏状态"><p role="status">${esc(record.pending?'正在处理收藏状态…':message)}</p>${record.storageError?`<p>${esc(record.storageError)}</p>`:''}${record.needsReview?`<button id="task-favorite-review" type="button" class="button secondary" data-task-favorite-review ${record.pending?'disabled':''}>核对收藏状态</button>`:record.cleanupPending?`<button id="task-favorite-clear" type="button" class="button secondary" data-task-favorite-clear ${record.pending?'disabled':''}>重试清理本页记录</button>`:''}</section>`;
+ return `<section class="notice${record.needsReview||record.cleanupPending?'':' info'} task-favorite-notice" aria-label="任务收藏状态"><p role="status">${esc(record.pending?(record.needsReview?'正在核对收藏状态…':'正在更新收藏状态…'):message)}</p>${record.storageError?`<p>${esc(record.storageError)}</p>`:''}${record.needsReview?`<button id="task-favorite-review" type="button" class="button secondary" data-task-favorite-review ${record.pending?'aria-disabled="true" aria-busy="true"':''}>${record.pending?'正在核对…':'核对收藏状态'}</button>`:record.cleanupPending?`<button id="task-favorite-clear" type="button" class="button secondary" data-task-favorite-clear ${record.pending?'disabled':''}>重试清理本页记录</button>`:''}</section>`;
 }
 function redrawTaskFavorite(record){if(taskFavoriteCurrent(record)){state.fingerprint='';render();}}
 function restoreTaskFavoriteFocus(record){
- if(!record.restoreFocus||!taskFavoriteCurrent(record)||document.activeElement!==document.body||document.querySelector('dialog[open]'))return;
+ if(!record.restoreFocus||!taskFavoriteCurrent(record)||document.querySelector('dialog[open]'))return;
+ if(document.activeElement!==document.body&&document.activeElement?.id!==record.focusSource)return;
  (document.getElementById(record.needsReview?'task-favorite-review':record.cleanupPending?'task-favorite-clear':'task-favorite-action')||document.getElementById('content'))?.focus({preventScroll:true});
 }
 function clearTaskFavorite(record){
@@ -46,7 +47,7 @@ function clearTaskFavorite(record){
 }
 function retryTaskFavoriteCleanup(){
  const record=taskFavoriteOperation();if(!record||record.pending||record.needsReview||!record.cleanupPending)return;
- record.restoreFocus=document.activeElement?.id==='task-favorite-clear';clearTaskFavorite(record);redrawTaskFavorite(record);restoreTaskFavoriteFocus(record);
+ record.restoreFocus=document.activeElement?.id==='task-favorite-clear';record.focusSource='task-favorite-clear';clearTaskFavorite(record);redrawTaskFavorite(record);restoreTaskFavoriteFocus(record);
 }
 function adoptTaskFavorite(record,packet){
  const value=packet?.detail?.favorite;
@@ -58,7 +59,7 @@ function adoptTaskFavorite(record,packet){
 }
 async function changeTaskFavorite(){
  const identity=taskFavoriteIdentity(),prior=taskFavoriteOperation();if(!identity||prior?.pending||prior?.needsReview)return;
- const value=taskFavoriteValue(),payload={favorited:!value.favorited,revision:value.revision},record={key:taskFavoriteKey(),identity,workspace:state.workspaceId,route:state.routeVersion,pending:true,needsReview:false,restoreFocus:document.activeElement?.id==='task-favorite-action'};
+ const value=taskFavoriteValue(),payload={favorited:!value.favorited,revision:value.revision},record={key:taskFavoriteKey(),identity,workspace:state.workspaceId,route:state.routeVersion,pending:true,needsReview:false,focusSource:'task-favorite-action',restoreFocus:document.activeElement?.id==='task-favorite-action'};
  taskFavoriteOperations.set(record.key,record);
  try{record.stored=JSON.stringify({v:1,id:crypto.randomUUID(),...payload});sessionStorage.setItem(record.key,record.stored);}catch{record.storageError='浏览器无法保留操作记录，刷新后请核对页面中的实际收藏状态。';}
  redrawTaskFavorite(record);
@@ -71,7 +72,7 @@ async function changeTaskFavorite(){
 }
 async function reviewTaskFavorite(){
  const record=taskFavoriteOperation();if(!record||record.pending||!record.needsReview)return;
- record.restoreFocus=document.activeElement?.id==='task-favorite-review';record.pending=true;redrawTaskFavorite(record);
+ record.restoreFocus=document.activeElement?.id==='task-favorite-review';record.focusSource='task-favorite-review';record.pending=true;redrawTaskFavorite(record);
  try{
   const packet=await api('/api/tasks/'+encodeURIComponent(record.identity)+'/favorite',undefined,15000,true,{workspace:record.workspace,payload:undefined});
   adoptTaskFavorite(record,packet);if(taskFavoriteCurrent(record)){record.needsReview=false;clearTaskFavorite(record);}

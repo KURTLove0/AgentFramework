@@ -29,27 +29,37 @@ function applyTaskDraftReceipt(saved,workspace){
 }
 function renderTaskDraftStatus(){
  const target=$('#task-draft-status');if(!target)return;
- const issue=taskJourney.draftIssue;target.hidden=!issue&&!taskJourney.draftSaving;
- if(target.hidden)return;
- if(taskJourney.draftSaving){target.innerHTML='<p>正在保存或读取设置草稿，请稍候…</p>';return;}
+ const issue=taskJourney.draftIssue,progress=$('#task-draft-progress'),busy=taskJourney.draftSaving;
+ const label=busy?(taskJourney.draftReading?'正在读取保存的草稿…':'正在保存草稿…'):issue?'请核对草稿，本页输入保留。':taskJourney.draftDirty||taskHasChanges()?'等待保存草稿…':taskJourney.ownsDraft?'草稿已保存':'填写时自动保存草稿';
+ if(progress){if(progress.textContent!==label)progress.textContent=label;progress.dataset.state=busy?'pending':issue?'review':taskJourney.ownsDraft?'saved':'idle';}
+ target.hidden=!issue;if(target.hidden)return;
  const latest=issue.latest,agent=latest?.draft&&(state.agents||[]).find(item=>item.id===latest.draft.agent_id),existing=issue.kind==='existing';
- target.innerHTML=`<p><strong>${existing?'已有保存的任务设置':issue.kind==='conflict'?'设置草稿已在其他页面变化':'设置草稿暂未保存'}</strong></p><p>${esc(issue.message)}${existing?'':' 本页输入保留，可以继续编辑或创建任务。'}</p>${latest?`<details ${existing?'':'open'}><summary>已保存的版本</summary><div class="task-draft-comparison"><p>${esc(latest.draft?.goal||'当前没有保存的草稿。')}</p>${latest.draft?`<p>执行智能体：${esc(agent?.name||latest.draft.agent_id||'尚未选择')}</p>`:''}</div></details><div class="toolbar"><button type="button" class="button secondary" data-task-draft-save>${existing?'用本页设置替换草稿':'保留本页设置并保存'}</button>${latest.draft?'<button type="button" class="text-button" data-task-draft-restore>使用已保存设置</button>':''}</div>`:'<button type="button" class="text-button" data-task-draft-review>查看已保存版本</button>'}`;
+ const active=document.activeElement,focus=target.contains?.(active)?active.id:null;
+ const reading=$$('[data-task-draft-reading]',target).map(el=>({key:el.dataset.taskDraftReading,text:el.textContent,open:el.open,top:el.scrollTop,left:el.scrollLeft}));
+ const html=`<p><strong>${existing?'已有保存的任务设置':issue.kind==='conflict'?'设置草稿已在其他页面变化':'设置草稿暂未保存'}</strong></p><p>${esc(issue.message)}${existing?'':' 本页输入保留，可以继续编辑或创建任务。'}</p>${latest?`<details data-task-draft-reading="saved" ${existing?'':'open'}><summary id="task-draft-saved-summary">已保存的版本 · ${latest.revision}</summary><div id="task-draft-comparison" class="task-draft-comparison" data-task-draft-reading="comparison" tabindex="0" role="region" aria-labelledby="task-draft-saved-summary"><p>${esc(latest.draft?.goal||'当前没有保存的草稿。')}</p>${latest.draft?`<p>执行智能体：${esc(agent?.name||latest.draft.agent_id||'尚未选择')}</p>`:''}</div></details>`:''}<div class="toolbar">${latest?`<button id="task-draft-save" type="button" class="button secondary" data-task-draft-save>${existing?'用本页设置替换草稿':'保留本页设置并保存'}</button>${latest.draft?'<button id="task-draft-restore" type="button" class="text-button" data-task-draft-restore>使用已保存设置</button>':''}`:''}<button id="task-draft-read" type="button" class="text-button" data-task-draft-review>${latest?'重新读取保存版本':'查看已保存版本'}</button></div>`;
+ if(target.dataset.content!==html){
+  target.innerHTML=html;target.dataset.content=html;
+  for(const saved of reading){const el=$$('[data-task-draft-reading]',target).find(el=>el.dataset.taskDraftReading===saved.key);if(el?.textContent===saved.text){if(saved.open!==undefined)el.open=saved.open;el.scrollTop=saved.top;el.scrollLeft=saved.left;}}
+  if(focus){const control=$('#'+focus);if(control&&target.contains(control))control.focus({preventScroll:true});}
+ }
+ for(const button of $$('button',target)){if(busy)button.setAttribute('aria-disabled','true');else button.removeAttribute('aria-disabled');}
+ const review=$('#task-draft-read');if(review){review.textContent=taskJourney.draftReading?'正在读取…':latest?'重新读取保存版本':'查看已保存版本';if(taskJourney.draftReading)review.setAttribute('aria-busy','true');else review.removeAttribute('aria-busy');}
 }
 async function reviewTaskDraft(){
  if(taskJourney.draftSaving||taskJourney.saving||taskJourney.draftDiscarding)return;
- const workspace=taskJourney.workspace;taskJourney.draftSaving=true;renderTaskDraftStatus();
+ const workspace=taskJourney.workspace;taskJourney.draftSaving=true;taskJourney.draftReading=true;renderTaskDraftStatus();
  try{
   const saved=await api('/api/task-draft',undefined,15000,true,{workspace,payload:undefined});
   if(workspace!==state.workspaceId||workspace!==taskJourney.workspace)return;
   applyTaskDraftReceipt(saved,workspace);taskJourney.draftIssue={kind:'conflict',message:'请核对保存的版本，再选择保留哪份设置。',latest:saved};
  }catch(error){if(workspace===state.workspaceId)taskJourney.draftIssue={kind:'error',message:error.message};}
- finally{taskJourney.draftSaving=false;renderTaskDraftStatus();}
+ finally{taskJourney.draftSaving=false;taskJourney.draftReading=false;renderTaskDraftStatus();}
 }
 async function resolveTaskDraft(useSaved){
  const latest=taskJourney.draftIssue?.latest;if(!latest||taskJourney.draftSaving||taskJourney.saving)return;
- taskJourney.serverRevision=latest.revision;taskJourney.draftIssue=null;
+ const origin=document.activeElement,restoreFocus=$('#task-draft-status')?.contains?.(origin);taskJourney.serverRevision=latest.revision;taskJourney.draftIssue=null;
  if(useSaved){applyTaskDraft(latest.draft);setTaskStep(latest.draft.step||0,false);clearTimeout(taskJourney.draftTimer);taskJourney.initial=taskFormSnapshot();taskJourney.draftDirty=false;renderTaskDraftStatus();$('#task-goal')?.focus();}
- else{taskJourney.draftDirty=true;await saveTaskDraft();if(!taskJourney.draftIssue)$('#task-goal')?.focus();}
+ else{taskJourney.draftDirty=true;await saveTaskDraft();if(restoreFocus&&(document.activeElement===document.body||document.activeElement===origin))(taskJourney.draftIssue?$('#task-draft-read'):$('#task-goal'))?.focus({preventScroll:true});}
  if(typeof captureTaskSubmissionEditing==='function')captureTaskSubmissionEditing();
 }
 
@@ -189,6 +199,7 @@ async function saveTaskDraft(){
 function scheduleTaskDraftSave(){
   if(!taskJourney.initial)return;
   taskJourney.draftDirty=true;clearTimeout(taskJourney.draftTimer);
+  renderTaskDraftStatus();
   if(typeof setTimeout==='function')taskJourney.draftTimer=setTimeout(saveTaskDraft,450);
 }
 function applyTaskDraft(draft){
@@ -257,13 +268,18 @@ function leaveTaskForConfiguration(){
 function taskReturnBanner(){
   if(!taskJourney.returnToTask||taskJourney.workspace!==state.workspaceId)return '';
   if(state.view==='agents'&&state.agentSavedNotice?.workspace===state.workspaceId)return '';
-  return `<section class="journey-return task-config-return" aria-label="返回任务设置"><span>${icon('file')}<span><strong>任务设置已保留</strong><small>完成配置后返回，目标已保留。</small></span></span><div class="toolbar"><button class="button secondary" data-action="discard-task-draft">放弃设置</button><button class="button primary" data-action="return-task-draft">返回任务</button></div></section>`;
+  return `<section class="journey-return task-config-return" aria-label="返回任务设置"><span>${icon('file')}<span><strong>任务设置已保留</strong><small>完成配置后返回，目标已保留。</small></span></span><div class="toolbar"><button id="task-return-discard" class="button secondary" data-action="discard-task-draft">放弃设置</button><button id="task-return-open" class="button primary" data-action="return-task-draft">返回任务</button></div></section>`;
 }
-function syncTaskReturnBanner(){
-  $('#content .journey-return.task-config-return')?.remove();
-  const banner=taskReturnBanner();if(banner)$('#content').insertAdjacentHTML('afterbegin',banner);
+function syncTaskReturnBanner(focusId=null){
+  const previous=$('#content .journey-return.task-config-return'),active=document.activeElement,focus=previous?.contains?.(active)?active.id:['task-return-open','task-return-discard'].includes(focusId)?focusId:null,banner=taskReturnBanner();
+  if(!banner){previous?.remove();return;}
+  if(!previous||previous.dataset.content!==banner){previous?.remove();$('#content').insertAdjacentHTML('afterbegin',banner);const current=$('#content .journey-return.task-config-return');if(current)current.dataset.content=banner;}
+  const request=taskJourney.preparation,trigger=$('#task-return-open');
+  if(trigger&&request?.trigger?.id==='task-return-open'&&taskPreparationCurrent(request)){request.trigger=trigger;if(taskJourney.opening){trigger.disabled=true;trigger.setAttribute('aria-busy','true');}}
+  if(focus&&document.activeElement===document.body)$('#'+focus)?.focus({preventScroll:true});
 }
 async function returnToTaskDraft(button){
+  if(button?.id==='task-return-open')button=$('#task-return-open')||button;
   if(taskJourney.opening)return;const request=beginTaskPreparation(button,()=>returnToTaskDraft(button)),workspace=state.workspaceId,read=url=>api(url,undefined,15000,true,{workspace,payload:undefined});
   try{
     if(taskJourney.workspace!==state.workspaceId)throw Error('该任务设置属于另一工作空间，请切回原空间后继续。');
@@ -275,9 +291,10 @@ async function returnToTaskDraft(button){
     if(!agentId)form.planner.value=runtime;updateTaskAgent();
     form.consent.checked=false;form.mcp_consent.checked=false;form.grant.checked=false;
     taskJourney.returnToTask=false;setTaskStep(agentId&&!form.agent_id.value?0:1,false);
-    hideTaskPreparation(request);$('#create-dialog').showModal();if($('#create-form').dataset?.simple==='true')$('#task-goal').focus();else $('#'+taskSteps[taskJourney.step]).focus();
-    $('#task-return-note').textContent=agentId&&!form.agent_id.value?'原 Agent 已不可用，请重新选择。任务说明已保留。':'已更新可用配置，任务目标已保留，可以开始执行。';$('#task-return-note').hidden=false;
+    hideTaskPreparation(request);const dialog=$('#create-dialog'),editor=taskJourney.editorSession;dialog.showModal();
+    $('#task-return-note').textContent=agentId&&!form.agent_id.value?((state.agents||[]).some(agent=>!agent.archived)?'原智能体已不可用，请重新选择。任务目标已保留。':'原智能体已不可用，请先创建可用的智能体。任务目标已保留。'):'已更新可用配置，任务目标已保留，可以开始执行。';$('#task-return-note').hidden=false;
     state.fingerprint='';render();
+    const active=document.activeElement;queueMicrotask(()=>{if(editor!==taskJourney.editorSession||!dialog.open||document.activeElement!==active)return;if(form.dataset?.simple==='true'){if(!form.agent_id.value){const configure=!(state.agents||[]).some(agent=>!agent.archived)&&form.querySelector('[data-action="task-configure-agent"]');if(configure)configure.focus();else if(typeof focusFormControl==='function')focusFormControl(form.agent_id);else form.agent_id.focus();}else $('#task-goal').focus();}else $('#'+taskSteps[taskJourney.step]).focus();});
   }catch(e){if(taskPreparationCurrent(request))showTaskPreparation(request,e.message);}finally{finishTaskPreparation(request);}
 }
 function runMatchesFilter(run,filter){
@@ -301,9 +318,9 @@ function runNextStep(detail){
   const diagnostics=run.last_error?`<details class="notice-diagnostics"><summary>查看诊断信息</summary><pre>${esc(typeof run.last_error==='string'?run.last_error:JSON.stringify(run.last_error))}</pre></details>`:'';
   return `<section class="run-next-step ${tone}" aria-label="当前任务下一步"><div><strong>${esc(title)}</strong><p>${esc(copy)}</p>${diagnostics}</div><button class="button secondary" data-open-run-tab="${tab}">${button}${icon('arrow')}</button>${run.status==='WAITING_INPUT'&&run.scenario==='missing-evidence'?'<button class="button primary" data-action="new">新建正常场景任务</button>':''}</section>`;
 }
-function afterJourneyRender(){
+function afterJourneyRender(focusId=null){
   const key=state.view+':'+(state.selected||'');
-  syncTaskReturnBanner();
+  syncTaskReturnBanner(focusId);
   const changed=state.renderedRouteKey!==key;
   if(changed){
     state.renderedRouteKey=key;

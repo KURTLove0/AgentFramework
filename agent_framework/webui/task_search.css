@@ -1,13 +1,21 @@
 .task-activity-heading .task-search-toggle {display:inline-flex; align-items:center; gap:6px; min-height:36px; padding:4px 8px; font-size:12px; margin-left:8px; flex:none}
 .task-search-toggle svg {width:14px; height:14px}
 .task-search-panel {width:calc(100% - 56px); max-width:var(--chat-reading-width,800px); align-self:center; flex:none; margin:8px 0 0; padding:12px 14px; border:1px solid var(--border); border-radius:10px; background:var(--subtle)}
-.task-search-controls {display:flex; align-items:flex-end; gap:12px; flex-wrap:wrap}
+.task-search-controls {display:flex; align-items:center; gap:12px; flex-wrap:wrap}
 .task-search-controls label {flex:1 1 160px; min-width:0; font-size:12px; margin:0}
-.task-search-controls input {width:100%; min-width:0; margin-top:4px}
-.task-search-actions {display:flex; gap:6px; flex-wrap:wrap; align-items:center}
-.task-search-actions button {min-height:36px; padding:6px 10px; font-size:12px; white-space:nowrap}
+.task-search-controls input {width:100%; min-width:0; margin:0}
+.task-search-actions {display:flex; gap:6px; flex:none; align-items:center}
+.task-search-actions button {display:inline-flex;align-items:center;justify-content:center;min-height:40px;width:40px;padding:8px;font-size:12px;flex:none}
+.task-search-actions svg {width:20px;height:20px}
+#task-search-previous svg {transform:rotate(180deg)}
 #content #task-search-status {margin:8px 0 0; font-size:12px; line-height:1.5; color:var(--muted); overflow-wrap:anywhere}
 .task-search-current-message {outline:2px solid var(--control-focus); outline-offset:5px; border-radius:4px}
 ::highlight(task-search-matches) {background-color:var(--amber-soft); color:var(--amber)}
 ::highlight(task-search-current) {background-color:var(--action); color:var(--color-accent-ink)}
 @media(max-width:1100px){.task-search-panel {padding:10px;}.task-search-controls {gap:8px;}.task-search-actions {gap:4px;}}
+.task-search-composer-return {display:none}
+@media(min-width:901px) and (max-height:900px){
+ .task-thread-main:has(#task-search-panel:not([hidden])):not(:has(.task-message-recovery,#task-chat-form:focus-within)) #task-chat-form {display:none}
+ .task-thread-main:not(:has(.task-message-recovery,#task-chat-form:focus-within)) .task-search-composer-return:not([hidden]) {display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none;margin:4px 28px 16px;font-size:13px;color:var(--muted)}
+ .task-search-composer-return .button {min-height:40px;flex:none}
+}

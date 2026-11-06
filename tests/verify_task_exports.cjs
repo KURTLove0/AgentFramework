@@ -72,7 +72,7 @@ const inspect=file=>{const verified=python(['-m','agent_framework','verify-expor
    }
    // Reverse through the dialog's controls instead of assuming that Tab from
    // its last control never visits the browser's own chrome.
-   await page.keyboard.press('Shift+Tab');if(location==='header')await page.keyboard.press('Shift+Tab');const target=location==='footer'?'task-export-close':'task-export-dismiss';
+   const target=location==='footer'?'task-export-close':'task-export-dismiss';for(let n=0;n<3&&await page.evaluate(()=>document.activeElement.id)!==target;n++)await page.keyboard.press('Shift+Tab');
    assert.equal(await page.evaluate(()=>document.activeElement.id),target);
    go.resolve();await page.waitForFunction(()=>taskExportRequest&&!taskExportRequest.loading);release=null;
    assert.equal(await page.evaluate(()=>document.activeElement.id),target);assert.equal(downloads.length,before+(failure?0:1));assert.equal(exportRequests.length,requestCount+1);

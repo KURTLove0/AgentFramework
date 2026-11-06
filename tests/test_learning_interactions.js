@@ -151,3 +151,25 @@ test('a pending next page prevents duplicate reads and leaves history buttons di
 test('opening a stored proposal also protects modified generation instructions',async()=>{
  const s=sandbox();s.ui.output=null;s.ui.dirty=true;s.context.confirm=()=>false;s.element('learning-instruction').value='未发送的生成要求';s.setApi(()=>proposal());await s.run("loadLearningProposal('learning-test')");assert.equal(s.ui.current,null);assert(s.ui.dirty);assert.equal(s.element('learning-instruction').value,'未发送的生成要求');
 });
+test('failed initial loading can retry in the same dialog without generating a proposal',async()=>{
+ const s=sandbox();s.run('learningDialog.close()');s.setApi(()=>{throw Error('temporary read failure');});await s.run("openLearning('run-test')");const request=s.ui.opening,session=s.ui.session;assert.equal(request.error,'temporary read failure');assert(!s.ui.busy&&!s.ui.reading);assert.match(s.element('learning-dialog').innerHTML,/data-learning-opening-retry/);
+ s.setApi(url=>url.startsWith('/api/agents')?{agents:[]}:url.startsWith('/api/learning/run')?{facts:{goal:'原任务'},sources:[]}:{proposals:[]});await s.run('retryLearningOpening()');assert.equal(s.ui.session,session);assert.equal(s.ui.runId,'run-test');assert.equal(s.ui.source.facts.goal,'原任务');assert.equal(s.ui.opening,null);assert.equal(s.calls.filter(c=>c.data).length,0);
+});
+test('an initial-load retry is deduplicated and cannot cross identity or route changes',async()=>{
+ for(const change of [state=>state.routeVersion++,state=>state.workspaceId='other',state=>state.meta.principal='other',state=>state.meta.tenant='other']){
+  const s=sandbox(),pending=deferred();s.run('learningDialog.close()');s.setApi(url=>url.startsWith('/api/agents')?pending.promise:{proposals:[]});const first=s.run("openLearning(null,'ontology')"),count=s.calls.length;await s.run('retryLearningOpening()');assert.equal(s.calls.length,count);change(s.context.state);pending.reject(Error('late failure'));await first;assert.equal(s.ui.opening.error,null);await s.run('retryLearningOpening()');assert.equal(s.calls.length,count);
+ }
+});
+test('the reading button stays focusable while fields remain frozen and a newer close focus is respected',async()=>{
+ const s=sandbox(),request=deferred(),button=s.element('read-button'),field=s.element('input-field'),close=s.element('learning-close'),attrs=new Map();button.tagName='BUTTON';button.setAttribute=(k,v)=>attrs.set(k,v);button.removeAttribute=k=>attrs.delete(k);button.isConnected=true;button.focus=()=>s.context.document.activeElement=button;close.focus=()=>s.context.document.activeElement=close;s.context.$$=()=>[button,field,close];s.context.document.activeElement=button;s.context.pendingRead=request.promise;
+ const pending=s.run('readLearning(()=>pendingRead,()=>{},()=>false)');assert.equal(button.disabled,false);assert.equal(attrs.get('aria-busy'),'true');assert(field.disabled);assert.equal(close.disabled,false);close.focus();request.resolve({});await pending;assert.equal(s.context.document.activeElement,close);assert.equal(attrs.size,0);assert(!field.disabled);
+});
+test('read failures keep a newly chosen close control rather than forcing the error focus',async()=>{
+ const s=sandbox(),request=deferred(),button=s.element('read-button'),close=s.element('learning-close');button.tagName='BUTTON';s.context.document.activeElement=button;s.context.pendingRead=request.promise;s.context.learningError=(message,options)=>{s.context.testError=message;if(options.focus)s.context.document.activeElement=s.element('learning-error');};const pending=s.run('readLearning(()=>pendingRead,()=>{})');s.context.document.activeElement=close;request.reject(Error('failed read'));await pending;assert.equal(s.context.testError,'failed read');assert.equal(s.context.document.activeElement,close);
+});
+test('unchanged long text restores backward selection and scroll while changed text keeps its new position',()=>{
+ for(const same of [true,false]){
+  const s=sandbox(),active={id:'description',tagName:'TEXTAREA',dataset:{},value:'原文',selectionStart:12,selectionEnd:20,selectionDirection:'backward',scrollTop:250,scrollLeft:90,style:{height:'240px'}},target={...active,value:same?'原文':'新原文',selectionStart:0,selectionEnd:0,selectionDirection:'none',scrollTop:0,scrollLeft:0,style:{},disabled:false,focus(){s.context.document.activeElement=this;},setSelectionRange(start,end,direction){Object.assign(this,{selectionStart:start,selectionEnd:end,selectionDirection:direction});}};
+  const root={contains:()=>true,querySelectorAll:q=>q.startsWith('details')?[]:[target]};s.context.document.activeElement=active;s.context.focusRoot=root;s.context.focusView=s.run('captureLearningView(focusRoot)');assert(s.run('restoreLearningView(focusView,focusRoot)'));assert.equal(s.context.document.activeElement,target);assert.equal(target.scrollTop,same?250:0);assert.equal(target.scrollLeft,same?90:0);assert.equal(target.selectionDirection,same?'backward':'none');assert.equal(target.selectionStart,same?12:0);
+ }
+});

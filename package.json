@@ -7,7 +7,7 @@
     "test:browser": "python3 scripts/run_browser_tests.py",
     "test:controls": "python3 scripts/run_browser_tests.py --suite controls --suite control-routes --suite run-filters",
     "test:ui-details": "python3 scripts/run_browser_tests.py --suite ui-details",
-    "test:desktop": "python3 scripts/run_browser_tests.py --suite ui-details"
+    "test:desktop": "python3 scripts/run_browser_tests.py --suite ui-details --suite typography --suite text-roles --suite desktop-navigation --suite run-list-navigation --suite help-navigation --suite library-catalog --suite agent-directory-history --suite keyboard-navigation --suite library-navigation --suite skill-catalog --suite skill-opening --suite skill-files --suite skill-resources --suite workflow-navigation --suite workflow-editor-navigation --suite workflow-directory --suite runtime-navigation --suite workspace-switching --suite first-use --suite library-search --suite daily-template-editor --suite evaluation-navigation --suite workspace-directory --suite domain-directory --suite daily-plan-navigation --suite alert-navigation --suite command-navigation --suite registry-navigation --suite page-recovery --suite attention-navigation --suite time-display --suite run-inspector-navigation --suite task-dialog-return --suite task-relations --suite task-message-history --suite task-search --suite queue-edit-navigation --suite queue-edit-recovery --suite task-organizing-navigation --suite task-name-navigation --suite task-export-navigation --suite learning-navigation --suite run-action-navigation --suite run-review-navigation --suite task-draft-navigation --suite task-submission-navigation --suite task-configuration-navigation"
   },
   "devDependencies": {"playwright": "1.62.1"}
 }

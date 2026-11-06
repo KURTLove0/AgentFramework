@@ -71,6 +71,7 @@ function flowStartOptions(direct){
 async function openFlowStart(identity,options={}){
  const pending=readFlowStart();
  if(pending&&!options.prepared){if(pending.invalid){toast('启动恢复记录无法读取，请先从工作流目录处理。');if(state.view!=='workflows'||state.selected)navigate('workflows');else render();return;}return resumeFlowStart(pending);}
+ if(typeof rememberFlowDirectoryDialog==='function')rememberFlowDirectoryDialog('flow-start-dialog');
  if(flowStartEditor)flowStartBusy(flowStartEditor,false);
  const editor=flowStartEditor=flowStartContext(identity);editor.opening=true;editor.name=identity;
  const f=$('#flow-start-form');f.reset();f.dataset.id=identity;f.dataset.requestId='request-'+crypto.randomUUID();f.dataset.revision=0;f.dataset.executionMode='';

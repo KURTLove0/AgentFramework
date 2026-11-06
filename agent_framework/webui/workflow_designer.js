@@ -61,6 +61,7 @@ function requestFlowEditorClose(){
 }
 function openVisualFlowEditor(w=null,options={}){
   if(typeof flowDraftBlocksOpen==='function'&&flowDraftBlocksOpen(options))return;
+  if(typeof rememberFlowDirectoryDialog==='function')rememberFlowDirectoryDialog('flow-editor-dialog');
   flowSaveUnlock(flowSaveEditor);
   flowEditorSetSaving(false);
   const active=(state.agents||[]).filter(a=>!a.archived);
@@ -82,6 +83,13 @@ function flowEnsureCanvasControls(){
   const viewport=$('.flow-canvas-viewport');viewport.id='flow-canvas-region';viewport.tabIndex=0;viewport.setAttribute('role','region');viewport.setAttribute('aria-label','工作流画布。可滚动，使用加减键缩放，按 0 恢复大小。');
   $('#flow-canvas-controls').insertAdjacentHTML('afterend','<div class="flow-mobile-panes" role="tablist" aria-label="工作流编辑区域"><button type="button" class="button secondary" role="tab" id="flow-pane-canvas" data-flow-pane="canvas" aria-controls="flow-canvas-region">画布</button><button type="button" class="button secondary" role="tab" id="flow-pane-inspector" data-flow-pane="inspector" aria-controls="flow-inspector">节点配置</button></div>');
   const body=$('.flow-tools-more-body');if(body)for(const selector of ['[data-flow-locate]','[data-flow-arrange]']){const button=$(selector);if(button)body.append(button);}
+  $('#flow-canvas-controls').insertAdjacentHTML('beforeend','<label class="flow-node-picker" for="flow-node-picker"><span>切换节点</span><select id="flow-node-picker" aria-controls="flow-canvas flow-inspector"></select></label>');
+}
+function syncFlowNodePicker(){
+  const picker=$('#flow-node-picker');if(!picker)return;
+  const signature=JSON.stringify(flowDesign.nodes.map(node=>[node.id,node.name]));
+  if(picker.dataset.nodes!==signature){picker.innerHTML=flowDesign.nodes.map((node,index)=>`<option value="${esc(node.id)}">${index+1} / ${flowDesign.nodes.length} · ${esc(node.name||'未命名节点')}</option>`).join('');picker.dataset.nodes=signature;}
+  picker.value=flowDesign.selected||'';picker.disabled=flowEditorSaving;picker.title=flowDesign.nodes.find(node=>node.id===flowDesign.selected)?.name||'未命名节点';
 }
 function flowIsMobile(){return Boolean(window.matchMedia?.('(max-width:959px)').matches);}
 function flowSetMobilePane(pane,reveal=false){
@@ -114,6 +122,7 @@ function flowPlaceCanvas(){
   const svg=$('.flow-edges',canvas);if(svg){svg.setAttribute('width',width);svg.setAttribute('height',height);svg.innerHTML='<defs><marker id="flow-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8"/></marker></defs>'+edges;}
 }
 function drawFlowCanvas(){
+  syncFlowNodePicker();
   const nodes=flowDesign.nodes,canvas=$('#flow-canvas'),active=document.activeElement,relations=flowRelations(flowDesign.selected),ancestors=flowDesign.connecting?flowRelations(flowDesign.connecting).upstream:new Set();
   const focus=active?.closest('#flow-canvas')?['flowSelect','flowInput','flowOutput','flowDrag'].find(key=>active.dataset[key]):null,focusId=focus?active.dataset[focus]:null;
   canvas.setAttribute('role','group');canvas.setAttribute('aria-label',`工作流画布，${nodes.length} 个节点。方向键选择节点，Tab 进入配置或移动手柄。`);
@@ -145,10 +154,30 @@ function renderFlowInspector(){
   const active=flowAvailableAgents(),others=flowDesign.nodes.filter(v=>v.id!==n.id),c=n.condition;
   $('#flow-inspector').innerHTML=`<div class="mini-heading"><div><p class="eyebrow">节点 ${flowDesign.nodes.indexOf(n)+1} / ${flowDesign.nodes.length}</p><h3>节点配置</h3></div><span class="pill">${n.retrieval?'知识检索':c?'条件分支':'Agent 执行'}</span></div><p class="field-help flow-designer-context">${n.depends_on.length?'此节点接收上游已验收的结果。':'起始节点，接收本次运行的输入。'}</p><label>节点名称<input data-design-field="name" value="${esc(n.name)}" required maxlength="100" autocomplete="off"></label><label>执行 Agent<select data-design-field="agent_id" required>${!active.some(a=>a.id===n.agent_id&&a.revision===n.agent_revision)?`<option value="" selected disabled>${n.agent_id?`原固定版本 v${esc(n.agent_revision)} 已更新或不可用，请重新选择`:'选择已有智能体，或创建专用智能体'}</option>`:''}${active.map(a=>`<option value="${esc(a.id)}" ${n.agent_id===a.id&&n.agent_revision===a.revision?'selected':''}>${esc(a.name)} · ${flowDraft(a.id)?'新建 · 保存时创建':'v'+a.revision}</option>`).join('')}</select></label>${n.agent_id&&!active.some(a=>a.id===n.agent_id&&a.revision===n.agent_revision)?'<p class="inline-error" role="alert">原固定版本已更新或停用。请选择当前可用智能体，核对职责与目标后再保存。</p>':''}<button type="button" class="button secondary" data-flow-create-agent>创建专用智能体</button>${flowAgentDraftFields(n)}<label>节点目标<textarea data-design-field="goal" required maxlength="2000" rows="3">${esc(n.goal)}</textarea></label><fieldset class="flow-dependencies"><legend>从哪些上游接收结果</legend>${others.map(d=>`<label class="check-label"><input type="checkbox" data-flow-dependency="${esc(d.id)}" ${n.depends_on.includes(d.id)?'checked':''}><span>${esc(d.name||'未命名节点')}</span></label>`).join('')||'<small>添加另一个节点后，可在这里建立连接。</small>'}</fieldset><label>上游完成时如何继续<select data-design-field="join" ${n.depends_on.length?'':'disabled'}><option value="all" ${n.join!=='any'?'selected':''}>全部上游成功</option><option value="any" ${n.join==='any'?'selected':''}>任一上游成功</option></select></label><p class="field-help">等待所有上游结束后汇合；“任一成功”适合合并互斥分支，被跳过的分支不创建任务。</p><section class="flow-config-section"><label class="check-label"><input type="checkbox" data-design-toggle="retrieval" ${n.retrieval?'checked':''}><span>先检索知识（RAG）</span></label>${n.retrieval?`<label>要检索什么<textarea data-retrieval-field="query" rows="2" required maxlength="2000">${esc(n.retrieval.query)}</textarea></label><label>检索条数上限（Top K）<input type="number" data-retrieval-field="top_k" min="1" max="8" value="${n.retrieval.top_k}" required inputmode="numeric"></label><p class="field-help">只检索当前空间中你可见、已发布的知识。知识问答 Agent 无命中时等待补充材料；引用验收后再传给下游。其他 Agent 将检索结果用作模型参考，必选标准仍保留。</p>`:'<p class="field-help">将当前空间的知识作为节点参考，可配置查询词与检索条数上限。</p>'}</section><section class="flow-config-section"><label class="check-label"><input type="checkbox" data-design-toggle="condition" ${c?'checked':''} ${n.depends_on.length?'':'disabled'}><span>仅在满足条件时执行</span></label>${c?`<label>依据哪个上游<select data-condition-field="source">${n.depends_on.map(id=>`<option value="${esc(id)}" ${c.source===id?'selected':''}>${esc(flowDesign.nodes.find(v=>v.id===id)?.name||id)}</option>`).join('')}</select></label><label>检查结果字段<select data-condition-field="field">${Object.entries(flowFieldNames).map(([v,label])=>`<option value="${v}" ${c.field===v?'selected':''}>${label}</option>`).join('')}</select></label><div class="form-grid"><label>比较方式<select data-condition-field="operator">${Object.entries(flowOperators).filter(([v])=>c.field==='risk_level'?['eq','ne'].includes(v):['answer','content'].includes(c.field)?['eq','ne','contains','not_contains'].includes(v):['eq','ne','gte','lte'].includes(v)).map(([v,label])=>`<option value="${v}" ${c.operator===v?'selected':''}>${label}</option>`).join('')}</select></label><label>比较值${c.field==='risk_level'?`<select data-condition-field="value">${Object.entries(flowRiskLabels).map(([v,label])=>`<option value="${v}" ${c.value===v?'selected':''}>${label} · ${v}</option>`).join('')}</select>`:`<input data-condition-field="value" ${c.field==='citations_count'?'type="number" min="0" max="8" inputmode="numeric"':'maxlength="1000"'} value="${esc(c.value)}" required>`}</label></div><p class="flow-config-summary">${esc(flowConditionText(n))}</p><p class="field-help">只使用上游已验收的结果。字段缺失或条件不匹配时，跳过此节点。</p>`:`<p class="field-help">${n.depends_on.length?'可根据上游风险等级、引用数量或回答正文决定是否执行。':'先选择上游节点，再设置进入此节点的条件。'}</p>`}</section><details class="flow-config-section flow-node-position"><summary>调整节点位置</summary><p class="field-help">点击方向按钮每次移动 8 像素；移动手柄仍支持方向键与 Shift 加速。</p><output class="field-help" data-flow-coordinates>横向 ${Math.round(flowPositions()[n.id].x)} · 纵向 ${Math.round(flowPositions()[n.id].y)}</output><div class="flow-position-controls">${[['up','上移'],['left','左移'],['down','下移'],['right','右移']].map(([direction,label])=>`<button type="button" class="button secondary" data-flow-nudge="${direction}" aria-label="${label}节点 8 像素">${label}</button>`).join('')}</div></details><button type="button" class="text-button" data-flow-delete ${flowDesign.nodes.length===1?'disabled':''}>删除此节点</button>${flowDesign.nodes.length===1?'<p class="field-help">工作流至少需要一个 Agent 节点。</p>':''}`;
 }
-function flowCaptureInspectorFocus(){const a=document.activeElement;if(!a?.closest('#flow-inspector'))return null;const key=['flowAgentField','designField','retrievalField','conditionField','flowDependency','designToggle'].find(k=>a.dataset[k]);return key?{key,value:a.dataset[key],start:a.selectionStart,end:a.selectionEnd,scroll:$('#flow-inspector').scrollTop}:null;}
+function flowInspectorField(element){const key=['flowAgentField','designField','retrievalField','conditionField','flowDependency','designToggle'].find(key=>element?.dataset[key]);return key?{key,value:element.dataset[key]}:null;}
+function flowCaptureInspectorFocus(){const a=document.activeElement;return a?.closest('#flow-inspector')?flowInspectorField(a.dataset.focusSource?$('#'+CSS.escape(a.dataset.focusSource)):a):null;}
+function rememberFlowInspector(){
+  const identity=flowDesign.inspectorNode;if(!identity)return;
+  const inspector=$('#flow-inspector'),views=flowDesign.inspectorViews||=new Map();
+  const fields=$$('input,textarea',inspector).map(field=>{const ref=flowInspectorField(field);return ref?{...ref,start:field.selectionStart,end:field.selectionEnd,direction:field.selectionDirection,top:field.scrollTop,left:field.scrollLeft}:null;}).filter(Boolean);
+  views.set(identity,{scroll:inspector.scrollTop,fields,positionOpen:Boolean($('.flow-node-position',inspector)?.open)});
+  const retained=new Set([...flowDesign.nodes,...(flowDesign.undo?.nodes||[])].map(node=>node.id));for(const id of views.keys())if(!retained.has(id))views.delete(id);
+}
+function restoreFlowInspector(){
+  const inspector=$('#flow-inspector'),saved=flowDesign.inspectorViews?.get(flowDesign.selected);
+  if(!saved){inspector.scrollTop=0;return;}
+  const position=$('.flow-node-position',inspector);if(position)position.open=saved.positionOpen;
+  for(const item of saved.fields){
+    const attr=item.key.replace(/[A-Z]/g,m=>'-'+m.toLowerCase()),field=$(`[data-${attr}="${CSS.escape(item.value)}"]`,inspector);if(!field)continue;
+    if(Number.isInteger(item.start)&&field.setSelectionRange)try{field.setSelectionRange(item.start,item.end,item.direction);}catch(_){}
+    field.scrollTop=item.top;field.scrollLeft=item.left;
+  }
+  inspector.scrollTop=saved.scroll;
+}
 function renderFlowDesign(){
-  const focus=flowCaptureInspectorFocus();drawFlowCanvas();renderFlowInspector();
-  if(focus){const attr=focus.key.replace(/[A-Z]/g,m=>'-'+m.toLowerCase()),target=$(`[data-${attr}="${CSS.escape(focus.value)}"]`,$('#flow-inspector'));if(target){target.focus({preventScroll:true});if(typeof target.setSelectionRange==='function'&&focus.start!==null)try{target.setSelectionRange(focus.start,focus.end);}catch(_){}$('#flow-inspector').scrollTop=focus.scroll;}}
+  const focus=flowDesign.inspectorNode===flowDesign.selected?flowCaptureInspectorFocus():null;rememberFlowInspector();drawFlowCanvas();renderFlowInspector();flowDesign.inspectorNode=flowDesign.selected;
+  if(focus){const attr=focus.key.replace(/[A-Z]/g,m=>'-'+m.toLowerCase());$(`[data-${attr}="${CSS.escape(focus.value)}"]`,$('#flow-inspector'))?.focus({preventScroll:true});}
+  restoreFlowInspector();
 }
 function flowValidateGraph(){
   const ids=new Set(flowDesign.nodes.map(n=>n.id));
@@ -178,7 +207,7 @@ function serializeFlowDesign(){
 function flowDefaultCondition(source){const legacy=(flowAgent(source.agent_id)?.definition?.responsibilities||[]).some(r=>r.deliverable_ref==='release-draft@1.0.0');return legacy?{source:source.id,field:'risk_level',operator:'eq',value:'HIGH'}:{source:source.id,field:'content',operator:'contains',value:''};}
 function flowInvalidateUndo(){flowDesign.undo=null;$('[data-flow-undo]',$('#flow-editor-dialog'))?.remove();}
 function flowCancelConnection(){flowDesign.connecting=null;drawFlowCanvas();flowDesignMessage('已取消连线，现有连接保持不变。');}
-function flowSelectNode(id,focusName=false,reveal=true,showInspector=focusName){const changed=flowDesign.selected!==id;flowDesign.selected=id;renderFlowDesign();if(changed)$('#flow-inspector').scrollTop=0;if(reveal)flowRevealNode(id);if(showInspector)flowSetMobilePane('inspector',true);if(focusName)$('[data-design-field="name"]',$('#flow-inspector'))?.focus();}
+function flowSelectNode(id,focusName=false,reveal=true,showInspector=focusName){if(!flowDesign.nodes.some(node=>node.id===id))return;flowDesign.selected=id;renderFlowDesign();if(reveal)flowRevealNode(id);if(showInspector)flowSetMobilePane('inspector',true);if(focusName)$('[data-design-field="name"]',$('#flow-inspector'))?.focus();}
 function flowConnect(from,to){
   if(!from||!to||from===to.id){flowDesignMessage('先选择一个上游的输出端口，再选择其他节点的输入端口。');return;}
   const prior=[...to.depends_on];if(!to.depends_on.includes(from))to.depends_on.push(from);
@@ -202,8 +231,8 @@ document.addEventListener('click',e=>{
   if(input)flowConnect(flowDesign.connecting,flowDesign.nodes.find(n=>n.id===input.dataset.flowInput));
   if(find('flow-create-agent')){const node=flowDesign.nodes.find(n=>n.id===flowDesign.selected);if(node)flowCreateAgentDraft(node);}
   if(find('add-flow-node')){if(flowDesign.nodes.length>=12){toast('最多支持 12 个 Agent 节点');return;}flowInvalidateUndo();flowDesign.seedOnly=false;const a=(state.agents||[]).find(a=>!a.archived);const n=flowNewNode(a);flowDesign.nodes.push(n);flowSelectNode(n.id,true);flowDesignMessage('已添加节点。先选择执行 Agent，再设置目标和上游连接。');}
-  if(find('flow-delete')){if(flowDesign.nodes.length===1)return;flowDesign.undo={nodes:structuredClone(flowDesign.nodes),positions:structuredClone(flowDesign.positions||{}),selected:flowDesign.selected};const id=flowDesign.selected,name=flowDesign.nodes.find(n=>n.id===id)?.name;flowDesign.nodes=flowDesign.nodes.filter(n=>n.id!==id);delete flowDesign.positions[id];for(const n of flowDesign.nodes){n.depends_on=n.depends_on.filter(d=>d!==id);if(n.condition?.source===id)delete n.condition;}flowDesign.selected=flowDesign.nodes[0].id;flowDesign.connecting=null;flowDesign.seedOnly=false;renderFlowDesign();flowDesignMessage(`已删除「${name}」及其连线。依赖它的条件已清除，保存前请检查下游配置。`);}
-  if(find('flow-undo')&&flowDesign.undo){const prior=flowDesign.undo;flowDesign.nodes=prior.nodes;flowDesign.positions=prior.positions||{};flowDesign.selected=prior.selected;flowDesign.undo=null;flowDesign.connecting=null;renderFlowDesign();flowDesignMessage('节点与原有连接已恢复。');}
+  if(find('flow-delete')){if(flowDesign.nodes.length===1)return;flowDesign.undo={nodes:structuredClone(flowDesign.nodes),positions:structuredClone(flowDesign.positions||{}),selected:flowDesign.selected};const id=flowDesign.selected,name=flowDesign.nodes.find(n=>n.id===id)?.name;flowDesign.nodes=flowDesign.nodes.filter(n=>n.id!==id);delete flowDesign.positions[id];for(const n of flowDesign.nodes){n.depends_on=n.depends_on.filter(d=>d!==id);if(n.condition?.source===id)delete n.condition;}flowDesign.selected=flowDesign.nodes[0].id;flowDesign.connecting=null;flowDesign.seedOnly=false;renderFlowDesign();flowRevealNode();flowDesignMessage(`已删除「${name}」及其连线。依赖它的条件已清除，保存前请检查下游配置。`);$('#flow-node-picker')?.focus();}
+  if(find('flow-undo')&&flowDesign.undo){const prior=flowDesign.undo;flowDesign.nodes=prior.nodes;flowDesign.positions=prior.positions||{};flowDesign.selected=prior.selected;flowDesign.undo=null;flowDesign.connecting=null;renderFlowDesign();flowRevealNode();flowDesignMessage('节点与原有连接已恢复。');$('#flow-node-picker')?.focus();}
   if(find('flow-rag-template')){const available=(state.agents||[]).filter(a=>!a.archived);if(!available.length){toast('请先配置一个执行智能体');return;}if((flowDesign.seedOnly?0:flowDesign.nodes.length)+2>12){toast('此模板需要两个节点位置（最多 12 个）');return;}if(flowDesign.seedOnly)flowDesign.nodes=[];flowInvalidateUndo();flowDesign.seedOnly=false;flowDesign.connecting=null;const a=flowNewNode(available[0]);a.name='检索资料';a.retrieval={query:'',top_k:3};const b=flowNewNode(available[1]||available[0],[a.id]);b.name='整理结果';flowDesign.nodes.push(a,b);flowSelectNode(a.id,true);flowDesignMessage('已添加“检索资料 → 整理结果”。请填写检索问题、节点目标，并选择执行智能体。');}
 
   if(find('flow-branch')){if(flowDesign.nodes.length>10){toast('添加分支需要两个可用节点位置（最多 12 个）');return;}const source=flowDesign.nodes.find(n=>n.id===flowDesign.selected),a=flowAgent(source?.agent_id);if(!a||a.archived){toast('请为起点选择一个可用 Agent');return;}flowInvalidateUndo();flowDesign.seedOnly=false;flowDesign.connecting=null;const yes=flowNewNode(a,[source.id]),no=flowNewNode(a,[source.id]);yes.name='条件满足 · '+a.name;no.name='其他情况 · '+a.name;yes.condition=flowDefaultCondition(source);no.condition={...yes.condition,operator:yes.condition.operator==='gte'?'lte':yes.condition.operator==='contains'?'not_contains':'ne',value:yes.condition.operator==='gte'?0:yes.condition.value};flowDesign.nodes.push(yes,no);flowSelectNode(yes.id,true);flowDesignMessage('已添加两个互斥分支。分别选择执行 Agent 与目标；新增汇合节点并选择“任一上游成功”可重新合并。');}
@@ -220,8 +249,15 @@ $('#flow-editor-dialog').addEventListener('keydown',e=>{
   e.preventDefault();const index=flowDesign.nodes.findIndex(n=>n.id===node.dataset.flowSelect),offset=['ArrowLeft','ArrowUp'].includes(e.key)?-1:1,next=e.key==='Home'?0:e.key==='End'?flowDesign.nodes.length-1:(index+offset+flowDesign.nodes.length)%flowDesign.nodes.length;flowSelectNode(flowDesign.nodes[next].id);const target=$(`[data-flow-select="${CSS.escape(flowDesign.selected)}"]`);target?.focus({preventScroll:true});target?.scrollIntoView({block:'nearest',inline:'nearest'});
 });
 $('#flow-editor-dialog').addEventListener('focusin',e=>{
-  const field=e.target;if(!['INPUT','TEXTAREA','SELECT'].includes(field.tagName))return;
-  const key=['flowAgentField','designField','retrievalField','conditionField','flowDependency','designToggle'].find(k=>field.dataset[k]);lastFlowEditorFocus={id:field.id||null,key,value:key?field.dataset[key]:null,selection:field.setSelectionRange?[field.selectionStart,field.selectionEnd]:null};
+  const field=e.target;
+  if(field.closest('#flow-inspector'))requestAnimationFrame(()=>{
+    if(document.activeElement!==field||!field.isConnected)return;
+    const rect=field.getBoundingClientRect(),inspector=$('#flow-inspector').getBoundingClientRect();
+    if(rect.top<inspector.top+12||rect.bottom>inspector.bottom-12)field.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
+  });
+  const control=field.dataset.focusSource?$('#'+CSS.escape(field.dataset.focusSource)):field;
+  if(field.closest('.select-popover')||!control||!['INPUT','TEXTAREA','SELECT'].includes(control.tagName))return;
+  const key=['flowAgentField','designField','retrievalField','conditionField','flowDependency','designToggle'].find(k=>control.dataset[k]);lastFlowEditorFocus={id:control.id||null,key,value:key?control.dataset[key]:null,selection:control.setSelectionRange?[control.selectionStart,control.selectionEnd]:null};
 });
 $('#flow-editor-dialog').addEventListener('focusout',e=>{
   const field=e.target;if(!lastFlowEditorFocus||!field.setSelectionRange)return;const saved=lastFlowEditorFocus;
@@ -255,7 +291,15 @@ $('.flow-canvas-viewport').addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKe
 window.addEventListener('blur',()=>{if(flowPointer)flowFinishPointer(true);});
 window.addEventListener('resize',()=>{if($('#flow-editor-dialog').open&&!flowPointer)flowSetMobilePane(flowDesign.mobilePane||'canvas');});
 $('#flow-editor-form').addEventListener('invalid',e=>{if(e.target.id==='flow-name')$('#flow-metadata').open=true;if(e.target.closest('#flow-inspector')){flowSetMobilePane('inspector',true);flowDesign.invalidNode=flowDesign.selected;drawFlowCanvas();flowRevealNode();e.target.setAttribute('aria-invalid','true');flowDesignMessage('当前节点还有未完成的配置。请修改标记的字段后再保存。');}},true);
+function selectFlowNodeFromPicker(e){if(e.target.id!=='flow-node-picker'||!$('#flow-editor-dialog').open)return;if(flowEditorSaving){syncFlowNodePicker();return;}flowSelectNode(e.target.value,false,true,true);syncFlowNodePicker();}
+document.addEventListener('change',selectFlowNodeFromPicker);
+document.addEventListener('picker-selected',selectFlowNodeFromPicker);
+function flowInspectorFieldEvent(event){
+ const target=event.target;
+ return !flowEditorSaving&&!!target?.dataset&&!target.closest?.('.select-popover')&&['flowAgentField','designField','retrievalField','conditionField','flowDependency','designToggle'].some(key=>Object.hasOwn(target.dataset,key));
+}
 $('#flow-inspector').addEventListener('input',e=>{
+  if(!flowInspectorFieldEvent(e))return;
   const n=flowDesign.nodes.find(n=>n.id===flowDesign.selected),t=e.target;if(!n)return;flowDesign.seedOnly=false;flowDesign.invalidNode=null;flowInvalidateUndo();t.removeAttribute('aria-invalid');t.removeAttribute('aria-describedby');
   if(t.dataset.flowAgentField&&t.tagName!=='SELECT'){const draft=flowDraft(n.agent_id);if(draft){const previous=draft.name;draft[t.dataset.flowAgentField]=t.value;if(t.dataset.flowAgentField==='name'&&n.name===previous){n.name=t.value;const nameField=$('[data-design-field="name"]',$('#flow-inspector'));if(nameField)nameField.value=t.value;}}}
   if(t.dataset.designField&&t.tagName!=='SELECT')n[t.dataset.designField]=t.value;
@@ -264,6 +308,7 @@ $('#flow-inspector').addEventListener('input',e=>{
   drawFlowCanvas();
 });
 $('#flow-inspector').addEventListener('change',e=>{
+  if(!flowInspectorFieldEvent(e))return;
   const n=flowDesign.nodes.find(n=>n.id===flowDesign.selected),t=e.target;if(!n)return;flowDesign.seedOnly=false;flowInvalidateUndo();let message='节点配置已更新。保存后应用到新的工作流版本。';
   if(t.dataset.flowAgentField==='source_agent_id'){const draft=flowDraft(n.agent_id),source=(state.agents||[]).find(a=>a.id===t.value);if(draft){draft.source_agent_id=t.value;draft.source_agent_revision=source?.revision||0;}}
   if(t.dataset.designField&&t.tagName==='SELECT'){const prior=flowAgent(n.agent_id);if(t.dataset.designField==='agent_id'&&n.name===prior?.name)n.name=flowAgent(t.value)?.name||n.name;n[t.dataset.designField]=t.value;if(t.dataset.designField==='agent_id')n.agent_revision=flowAgent(t.value)?.revision;}

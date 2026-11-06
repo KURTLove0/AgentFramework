@@ -187,8 +187,10 @@ class CursorTransport:
             (settings / "mcp.json").write_text(canonical(mcp))
             env = {**os.environ, "CURSOR_CONFIG_DIR": str(settings), "CURSOR_DATA_DIR": str(root / "data"),
                    "CURSOR_AGENT_DISABLE_DEBUG_LOG": "1"}
+            # Trust only this fresh directory that we created, never the caller's
+            # workspace. Trust does not replace the sandbox or tool deny policy.
             command = ["cursor-agent", "--print", "--mode", "ask", "--output-format", "stream-json",
-                       "--sandbox", "enabled", "--workspace", str(root), "--model", config.model]
+                       "--sandbox", "enabled", "--trust", "--workspace", str(root), "--model", config.model]
             if getattr(self,'stream_output',False):command.append('--stream-partial-output')
             if enabled_servers(native_profile):
                 command.append('--approve-mcps')

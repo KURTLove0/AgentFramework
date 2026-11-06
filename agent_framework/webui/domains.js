@@ -1,4 +1,25 @@
 'use strict';
+function domainDirectoryScope(){return JSON.stringify([state.workspaceId,state.meta?.tenant,state.meta?.principal]);}
+function domainControlId(id,action){return 'domain-control-'+id+'-'+action;}
+function domainDirectoryReturnFocus(){
+ const saved=state.domainDirectoryReturn;if(!saved||saved.scope!==domainDirectoryScope())return null;
+ state.domainQuery=saved.query;state.domainStatus=saved.status;state.routePosition={top:saved.top};
+ return domainControlId(saved.id,'agents');
+}
+function domainAgentReturnBanner(){
+ const saved=state.domainDirectoryReturn;if(!saved||saved.scope!==domainDirectoryScope()||state.agentDomain!==saved.id)return '';
+ return `<section class="resource-feedback domain-agent-return"><div><strong>${esc(saved.name)} · 关联智能体</strong><p>这里包含已关联此领域的智能体，各自保留选定的领域版本。</p></div><a id="domain-directory-return" class="button secondary" href="#/domains">返回处理领域</a></section>`;
+}
+function rememberDomainDialogOpener(dialog){
+ if(state.view!=='domains')return;
+ const source=document.activeElement,entry={source,id:source?.id,scope:domainDirectoryScope(),route:state.routeVersion};dialog.domainDirectoryOpening=entry;
+ dialog.addEventListener('close',()=>{
+  if(dialog.open||dialog.domainDirectoryOpening!==entry||state.view!=='domains'||state.routeVersion!==entry.route||entry.scope!==domainDirectoryScope()||$$('dialog[open]').length)return;
+  const target=(entry.id&&document.getElementById(entry.id))||(entry.source?.isConnected?entry.source:null)||$('#domain-search'),active=document.activeElement;
+  if(active&&active!==document.body&&active!==document.documentElement&&active!==$('#content')&&active!==target&&!dialog.contains(active))return;
+  target?.focus({preventScroll:true});target?.scrollIntoView({block:'nearest',behavior:'instant'});
+ },{once:true});
+}
 async function loadDomainCatalog(current=()=>true,workspace=state.workspaceId){
  const request=state.domainCatalogRequest||0;
  const data=await api('/api/agent-domains?include_archived=1',undefined,15000,true,{workspace});
@@ -30,20 +51,24 @@ function domainFeedback(){
  const domain=(state.domainCatalog||[]).find(d=>d.id===f.id),titles={create:'领域已创建',save:'领域已更新',archive:'领域已归档',restore:'领域已恢复'};
  return `<section id="domain-feedback" class="resource-feedback" role="status" tabindex="-1"><div><strong>${esc(f.name)} · ${titles[f.operation]}</strong><p>${f.operation==='archive'?'已停止新的选用，已有智能体与历史任务继续保留原配置。':'现在可供当前工作空间的智能体选用。已有智能体保留各自选定的版本。'}</p></div><div class="resource-next-step">${domain&&!domain.archived?`<button type="button" class="button primary" data-domain-use="${esc(domain.id)}">${domainManagementSession()?'选用并返回智能体':'创建智能体'}</button>`:''}<button type="button" class="text-button" data-domain-feedback-close>收起</button></div></section>`;
 }
-function domainUseAction(id,label){return `<button type="button" class="button secondary" data-domain-use="${esc(id)}">${label||(domainManagementSession()?'选用并返回':'创建智能体')}</button>`;}
+function domainUseAction(id,label){return `<button type="button" id="${esc(domainControlId(id,'use'))}" class="button secondary" data-domain-use="${esc(id)}">${label||(domainManagementSession()?'选用并返回':'创建智能体')}</button>`;}
+function domainDescriptionContent(domain){
+ const original=domain.description||'',normalized=original.replace(/\s+/g,' ').trim(),characters=Array.from(normalized),preview=characters.slice(0,120).join('')+(characters.length>120?'…':'');
+ return `<p class="${preview!==original?'domain-description-preview':''}">${esc(preview||'尚未填写用途说明')}</p>${preview!==original?`<details data-key="domain-description-${esc(domain.id)}"><summary id="${esc(domainControlId(domain.id,'description'))}">完整用途说明</summary><p class="domain-description-copy">${esc(original)}</p></details>`:''}`;
+}
 function domainMethodContent(domain){
  const method=domainWorkMethod(domain);if(!method)return '<span class="muted">尚未填写</span>';
- return method.length>160?`<details data-key="domain-method-${esc(domain.id)}"><summary>查看工作方式</summary><p class="domain-method-copy">${esc(method)}</p></details>`:`<span class="domain-method-copy">${esc(method)}</span>`;
+ return method.length>160?`<details data-key="domain-method-${esc(domain.id)}"><summary id="${esc(domainControlId(domain.id,'method'))}">查看工作方式</summary><p class="domain-method-copy">${esc(method)}</p></details>`:`<span class="domain-method-copy">${esc(method)}</span>`;
 }
 function domainTableRow(d){
- return `<tr id="domain-row-${esc(d.id)}"><td><strong>${esc(d.name)}</strong><p>${esc(d.description||'尚未填写用途说明')}</p><small>v${d.revision}</small></td><td data-label="工作方式">${domainMethodContent(d)}</td><td data-label="关联智能体">${d.agent_count?`<button type="button" class="text-button" data-domain-agents="${esc(d.id)}" aria-label="查看 ${esc(d.name)} 关联的 ${d.agent_count} 个智能体">${d.agent_count} 个 ${icon('arrow')}</button>`:'<span class="muted">尚未关联</span>'}</td><td data-label="状态"><span class="pill ${d.archived?'':'good'}">${d.archived?'已归档':'可用'}</span></td><td class="domain-actions">${d.archived?`<button type="button" class="button secondary" data-domain-archive="${esc(d.id)}">恢复</button>`:`${domainUseAction(d.id)}<button type="button" class="text-button" data-domain-edit="${esc(d.id)}">编辑</button><button type="button" class="text-button" data-domain-archive="${esc(d.id)}">归档</button>`}</td></tr>`;
+ return `<tr id="domain-row-${esc(d.id)}"><td><strong>${esc(d.name)}</strong>${domainDescriptionContent(d)}<small>v${d.revision}</small></td><td data-label="工作方式">${domainMethodContent(d)}</td><td data-label="关联智能体">${d.agent_count?`<button type="button" id="${esc(domainControlId(d.id,'agents'))}" class="text-button" data-domain-agents="${esc(d.id)}" aria-label="查看 ${esc(d.name)} 关联的 ${d.agent_count} 个智能体">${d.agent_count} 个 ${icon('arrow')}</button>`:'<span class="muted">尚未关联</span>'}</td><td data-label="状态"><span class="pill ${d.archived?'':'good'}">${d.archived?'已归档':'可用'}</span></td><td class="domain-actions">${d.archived?`<button type="button" id="${esc(domainControlId(d.id,'archive'))}" class="button secondary" data-domain-archive="${esc(d.id)}">恢复</button>`:`${domainUseAction(d.id)}<button type="button" id="${esc(domainControlId(d.id,'edit'))}" class="text-button" data-domain-edit="${esc(d.id)}">编辑</button><button type="button" id="${esc(domainControlId(d.id,'archive'))}" class="text-button" data-domain-archive="${esc(d.id)}">归档</button>`}</td></tr>`;
 }
 function domainsPage(){
- const domains=filteredDomains(),all=state.domainCatalog||[],active=all.filter(d=>!d.archived).length,filtered=(state.domainQuery||'').trim()||(state.domainStatus||'active')!=='active';
- return `<div class="domains-page"><header class="page-head"><div><h1>处理领域</h1><p>统一维护业务范围与工作方式，供当前工作空间的智能体复用。</p></div><button type="button" class="button primary" data-domain-new>${icon('plus')}新建领域</button></header>${domainManagementBanner()}${domainFeedback()}
+ const domains=filteredDomains(),all=state.domainCatalog||[],active=all.filter(d=>!d.archived).length,filtered=(state.domainQuery||'').trim()||(state.domainStatus||'active')!=='active',onlyArchived=!filtered&&all.length>0&&!active;
+ return `<div class="domains-page"><header class="page-head"><div><h1 id="domains-heading" tabindex="-1">处理领域</h1><p>统一维护业务范围与工作方式，供当前工作空间的智能体复用。</p></div><button type="button" id="domain-create" class="button primary" data-domain-new>${icon('plus')}新建领域</button></header>${domainManagementBanner()}${domainFeedback()}
  <div class="domain-explanation"><span>${icon('box')}</span><p>领域描述业务范围，工作方式可自由填写。执行模板、工具与验收要求在智能体中单独配置。</p></div>
- <section class="agent-directory-surface" aria-label="处理领域列表"><div class="domain-toolbar"><div class="agent-directory-scopes" role="group" aria-label="按领域状态筛选">${[['active','可用',active],['archived','已归档',all.length-active],['all','全部',all.length]].map(([id,label,count])=>`<button type="button" data-domain-status="${id}" aria-pressed="${(state.domainStatus||'active')===id}">${label}<span>${count}</span></button>`).join('')}</div><label class="filter-input agent-directory-search">${icon('search')}<span class="sr-only">搜索处理领域</span><input id="domain-search" type="search" value="${esc(state.domainQuery||'')}" placeholder="搜索名称、用途、工作方式" aria-label="搜索处理领域" autocomplete="off"></label></div>
- ${domains.length?`<table class="domain-table"><caption class="sr-only">当前工作空间的处理领域</caption><thead><tr><th scope="col">领域 / 用途</th><th scope="col">工作方式</th><th scope="col">关联智能体</th><th scope="col">状态</th><th scope="col"><span class="sr-only">操作</span></th></tr></thead><tbody>${domains.map(domainTableRow).join('')}</tbody></table>`:`<div class="domain-empty">${icon('box')}<h2>${filtered?'没有匹配的领域':'还没有处理领域'}</h2><p>${filtered?'换个关键词或筛选条件，查看其他领域。':'保存常用业务范围与工作方式，创建智能体时直接复用。工作方式选填，后续可随时编辑。'}</p>${filtered?'<button type="button" class="button secondary" data-domain-clear>清除条件</button>':'<button type="button" class="button primary" data-domain-new>新建领域</button>'}</div>`}
+ <section class="agent-directory-surface" aria-label="处理领域列表"><div class="domain-toolbar"><div class="agent-directory-scopes" role="group" aria-label="按领域状态筛选">${[['active','可用',active],['archived','已归档',all.length-active],['all','全部',all.length]].map(([id,label,count])=>`<button type="button" id="domain-status-${id}" data-domain-status="${id}" aria-pressed="${(state.domainStatus||'active')===id}">${label}<span>${count}</span></button>`).join('')}</div><label class="filter-input agent-directory-search">${icon('search')}<span class="sr-only">搜索处理领域</span><input id="domain-search" type="search" value="${esc(state.domainQuery||'')}" placeholder="搜索名称、用途、工作方式" aria-label="搜索处理领域" autocomplete="off" maxlength="2000"></label>${filtered?'<button type="button" id="domain-clear-toolbar" class="text-button" data-domain-clear>清除条件</button>':''}</div>
+ ${domains.length?`<table class="domain-table"><caption class="sr-only">当前工作空间的处理领域</caption><thead><tr><th scope="col">领域 / 用途</th><th scope="col">工作方式</th><th scope="col">关联智能体</th><th scope="col">状态</th><th scope="col"><span class="sr-only">操作</span></th></tr></thead><tbody>${domains.map(domainTableRow).join('')}</tbody></table>`:`<div class="domain-empty">${icon('box')}<h2>${onlyArchived?'暂无可用领域':filtered?'没有匹配的领域':'还没有处理领域'}</h2><p>${onlyArchived?'已有领域均已归档。恢复后可供新的智能体选用，已有智能体保留原配置。':filtered?'换个关键词或筛选条件，查看其他领域。':'保存常用业务范围与工作方式，创建智能体时直接复用。工作方式选填，后续可随时编辑。'}</p>${onlyArchived?'<button type="button" id="domain-show-archived" class="button secondary" data-domain-status="archived">查看已归档领域</button>':filtered?'<button type="button" id="domain-clear-empty" class="button secondary" data-domain-clear>清除条件</button>':'<button type="button" class="button primary" data-domain-new>新建领域</button>'}</div>`}
  <footer class="domain-list-footer" role="status" aria-live="polite">显示 ${domains.length} / ${all.length} 个领域 · 当前工作空间独立管理</footer></section></div>`;
 }
 function setDomainFeedback(domain,operation){
@@ -60,7 +85,7 @@ function openDomainEditor(identity=null){
  $('#domain-method-help').textContent='可自由描述处理步骤、采用的方法和输出要求，最多 4000 字。后续可修改，执行模板在智能体中独立配置。';
  $('#domain-save').textContent=domain?'保存更改':'创建领域';$('#domain-error').hidden=true;
  for(const field of $$('[aria-invalid]',form)){field.removeAttribute('aria-invalid');field.removeAttribute('aria-describedby');}
- state.domainEditorInitial=domainFormSnapshot();state.domainEditorSaving=false;state.domainEditorComposing=false;$('#domain-dialog').showModal();$('#domain-name').focus({preventScroll:true});
+ state.domainEditorInitial=domainFormSnapshot();state.domainEditorSaving=false;state.domainEditorComposing=false;rememberDomainDialogOpener($('#domain-dialog'));$('#domain-dialog').showModal();$('#domain-name').focus({preventScroll:true});
 }
 async function saveDomainEditor(){
  if(state.domainEditorSaving||state.domainEditorComposing)return;
@@ -73,7 +98,7 @@ async function saveDomainEditor(){
  try{
   const saved=await api('/api/agent-domains'+(id?'/'+id:''),data);
   if(workspace!==state.workspaceId)return;
-  rememberManagedDomain(saved);state.domainEditorInitial=domainFormSnapshot();$('#domain-dialog').close();setDomainFeedback(saved,id?'save':'create');
+  rememberManagedDomain(saved);state.domainEditorInitial=domainFormSnapshot();$('#domain-dialog').domainDirectoryOpening=null;$('#domain-dialog').close();setDomainFeedback(saved,id?'save':'create');
  }catch(e){error.textContent=e.message;error.hidden=false;error.focus();if(/同名/.test(e.message)){name.setAttribute('aria-invalid','true');name.setAttribute('aria-describedby','domain-error');}}
  finally{unlock();state.domainEditorSaving=false;form.removeAttribute('aria-busy');button.disabled=false;button.textContent=label;}
 }
@@ -97,7 +122,7 @@ function confirmDomainArchive(identity){
   try{const saved=await api('/api/agent-domains/'+identity+'/archive',{revision:domain.revision,archived});if(workspace!==state.workspaceId)return;rememberManagedDomain(saved);dialog.close();setDomainFeedback(saved,archived?'archive':'restore');}
   catch(e){$('#confirm-error').textContent=e.message;$('#confirm-error').hidden=false;$('#confirm-error').focus();}
   finally{button.disabled=false;button.removeAttribute('aria-busy');}
- };dialog.showModal();dialog.querySelector('[data-close]')?.focus();
+ };rememberDomainDialogOpener(dialog);dialog.showModal();dialog.querySelector('[data-close]')?.focus();
 }
 async function startDomainManagementFromAgent(){
  const request=beginAgentManagementOpening('domains');if(!request)return;
@@ -132,10 +157,10 @@ document.addEventListener('click',e=>{
   if(find('domain-archive'))confirmDomainArchive(find('domain-archive').dataset.domainArchive);
   if(find('domain-use'))void useManagedDomain(find('domain-use').dataset.domainUse).catch(error=>toast(error.message));
   if(find('domain-return'))void useManagedDomain().catch(error=>toast(error.message));
-  if(find('domain-status')){state.domainStatus=find('domain-status').dataset.domainStatus;render();}
+  if(find('domain-status')){state.domainStatus=find('domain-status').dataset.domainStatus;render();$('#domain-status-'+state.domainStatus)?.focus({preventScroll:true});}
   if(find('domain-clear')){state.domainStatus='active';state.domainQuery='';render();$('#domain-search')?.focus();}
-  if(find('domain-feedback-close')){state.domainFeedback=null;render();}
-  if(find('domain-agents')){state.agentDomain=find('domain-agents').dataset.domainAgents;state.agentStatus='all';state.agentSearch='';state.agentRuntime='all';navigate('agents');}
+  if(find('domain-feedback-close')){state.domainFeedback=null;render();$('#domain-search')?.focus();}
+  if(find('domain-agents')){const id=find('domain-agents').dataset.domainAgents,domain=(state.domainCatalog||[]).find(d=>d.id===id);state.domainDirectoryReturn={scope:domainDirectoryScope(),id,name:domain?.name||'处理领域',query:state.domainQuery||'',status:state.domainStatus||'active',top:window.scrollY};state.agentDomain=id;state.agentStatus='all';state.agentSearch='';state.agentRuntime='all';navigate('agents');}
  }catch(error){toast(error.message);}
 });
 document.addEventListener('input',e=>{if(e.target.id==='domain-search'){state.domainQuery=e.target.value;if(!e.isComposing)render();}if(e.target.closest('#domain-form')){e.target.removeAttribute('aria-invalid');if($('#domain-error').textContent&&!state.domainEditorSaving)$('#domain-error').hidden=true;}});

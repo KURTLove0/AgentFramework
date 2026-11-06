@@ -99,3 +99,6 @@ test('new server state does not hide local cleanup failure or keep a stale succe
 test('cleanup retry cannot touch a newer route or an unresolved operation',async()=>{
  const f=fixture();f.run('sessionStorage.removeItem=()=>{throw Error("remove denied")};');await f.change();const original=[...f.storage.values()][0];f.state.routeVersion++;f.context.sessionStorage.removeItem=key=>f.storage.delete(key);f.context.retryTaskFavoriteCleanup();assert.equal([...f.storage.values()][0],original);assert.equal(f.calls.length,1);
 });
+test('cleanup recovery replaces retained operation focus but respects newer composer focus',async()=>{
+ for(const moved of [false,true]){const f=keyboardFixture(),gate=deferred();f.context.render=()=>{};f.context.sessionStorage.removeItem=()=>{throw Error('remove denied');};f.api(()=>gate.promise);f.focus('task-favorite-action');const pending=f.change();assert.equal(f.active().id,'task-favorite-action');if(moved)f.focus('task-chat-input');gate.resolve(response());await pending;assert.equal(f.active().id,moved?'task-chat-input':'task-favorite-clear');assert.equal(f.calls.length,1);assert(f.state.detail.favorite.favorited);}
+});

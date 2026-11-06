@@ -36,3 +36,13 @@ test('IME confirmation does not navigate or submit; normal Enter and Shift+Enter
 test('status explains no results, capped results and unsupported text highlighting',()=>{
  const {c}=fixture(),h=c.taskSearchState();h.applied='x';assert.match(c.taskSearchStatus(h),/没有找到.*不含运行过程与配置/);h.matches=[{turn:'4',role:'assistant',preview:true}];h.index=0;h.capped=true;assert.match(c.taskSearchStatus(h),/第 1 \/ 1 处 · 第 4 轮 · 生成片段/);assert.match(c.taskSearchStatus(h),/仅显示前 500 处/);assert.match(c.taskSearchStatus(h),/未提供文字高亮/);
 });
+test('Escape closes from each search control while Enter on buttons keeps native activation',()=>{
+ const f=fixture(),h=f.c.taskSearchState();h.open=true;let closes=0,moves=0;f.c.closeTaskSearch=()=>closes++;f.c.moveTaskSearch=()=>moves++;
+ for(const id of ['task-search-input','task-search-previous','task-search-next','task-search-close'])f.handlers.keydown({target:{id},key:'Escape',preventDefault(){},stopPropagation(){}});
+ assert.equal(closes,4);f.handlers.keydown({target:{id:'task-search-next'},key:'Enter',preventDefault(){throw Error('native button activation must remain');}});assert.equal(moves,0);
+ h.composing=true;f.handlers.keydown({target:{id:'task-search-input'},key:'Escape',preventDefault(){throw Error('IME cancellation must remain native');}});assert.equal(closes,4);
+});
+test('losing matches returns navigation focus to the query without overriding another control or scope',()=>{
+ const f=fixture(),h=f.c.taskSearchState(),previous={},next={},other={};h.open=true;f.c.document.querySelectorAll=()=>[previous,next];f.input.focus=()=>f.c.document.activeElement=f.input;f.c.document.activeElement=next;f.c.updateTaskSearchControls(h);assert.equal(f.c.document.activeElement,f.input);assert(next.disabled&&previous.disabled);
+ f.c.document.activeElement=other;f.c.updateTaskSearchControls(h);assert.equal(f.c.document.activeElement,other);f.setScope('other');f.c.document.activeElement=next;f.c.updateTaskSearchControls(h);assert.equal(f.c.document.activeElement,next);
+});

@@ -23,7 +23,7 @@ class Element{
   removeAttribute(k){delete this.attributes[k];} hasAttribute(k){return k in this.attributes;}
   addEventListener(type,fn,options={}){if(!this.events.has(type))this.events.set(type,[]);this.events.get(type).push({fn,once:options?.once});}
   emit(type,event={}){for(const listener of [...(this.events.get(type)||[])]){listener.fn(event);if(listener.once)this.events.set(type,this.events.get(type).filter(x=>x!==listener));}}
-  focus(){documentState.activeElement=this;} setSelectionRange(a,b){this.selectionStart=a;this.selectionEnd=b;} scrollIntoView(){} remove(){this.removed=true;}
+  focus(){documentState.activeElement=this;} setSelectionRange(a,b,direction='none'){this.selectionStart=a;this.selectionEnd=b;this.selectionDirection=direction;} scrollIntoView(){} remove(){this.removed=true;}
   showModal(){this.open=true;} close(){this.open=false;this.emit('close');}
   matches(selector){if(selector[0]==='#')return this.id===selector.slice(1);if(selector[0]==='.')return this.classes.has(selector.slice(1));const data=selector.match(/^\[data-([a-z-]+)(?:="([^"]*)")?\]$/);if(data)return camel(data[1]) in this.dataset&&(data[2]===undefined||this.dataset[camel(data[1])]===data[2]);if(selector==='[aria-invalid="true"]')return this.attributes['aria-invalid']==='true';return this.tagName.toLowerCase()===selector;}
   closest(selector){if(selector==='#flow-editor-dialog [data-close]')return this.hasAttribute('data-close')&&this.closest('#flow-editor-dialog')?this:null;for(let node=this;node;node=node.parent)if(selector.split(',').some(s=>node.matches(s.trim())))return node;return null;}
@@ -38,7 +38,7 @@ function parseButtons(html,parent){return [...html.matchAll(/<button\b([^>]*)>/g
 function mountCanvas(html){canvasCards=[];canvasButtons=[];for(const m of html.matchAll(/<article class="([^"]*)" data-flow-position="([^"]*)">([\s\S]*?)<\/article>/g)){const card=new Element('','ARTICLE',canvas);card.className=m[1];card.dataset.flowPosition=m[2];canvasCards.push(card);canvasButtons.push(...parseButtons(m[3],card));}}
 function mountInspector(html){inspectorFields=[];for(const m of html.matchAll(/<(input|select|textarea)\b([^>]*data-(?:design-field|retrieval-field|condition-field|flow-dependency|design-toggle)="[^"]*"[^>]*)>/g)){const field=new Element('',m[1].toUpperCase(),inspector);attrs(field,m[2]);inspectorFields.push(field);}}
 function all(){return [...registry.values(),...canvasCards,...canvasButtons,...inspectorFields,...navigationButtons];}
-function queryAll(selector,root=null){if(selector==='.flow-canvas-node')return canvasCards;if(selector==='[data-flow-zoom]')return navigationButtons.filter(n=>'flowZoom'in n.dataset);if(selector==='input,select,textarea,button')return [nameField,descriptionField,saveButton,closeButton,...inspectorFields,...navigationButtons,...canvasButtons];if(selector==='[data-close]'&&root===confirmDialog)return [confirmBack,confirmClose];return all().filter(n=>!n.removed&&n.matches(selector)&&(!root||n===root||ancestor(n,root)));}
+function queryAll(selector,root=null){if(selector==='.flow-canvas-node')return canvasCards;if(selector==='[data-flow-zoom]')return navigationButtons.filter(n=>'flowZoom'in n.dataset);if(selector==='input,textarea')return inspectorFields.filter(n=>['INPUT','TEXTAREA'].includes(n.tagName)&&(!root||ancestor(n,root)));if(selector==='input,select,textarea,button')return [nameField,descriptionField,saveButton,closeButton,...inspectorFields,...navigationButtons,...canvasButtons];if(selector==='[data-close]'&&root===confirmDialog)return [confirmBack,confirmClose];return all().filter(n=>!n.removed&&n.matches(selector)&&(!root||n===root||ancestor(n,root)));}
 function ancestor(node,root){for(let p=node.parent;p;p=p.parent)if(p===root)return true;return false;}
 function query(selector,root=null){if(selector==='#flow-metadata summary')return metadataSummary;if(selector==='.dialog-foot [data-close]')return confirmBack;if(selector==='button[type="submit"]')return saveButton;if(selector[0]==='#'&&!selector.includes(' '))return registry.get(selector.slice(1))||null;return queryAll(selector,root)[0]||null;}
 
@@ -64,6 +64,30 @@ let passed=0;
 function test(name,fn){reset();fn();passed++;console.log('PASS '+name);}
 
 test('navigation is added once and selected node has a move handle',()=>{assert(registry.has('flow-canvas-controls'));assert(handle('knowledge'));run('flowEnsureCanvasControls()');assert.equal(navigationButtons.filter(n=>n.dataset.flowZoom==='reset').length,1);assert.equal(viewport.attributes.role,'region');});
+test('node inspection restores each text selection and scroll without changing its definition',()=>{
+ const original=run('JSON.stringify(flowSavePayload(false))'),goal=query('[data-design-field="goal"]',inspector);goal.focus();goal.setSelectionRange(4,12,'backward');goal.scrollTop=120;goal.scrollLeft=30;inspector.scrollTop=260;
+ run("flowSelectNode('review')");const other=query('[data-design-field="goal"]',inspector);assert.equal(other.scrollTop,0);assert.equal(inspector.scrollTop,0);other.setSelectionRange(2,5);other.scrollTop=40;inspector.scrollTop=100;
+ run("flowSelectNode('knowledge')");const restored=query('[data-design-field="goal"]',inspector);assert.equal(restored.selectionStart,4);assert.equal(restored.selectionEnd,12);assert.equal(restored.selectionDirection,'backward');assert.equal(restored.scrollTop,120);assert.equal(restored.scrollLeft,30);assert.equal(inspector.scrollTop,260);assert.equal(run('flowEditorIsDirty()'),false);assert.equal(run('JSON.stringify(flowSavePayload(false))'),original);
+ run("flowSelectNode('review')");assert.equal(query('[data-design-field="goal"]',inspector).scrollTop,40);assert.equal(inspector.scrollTop,100);
+});
+test('redraw retains current field focus and a new editor resets transient inspector state',()=>{
+ const goal=query('[data-design-field="goal"]',inspector);goal.focus();goal.setSelectionRange(3,9);goal.scrollTop=80;inspector.scrollTop=200;run('renderFlowDesign()');assert.equal(documentState.activeElement,query('[data-design-field="goal"]',inspector));assert.equal(documentState.activeElement.selectionEnd,9);assert.equal(documentState.activeElement.scrollTop,80);assert.equal(inspector.scrollTop,200);
+ run('openVisualFlowEditor(definition)');assert.equal(query('[data-design-field="goal"]',inspector).scrollTop,0);assert.equal(inspector.scrollTop,0);assert.equal(run('flowDesign.inspectorViews?.size||0'),0);
+});
+test('undo restores deleted node text navigation and expired undo state is removed',()=>{
+ const goal=query('[data-design-field="goal"]',inspector);goal.setSelectionRange(5,11);goal.scrollTop=110;click('flowDelete');assert(run("flowDesign.inspectorViews.has('knowledge')"));click('flowUndo');assert.equal(query('[data-design-field="goal"]',inspector).selectionStart,5);assert.equal(query('[data-design-field="goal"]',inspector).scrollTop,110);
+ click('flowDelete');run('flowInvalidateUndo();renderFlowDesign()');assert.equal(run("flowDesign.inspectorViews.has('knowledge')"),false);
+});
+test('picker search preserves deletion undo and validation until an actual field changes',()=>{
+ click('flowDelete');run('flowDesign.invalidNode=flowDesign.selected;flowDesign.seedOnly=true');
+ const snapshot=()=>run('JSON.stringify({nodes:flowDesign.nodes,undo:flowDesign.undo,invalid:flowDesign.invalidNode,seed:flowDesign.seedOnly})'),before=snapshot(),status=query('#flow-designer-status').textContent;
+ const popup=new Element('','DIV',inspector);popup.className='select-popover';const search=new Element('','INPUT',popup);search.value='仅搜索现有选项';
+ inspector.emit('input',{target:search});inspector.emit('change',{target:search});assert.equal(snapshot(),before);assert.equal(query('#flow-designer-status').textContent,status);
+ const goal=query('[data-design-field="goal"]',inspector);goal.value='真正修改的目标';inspector.emit('input',{target:goal});assert.equal(run('flowDesign.undo'),null);assert.equal(run('flowDesign.invalidNode'),null);assert.equal(run('flowDesign.seedOnly'),false);assert.equal(run('flowDesign.nodes.find(n=>n.id===flowDesign.selected).goal'),'真正修改的目标');
+});
+test('inspector events cannot change frozen nodes during a save',()=>{
+ const before=run('JSON.stringify(flowDesign.nodes)'),goal=query('[data-design-field="goal"]',inspector);run('flowEditorSaving=true');goal.value='保存期间的迟到输入';inspector.emit('input',{target:goal});inspector.emit('change',{target:goal});assert.equal(run('JSON.stringify(flowDesign.nodes)'),before);run('flowEditorSaving=false');
+});
 test('pointer press and tiny jitter do not alter a draft',()=>{pointer('pointerdown',handle('knowledge'),100,100);pointer('pointermove',handle('knowledge'),102,101);pointer('pointerup',handle('knowledge'),102,101);assert.equal(run('flowEditorIsDirty()'),false);});
 test('node dragging updates snapped coordinates and keeps business nodes unchanged',()=>{const original=run('JSON.stringify(flowDesign.nodes)');pointer('pointerdown',handle('knowledge'),100,100);pointer('pointermove',handle('knowledge'),164,132);assert(node('knowledge').classes.has('dragging'));pointer('pointerup',handle('knowledge'),164,132);const p=run('flowPositions().knowledge');assert.equal(p.x,104);assert.equal(p.y,104);assert.equal(run('JSON.stringify(flowDesign.nodes)'),original);assert(run('flowEditorIsDirty()'));assert(!node('knowledge').classes.has('dragging'));});
 test('dragging accounts for the current canvas zoom',()=>{run('flowSetZoom(.5)');pointer('pointerdown',handle('knowledge'),100,100);pointer('pointermove',handle('knowledge'),140,120);pointer('pointerup',handle('knowledge'),140,120);assert.equal(run('flowPositions().knowledge.x'),120);assert.equal(run('flowPositions().knowledge.y'),112);});

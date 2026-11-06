@@ -33,7 +33,7 @@ const output=process.env.PROJECT_REVIEW_OUTPUT||'/private/tmp/conversation-ui';f
   for(const theme of ['light','dark'])for(const width of [1024,1280,1440,1920]){
    await settle(theme,width);
    const record=await page.evaluate(()=>{const list=document.querySelector('#task-message-list'),turn=document.querySelector('.task-chat-turn'),user=document.querySelector('.is-user'),input=document.querySelector('#task-chat-input'),header=document.querySelector('.task-thread-header');return {overflow:document.documentElement.scrollWidth>innerWidth,thread:turn.getBoundingClientRect().width,userRight:user.getBoundingClientRect().right,threadRight:turn.getBoundingClientRect().right,listOverflow:list.scrollWidth>list.clientWidth,font:parseFloat(getComputedStyle(input).fontSize),header:header.getBoundingClientRect().height,readingHeight:list.getBoundingClientRect().height,headerControlsFit:[...header.querySelectorAll('button')].every(button=>{const r=button.getBoundingClientRect(),h=header.getBoundingClientRect();return r.left>=h.left&&r.right<=h.right&&r.top>=h.top&&r.bottom<=h.bottom;})};});
-   assert(!record.overflow&&!record.listOverflow);assert(record.thread<=800.5);assert(Math.abs(record.userRight-record.threadRight)<2);assert.equal(record.font,14);assert(record.headerControlsFit&&record.readingHeight>=160);assert(await hit('#task-chat-form [type=submit]'));
+   assert(!record.overflow&&!record.listOverflow);assert(record.thread<=800.5);assert(Math.abs(record.userRight-record.threadRight)<2);assert.equal(record.font,16);assert(record.headerControlsFit&&record.readingHeight>=160);assert(await hit('#task-chat-form [type=submit]'));
    layouts.push({surface:'task',theme,width,...record});if(width===1440)await shot('task-'+theme);
    await page.locator('[data-chat-properties]').click();assert(await hit('#task-chat-form [type=submit]'));await page.locator('[data-chat-properties]').click();
   }
@@ -41,7 +41,7 @@ const output=process.env.PROJECT_REVIEW_OUTPUT||'/private/tmp/conversation-ui';f
   pass('四种桌面宽度与深浅主题中正文行宽、右侧提问、代码块和底部操作保持清晰可用');
   for(const theme of ['light','dark'])for(const width of [1024,1440]){
    await settle(theme,width);await enlarge('.task-conversation-page');assert(await hit('#task-chat-form [type=submit]'));assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-   assert.equal(await page.locator('#task-chat-input').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)),28);
+   assert.equal(await page.locator('#task-chat-input').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)),32);
    layouts.push({surface:'task',theme,width,textScale:2});await reload();
   }
   pass('任务对话在 200% 文字下仍可输入和发送，无页面横向溢出');

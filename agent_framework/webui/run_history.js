@@ -1,5 +1,19 @@
 'use strict';
 
+let runListNavigationObserver=null,runListNavigationNode=null;
+function syncRunListNavigation(){
+ const navigation=$('#run-list-navigation');
+ if(navigation===runListNavigationNode)return;
+ runListNavigationObserver?.disconnect();runListNavigationObserver=null;runListNavigationNode=navigation;
+ if(!navigation||typeof ResizeObserver==='undefined')return;
+ const measure=()=>{
+  if(!navigation.isConnected)return;
+  const height=getComputedStyle(navigation).position==='sticky'?navigation.getBoundingClientRect().height:0;
+  navigation.closest('.run-list-panel').style.setProperty('--run-list-navigation-height',height+'px');
+ };
+ measure();runListNavigationObserver=new ResizeObserver(measure);runListNavigationObserver.observe(navigation);
+}
+
 function runHistoryScope(){return JSON.stringify([state.meta?.tenant,state.workspaceId,state.meta?.principal]);}
 function runHistoryQuery(){return Object.fromEntries(['search','filter','runAgent','runDomain','runSort','runVisibility','runFavorites','runAfter','runBefore','runCursor','runCursorStack'].map(key=>[key,structuredClone(key==='runFavorites'?(state[key]||'all'):key==='runVisibility'?(state[key]||'active'):state[key])]));}
 function validRunHistoryQuery(query){

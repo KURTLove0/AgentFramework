@@ -46,9 +46,9 @@
   --red-soft:oklch(96% .022 25);
   --overlay:oklch(17% .025 260 / .4);
   --shadow:0 18px 64px oklch(15% .02 260 / .18);
-  --font:"IBM Plex Sans","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
   --display:"Space Grotesk",var(--font);
-  --mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
   --radius:6px;
   --sidebar-width:220px}
 
@@ -108,11 +108,11 @@ label>input,label>select,label>textarea {
 h1,h2,h3,p {
   margin:0}
 h1 {
-  font:600 28px/1.3 var(--display);
-  letter-spacing:-.7px}
+  font:600 28px/1.35 var(--font);
+  letter-spacing:normal}
 h2 {
-  font:600 20px/1.4 var(--display);
-  letter-spacing:-.3px}
+  font:600 20px/1.4 var(--font);
+  letter-spacing:normal}
 h3 {
   font-size:14px;
   font-weight:600}
@@ -175,7 +175,7 @@ button:active:not(:disabled) {
   font-size:12px}
 .workspace small {
   display:block;
-  font:12px/1.6 var(--mono);
+  font:12px/1.6 var(--font);
   color:var(--nav-muted)}
 .workspace-icon {
   border:1px solid var(--nav-muted);
@@ -184,7 +184,7 @@ button:active:not(:disabled) {
   display:grid;
   place-items:center;
   border-radius:5px;
-  font:12px var(--mono)}
+  font:12px var(--font)}
 .workspace .local-dot {
   margin-left:auto}
 .local-dot {
@@ -220,7 +220,7 @@ button:active:not(:disabled) {
   color:var(--white)}
 .sidebar nav small {
   margin-left:auto;
-  font:12px var(--mono);
+  font:12px var(--font);
   opacity:.8}
 .sidebar-bottom {
   margin-top:auto;
@@ -247,10 +247,10 @@ button:active:not(:disabled) {
   font-size:12px}
 .sidebar-help>span:last-child {
   margin-left:auto;
-  font-family:var(--mono)}
+  font-family:var(--font)}
 .sidebar-bottom>small {
   color:var(--nav-muted);
-  font:12px var(--mono)}
+  font:12px var(--font)}
 .shell {
   margin-left:var(--sidebar-width);
   min-height:100dvh;
@@ -315,7 +315,7 @@ button:active:not(:disabled) {
   place-items:center;
   border:1px solid var(--border);
   border-radius:50%;
-  font:12px var(--mono);
+  font:12px var(--font);
   background:var(--canvas)}
 main {
   padding:var(--space-32) var(--space-36) var(--space-36);
@@ -335,8 +335,8 @@ main {
   font-size:13px;
   margin-top:var(--space-8)}
 .eyebrow {
-  font:12px/1.5 var(--mono);
-  letter-spacing:1.8px;
+  font:12px/1.5 var(--font);
+  letter-spacing:normal;
   color:var(--muted);
   margin-bottom:var(--space-8)}
 .button {
@@ -426,7 +426,7 @@ main {
   letter-spacing:0}
 .panel-heading h2 small {
   color:var(--muted);
-  font:12px var(--mono);
+  font:12px var(--font);
   margin-left:var(--space-8)}
 .panel-heading p {
   font-size:12px;
@@ -495,7 +495,7 @@ td .task-link {
   white-space:nowrap}
 td small {
   display:block;
-  font:12px/1.8 var(--mono);
+  font:12px/1.8 var(--font);
   color:var(--muted)}
 .mono {
   font-family:var(--mono);
@@ -626,7 +626,7 @@ td small {
   border:1px solid var(--border);
   display:grid;
   place-items:center;
-  font:12px var(--mono);
+  font:12px var(--font);
   flex:none}
 .phase.done {
   color:var(--ink)}
@@ -690,7 +690,7 @@ td small {
   margin-top:var(--space-20);
   padding-top:var(--space-20)}
 .proof-number {
-  font:500 25px var(--mono);
+  font:500 25px var(--font);
   color:var(--ink)}
 .proof-number small {
   font:12px var(--font);
@@ -727,7 +727,7 @@ td small {
   font-size:12px}
 .mini-heading small {
   color:var(--muted);
-  font:12px var(--mono)}
+  font:400 13px/1.6 var(--font)}
 .plan ol {
   margin:0;
   padding-left:var(--space-20);
@@ -736,7 +736,7 @@ td small {
   font-size:12px;
   color:var(--muted)}
 .plan li::marker {
-  font:12px var(--mono);
+  font:12px var(--font);
   color:var(--blue)}
 .plan .mono {
   font-size:12px;
@@ -796,7 +796,7 @@ td small {
   color:var(--faint);
   overflow-wrap:anywhere}
 .event time {
-  font:12px/1.7 var(--mono);
+  font:12px/1.7 var(--font);
   color:var(--faint);
   padding-top:var(--space-4)}
 pre {
@@ -1152,6 +1152,10 @@ form>label {
   display:block;
   color:var(--muted);
   font-size:12px}
+.command-option .command-option-title,.command-option .command-option-copy>small {
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;line-height:1.5}
+.command-option .command-option-title {font:inherit;font-weight:500;line-height:1.5}
+.command-option .command-option-copy {display:block;min-width:0}
 .command-foot {
   padding:var(--space-12) var(--space-20);
   border-top:1px solid var(--border);
@@ -1704,7 +1708,7 @@ input,textarea,select {
 #flow-metadata>summary{padding:10px 0;cursor:pointer;font-size:13px;color:var(--muted);overflow-wrap:anywhere;line-height:1.7}.flow-metadata-fields{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding-top:6px}.flow-metadata-fields label{margin:0 0 12px}.flow-metadata-fields textarea{min-height:76px}.flow-metadata-fields input{margin-bottom:0}@media(max-width:700px){.flow-metadata-fields{grid-template-columns:minmax(0,1fr);gap:0}}
 
 /* Standard Agent Skills packages and version-pinned Agent selections. */
-.skill-catalog-summary{display:flex;flex-wrap:wrap;gap:24px;align-items:center;font-size:12px;color:var(--muted);margin:12px 0 20px}.skill-catalog-summary strong{font-size:20px;color:var(--text);margin-right:6px}.skill-catalog-summary a{margin-left:auto}.skill-catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.skill-card{padding:24px;min-width:0;overflow-wrap:anywhere}.skill-card .mini-heading{align-items:flex-start;gap:12px}.skill-card h2{font-size:16px;line-height:1.6;margin:0 0 4px}.skill-card-identity{display:flex;gap:12px;min-width:0;align-items:flex-start}.skill-card-identity>svg{width:26px;height:26px;flex:none;color:var(--blue);margin-top:4px}.skill-card-identity small{font-size:12px;color:var(--muted)}.skill-card>p{font-size:13px;line-height:1.9;min-height:48px;color:var(--muted)}.skill-card-files{display:flex;gap:8px;flex-wrap:wrap;font-size:12px}.skill-card-files span{padding:6px 10px;background:var(--surface);border-radius:4px}.skill-versions{border-top:1px solid var(--border);margin-top:20px;padding-top:12px;font-size:12px}.skill-versions summary{cursor:pointer;padding:8px 0}.skill-versions>div{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 0}.skill-versions small{color:var(--muted);font-size:12px}.skill-editor-dialog{max-width:1200px;width:calc(100vw - 48px);max-height:94dvh}.skill-meta-row{display:grid;grid-template-columns:2fr 1fr auto;gap:20px;align-items:center}.skill-meta-row label{min-width:0}.skill-meta-row>.pill{margin-top:10px}.skill-package-editor{display:grid;grid-template-columns:240px minmax(0,1fr);border:1px solid var(--border);border-radius:8px;overflow:hidden}.skill-package-editor>aside{padding:18px;background:var(--surface);border-right:1px solid var(--border);min-width:0}.skill-package-editor>section{padding:20px;min-width:0}.skill-package-editor h3{font-size:13px;overflow-wrap:anywhere}.skill-file-item{width:100%;display:flex;align-items:center;gap:8px;padding:12px 8px;background:transparent;border:0;text-align:left;border-radius:5px;cursor:pointer;font-size:12px;min-height:44px;overflow-wrap:anywhere;color:var(--text)}.skill-file-item span{min-width:0}.skill-file-item.active{background:var(--blue-soft);color:var(--blue)}.skill-file-item svg{width:17px;height:17px;flex:none}.skill-add-resource{border-top:1px solid var(--border);padding-top:16px;margin-top:16px}.skill-add-resource label{font-size:12px}.skill-add-resource .button{width:100%;margin-top:10px;min-height:44px}.skill-add-resource input{font-size:12px}.skill-package-editor textarea{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.8;min-height:380px;white-space:pre;tab-size:2;resize:vertical}.skill-editor-dialog .field-help{font-size:12px;line-height:1.8;color:var(--muted);margin:12px 0 20px}.skill-editor-dialog .dialog-foot{gap:12px;flex-wrap:wrap}.skill-editor-dialog .toolbar{flex-wrap:wrap}.managed-skill-binding select{font-size:13px}.legacy-skill-note{padding:16px;border:1px dashed var(--border);border-radius:6px;margin:16px 0;font-size:12px;overflow-wrap:anywhere}.legacy-skill-note p{white-space:pre-wrap;line-height:1.8;color:var(--muted)}.legacy-skill-note .pill{margin-left:8px}.skill-file-item:focus-visible{outline:3px solid var(--blue);outline-offset:1px}.skill-file-item:hover{background:var(--blue-soft)}
+.skill-catalog-summary{display:flex;flex-wrap:wrap;gap:24px;align-items:center;font-size:12px;color:var(--muted);margin:12px 0 20px}.skill-catalog-summary strong{font-size:20px;color:var(--text);margin-right:6px}.skill-catalog-summary a{margin-left:auto}.skill-catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.skill-card{padding:24px;min-width:0;overflow-wrap:anywhere}.skill-card .mini-heading{align-items:flex-start;gap:12px}.skill-card h2{font-size:16px;line-height:1.6;margin:0 0 4px}.skill-card-identity{display:flex;gap:12px;min-width:0;align-items:flex-start}.skill-card-identity>svg{width:26px;height:26px;flex:none;color:var(--blue);margin-top:4px}.skill-card-identity small{font-size:12px;color:var(--muted)}.skill-card>p{font-size:13px;line-height:1.9;min-height:48px;color:var(--muted)}.skill-card-files{display:flex;gap:8px;flex-wrap:wrap;font-size:12px}.skill-card-files span{padding:6px 10px;background:var(--surface);border-radius:4px}.skill-versions{border-top:1px solid var(--border);margin-top:20px;padding-top:12px;font-size:12px}.skill-versions summary{cursor:pointer;padding:8px 0}.skill-versions>div{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 0}.skill-versions small{color:var(--muted);font-size:12px}.skill-editor-dialog{max-width:1200px;width:calc(100vw - 48px);max-height:94dvh}.skill-meta-row{display:grid;grid-template-columns:2fr 1fr auto;gap:20px;align-items:center}.skill-meta-row label{min-width:0}.skill-meta-row>.pill{margin-top:10px}.skill-package-editor{display:grid;grid-template-columns:240px minmax(0,1fr);border:1px solid var(--border);border-radius:8px;overflow:hidden}.skill-package-editor>aside{padding:18px;background:var(--surface);border-right:1px solid var(--border);min-width:0}.skill-package-editor>section{padding:20px;min-width:0}.skill-package-editor h3{font-size:13px;overflow-wrap:anywhere}.skill-file-item{width:100%;display:flex;align-items:center;gap:8px;padding:12px 8px;background:transparent;border:0;text-align:left;border-radius:5px;cursor:pointer;font-size:12px;min-height:44px;overflow-wrap:anywhere;color:var(--text)}.skill-file-item span{min-width:0}.skill-file-item.active{background:var(--blue-soft);color:var(--blue)}.skill-file-item svg{width:17px;height:17px;flex:none}.skill-add-resource{border-top:1px solid var(--border);padding-top:16px;margin-top:16px}.skill-add-resource label{font-size:12px}.skill-add-resource .button{width:100%;margin-top:10px;min-height:44px}.skill-add-resource input{font-size:12px}.skill-package-editor textarea{font-family:var(--mono);font-size:13px;line-height:1.8;min-height:380px;white-space:pre;tab-size:2;resize:vertical}.skill-editor-dialog .field-help{font-size:12px;line-height:1.8;color:var(--muted);margin:12px 0 20px}.skill-editor-dialog .dialog-foot{gap:12px;flex-wrap:wrap}.skill-editor-dialog .toolbar{flex-wrap:wrap}.managed-skill-binding select{font-size:13px}.legacy-skill-note{padding:16px;border:1px dashed var(--border);border-radius:6px;margin:16px 0;font-size:12px;overflow-wrap:anywhere}.legacy-skill-note p{white-space:pre-wrap;line-height:1.8;color:var(--muted)}.legacy-skill-note .pill{margin-left:8px}.skill-file-item:focus-visible{outline:3px solid var(--blue);outline-offset:1px}.skill-file-item:hover{background:var(--blue-soft)}
 @media(max-width:1000px){.skill-catalog{grid-template-columns:minmax(0,1fr)}}@media(max-width:700px){.skill-editor-dialog{width:calc(100vw - 20px);padding:16px}.skill-meta-row{grid-template-columns:minmax(0,1fr);gap:4px}.skill-meta-row>.pill{justify-self:start;margin:0 0 12px}.skill-package-editor{grid-template-columns:minmax(0,1fr)}.skill-package-editor>aside{border-right:0;border-bottom:1px solid var(--border)}#skill-file-list{display:flex;gap:8px;overflow:auto}.skill-file-item{width:auto;min-width:130px}.skill-add-resource{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}.skill-add-resource label{grid-column:1/-1}.skill-add-resource .button{margin:0}.skill-package-editor>section{padding:14px}.skill-package-editor textarea{font-size:16px;min-height:340px}.skill-meta-row input,.skill-meta-row select{font-size:16px}.skill-catalog-summary a{margin:0}.skill-card{padding:20px}}
 @media(max-width:480px){.sidebar .brand{padding-right:0}.sidebar nav a{padding-inline:2px}.sidebar nav a svg{width:17px;height:17px}}
 .agent-skill-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.agent-skill-badges .pill{white-space:normal;overflow-wrap:anywhere;line-height:1.7;max-width:100%}

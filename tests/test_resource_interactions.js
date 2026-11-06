@@ -19,7 +19,7 @@ function skill(status='PUBLISHED',version=1) {
 function sandbox(options={}) {
   const elements = new Map(), listeners = new Map(), messages=[], calls=[], navigation=[];
   let renders=0,marked=0,initialized=0,refreshes=0;
-  const document = {activeElement:null,contains:item=>item?.isConnected!==false,addEventListener(type,fn,options){const key=type+(options===true?':capture':'');if(!listeners.has(key))listeners.set(key,[]);listeners.get(key).push(fn);},getElementById(id){return elements.get(id)||null;}};
+  const document = {activeElement:null,contains:item=>item?.isConnected!==false,querySelectorAll:()=>[...elements.values()].filter(el=>el.open),addEventListener(type,fn,options){const key=type+(options===true?':capture':'');if(!listeners.has(key))listeners.set(key,[]);listeners.get(key).push(fn);},getElementById(id){return elements.get(id)||null;}};
   function element(selector) {
     const id=selector.startsWith('#')&&!selector.includes(' ')?selector.slice(1):selector;
     if(elements.has(id))return elements.get(id);
@@ -61,6 +61,19 @@ function sandbox(options={}) {
   return {state,context,evaluate,element,document,calls,messages,navigation,storage,taskJourney,listeners,formSubmit,closeClick,escape,handle(fn){handler=fn;},get renders(){return renders;},get marked(){return marked;},get initialized(){return initialized;},get refreshes(){return refreshes;}};
 }
 function fillAsset(s,kind='KNOWLEDGE'){s.evaluate('openAsset(null,"'+kind+'")');s.element('#asset-name').value='新增模拟资料';s.element('#asset-content').value=kind==='PREFERENCE'?'{"language":"zh"}':'模拟知识正文';}
+
+test('workspace search combines descriptive terms without combining unrelated fragments of identifiers',()=>{
+ const s=sandbox();s.state.workspaces=[{...workspace('workspace-07-other'),name:'Workspace 11'},{...workspace('workspace-correct'),name:'Workspace 07',business:'客户支持',scenario:'售后服务',description:'完整说明尾部关键词'}];
+ s.evaluate("workspaceDirectoryState().query='workspace 07'");assert.deepEqual(clone(s.evaluate('state.workspaces.filter(w=>workspaceDirectoryMatches(w)).map(w=>w.name)')),['Workspace 07']);
+ s.evaluate("workspaceDirectoryState().query='客户支持 售后服务'");assert.deepEqual(clone(s.evaluate('state.workspaces.filter(w=>workspaceDirectoryMatches(w)).map(w=>w.name)')),['Workspace 07']);
+ s.evaluate("workspaceDirectoryState().query='project-workspace-07-other'");assert.deepEqual(clone(s.evaluate('state.workspaces.filter(w=>workspaceDirectoryMatches(w)).map(w=>w.name)')),['Workspace 11']);
+ s.evaluate("workspaceDirectoryState().query='尾部关键词'");assert.equal(s.evaluate('workspaceDirectoryMatches(state.workspaces[1])'),true);
+});
+test('workspace directory filters isolate identity while preserving the same catalog across current-space changes',()=>{
+ const s=sandbox();s.state.workspaces[1].deleted=true;s.evaluate("Object.assign(workspaceDirectoryState(),{query:'workspace',status:'deleted',sort:'updated'})");
+ assert.deepEqual(clone(s.evaluate('state.workspaces.filter(w=>workspaceDirectoryMatches(w)).map(w=>w.id)')),['workspace-beta']);
+ s.state.workspaceId='workspace-beta';assert.equal(s.evaluate('workspaceDirectoryState().status'),'deleted');s.state.meta.principal='another-user';assert.equal(s.evaluate('workspaceDirectoryState().query'),'');assert.equal(s.evaluate('workspaceDirectoryState().status'),'all');assert.equal(s.evaluate('workspaceDirectoryState().sort'),'current');
+});
 function assetReply(data,status='DRAFT'){return {ref:'asset-new@1',id:'asset-new',version:1,title:data.title,kind:data.kind,status,content:data.content,source_uri:data.source_uri,source_version:data.source_version,effective_at:data.effective_at,effective_until:data.effective_until,visibility:data.visibility,save_receipt:{request_id:data.request_id,ref:'asset-new@1',version:1,status:'DRAFT'}};}
 
 function versionedAsset(version=2,kind='KNOWLEDGE') {return {id:'versioned',ref:'versioned@'+version,version,kind,owner:'test-user',title:'同一份资料',visibility:'PROJECT',status:version===1?'PUBLISHED':'DRAFT',source_version:'1',source_uri:'local:policy',effective_until:2000000000,content:kind==='PREFERENCE'?{language:'zh'}:{text:'版本'+version+'的正文'},supersedes:version>1?'versioned@'+(version-1):null};}
@@ -506,6 +519,30 @@ for(const changed of ['tenant','principal'])test('a workspace editor save cannot
 test('workspace preflight cannot commit after its original identity changed',async()=>{
  const s=sandbox();let finish;s.state.meta.principal='actor-a';s.handle(async request=>request==='/api/session'?await new Promise(resolve=>finish=resolve):{runs:[],counts:{total:0},limit:10});const pending=s.evaluate('switchWorkspace("workspace-beta")');s.state.meta.principal='actor-b';
  finish({...s.state.meta,principal:'actor-a',workspace:workspace('workspace-beta')});await assert.rejects(pending,/身份/);assert.equal(s.state.workspaceId,'workspace-alpha');assert.equal(s.initialized,0);
+});
+test('cancelled workspace reads keep the current picker and cannot navigate after success',async()=>{
+ const s=sandbox();let finish;s.handle(async request=>request==='/api/session'?await new Promise(resolve=>finish=resolve):{runs:[],counts:{},limit:10});
+ s.element('#workspace-picker').value='workspace-beta';const pending=s.evaluate('switchWorkspace("workspace-beta")');assert.equal(s.element('#workspace-picker').value,'workspace-alpha');assert(s.element('#workspace-picker').disabled);
+ s.evaluate('cancelWorkspaceSwitch()');assert.equal(s.state.busy,false);assert.equal(s.element('#workspace-picker').disabled,false);finish({...s.state.meta,workspace:workspace('workspace-beta')});await pending;assert.equal(s.state.workspaceId,'workspace-alpha');assert.equal(s.initialized,0);
+});
+test('late cancelled workspace failure cannot reopen its error view',async()=>{
+ const s=sandbox();let reject;s.handle(async request=>request==='/api/session'?await new Promise((_resolve,fail)=>reject=fail):{runs:[],counts:{},limit:10});
+ const pending=s.evaluate('switchWorkspace("workspace-beta")');s.evaluate('cancelWorkspaceSwitch()');reject(Error('obsolete failure'));await pending;assert.equal(s.evaluate('workspaceSwitchAttempt'),null);assert(!s.element('#workspace-switch-dialog').open);assert.equal(s.messages.length,0);
+});
+test('old switch completion cannot release the new switch busy state',async()=>{
+ const s=sandbox(),gates=[];s.state.workspaces.push(workspace('workspace-gamma'));s.handle(async(request,_body,_timeout,_retry,context)=>request==='/api/session'?await new Promise(resolve=>gates.push(()=>resolve({...s.state.meta,workspace:workspace(context.workspace)}))):{runs:[],counts:{},limit:10});
+ const old=s.evaluate('switchWorkspace("workspace-beta")');s.evaluate('cancelWorkspaceSwitch()');const next=s.evaluate('switchWorkspace("workspace-gamma")');gates[0]();await old;assert.equal(s.evaluate('workspaceSwitchAttempt.identity'),'workspace-gamma');assert(s.state.busy);assert(s.element('#workspace-picker').disabled);
+ s.evaluate('cancelWorkspaceSwitch()');gates[1]();await next;assert.equal(s.state.workspaceId,'workspace-alpha');
+});
+test('cancelling a queued switch preserves the unrelated background read',async()=>{
+ const s=sandbox();s.state.busy=true;await s.evaluate('switchWorkspace("workspace-beta")');assert.equal(s.state.nextWorkspace,'workspace-beta');assert.equal(s.evaluate('workspaceSwitchAttempt.phase'),'queued');assert.equal(s.calls.length,0);
+ s.evaluate('cancelWorkspaceSwitch()');assert(s.state.busy);assert.equal(s.state.nextWorkspace,null);assert(!s.element('#workspace-picker').disabled);
+});
+test('navigation supersedes a pending workspace handoff',async()=>{
+ const s=sandbox();let finish;s.handle(async request=>request==='/api/session'?await new Promise(resolve=>finish=resolve):{runs:[],counts:{},limit:10});const pending=s.evaluate('switchWorkspace("workspace-beta")');s.context.location.hash='#/agents';finish({...s.state.meta,workspace:workspace('workspace-beta')});await pending;assert.equal(s.state.workspaceId,'workspace-alpha');assert.equal(s.storage.get('agent-workspace'),'workspace-alpha');assert.equal(s.initialized,0);assert.equal(s.evaluate('workspaceSwitchAttempt'),null);
+});
+test('reselecting the pending workspace does not create a second read or queue',async()=>{
+ const s=sandbox();let finish;s.handle(async request=>request==='/api/session'?await new Promise(resolve=>finish=resolve):{runs:[],counts:{},limit:10});const pending=s.evaluate('switchWorkspace("workspace-beta")');await s.evaluate('switchWorkspace("workspace-beta")');assert.equal(s.calls.length,2);assert(!s.state.nextWorkspace);s.evaluate('cancelWorkspaceSwitch()');finish({...s.state.meta,workspace:workspace('workspace-beta')});await pending;
 });
 function installActualWorkspaceRefresh(s){
  const app=fs.readFileSync(path.join(root,'agent_framework/webui/app.js'),'utf8');

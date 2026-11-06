@@ -5,16 +5,29 @@ function commandScope(){return {workspace:state.workspaceId,tenant:state.meta?.t
 function commandScopeMatches(scope){const now=commandScope();return scope&&Object.keys(now).every(key=>scope[key]===now[key]);}
 function commandCurrent(session){return state.commandSession===session&&$('#command-dialog').open&&commandScopeMatches(session.scope)&&session.route===location.hash&&session.routeVersion===state.routeVersion;}
 function commandRemember(session){if(session&&commandScopeMatches(session.scope))state.commandHistory={scope:session.scope,query:$('#command-input').value,selectedKey:state.commandSelectedKey,page:state.commandPage||0};}
+function commandFocusTarget(candidate){
+ const target=candidate?.isConnected?candidate:candidate?.id?document.getElementById(candidate.id):null;
+ return target&&!target.disabled&&(target.tabIndex>=0||target.hasAttribute?.('tabindex')||target.isContentEditable)&&!target.closest?.('[inert],dialog:not([open])')&&target.getClientRects?.().length?target:$('[data-action="command"]');
+}
+async function startTaskFromCommand(opener){
+ const target=commandFocusTarget(opener),scope=commandScope(),route=location.hash,version=state.routeVersion;
+ await newTask({},target);
+ const dialog=$('#create-dialog');if(!dialog?.open||!commandScopeMatches(scope)||route!==location.hash||version!==state.routeVersion)return;
+ const session=taskJourney.editorSession;
+ dialog.addEventListener('close',()=>{
+  if(session===taskJourney.editorSession&&commandScopeMatches(scope)&&route===location.hash&&version===state.routeVersion&&!$$('dialog[open]').length)commandFocusTarget(target)?.focus({preventScroll:true});
+ },{once:true});
+}
 function closeCommandSearch(activated=false){
  const session=state.commandSession;if(!session)return;
  commandRemember(session);session.activated=activated;clearTimeout(session.timer);state.commandSession=null;
  if($('#command-dialog').open)$('#command-dialog').close();
- if(!activated&&commandScopeMatches(session.scope)&&session.route===location.hash&&!$$('dialog[open]').length){const target=session.opener?.isConnected?session.opener:$('[data-action="command"]');target?.focus({preventScroll:true});}
+ if(!activated&&commandScopeMatches(session.scope)&&session.route===location.hash&&session.routeVersion===state.routeVersion&&!$$('dialog[open]').length)commandFocusTarget(session.opener)?.focus({preventScroll:true});
 }
 function startCommandSearch(){
  if($('#command-dialog').open||$$('dialog[open]').length)return;
  const scope=commandScope(),history=commandScopeMatches(state.commandHistory?.scope)?state.commandHistory:null;
- const session={scope,route:location.hash,routeVersion:state.routeVersion,query:(history?.query||'').trim(),opener:document.activeElement,sources:{},generation:0,resumeKey:history?.selectedKey||null};
+ const session={scope,route:location.hash,routeVersion:state.routeVersion,query:(history?.query||'').trim(),opener:document.activeElement,sources:{},generation:0,resumeKey:history?.selectedKey||null,revealSelection:true};
  state.commandSession=session;state.commandPage=history?.page||0;state.commandIndex=0;state.commandSelectedKey=history?.selectedKey||null;
  $('#command-input').value=history?.query||'';$('#command-dialog').showModal();$('#command-input').focus();
  for(const key of Object.keys(commandSources))session.sources[key]={pending:true,data:null,error:'',generation:0,query:session.query};
@@ -40,22 +53,22 @@ async function readCommandSource(session,key){
 function retryCommandSource(key){const session=state.commandSession,source=session?.sources[key];if(!session||!commandCurrent(session)||!source||source.pending)return;return readCommandSource(session,key);}
 function scheduleCommandSearch(){
  const session=state.commandSession;if(!session||!commandCurrent(session))return;
- clearTimeout(session.timer);session.query=$('#command-input').value.trim();session.generation++;session.resumeKey=null;
+ clearTimeout(session.timer);session.query=$('#command-input').value.trim();session.generation++;session.resumeKey=null;session.revealSelection=true;
  state.commandIndex=0;state.commandPage=0;state.commandSelectedKey=null;
  for(const key of ['runs','library','flowRuns']){const source=session.sources[key];source.generation++;source.data=null;source.error='';source.retrying=false;source.pending=true;source.query=session.query;}
  commandRemember(session);renderCommands();
  const generation=session.generation;
  session.timer=setTimeout(()=>{if(commandCurrent(session)&&generation===session.generation)Promise.all(['runs','library','flowRuns'].map(key=>readCommandSource(session,key)));},260);
 }
-function openLibraryAsset(ref,tab){state.libraryTab=tab;state.libraryFocusRef=ref;state.libraryQuery='';state.librarySearch='';state.libraryStatus='';navigate('library');}
-function openCommandWorkflow(identity){state.flowSection='definitions';state.commandFlowTarget={id:identity,scope:commandScope()};state.flows=null;navigate('workflows');}
+function openLibraryAsset(ref,tab){state.libraryTab=tab;state.libraryFocusRef=ref;state.libraryQuery='';state.librarySearch='';state.libraryStatus='';if(typeof prepareLibraryNavigation==='function')prepareLibraryNavigation();navigate('library');}
+function openCommandWorkflow(identity){if(typeof resetFlowDirectory==='function')resetFlowDirectory();state.flowSection='definitions';state.commandFlowTarget={id:identity,scope:commandScope()};state.flows=null;navigate('workflows');}
 function focusCommandWorkflow(){
  const target=state.commandFlowTarget;if(!target)return;
  if(!commandScopeMatches(target.scope)){state.commandFlowTarget=null;return;}
  if(state.view!=='workflows'||state.selected||!state.flows)return;
  const card=document.getElementById('flow-definition-'+target.id);state.commandFlowTarget=null;
  if(!card){toast('这条流程定义已不可用，可重新搜索或查看当前目录。');return;}
- const details=card.querySelector('details');if(details)details.open=true;
+ const details=card.querySelector('.flow-card-details');if(details)details.open=true;
  card.scrollIntoView({block:'center',behavior:'instant'});if(!$$('dialog[open]').length)card.focus({preventScroll:true});
 }
 function openCommandRuns(query){
@@ -79,7 +92,12 @@ function commandResourceItems(query){
  return items.filter(item=>item.matched||(item.title+' '+item.sub+' '+item.group).toLowerCase().includes(query.toLowerCase()));
 }
 function commandActions(){
- return [{key:'new',title:'新建任务',icon:'plus',fn:()=>newTask()},...Object.entries(pageNames).map(([view,title])=>({key:'nav:'+view,title,icon:({workbench:'grid',runs:'list',agents:'agent',workflows:'flow',skills:'puzzle',library:'book',daily:'clock',evaluations:'shield',workspaces:'workspace',registry:'box',domains:'box',runtimes:'bolt'})[view],fn:()=>navigate(view)})),{key:'help',title:'使用说明',icon:'help',fn:()=>$('#help-dialog').showModal()}].map(item=>({...item,key:'command:'+item.key,group:'命令',sub:item.key==='new'?'使用已保存的智能体创建任务':'导航与帮助'}));
+ return [{key:'new',title:'新建任务',icon:'plus',fn:opener=>startTaskFromCommand(opener)},...Object.entries(pageNames).map(([view,title])=>({key:'nav:'+view,title,icon:({workbench:'grid',runs:'list',agents:'agent',workflows:'flow',skills:'puzzle',library:'book',daily:'clock',evaluations:'shield',workspaces:'workspace',registry:'box',domains:'box',runtimes:'bolt'})[view],fn:()=>navigate(view)})),{key:'help',title:'使用指南',icon:'help',fn:opener=>openHelp(opener)}].map(item=>({...item,key:'command:'+item.key,group:'命令',sub:item.key==='new'?'使用已保存的智能体创建任务':'导航与帮助'}));
+}
+function revealCommandSelection(){
+ const session=state.commandSession;
+ if(!session?.revealSelection||document.activeElement?.id!=='command-input')return;
+ $('#cmd-'+state.commandIndex)?.scrollIntoView?.({block:'nearest',inline:'nearest',behavior:'instant'});
 }
 function renderCommands(){
  const session=state.commandSession;if(!session)return;
@@ -89,7 +107,7 @@ function renderCommands(){
  if(query!==session.query){state.commandItems=[];$('#command-results').innerHTML='';$('#command-input').removeAttribute('aria-activedescendant');return;}
  const actions=commandActions().filter(i=>(i.title+' '+i.sub+' '+i.group).toLowerCase().includes(query.toLowerCase())),resources=commandResourceItems(query);
  const all=query?[...resources,...actions]:[...actions,...resources.filter(item=>item.group==='运行').slice(0,5)],size=query?12:20;
- if(session.resumeKey&&all.some(item=>item.key===session.resumeKey)){state.commandSelectedKey=session.resumeKey;session.resumeKey=null;}
+ if(session.resumeKey&&all.some(item=>item.key===session.resumeKey)){state.commandSelectedKey=session.resumeKey;session.resumeKey=null;session.revealSelection=true;}
  const selected=all.findIndex(item=>item.key===state.commandSelectedKey);
  if(selected>=0)state.commandPage=Math.floor(selected/size);
  state.commandPage=Math.min(state.commandPage||0,Math.max(0,Math.ceil(all.length/size)-1));
@@ -99,26 +117,29 @@ function renderCommands(){
  $('#command-summary').textContent=pending.length?'正在读取：'+pending.map(key=>commandSources[key]).join('、')+'。已读结果可先打开。':failed.length?'部分资源读取失败，当前只显示已读结果。':'已读取当前空间的搜索结果。';
  $('#command-errors').innerHTML=Object.keys(commandSources).filter(key=>session.sources[key].error||session.sources[key].retrying).map(key=>{const source=session.sources[key];return `<div class="command-read-error"><p ${source.error?'role="alert"':''}><strong>${esc(commandSources[key])}</strong> · ${esc(source.error||'正在重新读取…')}</p><button type="button" class="button secondary" id="command-retry-${key}" data-command-retry="${key}" aria-disabled="${source.pending}" aria-busy="${source.pending}">${source.pending?'正在读取…':'重试'+esc(commandSources[key])}</button></div>`;}).join('');
  $('#command-results').setAttribute('aria-busy',String(pending.length>0));
- let previousGroup='';const markup=state.commandItems.map((item,n)=>{const heading=item.group!==previousGroup?`<div class="command-group-label" role="presentation">${esc(item.group)}</div>`:'';previousGroup=item.group;return heading+`<button class="command-option ${n===state.commandIndex?'selected':''}" role="option" tabindex="-1" aria-selected="${n===state.commandIndex}" id="cmd-${n}" data-command="${n}">${icon(item.icon)}<span>${esc(item.title)}<small>${esc(item.sub)}</small></span></button>`;}).join('');
+ let previousGroup='';const markup=state.commandItems.map((item,n)=>{const heading=item.group!==previousGroup?`<div class="command-group-label" role="presentation">${esc(item.group)}</div>`:'';previousGroup=item.group;return heading+`<button class="command-option ${n===state.commandIndex?'selected':''}" role="option" tabindex="-1" aria-selected="${n===state.commandIndex}" id="cmd-${n}" data-command="${n}">${icon(item.icon)}<span class="command-option-copy" title="${esc(item.title+'\n'+item.sub)}"><strong class="command-option-title">${esc(item.title)}</strong><small>${esc(item.sub)}</small></span></button>`;}).join('');
  $('#command-results').innerHTML=state.commandItems.length?markup:`<div class="empty">${pending.length?'正在查找匹配结果…':failed.length?'搜索尚未完成，可重试上方失败的资源。':'没有匹配的命令或资源。试试名称、标识，或缩短关键词。'}</div>`;
  $('#command-input').setAttribute('aria-controls','command-results');if(state.commandItems.length)$('#command-input').setAttribute('aria-activedescendant','cmd-'+state.commandIndex);else $('#command-input').removeAttribute('aria-activedescendant');
  $('#command-page').textContent=all.length?'显示 '+(state.commandPage*size+1)+'–'+Math.min((state.commandPage+1)*size,all.length)+' / '+all.length+' 条已读匹配':'';
  $('#command-prev').disabled=state.commandPage===0;$('#command-next').disabled=(state.commandPage+1)*size>=all.length;
  $('#command-pagination').hidden=all.length<=size;
  if(focus?.startsWith('command-retry-'))(document.getElementById(focus)||$('#command-input')).focus({preventScroll:true});
- commandRemember(session);
+ commandRemember(session);revealCommandSelection();
 }
 function moveCommandSelection(delta){
  if(!state.commandItems?.length)return;
- if(state.commandSession)state.commandSession.resumeKey=null;
- state.commandIndex=(state.commandIndex+delta+state.commandItems.length)%state.commandItems.length;state.commandSelectedKey=state.commandItems[state.commandIndex].key;renderCommands();$('#cmd-'+state.commandIndex)?.scrollIntoView({block:'nearest'});
+ if(state.commandSession){state.commandSession.resumeKey=null;state.commandSession.revealSelection=true;}
+ state.commandIndex=(state.commandIndex+delta+state.commandItems.length)%state.commandItems.length;state.commandSelectedKey=state.commandItems[state.commandIndex].key;renderCommands();
 }
-function changeCommandPage(delta){if(state.commandSession)state.commandSession.resumeKey=null;state.commandPage=Math.max(0,(state.commandPage||0)+delta);state.commandSelectedKey=null;state.commandIndex=0;renderCommands();$('#command-input').focus({preventScroll:true});$('#command-results').scrollTop=0;}
+function changeCommandPage(delta){if(state.commandSession){state.commandSession.resumeKey=null;state.commandSession.revealSelection=true;}state.commandPage=Math.max(0,(state.commandPage||0)+delta);state.commandSelectedKey=null;state.commandIndex=0;renderCommands();$('#command-input').focus({preventScroll:true});$('#command-results').scrollTop=0;}
 function runCommand(n){
  const session=state.commandSession;if(!session||!commandCurrent(session)||session.query!==$('#command-input').value.trim()||state.composing)return;
- const item=state.commandItems[n];if(item){closeCommandSearch(true);item.fn();}
+ const item=state.commandItems[n];if(item){closeCommandSearch(true);item.fn(session.opener);}
 }
 $('#command-errors').addEventListener('click',event=>{const button=event.target.closest('[data-command-retry]');if(button)retryCommandSource(button.dataset.commandRetry);});
 $('#command-prev').addEventListener('click',()=>changeCommandPage(-1));$('#command-next').addEventListener('click',()=>changeCommandPage(1));
 $('#command-dialog').addEventListener('close',()=>{if(!$('#command-dialog').open)closeCommandSearch();});
 window.addEventListener('hashchange',()=>{if(state.commandSession&&!commandCurrent(state.commandSession))closeCommandSearch(true);if(state.commandFlowTarget&&location.hash!=='#/workflows')state.commandFlowTarget=null;});
+// Manual reading takes precedence over late source arrivals. Arrow navigation
+// or reopening the palette explicitly resumes following the selected result.
+for(const type of ['wheel','pointerdown','touchstart'])$('#command-results').addEventListener(type,()=>{if(state.commandSession)state.commandSession.revealSelection=false;},{passive:true});

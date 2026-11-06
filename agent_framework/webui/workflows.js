@@ -43,6 +43,20 @@ function flowHistoryDetailChanged(detail){
 function flowHistoryPath(h=flowHistory()){
  return '/api/workflow-runs?limit=50&search='+encodeURIComponent(h.search.trim())+'&status='+encodeURIComponent(h.status)+(h.cursor?'&cursor='+encodeURIComponent(h.cursor):'');
 }
+function flowRunLinkId(id){return 'flow-run-link-'+Array.from(String(id),character=>character.codePointAt(0).toString(16)).join('-');}
+function rememberFlowRunList(id){const h=flowHistory();state.flowRunReturn={id,scope:h.scope,query:flowHistoryPath(h),top:window.scrollY};}
+function flowRunReturnFocus(id){
+ const saved=state.flowRunReturn,h=flowHistory();if(!saved||saved.id!==id||saved.scope!==h.scope||saved.query!==flowHistoryPath(h))return null;
+ state.flowSection='runs';state.routePosition={top:saved.top};return flowRunLinkId(id);
+}
+let flowHistoryNavigationNode=null,flowHistoryNavigationObserver=null;
+function syncFlowHistoryNavigation(){
+ const navigation=$('#flow-history-navigation');if(navigation===flowHistoryNavigationNode)return;
+ flowHistoryNavigationObserver?.disconnect();flowHistoryNavigationObserver=null;flowHistoryNavigationNode=navigation;
+ if(!navigation||typeof ResizeObserver==='undefined')return;
+ const measure=()=>{if(navigation.isConnected)navigation.closest('#flow-run-directory').style.setProperty('--flow-history-navigation-height',(getComputedStyle(navigation).position==='sticky'?navigation.getBoundingClientRect().height:0)+'px');};
+ measure();flowHistoryNavigationObserver=new ResizeObserver(measure);flowHistoryNavigationObserver.observe(navigation);
+}
 function renderFlowHistory(){if(state.view==='workflows'&&!state.selected){state.fingerprint='';render();}}
 function loadFlowHistory({background=false}={}){
  const h=flowHistory(),path=flowHistoryPath(h),route=state.routeVersion,selected=state.selected,revision=state.flowDataRevision||0;
@@ -55,12 +69,13 @@ function loadFlowHistory({background=false}={}){
  h.promise=(async()=>{
   try{
    const data=await api(path,undefined,15000,true,{workspace,payload:undefined});if(!current())return false;
-   h.data=data;h.cursor=data.cursor;h.pending=false;h.invalidated=false;state.flows={...(state.flows||{workflows:[]}),runs:data.runs};renderFlowHistory();return true;
+   const changed=JSON.stringify(h.data)!==JSON.stringify(data);h.data=data;h.cursor=data.cursor;h.pending=false;h.invalidated=false;state.flows={...(state.flows||{workflows:[]}),runs:data.runs};if(!background||changed)renderFlowHistory();return true;
   }catch(error){if(!current())return false;h.error=error.message||'读取未完成';h.pending=false;renderFlowHistory();return false;}
   finally{if(request===h.request)h.pending=false;}
  })();return h.promise;
 }
 function changeFlowHistory({search,status,cursor,fresh=false}={}){
+ state.flowRunReturn=null;
  const h=flowHistory();clearTimeout(h.timer);h.timer=null;h.request++;
  if(search!==undefined)h.search=search;if(status!==undefined)h.status=status;
  if(search!==undefined||status!==undefined||fresh){h.cursor=null;h.stack=[];}else if(cursor!==undefined)h.cursor=cursor;
@@ -69,9 +84,20 @@ function changeFlowHistory({search,status,cursor,fresh=false}={}){
  else return loadFlowHistory();
 }
 function pageFlowHistory(direction){
- const h=flowHistory();if(h.pending)return;
- if(direction==='next'&&h.data?.next_cursor){h.stack.push(h.cursor);return changeFlowHistory({cursor:h.data.next_cursor});}
- if(direction==='prev'&&h.stack.length)return changeFlowHistory({cursor:h.stack.pop()});
+ const h=flowHistory();if(h.pending&&!h.data)return;
+ const focusId='flow-history-'+direction,restore=document.activeElement?.id===focusId;
+ const move=cursor=>{
+  const promise=changeFlowHistory({cursor}),request=h.request,route=state.routeVersion;
+  if(restore)promise.then(()=>{
+   if(h!==flowHistory()||request!==h.request||route!==state.routeVersion||state.view!=='workflows'||state.selected)return;
+   if(document.activeElement!==document.body&&document.activeElement!==$('#content'))return;
+   const preferred=$('#'+focusId),fallback=$('#flow-history-'+(direction==='next'?'prev':'next'));
+   (preferred&&!preferred.disabled?preferred:fallback&&!fallback.disabled?fallback:$('#flow-runs-heading'))?.focus();
+  });
+  return promise;
+ };
+ if(direction==='next'&&h.data?.next_cursor){h.stack.push(h.cursor);return move(h.data.next_cursor);}
+ if(direction==='prev'&&h.stack.length)return move(h.stack.pop());
  if(direction==='first'){const promise=changeFlowHistory({fresh:true});$('#flow-runs-heading')?.focus({preventScroll:true});return promise;}
 }
 function flowHistoryEmpty(h){
@@ -153,18 +179,81 @@ function flowNeedsReview(workflow){return workflow.nodes.some(node=>!(state.agen
 function flowPageHeader(available){
  return `<div class="page-head"><div><p class="eyebrow">AGENT WORKFLOWS</p><h1>工作流</h1><p>将知识检索、Agent 执行与结果验收连接成可恢复的流程。</p></div><div class="toolbar">${available.length?`<button class="button secondary" data-flow-chat>${icon('file')}对话设计</button>`:''}<button class="button primary" data-flow-new>${icon('plus')}可视化创建</button></div></div>`;
 }
-function flowDefinitions(data,available){
- return `<section class="workflow-catalog" aria-label="工作流目录">${data.workflows.map(w=>`<article class="panel workspace-card flow-card" id="flow-definition-${esc(w.id)}" tabindex="-1"><div class="mini-heading"><h2>${esc(w.name)}</h2><span class="pill">${w.archived?'已归档':'v'+w.revision+(flowNeedsReview(w)?' · 需更新配置':'')}</span></div><p>${esc(w.description||'为 Agent 编排任务，按节点依赖逐步执行。')}</p><div class="flow-card-summary"><span>${w.nodes.length} 个 Agent 节点</span>${w.nodes.some(n=>n.retrieval)?`<span>${w.nodes.filter(n=>n.retrieval).length} 个知识检索</span>`:''}${w.nodes.some(n=>n.condition)?`<span>${w.nodes.filter(n=>n.condition).length} 个条件分支</span>`:''}</div><details class="flow-card-details" data-key="flow-definition-${esc(w.id)}"><summary>查看节点与路由</summary>${flowGraph(w.nodes)}</details>${!w.archived&&flowNeedsReview(w)?'<p class="field-help">节点绑定的智能体已更新或停用。重新选择并保存后，再创建新运行；旧运行保留原版本。</p>':''}<div class="agent-card-actions">${!w.archived&&flowNeedsReview(w)?`<button class="button primary" data-edit-flow="${esc(w.id)}" aria-label="更新 ${esc(w.name)} 的执行配置">更新执行配置</button>`:`<button class="button primary" data-start-flow="${esc(w.id)}" ${w.archived?'disabled':''} aria-label="运行 ${esc(w.name)}">运行工作流</button><button class="button secondary" data-edit-flow="${esc(w.id)}" aria-label="编辑 ${esc(w.name)}">编辑流程</button>`}<button class="text-button" data-archive-flow="${esc(w.id)}" aria-label="${w.archived?'恢复使用':'归档'} ${esc(w.name)}">${w.archived?'恢复使用':'归档'}</button></div></article>`).join('')||`<section class="panel empty flow-empty-state">${icon('list')}<h2>让 Agent 协同完成工作</h2><p>${available.length?'从可视化画布开始，或向 Agent 描述你的流程。每个节点都由 Agent 执行并独立验收。':'从画布创建工作流，可直接为节点配置专用智能体，保存时一起创建。'}</p><div class="toolbar">${available.length?'<button class="button primary" data-flow-new>创建第一个工作流</button><button class="button secondary" data-flow-chat>通过对话设计</button>':'<button class="button primary" data-flow-new>创建第一个工作流</button>'}</div></section>`}</section><details class="panel registry-skill flow-conversations" data-key="workflow-design-conversations"><summary>设计对话 <span class="pill">${(state.flowChats||[]).length}</span></summary>${(state.flowChats||[]).map(c=>`<button class="flow-run-row" data-open-flow-chat="${esc(c.id)}" aria-label="继续设计对话：${esc(c.preview)}"><span><strong>${esc(c.preview)}</strong><small>${runtimeLabel(c.runtime)} · ${time(c.updated_at)}</small></span><span>继续对话 →</span></button>`).join('')||'<p class="empty">通过对话设计时，需求和提案会保存在这里。</p>'}</details>`;
+function flowDirectoryState(){
+ const scope=JSON.stringify([state.workspaceId,state.meta?.tenant,state.meta?.principal]);
+ if(state.flowDirectory?.scope!==scope)state.flowDirectory={scope,search:'',status:'all',sort:'updated'};
+ return state.flowDirectory;
 }
+function resetFlowDirectory(){Object.assign(flowDirectoryState(),{search:'',status:'all',sort:'updated'});}
+let flowDirectoryRenderWait=null;
+function deferFlowDirectoryRender(){
+ const picker=state.view==='workflows'&&!state.selected&&(state.flowSection||'definitions')==='definitions'&&typeof pickerOpen!=='undefined'&&pickerOpen?.select.isConnected&&pickerOpen.select.closest('.flow-directory-filters')?pickerOpen:null;
+ if(!picker){flowDirectoryRenderWait?.observer.disconnect();flowDirectoryRenderWait=null;return false;}
+ if(flowDirectoryRenderWait?.popup!==picker.popup){
+  flowDirectoryRenderWait?.observer.disconnect();
+  const wait={popup:picker.popup,scope:flowDirectoryState().scope,route:state.routeVersion};flowDirectoryRenderWait=wait;
+  wait.observer=new MutationObserver(()=>{
+   if(!wait.popup.hidden)return;wait.observer.disconnect();if(flowDirectoryRenderWait!==wait)return;flowDirectoryRenderWait=null;
+   if(state.view==='workflows'&&!state.selected&&(state.flowSection||'definitions')==='definitions'&&state.routeVersion===wait.route&&flowDirectoryState().scope===wait.scope)render();
+  });
+  wait.observer.observe(wait.popup,{attributes:true,attributeFilter:['hidden']});
+ }
+ return true;
+}
+function flowDirectoryItems(workflows){
+ const h=flowDirectoryState(),query=h.search.trim().toLocaleLowerCase(),agents=new Map((state.agents||[]).map(agent=>[agent.id,agent.name]));
+ return workflows.filter(w=>(h.status==='active'?!w.archived:h.status==='review'?!w.archived&&flowNeedsReview(w):h.status==='archived'?w.archived:true)&&(!query||[w.id,w.name,w.description,...w.nodes.flatMap(node=>[node.name,node.agent_id,agents.get(node.agent_id)||''])].join(' ').toLocaleLowerCase().includes(query))).sort((a,b)=>h.sort==='name'?a.name.localeCompare(b.name,'zh-CN',{numeric:true,sensitivity:'base'})||a.id.localeCompare(b.id):(Number(b.updated_at)||0)-(Number(a.updated_at)||0)||a.id.localeCompare(b.id));
+}
+function flowDirectoryControl(id,part){return 'flow-control-'+id+'-'+part;}
+function flowDirectoryDescription(w){
+ const original=w.description||'',normalized=original.replace(/\s+/g,' ').trim(),points=Array.from(normalized),preview=points.slice(0,160).join('')+(points.length>160?'…':'');
+ return `<p class="flow-directory-description">${esc(preview||'未填写说明')}</p>${preview!==original?`<details class="flow-full-description" data-key="flow-description-${esc(w.id)}"><summary id="${esc(flowDirectoryControl(w.id,'description'))}">完整说明</summary><p>${esc(original)}</p></details>`:''}`;
+}
+function flowDefinitionCard(w){
+ const review=!w.archived&&flowNeedsReview(w),control=part=>esc(flowDirectoryControl(w.id,part)),id=esc(w.id),name=esc(w.name);
+ return `<article class="panel flow-card flow-directory-card" id="flow-definition-${id}" tabindex="-1" aria-labelledby="${control('title')}"><div class="mini-heading"><h2 id="${control('title')}">${name}</h2><span class="pill ${review?'warn':''}">${w.archived?'已归档':review?'需更新配置':'使用中'}</span></div>${flowDirectoryDescription(w)}<div class="flow-card-summary"><span>v${w.revision}</span><span>${w.nodes.length} 个 Agent 节点</span>${w.nodes.some(n=>n.retrieval)?`<span>${w.nodes.filter(n=>n.retrieval).length} 个知识检索</span>`:''}${w.nodes.some(n=>n.condition)?`<span>${w.nodes.filter(n=>n.condition).length} 个条件分支</span>`:''}${w.updated_at?`<span>更新于 ${time(w.updated_at)}</span>`:''}</div>${review?'<p class="field-help flow-directory-review">节点绑定的智能体版本已更新或停用。</p>':''}<div class="flow-directory-footer"><details class="flow-card-details" data-key="flow-definition-${id}"><summary id="${control('nodes')}">查看节点与路由</summary>${flowGraph(w.nodes)}</details><div class="agent-card-actions">${review?`<button id="${control('edit')}" class="button primary" data-edit-flow="${id}" aria-label="更新 ${name} 的执行配置">更新执行配置</button>`:`<button id="${control('start')}" class="button primary" data-start-flow="${id}" ${w.archived?'disabled':''} aria-label="运行 ${name}">运行工作流</button><button id="${control('edit')}" class="button secondary" data-edit-flow="${id}" aria-label="编辑 ${name}">编辑流程</button>`}<button id="${control('archive')}" class="text-button" data-archive-flow="${id}" aria-label="${w.archived?'恢复使用':'归档'} ${name}">${w.archived?'恢复使用':'归档'}</button></div></div></article>`;
+}
+function flowDefinitions(data,available){
+ const h=flowDirectoryState(),items=flowDirectoryItems(data.workflows),filtered=h.search.trim()||h.status!=='all';
+ const filters=`<div class="flow-directory-filters" role="search" aria-label="查找工作流"><label for="flow-directory-search">搜索工作流<input id="flow-directory-search" type="search" maxlength="2000" placeholder="名称、说明、节点或智能体" value="${esc(h.search)}"></label><label for="flow-directory-status">使用状态<select id="flow-directory-status">${[['all','全部流程'],['active','使用中'],['review','需更新配置'],['archived','已归档']].map(([value,label])=>`<option value="${value}" ${h.status===value?'selected':''}>${label}</option>`).join('')}</select></label><label for="flow-directory-sort">排序<select id="flow-directory-sort">${[['updated','最近更新'],['name','名称']].map(([value,label])=>`<option value="${value}" ${h.sort===value?'selected':''}>${label}</option>`).join('')}</select></label>${filtered?'<button type="button" class="text-button" data-flow-directory-clear>清除筛选</button>':''}</div><p class="flow-directory-count" role="status">显示 ${items.length} / ${data.workflows.length} 个流程</p>`;
+ const empty=filtered?'<section class="panel empty flow-empty-state"><h2>没有匹配的流程</h2><p>试试其他关键词，或清除使用状态筛选。</p><button type="button" class="button secondary" data-flow-directory-clear>清除筛选</button></section>':`<section class="panel empty flow-empty-state">${icon('list')}<h2>让 Agent 协同完成工作</h2><p>${available.length?'从可视化画布开始，或向 Agent 描述你的流程。每个节点都由 Agent 执行并独立验收。':'从画布创建工作流，可直接为节点配置专用智能体，保存时一起创建。'}</p><div class="toolbar"><button class="button primary" data-flow-new>创建第一个工作流</button>${available.length?'<button class="button secondary" data-flow-chat>通过对话设计</button>':''}</div></section>`;
+ return `${filters}<section class="workflow-catalog" aria-label="工作流目录">${items.map(flowDefinitionCard).join('')||empty}</section><details class="panel registry-skill flow-conversations" data-key="workflow-design-conversations"><summary>设计对话 <span class="pill">${(state.flowChats||[]).length}</span></summary>${(state.flowChats||[]).map(c=>`<button class="flow-run-row" data-open-flow-chat="${esc(c.id)}" aria-label="继续设计对话：${esc(c.preview)}"><span><strong>${esc(c.preview)}</strong><small>${runtimeLabel(c.runtime)} · ${time(c.updated_at)}</small></span><span>继续对话 →</span></button>`).join('')||'<p class="empty">通过对话设计时，需求和提案会保存在这里。</p>'}</details>`;
+}
+function updateFlowDirectory(field,value){
+ const h=flowDirectoryState();if(h[field]===value)return;h[field]=value;render();
+}
+function captureFlowDirectoryFocus(){
+ const trigger=document.activeElement,card=trigger?.closest?.('.flow-directory-card');
+ return state.view==='workflows'&&!state.selected&&card&&trigger.id?{id:trigger.id,card:card.id,scope:flowDirectoryState().scope,route:state.routeVersion,hash:location.hash}:null;
+}
+function rememberFlowDirectoryDialog(id){$('#'+id).flowDirectoryReturn=captureFlowDirectoryFocus();}
+function restoreFlowDirectoryDialog(dialog){
+ if(dialog.open)return;
+ const saved=dialog.flowDirectoryReturn;dialog.flowDirectoryReturn=null;restoreFlowDirectoryFocus(saved,dialog);
+}
+function restoreFlowDirectoryFocus(saved,dialog=null){
+ if(!saved)return;
+ queueMicrotask(()=>{
+  if(dialog?.open||state.view!=='workflows'||state.selected||(state.flowSection||'definitions')!=='definitions'||saved.scope!==flowDirectoryState().scope||saved.route!==state.routeVersion||saved.hash!==location.hash||$$('dialog[open]').length)return;
+  const active=document.activeElement;if(active!==document.body&&active!==$('#content')&&active?.id!==saved.id&&!dialog?.contains(active))return;
+  const original=document.getElementById(saved.id),target=original&&!original.disabled?original:document.getElementById(saved.card)||$('#flow-directory-search');
+  if(!target?.getClientRects().length)return;target.focus({preventScroll:true});target.scrollIntoView({block:'nearest',behavior:'instant'});
+ });
+}
+document.addEventListener('input',event=>{if(event.target.id==='flow-directory-search'&&!event.isComposing)updateFlowDirectory('search',event.target.value);});
+document.addEventListener('compositionend',event=>{if(event.target.id==='flow-directory-search')updateFlowDirectory('search',event.target.value);});
+document.addEventListener('change',event=>{if(event.target.id==='flow-directory-status')updateFlowDirectory('status',event.target.value);if(event.target.id==='flow-directory-sort')updateFlowDirectory('sort',event.target.value);});
+document.addEventListener('click',event=>{if(event.target.closest('[data-flow-directory-clear]')){Object.assign(flowDirectoryState(),{search:'',status:'all'});render();$('#flow-directory-search')?.focus();}});
+for(const id of ['flow-editor-dialog','flow-start-dialog'])$('#'+id).addEventListener('close',()=>restoreFlowDirectoryDialog($('#'+id)));
 function flowRunDirectory(data){
  const h=flowHistory(),page=h.data,rows=page?.runs||[];
- return `<section class="panel registry-skill" aria-labelledby="flow-runs-heading"><div class="panel-heading"><div><h2 id="flow-runs-heading" tabindex="-1">运行记录</h2><small>每次运行保留独立的流程与 Agent 版本快照</small></div><span class="pill">${page?.total??'—'} 次</span></div>${flowHistoryControls(h)}<div aria-busy="${h.pending}">${rows.map(r=>{const status=flowDisplayStatus(r);return `<button class="flow-run-row ${state.flowDetail?.run?.id===r.id?'selected':''}" data-select-flow-run="${esc(r.id)}" ${state.flowDetail?.run?.id===r.id?'aria-current="true"':''} aria-label="查看 ${esc(r.name)} 的运行，${esc(flowLabels[status]||status)}"><span><strong>${esc(r.name)}</strong><small>${time(r.created_at)}</small></span>${flowPill(status)}</button>`;}).join('')||flowHistoryEmpty(h)}</div><div class="flow-history-pagination"><button type="button" class="button secondary" data-flow-history-page="prev" ${h.pending||!h.stack.length?'disabled':''}>上一页</button><span>第 ${h.stack.length+1} 页</span><button type="button" class="button secondary" data-flow-history-page="next" ${h.pending||!page?.has_more?'disabled':''}>下一页</button></div></section>`;
+ return `<section class="panel registry-skill" id="flow-run-directory" aria-labelledby="flow-section-runs"><div class="panel-heading"><div><h2 id="flow-runs-heading" tabindex="-1">运行记录</h2><small>每次运行保留独立的流程与 Agent 版本快照</small></div><span class="pill">${page?.total??'—'} 次</span></div>${flowHistoryControls(h)}<nav class="flow-history-pagination" id="flow-history-navigation" aria-label="工作流运行分页"><span>第 ${h.stack.length+1} 页</span><div class="flow-history-page-actions"><button type="button" id="flow-history-prev" class="button secondary" data-flow-history-page="prev" aria-controls="flow-run-rows" ${h.pending&&!page||!h.stack.length?'disabled':''}>上一页</button><button type="button" id="flow-history-next" class="button secondary" data-flow-history-page="next" aria-controls="flow-run-rows" ${h.pending&&!page||!page?.has_more?'disabled':''}>下一页</button></div></nav><div id="flow-run-rows" aria-busy="${h.pending}">${rows.map(r=>{const status=flowDisplayStatus(r);return `<a id="${flowRunLinkId(r.id)}" href="#/workflows/${encodeURIComponent(r.id)}" class="flow-run-row ${state.flowDetail?.run?.id===r.id?'selected':''}" data-select-flow-run="${esc(r.id)}" ${state.flowDetail?.run?.id===r.id?'aria-current="true"':''} aria-label="查看 ${esc(r.name)} 的运行，${esc(flowLabels[status]||status)}"><span><strong>${esc(r.name)}</strong><small>${time(r.created_at)}</small></span>${flowPill(status)}</a>`;}).join('')||flowHistoryEmpty(h)}</div></section>`;
 }
 function flowsPage(){
   const data=state.flows||{workflows:[],runs:[]},available=(state.agents||[]).filter(a=>!a.archived),section=state.flowSection||'definitions';
   if(state.selected&&state.flowDetail)return `${flowPageHeader(available)}${typeof flowStartNotice==='function'?flowStartNotice():''}${typeof flowChatRequestNotice==='function'?flowChatRequestNotice():''}<a class="agent-back-link" href="#/workflows" data-flow-section="runs">${icon('arrow')}返回工作流运行记录</a>${flowRunDetail(state.flowDetail)}`;
   const waiting=flowHistory().data?.attention_count||0;
-  return `${flowPageHeader(available)}${typeof flowStartNotice==='function'?flowStartNotice():''}${typeof flowChatRequestNotice==='function'?flowChatRequestNotice():''}${flowMutationFeedback()}${typeof flowDraftNotice==='function'?flowDraftNotice():''}${waiting?`<div class="flow-overview"><span class="pill warn">${waiting} 次运行需要处理</span><span class="field-help">查看等待授权、材料、恢复或核对的运行。</span><button type="button" class="text-button" data-flow-history-attention>查看待处理运行</button></div>`:''}<nav class="content-tabs" role="tablist" aria-label="工作流视图"><button type="button" role="tab" aria-selected="${section==='definitions'}" class="button ${section==='definitions'?'primary':'secondary'}" tabindex="${section==='definitions'?'0':'-1'}" data-flow-section="definitions">流程定义 <small>${data.workflows.length}</small></button><button type="button" role="tab" aria-selected="${section==='runs'}" class="button ${section==='runs'?'primary':'secondary'}" tabindex="${section==='runs'?'0':'-1'}" data-flow-section="runs">运行记录 <small>${flowHistory().data?.total??'—'}</small></button></nav>${section==='runs'?flowRunDirectory(data):flowDefinitions(data,available)}`;
+  return `${flowPageHeader(available)}${typeof flowStartNotice==='function'?flowStartNotice():''}${typeof flowChatRequestNotice==='function'?flowChatRequestNotice():''}${flowMutationFeedback()}${typeof flowDraftNotice==='function'?flowDraftNotice():''}${waiting?`<div class="flow-overview"><span class="pill warn">${waiting} 次运行需要处理</span><span class="field-help">查看等待授权、材料、恢复或核对的运行。</span><button type="button" class="text-button" data-flow-history-attention>查看待处理运行</button></div>`:''}<nav class="content-tabs" role="tablist" aria-label="工作流视图"><button type="button" role="tab" id="flow-section-definitions" aria-controls="flow-definition-directory" aria-selected="${section==='definitions'}" class="button ${section==='definitions'?'primary':'secondary'}" tabindex="${section==='definitions'?'0':'-1'}" data-flow-section="definitions">流程定义 <small>${data.workflows.length}</small></button><button type="button" role="tab" id="flow-section-runs" aria-controls="flow-run-directory" aria-selected="${section==='runs'}" class="button ${section==='runs'?'primary':'secondary'}" tabindex="${section==='runs'?'0':'-1'}" data-flow-section="runs">运行记录 <small>${flowHistory().data?.total??'—'}</small></button></nav>${section==='runs'?flowRunDirectory(data):'<div id="flow-definition-directory" role="region" aria-labelledby="flow-section-definitions">'+flowDefinitions(data,available)+'</div>'}`;
 }
 function flowRunDetail(d){
   const r=d.run,done=['SUCCEEDED','FAILED','NEEDS_REVIEW','CANCELLED','EXPIRED'].includes(r.status),queued=d.queue?.state==='QUEUED',busy=d.job?.active||r.lease_active||queued,nodes=r.snapshot.definition.nodes,completed=Object.values(r.nodes).filter(n=>['SUCCEEDED','SKIPPED'].includes(n.status)).length,error=d.queue?.error||r.last_error,authorized=d.queue?.reason==='grant';
@@ -222,7 +311,7 @@ function flowStartReadiness(workflow,agents,hub,hubError){
 }
 function flowUsesBusinessTools(agents){return agents.some(a=>a&&!a.definition||(a?.definition?.capability_refs||[]).some(ref=>state.meta?.capability_contracts?.[ref]?.effect==='WRITE')||(a?.definition?.responsibilities||[]).some(r=>r.deliverable_ref==='release-draft@1.0.0'));}
 document.addEventListener('click',async e=>{
-  const section=e.target.closest('[data-flow-section]');if(section){state.flowSection=section.dataset.flowSection;if(state.selected)navigate('workflows');else{state.fingerprint='';render();}}
+  const section=e.target.closest('[data-flow-section]');if(section){if(section.tagName==='A'){if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();}state.flowSection=section.dataset.flowSection;if(state.selected)navigate('workflows');else{state.fingerprint='';render();}}
   if(e.target.closest('[data-flow-new]'))openFlowEditor();
   if(e.target.closest('[data-flow-chat]'))openFlowChat().catch(error=>toast(error.message));
   if(e.target.closest('[data-flow-feedback-close]')){state.flowFeedback=null;render();}
@@ -231,14 +320,14 @@ document.addEventListener('click',async e=>{
   if(e.target.closest('[data-adopt-flow]')){$('#flow-chat-dialog').close();openFlowEditor(state.flowChat.proposal);}
   const edit=e.target.closest('[data-edit-flow]');if(edit)openFlowEditor(state.flows.workflows.find(w=>w.id===edit.dataset.editFlow));
   const start=e.target.closest('[data-start-flow]');if(start)openFlowStart(start.dataset.startFlow).catch(error=>toast(error.message));
-  const select=e.target.closest('[data-select-flow-run]');if(select){state.flowSection='runs';navigate('workflows',select.dataset.selectFlowRun);}
-  const archive=e.target.closest('[data-archive-flow]');if(archive){const workspace=state.workspaceId,w=state.flows.workflows.find(w=>w.id===archive.dataset.archiveFlow),restore=flowButtonBusy(archive,w.archived?'正在恢复…':'正在归档…');try{const saved=await api('/api/workflows/'+w.id+'/archive',{revision:w.revision,archived:!w.archived});const feedback=flowRememberMutation('workflow',saved,workspace,w.archived?'工作流已恢复使用':'工作流已归档，运行记录仍保留');await flowRefreshAfterMutation(feedback);}catch(error){toast(error.message);}finally{restore();}}
+  const select=e.target.closest('[data-select-flow-run]');if(select){if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;state.flowSection='runs';rememberFlowRunList(select.dataset.selectFlowRun);if(select.tagName==='A')saveRoutePosition();else navigate('workflows',select.dataset.selectFlowRun);}
+  const archive=e.target.closest('[data-archive-flow]');if(archive){const returnTo=captureFlowDirectoryFocus(),workspace=state.workspaceId,w=state.flows.workflows.find(w=>w.id===archive.dataset.archiveFlow),restore=flowButtonBusy(archive,w.archived?'正在恢复…':'正在归档…');try{const saved=await api('/api/workflows/'+w.id+'/archive',{revision:w.revision,archived:!w.archived});const feedback=flowRememberMutation('workflow',saved,workspace,w.archived?'工作流已恢复使用':'工作流已归档，运行记录仍保留');restoreFlowDirectoryFocus(returnTo);await flowRefreshAfterMutation(feedback);}catch(error){toast(error.message);}finally{restore();restoreFlowDirectoryFocus(returnTo);}}
 
 });
 document.addEventListener('keydown',event=>{
  const tab=event.target.closest('.content-tabs [data-flow-section]');if(!tab||event.isComposing||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
  event.preventDefault();const next=event.key==='Home'?'definitions':event.key==='End'?'runs':state.flowSection==='runs'?'definitions':'runs';state.flowSection=next||'definitions';
- if(state.selected)navigate('workflows');else{state.fingerprint='';render();}requestAnimationFrame(()=>document.querySelector('.content-tabs [data-flow-section="'+state.flowSection+'"]')?.focus({preventScroll:true}));
+ if(state.selected)navigate('workflows');else{state.fingerprint='';render();document.querySelector('.content-tabs [data-flow-section="'+state.flowSection+'"]')?.focus({preventScroll:true});}
 });
 $('#flow-chat-agent').addEventListener('change',updateFlowChatRuntime);
 $('#flow-editor-form').addEventListener('submit',async e=>{e.preventDefault();await saveFlowEditor();});

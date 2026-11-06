@@ -91,3 +91,35 @@ test('a stale completion cannot focus controls in a reopened export dialog',asyn
  f.close();f.open('json');f.focus('task-export-format');const selected=f.active();gate.resolve(response());await pending;
  assert.equal(f.active(),selected);assert.equal(f.downloads.length,0);assert.equal(f.record().kind,'json');
 });
+test('cancel preparation keeps the selected format open and clears its timer immediately',async()=>{
+ const f=fixture(),gate=deferred();f.open('markdown');f.fetch(()=>gate.promise);const pending=f.download(),record=f.record();
+ f.context.cancelTaskExport();assert.equal(f.record(),record);assert(f.dialog().open);assert.equal(record.kind,'markdown');assert(!record.loading&&!record.complete&&record.cancelled);assert.equal(record.error,null);assert.equal(record.controller,null);assert(f.calls[0].options.signal.aborted);assert.equal(f.timers.size,0);assert.match(f.dialog().innerHTML,/本次准备已取消/);
+ gate.resolve(documentResponse('markdown','# cancelled'));await pending;assert.equal(f.downloads.length,0);assert(record.cancelled);f.context.changeTaskExportFormat('json');assert(!record.cancelled);assert.equal(f.calls.length,1);
+});
+test('a cancelled response cannot finish or unlock a new request in the same dialog',async()=>{
+ const f=fixture(),old=deferred(),next=deferred();f.open('markdown');f.fetch(()=>old.promise);const first=f.download();f.context.cancelTaskExport();f.context.changeTaskExportFormat('json');f.fetch(()=>next.promise);const second=f.download(),controller=f.record().controller;
+ old.resolve(documentResponse('markdown','# late old document'));await first;assert.equal(f.record().controller,controller);assert(f.record().loading);assert.equal(f.timers.size,1);assert.equal(f.downloads.length,0);await f.download();assert.equal(f.calls.length,2);
+ next.resolve(documentResponse('json',JSON.stringify(conversation())));await second;assert.equal(f.downloads.length,1);assert.equal(f.downloads[0].filename,'task-root-conversation.json');assert(f.record().complete);assert.equal(f.record().error,null);
+});
+test('a cancelled failure cannot overwrite a later successful download',async()=>{
+ const f=fixture(),old=deferred();f.open();f.fetch(()=>old.promise);const first=f.download();f.context.cancelTaskExport();f.fetch(async()=>response());await f.download();old.reject(Error('late offline failure'));await first;
+ assert.equal(f.downloads.length,1);assert(f.record().complete);assert.equal(f.record().error,null);assert(!f.record().cancelled);assert.match(f.dialog().innerHTML,/已交给浏览器下载/);assert.doesNotMatch(f.dialog().innerHTML,/late offline failure/);
+});
+test('cancellation fences an in-flight blob or JSON parse before creating a file',async()=>{
+ for(const stage of ['blob','json']){
+  const f=fixture(),gate=deferred(),entered=deferred();f.open(stage==='json'?'json':'bundle');f.fetch(async()=>response({headers:{get:()=>stage==='json'?'application/json':'application/zip'},blob:()=>{if(stage==='blob'){entered.resolve();return gate.promise;}return {size:50,text:()=>{entered.resolve();return gate.promise;}};}}));
+  const pending=f.download();await entered.promise;f.context.cancelTaskExport();gate.resolve(stage==='json'?JSON.stringify(conversation()):{size:10});await pending;assert.equal(f.downloads.length,0);assert(f.record().cancelled);assert.equal(f.record().error,null);assert.equal(f.timers.size,0);
+ }
+});
+test('cancel returns its own focus to format without replacing a newer focus choice',async()=>{
+ for(const target of ['task-export-cancel','task-export-close','task-export-dismiss',null]){
+  const f=keyboardFixture(),gate=deferred();f.fetch(()=>gate.promise);const pending=f.download();if(target)f.focus(target);else f.document.activeElement=f.document.body;f.context.cancelTaskExport();
+  assert.equal(f.active(),target?f.field(target==='task-export-cancel'?'task-export-format':target):f.document.body);gate.reject(Object.assign(Error('abort'),{name:'AbortError'}));await pending;assert.equal(f.record().error,null);
+ }
+});
+test('completion while focused on cancel returns to the available download action',async()=>{
+ for(const failure of [false,true]){
+  const f=keyboardFixture(),gate=deferred();f.fetch(()=>gate.promise);const pending=f.download();f.focus('task-export-cancel');if(failure)gate.reject(Error('offline'));else gate.resolve(response());await pending;
+  assert.equal(f.active(),f.field('task-export-download'));assert.equal(f.active().ariaDisabled,false);
+ }
+});

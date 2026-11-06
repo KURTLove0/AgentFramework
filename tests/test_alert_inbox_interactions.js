@@ -62,3 +62,18 @@ test('the actual request helper sends a scoped JSON acknowledgement body',async(
  const f=fixture();await seed(f);const requests=[];f.context.AbortSignal={timeout:()=>undefined};f.context.fetch=async(url,options)=>{requests.push({url,options});return {ok:true,json:async()=>options.method==='POST'?{id:'new-alert',acknowledged:true,acknowledged_at:12}:packet()};};
  const app=fs.readFileSync(path.join(root,'agent_framework/webui/app.js'),'utf8');vm.runInContext(app.slice(app.indexOf('async function api('),app.indexOf('\nfunction error(')),f.context);f.context.button=f.button();await f.run('acknowledgeEvaluationAlert(button)');const post=requests.find(r=>r.options.method==='POST');assert.equal(post.options.body,'{}');assert.equal(post.options.headers['X-Agent-Workspace'],'space-a');
 });
+test('a background alert read keeps the current records available with a sync notice',async()=>{
+ const f=fixture();await seed(f);let finish;f.handle(()=>new Promise(resolve=>finish=resolve));const pending=f.run('loadEvaluationAlerts()');const html=f.run('evaluationAlertInbox()');assert.match(html,/正在同步/);assert.match(html,/data-alert-id="new-alert"/);finish(packet());await pending;
+});
+test('acknowledging the last record leaves focus on the inbox heading',async()=>{
+ const f=fixture();await seed(f);f.handle(async(_url,body)=>body?{acknowledged_at:12}:{...packet(),alerts:[]});f.context.button=f.button();f.button().focus();await f.run('acknowledgeEvaluationAlert(button)');assert.equal(f.document.activeElement.id,'evaluation-alert-title');assert.equal(f.calls.filter(c=>c[1]).length,1);
+});
+test('an acknowledgement receipt cannot steal focus from a newer global action',async()=>{
+ const f=fixture();await seed(f);let finish;f.handle(async(_url,body)=>body?new Promise(resolve=>finish=resolve):{...packet(),alerts:[]});f.context.button=f.button();f.button().focus();const pending=f.run('acknowledgeEvaluationAlert(button)');f.node('global-action').focus();finish({acknowledged_at:12});await pending;assert.equal(f.document.activeElement.id,'global-action');
+});
+test('a late acknowledgement does not turn the execution ID into an alert agent filter',async()=>{
+ const f=fixture();await seed(f);const list=f.state.evaluationAlertList;let finish;f.handle(()=>new Promise(resolve=>finish=resolve));f.context.button=f.button();const pending=f.run('acknowledgeEvaluationAlert(button)'),before=f.calls.length;f.state.view='workbench';f.state.selected='run-opened-later';f.state.routeVersion++;finish({acknowledged_at:12});await pending;assert.equal(f.state.evaluationAlertList,list);assert.equal(list.agent,null);assert.equal(f.calls.length,before);assert.match(f.state.evaluationAlertFeedback.message,/已确认/);
+});
+test('alert return focus requires the original execution, route and account scope',async()=>{
+ const f=fixture();await seed(f);f.state.evaluationAlertList.returnFocus={route:'#/evaluations',run:'run-a',control:'evaluation-alert-run-a'};assert.equal(f.context.evaluationAlertReturnFocus('run-b'),null);f.context.location.hash='#/evaluations/agent-b';assert.equal(f.context.evaluationAlertReturnFocus('run-a'),null);f.context.location.hash='#/evaluations';assert.equal(f.context.evaluationAlertReturnFocus('run-a'),'evaluation-alert-run-a');f.state.meta.principal='other-user';assert.equal(f.context.evaluationAlertReturnFocus('run-a'),null);
+});

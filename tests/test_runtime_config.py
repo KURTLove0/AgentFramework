@@ -135,6 +135,28 @@ class CursorEnvelopeTests(unittest.TestCase):
         self.assertEqual(json.loads(raw),{'ok':True})
         self.assertEqual(meta['usage'],{'input_tokens':10,'output_tokens':5})
 
+    def test_trust_is_scoped_to_a_fresh_isolated_workspace(self):
+        roots=[]
+        def inspect(command,kwargs):
+            root=Path(command[command.index('--workspace')+1])
+            self.assertIn('--trust',command)
+            self.assertNotIn('--yolo',command)
+            self.assertEqual(command[command.index('--sandbox')+1],'enabled')
+            self.assertEqual(command[command.index('--mode')+1],'ask')
+            self.assertEqual(root,kwargs['cwd'])
+            self.assertNotEqual(root,Path.cwd())
+            self.assertEqual({entry.name for entry in root.iterdir()},{'.cursor'})
+            settings=root/'.cursor'
+            self.assertEqual(Path(kwargs['env']['CURSOR_CONFIG_DIR']),settings)
+            policy=json.loads((settings/'cli.json').read_text())['permissions']
+            self.assertEqual(policy['allow'],[])
+            for denied in ('Shell(*)','Read(*)','Write(*)','WebFetch(*)','Mcp(*:*)'):
+                self.assertIn(denied,policy['deny'])
+            roots.append(root)
+        for _ in range(2):self.generate([self.result()],inspect)
+        self.assertNotEqual(roots[0],roots[1])
+        self.assertTrue(all(not root.exists() for root in roots))
+
     def test_tool_calls_missing_usage_or_error_fail_closed(self):
         for events in ([{'type':'tool_call'},self.result()],[self.result(usage={})],[self.result(is_error=True)],[self.result(),self.result()],[]):
             with self.assertRaises(ModelError):self.generate(events)

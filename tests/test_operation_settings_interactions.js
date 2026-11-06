@@ -16,6 +16,12 @@ function fixture(){
  context.loadOperations=async()=>{calls.push('refresh');};
  return {state,context,calls,messages,events,node,document,open(onSave=()=>({revision:0,threshold:90})){context.collect=onSave;vm.runInContext('operationDialog("设置","<input id=field>","保存",collect,{path:"/api/evaluation-policy",kind:"policy"})',context);return node('operations-form');},submit(form=node('operations-form')){return form.onsubmit({preventDefault(){},currentTarget:form});},run:s=>vm.runInContext(s,context)};
 }
+test('navigation and generated picker search do not dirty settings, while real values and permissions do',()=>{
+ const f=fixture(),goal={id:'daily-goal-0',tagName:'TEXTAREA',value:'原目标'},grant={id:'',name:'',tagName:'INPUT',type:'checkbox',checked:true};
+ f.context.snapshotForm={elements:[goal,grant]};const before=f.run('operationFormSnapshot(snapshotForm)');
+ f.context.snapshotForm.elements.push({id:'daily-template-jump',tagName:'SELECT',value:'2'},{id:'',tagName:'INPUT',type:'search',value:'仅用于定位',closest:selector=>selector==='.select-popover'?{}:null});
+ assert.equal(f.run('operationFormSnapshot(snapshotForm)'),before);goal.value='新目标';assert.notEqual(f.run('operationFormSnapshot(snapshotForm)'),before);goal.value='原目标';grant.checked=false;assert.notEqual(f.run('operationFormSnapshot(snapshotForm)'),before);
+});
 test('a committed save survives a failed page refresh with visible feedback',async()=>{
  const f=fixture();f.context.loadOperations=async()=>{throw Error('读取失败');};f.open();await f.submit();assert(!f.node('operations-dialog').open);assert.equal(f.state.operationSettingsFeedback?.revision,1);assert.match(f.run('operationSettingsFeedback()'),/已保存/);assert.match(f.run('operationSettingsFeedback()'),/重试读取/);
 });

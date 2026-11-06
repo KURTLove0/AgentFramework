@@ -92,7 +92,17 @@ function taskSubmissionPayload(payload){
  taskJourney.submission=attempt;persistTaskSubmission(attempt);return structuredClone(attempt.payload);
 }
 function taskSubmissionBlocked(){return !!(taskJourney.submissionIssue||taskJourney.submissionReviewing);}
-function taskSubmissionContent(target,html){if(target.dataset.content!==html){target.innerHTML=html;target.dataset.content=html;}}
+function taskSubmissionContent(target,html){
+ if(target.dataset.content===html)return;
+ const active=document.activeElement,focus=target.contains?.(active)?active.id:null,selection=document.getSelection?.();
+ const reading=$$('[data-task-submission-reading]',target).map(el=>({key:el.dataset.taskSubmissionReading,text:(el.querySelector?.('[data-task-submission-text]')||el).textContent,open:el.open,top:el.scrollTop,left:el.scrollLeft}));
+ const selected=selection?.anchorNode===selection?.focusNode&&selection?.anchorNode?.parentElement?.closest?.('[data-task-submission-selectable]');
+ const range=focus&&selected&&(active===selected||active.contains?.(selected))&&target.contains(selected)&&selection.anchorNode===selected.firstChild?{id:selected.id,text:selected.textContent,anchor:selection.anchorOffset,focus:selection.focusOffset}:null;
+ target.innerHTML=html;target.dataset.content=html;
+ for(const saved of reading){const el=$$('[data-task-submission-reading]',target).find(el=>el.dataset.taskSubmissionReading===saved.key);if(el&&(el.querySelector?.('[data-task-submission-text]')||el).textContent===saved.text){if(saved.open!==undefined)el.open=saved.open;el.scrollTop=saved.top;el.scrollLeft=saved.left;}}
+ if(focus){const control=$('#'+focus),fallback=$('#task-submission-review');(control&&target.contains(control)?control:fallback)?.focus({preventScroll:true});}
+ if(range){const el=$('#'+range.id);if(el?.firstChild?.nodeType===3&&target.contains(el)&&el.textContent===range.text)document.getSelection()?.setBaseAndExtent(el.firstChild,range.anchor,el.firstChild,range.focus);}
+}
 function renderTaskSubmission(){
  const target=$('#task-submission-status');if(!target)return;
  const attempt=taskJourney.submission,issue=taskJourney.submissionIssue||{message:'原提交编号与本页输入仍保留。'};
@@ -100,13 +110,14 @@ function renderTaskSubmission(){
  const form=$('#create-form');
  if(form?.dataset.simple==='true')for(const button of $$('button[type=submit]',form))button.disabled=!!(taskJourney.saving||taskSubmissionBlocked());
  if(target.hidden)return;
- if(taskJourney.submissionReviewing){taskSubmissionContent(target,'<p>正在核对提交结果与当前配置，请稍候…</p>');return;}
  const receipt=issue.receipt,profile=receipt?.run?.snapshot?.agent_profile,latest=issue.latest;
  let same=false;try{same=taskSubmissionIdentity(compactTaskFields())===taskSubmissionIdentity(attempt.payload);}catch{}
  const title=receipt?'原任务已受理':issue.absent?'暂未找到已受理任务':'提交结果需要核对';
  const original=receipt?.run?.task?.goal||attempt?.payload.goal||'';
- const html=`<p><strong>${title}</strong></p><p>${esc(issue.message)} 本页输入保留。</p>${attempt?.storageError?`<p class="inline-error" role="status">${esc(attempt.storageError)}</p>`:''}<details${receipt?' open':''}><summary>查看原提交</summary><div class="task-draft-comparison">${esc(original)}${profile?`<p>智能体：${esc(profile.name)} · v${profile.revision}</p>`:attempt?`<p>提交的智能体版本：v${attempt.payload.agent_revision}</p>`:''}</div></details>${latest?`<details open><summary>当前智能体配置 · v${latest.revision}${latest.archived?' · 已归档':''}</summary><div class="task-draft-comparison">${esc(latest.name)}<p>${esc(typeof agentRuntimeLabel==='function'?agentRuntimeLabel(latest.runtime):latest.runtime)} · ${esc(latest.model)}</p>${esc(latest.prompt)}<p>已启用 Skill：${esc((latest.skill_summaries||latest.skill_packages||[]).filter(s=>s.enabled).map(s=>s.ref).join('、')||'无')}</p><p>受控读取：${esc((latest.definition?.native_read_refs||[]).join('、')||'无')} · MCP：${esc((latest.mcp_servers||[]).filter(s=>s.enabled).map(s=>s.name).join('、')||'无')}</p></div></details>`:''}<div class="toolbar">${receipt?'<button type="button" class="button secondary" data-task-submission-open>查看已受理任务</button><button type="button" class="text-button" data-task-submission-copy>保留本页目标，另建任务</button>':`${latest&&!latest.archived?'<button type="button" class="button secondary" data-task-submission-use>使用所示配置，保留目标</button>':''}${same?'<button type="button" class="text-button" data-task-submission-retry>沿用原编号重试</button>':''}`}<button type="button" class="text-button" data-task-submission-review>核对提交结果</button></div>`;
+ const html=`<p><strong>${title}</strong></p><p>${esc(issue.message)} 本页输入保留。</p>${attempt?.storageError?`<p class="inline-error" role="status">${esc(attempt.storageError)}</p>`:''}<details data-task-submission-reading="original"${receipt?' open':''}><summary id="task-submission-original-summary">查看原提交</summary><div id="task-submission-original-text" class="task-draft-comparison" data-task-submission-reading="original-text" data-task-submission-text data-task-submission-selectable tabindex="0" role="region" aria-labelledby="task-submission-original-summary">${esc(original)}</div>${profile?`<p>智能体：${esc(profile.name)} · v${profile.revision}</p>`:attempt?`<p>提交的智能体版本：v${attempt.payload.agent_revision}</p>`:''}</details>${latest?`<details data-task-submission-reading="configuration" open><summary id="task-submission-config-summary">当前智能体配置 · v${latest.revision}${latest.archived?' · 已归档':''}</summary><div id="task-submission-config-text" class="task-draft-comparison" data-task-submission-reading="config-text" data-task-submission-text tabindex="0" role="region" aria-labelledby="task-submission-config-summary">${esc(latest.name)}<p>${esc(typeof agentRuntimeLabel==='function'?agentRuntimeLabel(latest.runtime):latest.runtime)} · ${esc(latest.model)}</p><span id="task-submission-config-prompt" data-task-submission-selectable>${esc(latest.prompt)}</span><p>已启用 Skill：${esc((latest.skill_summaries||latest.skill_packages||[]).filter(s=>s.enabled).map(s=>s.ref).join('、')||'无')}</p><p>受控读取：${esc((latest.definition?.native_read_refs||[]).join('、')||'无')} · MCP：${esc((latest.mcp_servers||[]).filter(s=>s.enabled).map(s=>s.name).join('、')||'无')}</p></div></details>`:''}<div class="toolbar">${receipt?'<button type="button" class="button secondary" id="task-submission-open" data-task-submission-open>查看已受理任务</button><button type="button" class="text-button" id="task-submission-copy" data-task-submission-copy>保留本页目标，另建任务</button>':`${latest&&!latest.archived?'<button type="button" class="button secondary" id="task-submission-use" data-task-submission-use>使用所示配置，保留目标</button>':''}${same?'<button type="button" class="text-button" id="task-submission-retry" data-task-submission-retry>沿用原编号重试</button>':''}`}<button type="button" class="text-button" id="task-submission-review" data-task-submission-review>核对提交结果</button></div>`;
  taskSubmissionContent(target,html);
+ for(const button of $$('button',target)){if(taskJourney.submissionReviewing)button.setAttribute('aria-disabled','true');else button.removeAttribute('aria-disabled');}
+ const review=$('#task-submission-review');if(review){review.textContent=taskJourney.submissionReviewing?'正在核对…':'核对提交结果';if(taskJourney.submissionReviewing)review.setAttribute('aria-busy','true');else review.removeAttribute('aria-busy');}
 }
 async function reviewTaskSubmission(){
  const attempt=taskJourney.submission;if(!attempt||taskJourney.saving||taskJourney.submissionReviewing)return;
@@ -129,7 +140,7 @@ async function reviewTaskSubmission(){
    }
   }
  }catch(error){if(taskSubmissionScopeMatches(scope)&&taskJourney.submission===attempt)taskJourney.submissionIssue={message:'核对暂未完成：'+error.message};}
- finally{if(taskSubmissionScopeMatches(scope)&&taskJourney.submission===attempt){taskJourney.submissionReviewing=false;renderTaskSubmission();if(restoreFocus&&document.activeElement===document.body)$('#task-submission-status').querySelector('button')?.focus({preventScroll:true});}}
+ finally{if(taskSubmissionScopeMatches(scope)&&taskJourney.submission===attempt){taskJourney.submissionReviewing=false;renderTaskSubmission();if(restoreFocus&&document.activeElement===document.body)$('#task-submission-review')?.focus({preventScroll:true});}}
 }
 function useReviewedTaskConfiguration(){
  const attempt=taskJourney.submission,latest=taskJourney.submissionIssue?.latest;

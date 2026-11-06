@@ -13,7 +13,7 @@ const gate=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {prom
  const open=()=>page.locator('.onboarding [data-action="new"]').click();
  try{
   await page.goto(base);await page.waitForFunction(()=>state.connected&&!state.busy);assert.equal(await page.locator('.onboarding [data-action="new-agent"]').count(),1);
-  const replaced=await hold();await page.locator('[data-action="new"]').first().click();await replaced.entered;
+  const replaced=await hold();await page.locator('[data-action="help"]').click();await page.locator('[data-action="help-new-task"]').click();await replaced.entered;
   await page.locator('.onboarding [data-action="new-agent"]').click();await page.locator('#agent-dialog').waitFor();await page.waitForFunction(()=>!taskJourney.opening&&!state.agentOpening&&!state.agentModelLoading);
   await page.locator('#agent-dialog .dialog-head [data-close]').click();await page.locator('#agent-dialog').waitFor({state:'hidden'});await replaced.release();
   assert(await editor.isHidden());assert(await loading.isHidden());assert(!await page.evaluate(()=>taskJourney.opening));assert.equal(taskWrites().length,0);

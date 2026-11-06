@@ -120,3 +120,9 @@ test('workflow run search preserves server metadata matches outside the visible 
 test('complete workflow results reset the history filters while retaining the command keyword',async()=>{
  const f=fixture();f.handle(async url=>url.startsWith('/api/workflow-runs?')?{runs:[{id:'one',name:'匹配流程',status:'SUCCEEDED'}],filtered_total:267}:f.empty(url));await f.open();await f.search('匹配流程');await f.flush();f.run("Object.assign(flowHistory(),{search:'old',status:'FAILED',cursor:'old-page',stack:['first'],data:{runs:[]}})");const i=f.state.commandItems.findIndex(x=>x.key==='flow-runs:all');assert(i>=0);f.run('runCommand('+i+')');assert.equal(f.state.flowHistory.search,'匹配流程');assert.equal(f.state.flowHistory.status,'all');assert.equal(f.state.flowHistory.cursor,null);assert.equal(f.state.flowHistory.stack.length,0);assert.equal(f.state.flowSection,'runs');assert.deepEqual(f.navigation,[{view:'workflows',id:undefined}]);
 });
+test('closing search restores a rendered replacement of its original input',async()=>{
+ const f=fixture(),original=f.node('original-input');original.tabIndex=0;original.getClientRects=()=>[{}];f.document.activeElement=original;await f.open();original.isConnected=false;const replacement={...original,isConnected:true,focus(){f.document.activeElement=this;}};f.nodes.set('original-input',replacement);f.close();assert.equal(f.document.activeElement,replacement);
+});
+test('a nonfocusable shortcut origin falls back to search and gives task creation a usable opener',async()=>{
+ const f=fixture();f.document.activeElement={isConnected:true,tabIndex:-1};await f.open();f.close();assert.equal(f.document.activeElement.id,'trigger');f.document.activeElement={isConnected:true,tabIndex:-1};await f.open();f.run('function newTask(options,opener){state.newTaskFocus=opener.id;}');f.run('runCommand(0)');assert.equal(f.state.newTaskFocus,'trigger');
+});

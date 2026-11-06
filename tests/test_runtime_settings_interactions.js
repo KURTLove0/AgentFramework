@@ -16,6 +16,19 @@ function fixture(storage=new Map()){
  const response=(payload,current)=>{const saved={default_runtime:payload.default_runtime,profiles:structuredClone(payload.profiles),revision:payload.revision+1,updated_at:10};return {...packet(current||saved),request_id:payload.request_id,found:true,receipt:{request_id:payload.request_id,tenant:'tenant',principal:'user',base_revision:payload.revision,settings:saved,accepted_at:10}};};
  return {state,form,nodes,calls,events,storage,session,response,api:fn=>handler=fn,run,editor:()=>run('runtimeSettingsEditor'),html:()=>nodes.get('runtime-settings-recovery').innerHTML,attach:()=>{context.attachRuntimeSettings();return tick();},read:()=>context.readRuntimeSettings(),save:()=>context.saveRuntimeSettings(form),resolve:action=>context.resolveRuntimeSettings(action),leave:()=>context.leaveRuntimeSettings(),edit:(name,value)=>{const field=form.elements[name];field.value=value;for(const fn of events.input||[])fn({target:field});},reload:async()=>{context.leaveRuntimeSettings();context.attachRuntimeSettings();await tick();}};
 }
+test('save status includes changes in hidden providers and the shared default',async()=>{
+ const f=fixture();await f.attach();f.edit('codex_timeout','85');f.edit('cursor_timeout','95');f.edit('default_runtime','qoder');
+ assert.equal(f.run('runtimeSaveStatus(runtimeSettingsEditor,runtimeChanges(runtimeSettingsEditor)).title'),'3 项未保存修改');
+ f.edit('codex_timeout',String(f.editor().base.profiles.codex.timeout));assert.equal(f.run('runtimeSaveStatus(runtimeSettingsEditor,runtimeChanges(runtimeSettingsEditor)).title'),'2 项未保存修改');assert(!f.calls.some(call=>call.data));
+});
+test('unresolved or unreadable settings never appear saved even when inputs match',async()=>{
+ const f=fixture();await f.attach();const status=()=>f.run('runtimeSaveStatus(runtimeSettingsEditor,[])');
+ f.editor().attempt={};assert.equal(status().title,'保存结果待核对');f.editor().attempt=null;f.editor().review=true;assert.equal(status().title,'配置需要核对');f.editor().invalid=true;assert.equal(status().title,'恢复记录需要处理');f.editor().invalid=false;f.editor().review=false;f.editor().storageError='unavailable';assert.equal(status().title,'恢复副本需要处理');
+});
+test('confirmed save clears status only for accepted inputs; later edits remain visible',async()=>{
+ const f=fixture();await f.attach();f.edit('codex_timeout','85');f.api(async(u,p)=>f.response(p));await f.save();assert.equal(f.run('runtimeSaveStatus(runtimeSettingsEditor,runtimeChanges(runtimeSettingsEditor)).title'),'全部配置已保存');
+ f.edit('qoder_timeout','90');assert.equal(f.run('runtimeSaveStatus(runtimeSettingsEditor,runtimeChanges(runtimeSettingsEditor)).title'),'1 项未保存修改');
+});
 async function unknown(f){await f.attach();f.edit('codex_timeout','85');f.api(async()=>{throw Error('lost response');});await f.save();return f.calls.find(c=>c.data)?.data;}
 test('initial read keeps edits typed while reading and stores a scoped draft',async()=>{const f=fixture(),gate=deferred();f.api(()=>gate.promise);await f.attach();f.edit('codex_timeout','95');gate.resolve(packet(settings()));await tick();assert.equal(f.form.elements.codex_timeout.value,'95');assert(f.storage.size);assert.equal(f.calls[0].options.workspace,'space');assert.equal(f.calls[0].data,undefined);});
 test('save posts one immutable identifier and confirms the committed version',async()=>{const f=fixture();await f.attach();f.edit('codex_timeout','85');f.api(async(u,p)=>f.response(p));await f.save();const p=f.calls.at(-1).data;assert.equal(p.request_id,'request-1');assert.equal(p.profiles.codex.timeout,85);assert.equal(f.state.runtimeConfig.settings.revision,1);assert.equal(f.storage.size,0);assert.equal(f.editor().attempt,null);assert.match(f.html(),/保存已确认 · v1/);});

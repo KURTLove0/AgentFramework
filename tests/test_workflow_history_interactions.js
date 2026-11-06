@@ -16,6 +16,18 @@ function fixture(){
 test('catalog uses only scoped GET and preserves its current cursor when refreshed',async()=>{
  const f=fixture();await f.run('loadFlowHistory()');await f.run('loadFlowHistory()');assert(f.calls[1].url.endsWith('cursor=first'));assert(f.calls.every(c=>c.body===undefined&&c.scope.workspace==='a'));
 });
+test('returning to a workflow record restores its list only in the same identity and query',async()=>{
+ const f=fixture();await f.run('loadFlowHistory()');f.run("globalThis.window={scrollY:1420};rememberFlowRunList('one')");
+ assert.equal(f.run("flowRunReturnFocus('another')"),null);assert.equal(f.state.flowSection,undefined);
+ assert.equal(f.run("flowRunReturnFocus('one')"),'flow-run-link-6f-6e-65');assert.equal(f.state.routePosition.top,1420);assert.equal(f.state.flowSection,'runs');
+ f.state.flowHistory.cursor='second';assert.equal(f.run("flowRunReturnFocus('one')"),null);f.state.flowHistory.cursor='first';
+ f.state.meta.principal='other';assert.equal(f.run("flowRunReturnFocus('one')"),null);assert.equal(f.state.flowHistory.data,null);
+});
+test('changing a workflow filter discards the old record return intent before its read completes',async()=>{
+ const f=fixture();await f.run('loadFlowHistory()');f.run("globalThis.window={scrollY:1420};rememberFlowRunList('one');changeFlowHistory({search:'新查询'})");
+ assert.equal(f.state.flowRunReturn,null);assert.equal(f.run("flowRunReturnFocus('one')"),null);assert.equal(f.state.flowHistory.search,'新查询');assert.equal(f.state.flowHistory.pending,true);
+ await f.flush();assert.equal(f.state.flowHistory.pending,false);
+});
 test('a page emptied by status changes retains matches and offers a filtered first page',async()=>{
  const f=fixture();f.handle(async()=>result('last',{runs:[],cursor:'second',offset:50,filtered_total:50,has_more:false,next_cursor:null}));
  f.run("Object.assign(flowHistory(),{search:'历史',status:'WAITING_AUTH',cursor:'second',stack:['first']})");await f.run('loadFlowHistory()');
@@ -38,6 +50,9 @@ test('user search overtakes a pending background page read',async()=>{
 });
 test('background polls share a matching in-flight read',async()=>{
  const f=fixture(),held=gate();f.handle(()=>held.promise);const one=f.run('loadFlowHistory({background:true})'),two=f.run('loadFlowHistory({background:true})');assert.equal(f.calls.length,1);held.resolve(result());await Promise.all([one,two]);
+});
+test('explicit paging overtakes background synchronization without duplicate page changes',async()=>{
+ const f=fixture();await f.run('loadFlowHistory()');const sync=gate(),page=gate();f.handle(url=>url.endsWith('cursor=second')?page.promise:sync.promise);const background=f.run('loadFlowHistory({background:true})');const html=f.run('flowRunDirectory(state.flows)');assert.doesNotMatch(html,/id="flow-history-next"[^>]* disabled/);const next=f.run("pageFlowHistory('next')");assert(f.calls.at(-1).url.endsWith('cursor=second'));const count=f.calls.length;f.run("pageFlowHistory('next')");assert.equal(f.calls.length,count);page.resolve(result('new-page',{cursor:'second',offset:50}));await next;sync.resolve(result('old-page'));await background;assert.equal(f.state.flowHistory.data.offset,50);assert.equal(f.state.flowHistory.data.runs[0].id,'new-page');assert.deepEqual(Array.from(f.state.flowHistory.stack),['first']);
 });
 test('failed refresh retains last success, escapes its error and permits explicit retry',async()=>{
  const f=fixture();await f.run('loadFlowHistory()');f.handle(async()=>{throw Error('<bad> temporarily unavailable');});await f.run('loadFlowHistory()');assert.equal(f.state.flowHistory.data.runs[0].id,'one');assert.match(f.run('flowHistoryControls(flowHistory())'),/上次读取.*|&lt;bad>/);const count=f.calls.length;await f.run('loadFlowHistory({background:true})');assert.equal(f.calls.length,count);f.handle(async()=>result('recovered'));await f.run('loadFlowHistory()');assert.equal(f.state.flowHistory.error,'');

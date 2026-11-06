@@ -62,6 +62,14 @@ function fixture(){
 }
 async function scenario(name,fn){const f=fixture();await fn(f);assert.equal(f.calls.filter(call=>call.kind==='api').length,0,'Interaction must not invoke an API');passed++;console.log('PASS '+name);}
 async function main(){
+ await scenario('untouched required fields give instructions before showing validation feedback',f=>{
+  f.nodes['agent-name'].value='';f.nodes['agent-name'].validity.valid=false;f.run('refreshAgentConfiguration()');assert.match(f.nodes['agent-next-guidance'].textContent,/先填写智能体名称/);assert.doesNotMatch(f.nodes['agent-next-guidance'].textContent,/请检查/);assert.equal(f.nodes['agent-name'].attrs['aria-invalid'],undefined);
+  f.run('advanceAgentConfiguration()');assert.match(f.nodes['agent-next-guidance'].textContent,/请检查/);assert.equal(f.nodes['agent-name'].attrs['aria-invalid'],'true');
+ });
+ await scenario('a blank instruction is guided gently but an unavailable model remains explicit',f=>{
+  f.state.agentConfigSection='runtime';f.nodes['agent-prompt'].value='';f.nodes['agent-prompt'].validity.valid=false;f.run('refreshAgentConfiguration()');assert.match(f.nodes['agent-next-guidance'].textContent,/工作指令/);assert.doesNotMatch(f.nodes['agent-next-guidance'].textContent,/请检查/);
+  const step={id:'runtime',issues:[{source:'model',message:'模型尚未核对',fields:[]}],busy:false};f.context.guidanceStep=step;assert.match(f.run('agentConfigurationGuidance(guidanceStep,null)'),/模型尚未核对/);step.busy=true;assert.match(f.run('agentConfigurationGuidance(guidanceStep,null)'),/正在读取/);
+ });
  await scenario('an inline domain write prevents opening a replacement agent editor',async f=>{f.state.agentDomainSaving=true;f.state.agentEditorSession=4;await f.run('openAgent("another-agent")');assert.equal(f.state.agentEditorSession,4);assert(f.nodes['agent-dialog'].open);assert.equal(f.nodes['agent-name'].value,'模拟评估岗位');});
  await scenario('template loading allows retaining a draft while save and active writes remain guarded',f=>{
   const keep=f.node('agent-keep-draft');f.state.agentConfigSection='advanced';f.state.agentRoleLoading=true;f.run('agentSetSaveAvailability()');assert(!keep.disabled);assert(f.nodes['agent-save'].disabled);

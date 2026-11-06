@@ -4,9 +4,17 @@ const source=fs.readFileSync(path.join(__dirname,'../agent_framework/webui/run_a
 function packet(id='task-one',revision=1){return {run:{run_id:id,version:revision,status:'WAITING_AUTH',task:{goal:'模拟任务',project_id:'project-one',change_id:'change-one',environment:'test'},snapshot:{agent:{identity:{name:'审核员'}}},actions:[{tool_ref:'report.draft.create@1.0.0',status:'PREPARED',args_hash:'original-hash',args:{summary:'原提案'}}]},events:[{seq:revision}],grant:{valid:false},permissions:{grant_token:'a'.repeat(64),revoke_token:'b'.repeat(64),request:null}};}
 function harness(){
  const fields=new Map(),calls=[],messages=[],renders=[],listeners=[];let respond=async()=>packet('task-one',2),refresh=async()=>{};
- const field=id=>{if(!fields.has(id))fields.set(id,{open:false,disabled:false,hidden:false,innerHTML:'',textContent:'',onclick:null,attributes:{},showModal(){this.open=true;},close(){this.open=false;},toggleAttribute(k,v){if(v)this.attributes[k]='';else delete this.attributes[k];},removeAttribute(k){delete this.attributes[k];},focus(){},scrollIntoView(){}});return fields.get(id);};
+ let ctx;
+ const field=id=>{
+  if(fields.has(id))return fields.get(id);
+  let html='';const handlers=[];
+  const element={id:id.replace(/^#/,''),open:false,disabled:false,hidden:false,isConnected:true,scrollTop:0,textContent:'',onclick:null,attributes:{},showModal(){this.open=true;},close(){this.open=false;for(const fn of handlers.splice(0))fn();},addEventListener(type,fn){if(type==='close')handlers.push(fn);},contains(other){return id==='#confirm-body'&&!!other&&this.innerHTML.includes('id="'+other.id+'"');},setAttribute(k,v){this.attributes[k]=v;},getAttribute(k){return this.attributes[k]??null;},toggleAttribute(k,v){if(v)this.attributes[k]='';else delete this.attributes[k];},removeAttribute(k){delete this.attributes[k];},focus(){if(!this.disabled)ctx.document.activeElement=this;},scrollIntoView(){}};
+  fields.set(id,element);
+  Object.defineProperty(element,'innerHTML',{get(){return id==='#confirm-body'?html.replace('<div id="run-action-feedback"></div>',()=>'<div id="run-action-feedback">'+field('#run-action-feedback').innerHTML+'</div>'):html;},set(value){html=value;if(id==='#confirm-body')field('#run-action-feedback').innerHTML='';}});
+  return element;
+ };
  const state={workspaceId:'workspace-one',meta:{tenant:'tenant-one',principal:'person-one'},routeVersion:1,selected:'task-one',detail:packet(),view:'runs'};
- const ctx=vm.createContext({console,state,structuredClone,terminal:new Set(['SUCCEEDED','FAILED','CANCELLED','EXPIRED','NEEDS_REVIEW']),$:field,esc:x=>String(x??''),json:JSON.stringify,fact:(name,value)=>name+': '+value,render:()=>renders.push(state.selected),refresh:()=>refresh(),toast:m=>messages.push(m),document:{addEventListener:(_type,fn)=>listeners.push(fn)},api:async(p,body,_t,_r,context)=>{calls.push({p,body:body===undefined?undefined:clone(body),context:context===undefined?undefined:clone(context)});return respond(p,body);}});
+ ctx=vm.createContext({console,state,structuredClone,terminal:new Set(['SUCCEEDED','FAILED','CANCELLED','EXPIRED','NEEDS_REVIEW']),$:field,esc:x=>String(x??''),json:JSON.stringify,fact:(name,value)=>name+': '+value,render:()=>renders.push(state.selected),refresh:()=>refresh(),toast:m=>messages.push(m),document:{addEventListener:(_type,fn)=>listeners.push(fn)},api:async(p,body,_t,_r,context)=>{calls.push({p,body:body===undefined?undefined:clone(body),context:context===undefined?undefined:clone(context)});return respond(p,body);}});
  vm.runInContext(source,ctx);const run=s=>vm.runInContext(s,ctx);
  return {ctx,state,field,calls,messages,renders,run,record:()=>run('runActionContext'),open:action=>run('openRunAction('+JSON.stringify(action||'grant')+')'),submit:()=>run('submitRunAction()'),review:()=>run('reviewRunAction()'),api:fn=>respond=fn,refresh:fn=>refresh=fn,unknown:async()=>{respond=async()=>{throw TypeError('network');};await run('submitRunAction()');}};
 }
@@ -79,4 +87,20 @@ test('a foreign older conversation cannot be mistaken for a successful operation
 });
 test('terminal state is retained at an otherwise equal durable position',()=>{
  const h=harness(),done=packet();done.run.status='CANCELLED';h.state.detail=done;h.ctx.next=packet();assert.equal(h.run('selectRunDetail(next)'),done);
+});
+test('pending confirmation remains focused and enabled while repeated activation is ignored',async()=>{
+ const h=harness();h.open();let finish;h.api(()=>new Promise(resolve=>finish=resolve));const button=h.field('#confirm-submit');button.focus();const pending=h.submit();assert.equal(h.ctx.document.activeElement,button);assert.equal(button.disabled,false);assert.equal(button.attributes['aria-busy'],'true');assert.match(button.textContent,/正在提交/);await h.submit();assert.equal(h.calls.length,1);finish(packet('task-one',2));await pending;assert(!('aria-busy'in button.attributes));
+});
+test('a failed submission hands its own focus to review while keeping a newer close focus',async()=>{
+ for(const move of [false,true]){
+  const h=harness();h.open();let fail;h.api(()=>new Promise((_resolve,reject)=>fail=reject));h.field('#confirm-submit').focus();const pending=h.submit();const close=h.field('#header-close');if(move)close.focus();fail(TypeError('offline'));await pending;
+  assert(h.field('#confirm-submit').disabled);assert.equal(h.ctx.document.activeElement,move?close:h.field('#run-action-review'));assert.equal(h.calls.length,1);
+ }
+});
+test('read-only review keeps the existing proposal node and respects a new close focus',async()=>{
+ const h=harness();h.open();await h.unknown();const scope=h.record().scopeNode;let finish;h.api(()=>new Promise(resolve=>finish=resolve));h.field('#run-action-review').focus();const pending=h.review();assert.match(h.field('#confirm-body').innerHTML,/正在核对/);assert.match(h.field('#confirm-body').innerHTML,/id="run-action-review"[^>]*aria-disabled="true"[^>]*aria-busy="true"/);await h.review();assert.equal(h.calls.length,2);h.field('#header-close').focus();finish(packet('task-one',3));await pending;
+ assert.equal(h.record().scopeNode,scope);assert.equal(h.ctx.document.activeElement,h.field('#header-close'));assert.equal(h.record().payload.proof,'a'.repeat(64));assert.match(h.field('#confirm-body').innerHTML,/重新审查当前内容/);assert.equal(h.field('#confirm-submit').textContent,'等待重新审查');
+});
+test('explicit re-review retains one return record and closing restores it only once',async()=>{
+ const h=harness(),saved={scope:'original'},restored=[];let captured=0;h.ctx.captureTaskDialogReturn=()=>{captured++;return saved;};h.ctx.restoreTaskDialogReturn=(record,dialog)=>restored.push({record,open:dialog.open});h.open();await h.unknown();h.api(async()=>packet('task-one',3));await h.review();h.run('openRunAction(runActionContext.action,runActionContext.review)');h.field('#confirm-dialog').close();assert.equal(captured,1);assert.deepEqual(restored,[{record:saved,open:false}]);
 });

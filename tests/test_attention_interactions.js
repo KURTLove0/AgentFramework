@@ -11,6 +11,16 @@ function fixture(packet=data()){
  return {state,context,calls,renders,events,node,document,handle:fn=>handler=fn,run:s=>vm.runInContext(s,context)};
 }
 test('all actionable categories share one deadline order',()=>{const f=fixture();assert.equal(f.context.attentionItems()[0].title,'紧急流程');});
+test('attention previews preserve the original goal and offer full names when shortened',()=>{const f=fixture(),item={title:'原始目标\n'+('逐项核对😀'.repeat(80)),goal:'原始目标\n'+('逐项核对😀'.repeat(80))},before=JSON.stringify(item),preview=f.context.attentionTitle(item);assert(preview.shortened&&preview.showGoal);assert.equal(preview.full,item.title);assert.equal(preview.goal,item.goal);assert.equal(Array.from(preview.preview).length,161);assert.equal(JSON.stringify(item),before);const renamed=f.context.attentionTitle({title:'周报核对',goal:'保留完整原始要求'});assert(!renamed.shortened&&renamed.showGoal);});
+test('attention returns require the original destination, origin route and identity scope',()=>{
+ const f=fixture();f.context.location={hash:'#/workbench'};f.run('attentionState()');
+ const remember=()=>f.state.attentionInbox.returnFocus={view:'runs',id:'task-a',route:'#/workbench',control:'attention-link-tasks-task-a',top:630};
+ remember();assert.equal(f.context.attentionReturnFocus('workflows','task-a'),null);assert.equal(f.state.attentionInbox.returnFocus,null);
+ remember();assert.equal(f.context.attentionReturnFocus('runs','task-b'),null);
+ remember();assert.equal(f.context.attentionReturnFocus('runs','task-a'),'attention-link-tasks-task-a');assert.equal(f.state.routePosition.top,630);assert.equal(f.context.attentionReturnFocus('runs','task-a'),null,'an old entry must not override a later unrelated visit');
+ remember();f.context.location.hash='#/runs';assert.equal(f.context.attentionReturnFocus('runs','task-a'),null);
+ remember();f.context.location.hash='#/workbench';f.state.meta.principal='other';assert.equal(f.context.attentionReturnFocus('runs','task-a'),null);assert.equal(f.context.attentionState().returnFocus,null);assert.equal(f.context.attentionState().expanded.size,0);
+});
 test('task names display in attention while both name and original goal remain searchable',()=>{const d=data();d.tasks[0].title='发布前核对';const f=fixture(d);assert.equal(f.context.attentionItems().find(item=>item.run_id===d.tasks[0].run_id).title,'发布前核对');for(const query of ['发布前核对',d.tasks[0].goal]){f.run('changeAttentionFilter("search",'+JSON.stringify(query)+')');assert(f.run('filteredAttention()').some(item=>item.run_id===d.tasks[0].run_id));}});
 test('attention exposes an internal next-page control beyond eight records',()=>{const f=fixture();assert.match(f.context.attentionPanel(),/data-attention-page="next"/);assert.doesNotMatch(f.context.attentionPanel(),/显示 8.*查看运行记录/);});
 test('daily attention links identify the exact plan',()=>{const f=fixture();assert.equal(f.context.attentionItems().find(x=>x.type==='每日计划').href,'#/daily/plan-old');});
